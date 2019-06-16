@@ -1,69 +1,105 @@
 <fieldset>
 	<div class="form-group">
 		<label for="title" class="lb-lg">
-			<f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.workflow.field.title">title
-				todo
-			</f:translate>
+			<f:translate key="module.newsletter.new.field.title">Title</f:translate>*
 		</label>
-		<f:form.textfield class="form-control input-lg" property="title" id="title"
-						  placeholder="{f:translate(key:'LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.workflow.field.title.placeholder')}"
+		<f:form.textfield class="form-control input-lg"
+						  property="title"
+						  id="title"
+						  placeholder="Newsletter Product A 2020/01"
 						  required="required"/>
 		<span class="help-block">
-            <f:translate
-					key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.workflow.field.title.description">Example description</f:translate>
-        </span>
+			<f:translate key="module.newsletter.new.field.title.description">Useful title</f:translate>
+		</span>
 	</div>
 
 	<div class="form-group">
 		<label for="description" class="lb-lg">
-			<f:translate
-					key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.workflow.field.description">
-				description
-			</f:translate>
+			<f:translate key="module.newsletter.new.field.description">description</f:translate>
 		</label>
-		<f:form.textarea class="form-control input-lg" property="description" id="description"
-						 placeholder="{f:translate(key:'LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.workflow.field.description.placeholder')}"
-						 style="height: 300px;"></f:form.textarea>
+		<f:form.textarea class="form-control input-lg"
+						 property="description"
+						 id="description"
+						 style="height: 100px;"></f:form.textarea>
 		<span class="help-block">
-            <f:translate
-					key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.workflow.field.description.description">Example description</f:translate>
-        </span>
+			<f:translate key="module.newsletter.new.field.description.description">Example description</f:translate>
+		</span>
 	</div>
 
-	<button class="btn btn-primary btn-lg pull-right" data-wizardform-gotostep="2">Weiter</button>
+	<div class="form-group">
+		<label for="datetime" class="lb-lg">
+			<f:translate key="module.newsletter.new.field.datetime">Datetime</f:translate>
+		</label>
+		<f:form.textfield
+				type="datetime"
+				property="datetime"
+				id="datetime"
+				class="form-control t3js-datetimepicker t3js-clearable" />
+		<span class="help-block">
+			<f:translate key="module.newsletter.new.field.datetime.description">Datetime description</f:translate>
+		</span>
+	</div>
+
+	<button class="btn btn-primary btn-lg pull-right" data-wizardform-gotostep="2">
+		<f:translate key="module.newsletter.wizard.next">Next</f:translate>
+	</button>
 </fieldset>
 
-<fieldset>
-	<h2>
-		<f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.workflow.field.addtrigger">add
-			trigger todo
-		</f:translate>
-	</h2>
 
-	todo
+
+
+
+
+
+<fieldset>
+	<div class="form-group">
+		<label for="origin" class="lb-lg">
+			<f:translate key="module.newsletter.new.field.origin">Origin</f:translate>*
+		</label>
+		<f:form.textfield class="form-control input-lg"
+						  property="origin"
+						  id="origin"
+						  placeholder="https://www.yourdomain/newsletter/2020-01/"
+						  required="required"/>
+		<span class="help-block">
+			<f:translate key="module.newsletter.new.field.origin.description">PID or absolute URL</f:translate>
+		</span>
+	</div>
+
+	<div class="form-group">
+		<label for="receiver" class="lb-lg">
+			<f:translate key="module.newsletter.new.field.receiver">Receiver</f:translate>*
+		</label>
+		<f:form.select id="receiver" class="form-control input-lg" options="{luxletter:groups.getReceiverGroups()}" prependOptionValue="" prependOptionLabel="{f:translate(key:'pleasechoose')}" property="receiver" required="required" />
+		<span class="help-block">
+			<f:translate key="module.newsletter.new.field.receiver.description">Receiver group description</f:translate>
+		</span>
+	</div>
 
 	<div class="row form-group">
 		<div class="col-md-12">
 			<button class="btn btn-primary btn-lg" data-wizardform-gotostep="1">
-				<f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:back">back</f:translate>
+				<f:translate key="module.newsletter.wizard.back">Back</f:translate>
 			</button>
 			<button class="btn btn-primary btn-lg pull-right" data-wizardform-gotostep="3">
-				<f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:next">next</f:translate>
+				<f:translate key="module.newsletter.wizard.next">Next</f:translate>
 			</button>
 		</div>
 	</div>
 </fieldset>
 
+
+
+
+
+
+
 <fieldset>
-	<h2>
-		<f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.workflow.field.addaction">add
-			action todo
-		</f:translate>
-	</h2>
+	<div class="row" data-luxletter-wizardpreview="users"></div>
+	<div class="row" data-luxletter-wizardpreview="newsletter"></div>
 
 	<button class="btn btn-primary btn-lg" data-wizardform-gotostep="2">
-		<f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:back">back</f:translate>
+		<f:translate key="module.newsletter.wizard.back">Back</f:translate>
 	</button>
-	<f:form.submit class="btn btn-primary btn-lg pull-right"
-				   value="{f:translate(key:'LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:save')}"/>
+	<f:form.submit class="btn btn-primary btn-lg pull-right" value="{f:translate(key:'save')}"/>
 </fieldset>

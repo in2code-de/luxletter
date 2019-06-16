@@ -11,11 +11,11 @@
 						<div class="btn-group" role="group">
 							<img src="{f:uri.resource(path:'Icons/lux.svg',extensionName:'luxletter')}" height="30" style="float:left;" />
 
-							<f:link.action action="dashboard" controller="Newsletter" class="btn btn-primary">
-								Dashboard (todo)
+							<f:link.action action="dashboard" controller="Newsletter" class="btn{luxletter:be.getClassNameOnAction(actionName:'dashboard')}">
+								<f:translate key="layout.backend.link.actiondashboard">Dashboard</f:translate>
 							</f:link.action>
-							<f:link.action action="list" controller="Newsletter" class="btn btn-primary">
-								Newsletter (todo)
+							<f:link.action action="list" controller="Newsletter" class="btn{luxletter:be.getClassNameOnAction(actionName:'list')}">
+								<f:translate key="layout.backend.link.actionnewsletter">Newsletter</f:translate>
 							</f:link.action>
 						</div>
 						<span style="margin-left:10px;">Luxletter</span>

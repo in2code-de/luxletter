@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2019-06-16T12:00:00Z" product-name="luxletter">
+		<header/>
+		<body>
+			<trans-unit id="layout.backend.link.actiondashboard">
+				<source>Dashboard</source>
+				<target state="translated">Dashboard</target>
+			</trans-unit>
+			<trans-unit id="layout.backend.link.actionnewsletter">
+				<source>Newsletter</source>
+				<target state="translated">Newsletter</target>
+			</trans-unit>
+
+			<trans-unit id="module.newsletter.list.title">
+				<source>Manage your Newsletters</source>
+				<target state="translated">Newsletter verwalten</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.createnew.1">
+				<source>No newsletters yet</source>
+				<target state="translated">Keine Newsletter vorhanden</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.createnew.2">
+				<source>Just create a new one</source>
+				<target state="translated">Neuen Newsletter erzeugen</target>
+			</trans-unit>
+
+			<trans-unit id="module.newsletter.new.title">
+				<source>Add new newsletter</source>
+				<target state="translated">Neuen Newsletter hinzufügen</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.wizard.1">
+				<source>Main</source>
+				<target state="translated">Start</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.wizard.2">
+				<source>Details</source>
+				<target state="translated">Details</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.wizard.3">
+				<source>Preview</source>
+				<target state="translated">Vorschau</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.wizard.back">
+				<source>Back</source>
+				<target state="translated">Zurück</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.wizard.next">
+				<source>Next</source>
+				<target state="translated">Weiter</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.title">
+				<source>Newsletter title</source>
+				<target state="translated">Newsletter Bezeichnung</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.title.description">
+				<source>We would recommend you to use a meaningful title that separates each newsletter</source>
+				<target state="translated">Benutze einen aussagekräftigen Namen um die Newsletter später voneinander unterscheiden zu können</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.description">
+				<source>Description</source>
+				<target state="translated">Beschreibung</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.description.description">
+				<source>You can add a small description for internal useage</source>
+				<target state="translated">Du kannst eine kleine Beschreibung für interne Nutzung hinzufügen</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.datetime">
+				<source>Newsletter start</source>
+				<target state="translated">Startdatum</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.datetime.description">
+				<source>Don't send newsletter before this date (empty for sending as soon as possible)</source>
+				<target state="translated">Newsletter erst zu diesem Zeitpunkt versenden (leer lassen wenn der Versand so schnell wie möglich starten soll)</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.origin">
+				<source>Where is the newsletter located?</source>
+				<target state="translated">Wo befindet sich der Newsletter?</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.origin.description">
+				<source>Please add the absolute URL (https://domain.org/newsletter/) or a page UID where your former created newsletter is located. Afterwards the newsletter will be parsed and prepared for sending.</source>
+				<target state="translated">Bitte tragen Sie die absolute URL (https://domain.org/newsletter/) oder eine Seiten UID ein zum von Ihnen zuvor erstellten Newsletter ein. Anschließend wird dieser von Luxletter gelesen und für den Versand vorbereitet.</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.receiver">
+				<source>Choose a receiver group</source>
+				<target state="translated">Empfänger-Gruppe auswählen</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.receiver.description">
+				<source>Please choose a frontend user group. Every user in this group will receive this newsletter.</source>
+				<target state="translated">Bitte eine Frontend-Benutzergruppe auswählen. Jeder Benutzer dieser Gruppe wird den Newsletter erhalten.</target>
+			</trans-unit>
+
+			<trans-unit id="pleasechoose">
+				<source>Please choose...</source>
+				<target state="translated">Bitte wählen...</target>
+			</trans-unit>
+			<trans-unit id="save">
+				<source>Save</source>
+				<target state="translated">Speichern</target>
+			</trans-unit>
+			<trans-unit id="cancel">
+				<source>Cancel</source>
+				<target state="translated">Abbrechen</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

@@ -15,6 +15,7 @@ define(['jquery'], function($) {
 		 * @returns {void}
 		 */
 		this.initialize = function() {
+			addDatePickers();
 			addWizardForm();
 		};
 
@@ -53,6 +54,17 @@ define(['jquery'], function($) {
 		var removeClassFromElements = function(elements, className) {
 			for (var i = 0; i < elements.length; i++) {
 				elements[i].classList.remove(className);
+			}
+		};
+
+		/**
+		 * @returns {void}
+		 */
+		var addDatePickers = function() {
+			if (document.querySelector('.t3js-datetimepicker') !== null) {
+				require(['TYPO3/CMS/Backend/DateTimePicker'], function(DateTimePicker) {
+					DateTimePicker.initialize();
+				});
 			}
 		};
 	}

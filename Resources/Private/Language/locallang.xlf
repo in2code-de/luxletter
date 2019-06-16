@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2019-06-16T12:00:00Z" product-name="luxletter">
+		<header/>
+		<body>
+			<trans-unit id="layout.backend.link.actiondashboard">
+				<source>Dashboard</source>
+			</trans-unit>
+			<trans-unit id="layout.backend.link.actionnewsletter">
+				<source>Newsletter</source>
+			</trans-unit>
+
+			<trans-unit id="module.newsletter.list.title">
+				<source>Manage your Newsletters</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.createnew.1">
+				<source>No newsletters yet</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.createnew.2">
+				<source>Just create a new one</source>
+			</trans-unit>
+
+			<trans-unit id="module.newsletter.new.title">
+				<source>Add new newsletter</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.wizard.1">
+				<source>Main</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.wizard.2">
+				<source>Details</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.wizard.3">
+				<source>Preview</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.wizard.back">
+				<source>Back</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.wizard.next">
+				<source>Next</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.title">
+				<source>Newsletter title</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.title.description">
+				<source>We would recommend you to use a meaningful title that separates each newsletter</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.description.description">
+				<source>You can add a small description for internal useage</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.datetime">
+				<source>Newsletter start</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.datetime.description">
+				<source>Don't send newsletter before this date (empty for sending as soon as possible)</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.origin">
+				<source>Where is the newsletter located?</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.origin.description">
+				<source>Please add the absolute URL (https://domain.org/newsletter/) or a page UID where your former created newsletter is located. Afterwards the newsletter will be parsed and prepared for sending.</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.receiver">
+				<source>Choose a receiver group</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.receiver.description">
+				<source>Please choose a frontend user group. Every user in this group will receive this newsletter.</source>
+			</trans-unit>
+
+			<trans-unit id="pleasechoose">
+				<source>Please choose...</source>
+			</trans-unit>
+			<trans-unit id="save">
+				<source>Save</source>
+			</trans-unit>
+			<trans-unit id="cancel">
+				<source>Cancel</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
