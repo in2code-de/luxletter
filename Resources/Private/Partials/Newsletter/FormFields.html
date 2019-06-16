@@ -70,7 +70,15 @@
 		<label for="receiver" class="lb-lg">
 			<f:translate key="module.newsletter.new.field.receiver">Receiver</f:translate>*
 		</label>
-		<f:form.select id="receiver" class="form-control input-lg" options="{luxletter:groups.getReceiverGroups()}" prependOptionValue="" prependOptionLabel="{f:translate(key:'pleasechoose')}" property="receiver" required="required" />
+		<f:form.select
+				id="receiver"
+				class="form-control input-lg"
+				options="{luxletter:groups.getReceiverGroups()}"
+				prependOptionValue=""
+				prependOptionLabel="{f:translate(key:'pleasechoose')}"
+				additionalAttributes="{data-luxletter-wizardpreviewevent:'users'}"
+				property="receiver"
+				required="required" />
 		<span class="help-block">
 			<f:translate key="module.newsletter.new.field.receiver.description">Receiver group description</f:translate>
 		</span>
@@ -95,8 +103,8 @@
 
 
 <fieldset>
-	<div class="row" data-luxletter-wizardpreview="users"></div>
-	<div class="row" data-luxletter-wizardpreview="newsletter"></div>
+	<div class="row"><div class="col-md-12" data-luxletter-wizardpreview="users"></div></div>
+	<div class="row"><div class="col-md-12" data-luxletter-wizardpreview="newsletter"></div></div>
 
 	<button class="btn btn-primary btn-lg" data-wizardform-gotostep="2">
 		<f:translate key="module.newsletter.wizard.back">Back</f:translate>

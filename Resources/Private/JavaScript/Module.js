@@ -10,6 +10,11 @@ define(['jquery'], function($) {
 		'use strict';
 
 		/**
+		 * @type {LuxletterBackend}
+		 */
+		var that = this;
+
+		/**
 		 * Initialize
 		 *
 		 * @returns {void}
@@ -17,6 +22,7 @@ define(['jquery'], function($) {
 		this.initialize = function() {
 			addDatePickers();
 			addWizardForm();
+			addWizardUserPreview();
 		};
 
 		/**
@@ -66,6 +72,83 @@ define(['jquery'], function($) {
 					DateTimePicker.initialize();
 				});
 			}
+		};
+
+		/**
+		 * @returns {void}
+		 */
+		var addWizardUserPreview = function() {
+			var select = document.querySelector('[data-luxletter-wizardpreviewevent="users"]');
+			if (select !== null) {
+				select.addEventListener('change', function() {
+					ajaxConnection(TYPO3.settings.ajaxUrls['/luxletter/wizardUserPreview'], {
+						usergroup: this.value,
+					}, 'addWizardUserPreviewCallback');
+				});
+			}
+		};
+
+		/**
+		 * @param response
+		 * @returns {void}
+		 */
+		this.addWizardUserPreviewCallback = function(response) {
+			var container = document.querySelector('[data-luxletter-wizardpreview="users"]');
+			if (container !== null) {
+				container.innerHTML = response.html
+			}
+		};
+
+		/**
+		 * @params {string} uri
+		 * @params {object} parameters
+		 * @params {string} target callback function name
+		 * @returns {void}
+		 */
+		var ajaxConnection = function(uri, parameters, target) {
+			if (uri !== undefined && uri !== '') {
+				var xhttp = new XMLHttpRequest();
+				xhttp.onreadystatechange = function() {
+					if (this.readyState === 4 && this.status === 200) {
+						if (target !== null) {
+							that[target](JSON.parse(this.responseText));
+						}
+					}
+				};
+				xhttp.open('POST', mergeUriWithParameters(uri, parameters), true);
+				xhttp.send();
+			} else {
+				console.log('No ajax URI given!');
+			}
+		};
+
+		/**
+		 * Build an uri string for an ajax call together with params from an object
+		 * 		{
+		 * 			'x': 123,
+		 * 			'y': 'abc'
+		 * 		}
+		 *
+		 * 		=>
+		 *
+		 * 		"?x=123&y=abc"
+		 *
+		 * @params {string} uri
+		 * @params {object} parameters
+		 * @returns {string} e.g. "index.php?id=123&type=123&x=123&y=abc"
+		 */
+		var mergeUriWithParameters = function(uri, parameters) {
+			for (var key in parameters) {
+				if (parameters.hasOwnProperty(key)) {
+					if (uri.indexOf('?') !== -1) {
+						uri += '&';
+					} else {
+						uri += '?';
+					}
+					uri += key + '=' + encodeURIComponent(parameters[key]);
+				}
+			}
+			return uri;
 		};
 	}
 

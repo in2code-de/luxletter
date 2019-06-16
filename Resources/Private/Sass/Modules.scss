@@ -145,3 +145,15 @@ label {
     color: $colorGrey;
   }
 }
+
+/**
+ * Luxletter
+ */
+.luxletter-mailprefiew--image {
+  width: 32px;
+  height: 32px;
+  border-radius: 16px;
+  display: inline-block;
+  overflow: hidden;
+  margin-right: 20px;
+}

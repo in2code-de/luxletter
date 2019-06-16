@@ -1,0 +1,37 @@
+<div class="luxletter-wizard-userpreview">
+	<f:if condition="{userAmount} > 0">
+		<f:then>
+			<div class="alert alert-success" role="alert">
+				<h4 class="alert-heading">Newsletter is versandfertig</h4>
+				<p>{userAmount} Empfänger in Newslettergruppe</p>
+			</div>
+
+			Vorschau der Empfängerliste:
+			<ul class="list-group">
+				<f:for each="{userPreview}" as="user">
+					<li class="list-group-item">
+						<f:if condition="{user.firstImage}">
+							<f:then>
+								<f:image image="{user.firstImage}" treatIdAsReference="1" width="32c" height="32c" class="luxletter-mailprefiew--image"/>
+							</f:then>
+							<f:else>
+								<img src="{luxletter:user.getGravatarImageUrl(user:user)}" width="32" height="32" class="luxletter-mailprefiew--image"/>
+							</f:else>
+						</f:if>
+						{user.readableName} ({user.email})
+					</li>
+				</f:for>
+				<f:if condition="{userAmount} > 3">
+					<li class="list-group-item">
+						<f:image src="{f:uri.resource(path: 'Images/DummyUser.svg', extensionName: 'luxletter')}" width="32" height="32" class="luxletter-mailprefiew--image"/>
+						{userAmount - 3} further receivers
+						...
+					</li>
+				</f:if>
+			</ul>
+		</f:then>
+		<f:else>
+			No users found in group!
+		</f:else>
+	</f:if>
+</div>

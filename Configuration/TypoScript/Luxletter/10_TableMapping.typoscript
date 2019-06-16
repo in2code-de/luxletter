@@ -1,0 +1,17 @@
+# Table Mapping
+config.tx_extbase {
+    persistence {
+        classes {
+            In2code\Luxletter\Domain\Model\User {
+                mapping {
+                    tableName = fe_users
+                }
+            }
+            In2code\Luxletter\Domain\Model\Usergroup {
+                mapping {
+                    tableName = fe_groups
+                }
+            }
+        }
+    }
+}
