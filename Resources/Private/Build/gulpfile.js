@@ -10,7 +10,7 @@ var rename = require('gulp-rename');
 var project = {
 	base: __dirname + '/../../Public',
 	css: __dirname + '/../../Public/Css',
-	js: __dirname + '/../../Public/JavaScript/Lux',
+	js: __dirname + '/../../Public/JavaScript/Luxletter',
 	images: __dirname + '/../../Public/Images'
 };
 

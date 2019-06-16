@@ -23,4 +23,18 @@ class NewsletterController extends ActionController
     public function listAction(): void
     {
     }
+
+    /**
+     * @return void
+     */
+    public function newAction(): void
+    {
+    }
+
+    /**
+     * @return void
+     */
+    public function createAction(): void
+    {
+    }
 }

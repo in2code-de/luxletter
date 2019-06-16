@@ -1,0 +1,19 @@
+<f:layout name="Backend"/>
+
+<f:section name="content">
+	<div class="row">
+		<div class="col-md-12">
+			<h1>
+				<f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.workflow.new.title">Add
+					a newsletter (todo)
+				</f:translate>
+			</h1>
+
+			<f:render partial="Newsletter/Wizard" arguments="{_all}"/>
+
+			<f:form class="wizardform" action="create" name="workflow">
+				<f:render partial="Newsletter/FormFields" arguments="{_all}"/>
+			</f:form>
+		</div>
+	</div>
+</f:section>

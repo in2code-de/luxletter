@@ -1,0 +1,205 @@
+@import "Settings";
+
+/* wizard with arrows */
+.nomargin {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.wizard {
+  background-color: $white;
+  padding: 0.2em 0em 0.2em 0.2em;
+}
+
+.wizard a {
+  padding: 20px 12px 18px;
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  min-width: 33.00%;
+  margin-left: 3px;
+  text-align: center;
+  font-size: 18px;
+  color: $white;
+  font-weight: bold;
+  background: $colorGrey;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.wizard a:hover {
+  text-decoration: none;
+}
+
+.wizard a:first-child {
+  margin-left: 0;
+}
+
+.wizard:not(.left-arrow) a:before {
+  width: 0;
+  height: 0;
+  border-top: 34px inset transparent;
+  border-bottom: 34px inset transparent;
+  border-left: 34px solid $white;
+  position: absolute;
+  content: "";
+  top: 0;
+  left: 0;
+}
+
+.wizard:not(.left-arrow) a:after {
+  width: 0;
+  height: 0;
+  border-top: 34px inset transparent;
+  border-bottom: 34px inset transparent;
+  border-left: 34px solid $colorGrey;
+  position: absolute;
+  content: "";
+  top: 0;
+  right: -34px;
+  z-index: 2;
+}
+
+.wizard.left-arrow a:before {
+  width: 0;
+  height: 0;
+  border-top: 34px inset transparent;
+  border-bottom: 34px inset transparent;
+  border-right: 34px solid $colorGrey;
+  position: absolute;
+  content: "";
+  top: 0;
+  left: -34px;
+  z-index: 2;
+}
+
+.wizard.left-arrow a:after {
+  width: 0;
+  height: 0;
+  border-top: 34px inset transparent;
+  border-bottom: 34px inset transparent;
+  border-right: 34px solid $white;
+  position: absolute;
+  content: "";
+  top: 0;
+  right: 0;
+  z-index: 2;
+}
+
+.wizard a:first-child:before,
+.wizard a:last-child:after {
+  border: none;
+}
+
+.wizard a:first-child {
+  -webkit-border-radius: 4px 0 0 4px;
+  -moz-border-radius: 4px 0 0 4px;
+  border-radius: 4px 0 0 4px;
+}
+
+.wizard a:last-child {
+  -webkit-border-radius: 0 4px 4px 0;
+  -moz-border-radius: 0 4px 4px 0;
+  border-radius: 0 4px 4px 0;
+}
+
+.wizard.left-arrow a:last-child:before,
+.wizard.small.left-arrow a:last-child:before {
+  border-right-color: $colorMain;
+}
+
+.wizard .badge {
+  margin: 0 5px 0 18px;
+  position: relative;
+  top: -1px;
+  border-radius: 15px;
+  font-size: 20px;
+  background: $white;
+  color: $colorGrey;
+
+  .number {
+    display: inline-block;
+  }
+}
+
+.wizard a:first-child .badge {
+  margin-left: 0;
+}
+
+.wizard .current, .wizard a.progress-current {
+  background: $colorMain;
+  color: $white;
+
+  .badge {
+    color: $colorMain;
+  }
+}
+
+.wizard a.current:after, .wizard a.progress-current:after {
+  border-left-color: $colorMain !important;
+}
+
+.wizard.left-arrow a.current:before, .wizard.left-arrow a.progress-current:before,
+.wizard.small.left-arrow a.current:before, .wizard.small.left-arrow a.progress-current:before {
+  border-right-color: $colorMain;
+}
+
+.wizard.small {
+  margin-bottom: 15px;
+}
+
+.wizard.small a {
+  padding: 5px 12px 5px;
+}
+
+.wizard.small:not(.left-arrow) a:before {
+  border-top: 15px inset transparent;
+  border-bottom: 15px inset transparent;
+  border-left: 15px solid $white;
+}
+
+.wizard.small:not(.left-arrow) a:after {
+  border-top: 15px inset transparent;
+  border-bottom: 15px inset transparent;
+  border-left: 15px solid $colorSoft;
+  right: -15px;
+}
+
+.wizard.small.left-arrow a:before {
+  border-top: 15px inset transparent;
+  border-bottom: 15px inset transparent;
+  border-right: 15px solid $colorSoft;
+  left: -15px;
+  z-index: 2;
+}
+
+.wizard.small.left-arrow a:after {
+  width: 0;
+  height: 0;
+  border-top: 15px inset transparent;
+  border-bottom: 15px inset transparent;
+  border-right: 15px solid $white;
+}
+
+.wizard.small a:first-child:before,
+.wizard.small a:last-child:after {
+  border: none;
+}
+
+/* IE11 border bug fixes... hooray! */
+_:-ms-fullscreen, :root .wizard.small.left-arrow a:before {
+  left: -14px;
+}
+
+_:-ms-fullscreen, :root .wizard.small:not(.left-arrow) a:after {
+  right: -14px;
+}
+
+_:-ms-fullscreen, :root .wizard.left-arrow a:before {
+  left: -29px;
+}
+
+_:-ms-fullscreen, :root .wizard:not(.left-arrow) a:after {
+  right: -29px;
+}

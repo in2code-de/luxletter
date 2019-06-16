@@ -43,7 +43,7 @@ call_user_func(
             'luxletter',
             '',
             [
-                'Newsletter' => 'dashboard, list',
+                'Newsletter' => 'dashboard, list, new, create',
             ],
             [
                 'access' => 'user,group',
