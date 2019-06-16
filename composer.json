@@ -1,0 +1,34 @@
+{
+  "name": "in2code/luxletter",
+  "description": "Free newsletter extension for TYPO3. Works with and without EXT:lux",
+  "keywords": [
+    "typo3",
+    "newsletter",
+    "marketing",
+    "direct_mail"
+  ],
+  "homepage": "https://github.com/in2code-de/luxletter",
+  "authors": [
+    {
+      "name": "Alex Kellner",
+      "email": "alexander.kellner@in2code.de"
+    }
+  ],
+  "type": "typo3-cms-extension",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "typo3/cms-core": ">=9.5.0 <=10.0.0"
+  },
+  "replace": {
+    "luxenterprise": "self.version",
+    "typo3-ter/luxenterprise": "self.version"
+  },
+  "suggest": {
+    "in2code/lux": "Marketing automation for TYPO3"
+  },
+  "autoload": {
+    "psr-4": {
+      "In2code\\Luxletter\\": "Classes/"
+    }
+  }
+}

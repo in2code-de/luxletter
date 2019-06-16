@@ -1,0 +1,13 @@
+root = true
+
+[*.js]
+indent_style = tab
+
+[*.html]
+indent_style = tab
+
+[*.xlf]
+indent_style = tab
+
+[*.xml]
+indent_style = tab
