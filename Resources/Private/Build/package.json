@@ -1,0 +1,13 @@
+{
+  "name": "lux",
+  "description": "Living User Experience - LUX - the marketing automation tool for TYPO3.",
+  "author": "in2code",
+  "private": true,
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-plumber": "^1.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.1.1",
+    "gulp-uglify": "^1.5.1"
+  }
+}

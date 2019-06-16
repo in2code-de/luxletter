@@ -10,17 +10,16 @@
 
 $EM_CONF[$_EXTKEY] = [
     'title' => 'lux - TYPO3 Marketing Automation',
-    'description' => 'Living User Experience - LUX - the Marketing Automation tool for TYPO3. Enterprise Edition.
-        Enterprise edition as addon to the Community edition.',
+    'description' => 'Free newsletter extension for TYPO3. Works with and without EXT:lux.',
     'category' => 'plugin',
-    'version' => '2.1.0',
+    'version' => '1.0.0',
     'author' => 'Alex Kellner',
     'author_email' => 'alexander.kellner@in2code.de',
     'author_company' => 'in2code.de',
     'state' => 'stable',
     'constraints' => [
         'depends' => [
-            'lux' => '4.0.0-4.99.99'
+            'typo3' => '9.5.0-9.5.99'
         ],
         'conflicts' => [],
         'suggests' => [],

@@ -20,8 +20,8 @@
     "typo3/cms-core": ">=9.5.0 <=10.0.0"
   },
   "replace": {
-    "luxenterprise": "self.version",
-    "typo3-ter/luxenterprise": "self.version"
+    "luxletter": "self.version",
+    "typo3-ter/luxletter": "self.version"
   },
   "suggest": {
     "in2code/lux": "Marketing automation for TYPO3"
