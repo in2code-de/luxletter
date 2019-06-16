@@ -11,16 +11,13 @@ class StringUtility
 {
 
     /**
-     * Get current scheme, domain and path of the current installation
+     * Test string if it is an URL
      *
-     * @return string
+     * @param string $value
+     * @return bool
      */
-    public static function getCurrentUri(): string
+    public static function isValidUrl($value): bool
     {
-        $uri = '';
-        $uri .= parse_url(GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'), PHP_URL_SCHEME);
-        $uri .= '://' . GeneralUtility::getIndpEnv('HTTP_HOST') . '/';
-        $uri .= rtrim(GeneralUtility::getIndpEnv('TYPO3_SITE_PATH'), '/');
-        return $uri;
+        return filter_var($value, FILTER_VALIDATE_URL) !== false;
     }
 }

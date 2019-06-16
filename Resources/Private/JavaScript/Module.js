@@ -23,6 +23,7 @@ define(['jquery'], function($) {
 			addDatePickers();
 			addWizardForm();
 			addWizardUserPreview();
+			addWizardNewsletterPreview();
 		};
 
 		/**
@@ -89,11 +90,36 @@ define(['jquery'], function($) {
 		};
 
 		/**
+		 * @returns {void}
+		 */
+		var addWizardNewsletterPreview = function() {
+			var input = document.querySelector('[data-luxletter-wizardpreviewevent="newsletter"]');
+			if (input !== null) {
+				input.addEventListener('blur', function() {
+					ajaxConnection(TYPO3.settings.ajaxUrls['/luxletter/wizardNewsletterPreview'], {
+						origin: this.value,
+					}, 'addWizardNewsletterPreviewCallback');
+				});
+			}
+		};
+
+		/**
 		 * @param response
 		 * @returns {void}
 		 */
 		this.addWizardUserPreviewCallback = function(response) {
 			var container = document.querySelector('[data-luxletter-wizardpreview="users"]');
+			if (container !== null) {
+				container.innerHTML = response.html
+			}
+		};
+
+		/**
+		 * @param response
+		 * @returns {void}
+		 */
+		this.addWizardNewsletterPreviewCallback = function(response) {
+			var container = document.querySelector('[data-luxletter-wizardpreview="newsletter"]');
 			if (container !== null) {
 				container.innerHTML = response.html
 			}

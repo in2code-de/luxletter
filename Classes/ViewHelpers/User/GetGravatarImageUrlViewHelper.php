@@ -3,7 +3,7 @@ declare(strict_types=1);
 namespace In2code\Luxletter\ViewHelpers\User;
 
 use In2code\Luxletter\Domain\Model\User;
-use In2code\Luxletter\Utility\StringUtility;
+use In2code\Luxletter\Utility\FrontendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
@@ -55,6 +55,6 @@ class GetGravatarImageUrlViewHelper extends AbstractViewHelper
      */
     protected function getDefaultUrl(): string
     {
-        return StringUtility::getCurrentUri() . $this->defaultFile;
+        return FrontendUtility::getCurrentUri() . $this->defaultFile;
     }
 }

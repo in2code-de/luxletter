@@ -11,6 +11,20 @@ class FrontendUtility
 {
 
     /**
+     * Get current scheme, domain and path of the current installation
+     *
+     * @return string
+     */
+    public static function getCurrentUri(): string
+    {
+        $uri = '';
+        $uri .= parse_url(GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'), PHP_URL_SCHEME);
+        $uri .= '://' . GeneralUtility::getIndpEnv('HTTP_HOST') . '/';
+        $uri .= rtrim(GeneralUtility::getIndpEnv('TYPO3_SITE_PATH'), '/');
+        return $uri;
+    }
+
+    /**
      * @return string
      */
     public static function getActionName(): string

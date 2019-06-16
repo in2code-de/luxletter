@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace In2code\Luxletter\ViewHelpers\Groups;
+namespace In2code\Luxletter\ViewHelpers\Usergroup;
 
 use In2code\Luxletter\Domain\Repository\UsergroupRepository;
 use In2code\Luxletter\Utility\ObjectUtility;

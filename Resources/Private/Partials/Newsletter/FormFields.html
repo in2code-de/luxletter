@@ -60,6 +60,7 @@
 						  property="origin"
 						  id="origin"
 						  placeholder="https://www.yourdomain/newsletter/2020-01/"
+						  additionalAttributes="{data-luxletter-wizardpreviewevent:'newsletter'}"
 						  required="required"/>
 		<span class="help-block">
 			<f:translate key="module.newsletter.new.field.origin.description">PID or absolute URL</f:translate>
@@ -73,7 +74,7 @@
 		<f:form.select
 				id="receiver"
 				class="form-control input-lg"
-				options="{luxletter:groups.getReceiverGroups()}"
+				options="{luxletter:usergroup.getReceiverGroups()}"
 				prependOptionValue=""
 				prependOptionLabel="{f:translate(key:'pleasechoose')}"
 				additionalAttributes="{data-luxletter-wizardpreviewevent:'users'}"
@@ -103,8 +104,14 @@
 
 
 <fieldset>
-	<div class="row"><div class="col-md-12" data-luxletter-wizardpreview="users"></div></div>
-	<div class="row"><div class="col-md-12" data-luxletter-wizardpreview="newsletter"></div></div>
+	<div class="row">
+		<div class="col-md-12" data-luxletter-wizardpreview="users"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-10" data-luxletter-wizardpreview="newsletter"></div>
+		<div class="col-md-1"></div>
+	</div>
 
 	<button class="btn btn-primary btn-lg" data-wizardform-gotostep="2">
 		<f:translate key="module.newsletter.wizard.back">Back</f:translate>
