@@ -21,7 +21,8 @@ class UsergroupRepository extends AbstractRepository
         $statement = $queryBuilder
             ->select('uid', 'title')
             ->from(Usergroup::TABLE_NAME)
-            ->where(1)
+            ->where('luxletter_receiver=1')
+            ->orderBy('title', 'ASC')
             ->execute();
         while ($row = $statement->fetch()) {
             $groups[$row['uid']] = $row['title'];
