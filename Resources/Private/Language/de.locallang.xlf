@@ -90,6 +90,30 @@
 				<source>Please choose a frontend user group. Every user in this group will receive this newsletter.</source>
 				<target state="translated">Bitte eine Frontend-Benutzergruppe auswählen. Jeder Benutzer dieser Gruppe wird den Newsletter erhalten.</target>
 			</trans-unit>
+			<trans-unit id="module.newsletter.new.wizarduserpreview.success.title">
+				<source>Newsletter is ready to be sent</source>
+				<target state="translated">Newsletter is versandfertig</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.wizarduserpreview.success.addition">
+				<source>%s receivers in newslettergroup</source>
+				<target state="translated">%s Empfänger in Newslettergruppe</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.wizarduserpreview.previewreceivers">
+				<source>Receivers preview</source>
+				<target state="translated">Vorschau der Empfängerliste</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.wizarduserpreview.nousersfound.title">
+				<source>No receivers found in group</source>
+				<target state="translated">Keine Empfänger in Gruppe gefunden</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.wizarduserpreview.nousersfound.addition">
+				<source>Please go back and choose a different group</source>
+				<target state="translated">Bitte wähle eine andere Gruppe</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.wizarduserpreview.further">
+				<source>further receivers</source>
+				<target state="translated">weitere Empfänger</target>
+			</trans-unit>
 
 			<trans-unit id="pleasechoose">
 				<source>Please choose...</source>

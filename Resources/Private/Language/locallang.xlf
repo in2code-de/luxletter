@@ -68,6 +68,24 @@
 			<trans-unit id="module.newsletter.new.field.receiver.description">
 				<source>Please choose a frontend user group. Every user in this group will receive this newsletter.</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.new.wizarduserpreview.success.title">
+				<source>Newsletter is ready to be sent</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.wizarduserpreview.success.addition">
+				<source>%s receivers in newslettergroup</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.wizarduserpreview.previewreceivers">
+				<source>Receivers preview</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.wizarduserpreview.nousersfound.title">
+				<source>No receivers found in group</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.wizarduserpreview.nousersfound.addition">
+				<source>Please go back and choose a different group</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.wizarduserpreview.further">
+				<source>further receivers</source>
+			</trans-unit>
 
 			<trans-unit id="pleasechoose">
 				<source>Please choose...</source>
