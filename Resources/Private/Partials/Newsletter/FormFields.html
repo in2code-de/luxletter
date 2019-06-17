@@ -104,13 +104,50 @@
 
 
 <fieldset>
-	<div class="row">
-		<div class="col-md-12" data-luxletter-wizardpreview="users"></div>
+	<div class="alert alert-success" role="alert" data-luxletter-wizardstatus="ready">
+		<h4 class="alert-heading">
+			Newsletter is ready to be sent
+		</h4>
+		<p>Choose a testsend or finish the newsletter</p>
 	</div>
+
 	<div class="row">
-		<div class="col-md-1"></div>
-		<div class="col-md-10" data-luxletter-wizardpreview="newsletter"></div>
-		<div class="col-md-1"></div>
+		<div class="col-md-12">
+			<div data-luxletter-wizardpreview="users">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h3 class="panel-title">
+							<f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.new.wizarduserpreview.previewreceivers">Preview of the receivers</f:translate>
+							<span class="badge" title="{userAmount} receivers">{userAmount}</span>
+						</h3>
+					</div>
+					<div class="panel-body">
+						<div class="alert alert-warning" role="alert" data-luxletter-wizardstatus="pending">
+							<h4 class="alert-heading">
+								Newsletter is not yet ready to be sent
+							</h4>
+							<p>Please choose a receiver group</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						Newsletter preview
+					</h3>
+				</div>
+				<div class="panel-body" data-luxletter-wizardpreview="newsletter">
+					<div class="alert alert-warning" role="alert" data-luxletter-wizardstatus="pending">
+						<h4 class="alert-heading">
+							Newsletter is not yet ready to be sent
+						</h4>
+						<p>Please select an origin for your newsletter</p>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<button class="btn btn-primary btn-lg" data-wizardform-gotostep="2">

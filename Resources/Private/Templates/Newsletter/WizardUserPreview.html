@@ -1,39 +1,39 @@
 <div class="luxletter-wizard-userpreview">
 	<f:if condition="{userAmount} > 0">
 		<f:then>
-			<div class="alert alert-success" role="alert">
-				<h4 class="alert-heading">
-					<f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.new.wizarduserpreview.success.title">Ready</f:translate>
-				</h4>
-				<p><f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.new.wizarduserpreview.success.addition" arguments="{0:userAmount}">Number of receivers</f:translate></p>
-			</div>
-
-			<h4>
-				<f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.new.wizarduserpreview.previewreceivers">Preview of the receivers</f:translate>:
-			</h4>
-			<ul class="list-group">
-				<f:for each="{userPreview}" as="user">
-					<li class="list-group-item">
-						<f:if condition="{user.firstImage}">
-							<f:then>
-								<f:image image="{user.firstImage}" treatIdAsReference="1" width="32c" height="32c" class="luxletter-mailprefiew--image" alt="image"/>
-							</f:then>
-							<f:else>
-								<img src="{luxletter:user.getGravatarImageUrl(user:user)}" width="32" height="32" class="luxletter-mailprefiew--image" alt="image"/>
-							</f:else>
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.new.wizarduserpreview.previewreceivers">Preview of the receivers</f:translate>
+						<span class="badge" title="{userAmount} receivers">{userAmount}</span>
+					</h3>
+				</div>
+				<div class="panel-body">
+					<ul class="list-group">
+						<f:for each="{userPreview}" as="user">
+							<li class="list-group-item">
+								<f:if condition="{user.firstImage}">
+									<f:then>
+										<f:image image="{user.firstImage}" treatIdAsReference="1" width="32c" height="32c" class="luxletter-mailprefiew--image" alt="image"/>
+									</f:then>
+									<f:else>
+										<img src="{luxletter:user.getGravatarImageUrl(user:user)}" width="32" height="32" class="luxletter-mailprefiew--image" alt="image"/>
+									</f:else>
+								</f:if>
+								{user.readableName} ({user.email})
+							</li>
+						</f:for>
+						<f:if condition="{userAmount} > 3">
+							<li class="list-group-item">
+								<f:image src="{f:uri.resource(path: 'Images/DummyUser.svg', extensionName: 'luxletter')}" width="32" height="32" class="luxletter-mailprefiew--image"/>
+								{userAmount - 3}
+								<f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.new.wizarduserpreview.further">Further</f:translate>
+								...
+							</li>
 						</f:if>
-						{user.readableName} ({user.email})
-					</li>
-				</f:for>
-				<f:if condition="{userAmount} > 3">
-					<li class="list-group-item">
-						<f:image src="{f:uri.resource(path: 'Images/DummyUser.svg', extensionName: 'luxletter')}" width="32" height="32" class="luxletter-mailprefiew--image"/>
-						{userAmount - 3}
-						<f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.new.wizarduserpreview.further">Further</f:translate>
-						...
-					</li>
-				</f:if>
-			</ul>
+					</ul>
+				</div>
+			</div>
 		</f:then>
 		<f:else>
 			<div class="alert alert-warning" role="alert">
