@@ -3,10 +3,14 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
 use In2code\Luxletter\Domain\Factory\UserFactory;
+use In2code\Luxletter\Domain\Model\User;
+use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
+use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
+use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -14,7 +18,11 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class ParseNewsletterUrlService
 {
+    use SignalTrait;
+
     /**
+     * Hold url from origin
+     *
      * @var string
      */
     protected $url = '';
@@ -26,7 +34,7 @@ class ParseNewsletterUrlService
 
     /**
      * ParseNewsletterUrlService constructor.
-     * @param string $origin
+     * @param string $origin can be a page uid or a complete url
      */
     public function __construct(string $origin)
     {
@@ -41,30 +49,46 @@ class ParseNewsletterUrlService
     }
 
     /**
+     * @param User|null $user
      * @return string
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
      */
-    public function getParsedContent(): string
+    public function getParsedContent(User $user = null): string
     {
-        $content = $this->getNewsletterContainer($this->getContentFromOrigin());
+        if ($user === null) {
+            $userFactory = ObjectUtility::getObjectManager()->get(UserFactory::class);
+            $user = $userFactory->getDummyUser();
+        }
+        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'BeforeParsing', [$user]);
+        $content = $this->getNewsletterContainer($this->getContentFromOrigin($user), $user);
+        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'AfterParsing', [$content]);
         return $content;
     }
 
     /**
      * @param string $content
+     * @param User $user
      * @return string
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
      */
-    protected function getNewsletterContainer(string $content): string
+    protected function getNewsletterContainer(string $content, User $user): string
     {
         $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
         $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->containerFile));
-        $standaloneView->assignMultiple(['content' => $content, 'user' => UserFactory::getDummyUser()]);
+        $standaloneView->assignMultiple(['content' => $content, 'user' => $user]);
+        $this->signalDispatch(__CLASS__, __FUNCTION__, [$standaloneView, $content, $user]);
         return $standaloneView->render();
     }
 
     /**
-     * @return mixed|string
+     * @param User $user
+     * @return string
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
      */
-    protected function getContentFromOrigin()
+    protected function getContentFromOrigin(User $user): string
     {
         if ($this->url === '') {
             throw new \LogicException('Given URL was invalid and was not parsed', 1560709687);
@@ -74,7 +98,11 @@ class ParseNewsletterUrlService
         if ($string === false) {
             throw new \DomainException('Given URL could not be parsed and accessed', 1560709791);
         }
-        return $string;
+        $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
+        $standaloneView->setTemplateSource($string);
+        $standaloneView->assignMultiple(['user' => $user]);
+        $this->signalDispatch(__CLASS__, __FUNCTION__, [$standaloneView, $user]);
+        return $standaloneView->render();
     }
 
     /**
