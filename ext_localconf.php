@@ -5,6 +5,21 @@ if (!defined('TYPO3_MODE')) {
 
 call_user_func(
     function () {
+
+        /**
+         * Include Frontend Plugins
+         */
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'In2code.luxletter',
+            'Fe',
+            [
+                'Frontend' => 'preview'
+            ],
+            [
+                'Frontend' => 'preview'
+            ]
+        );
+
         /**
          * Fluid Namespace
          */

@@ -8,7 +8,6 @@ use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\ExpressionLanguage\Tests\Node\Obj;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -68,23 +67,6 @@ class NewsletterController extends ActionController
         ]);
         $response->getBody()->write(json_encode(
             ['html' => $standaloneView->render()]
-        ));
-        return $response;
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @return ResponseInterface
-     */
-    public function wizardNewsletterPreviewAjax(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
-    {
-        $parseService = ObjectUtility::getObjectManager()->get(
-            ParseNewsletterUrlService::class,
-            $request->getQueryParams()['origin']
-        );
-        $response->getBody()->write(json_encode(
-            ['html' => $parseService->getParsedContent()]
         ));
         return $response;
     }

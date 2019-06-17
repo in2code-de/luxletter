@@ -1,0 +1,25 @@
+# Newsletter preview
+luxletterPreviewNewsletter = PAGE
+luxletterPreviewNewsletter {
+    typeNum = 1560777975
+    config {
+        no_cache = 1
+        disableAllHeaderCode = 1
+        disablePrefixComment = 1
+        xhtml_cleaning = 0
+        admPanel = 0
+        debug = 0
+    }
+
+    10 = USER
+    10 {
+        userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+        extensionName = Luxletter
+        pluginName = Fe
+        vendorName = In2code
+        controller = Frontend
+        action = preview
+        switchableControllerActions.Frontend.1 = preview
+        features.requireCHashArgumentForActionArguments = 0
+    }
+}
