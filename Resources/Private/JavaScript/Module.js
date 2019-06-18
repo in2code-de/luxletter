@@ -169,6 +169,10 @@ define(['jquery'], function($) {
 			if (messageElement !== null) {
 				showElement(messageElement);
 			}
+			var fieldElements = document.querySelector('[data-luxletter-testmail="fields"]');
+			if (fieldElements !== null) {
+				hideElement(fieldElements);
+			}
 		};
 
 		/**

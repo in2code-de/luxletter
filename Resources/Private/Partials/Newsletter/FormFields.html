@@ -135,17 +135,19 @@
 					</h3>
 				</div>
 				<div class="panel-body">
-					<label for="test" class="lb-lg">
-						Receiver
-					</label>
-					<f:form.textfield class="form-control input-lg"
-									  property="origin"
-									  id="test"
-									  additionalAttributes="{data-luxletter-testmail:'email'}"
-									  placeholder="your@email.org"/>
-					<button class="btn btn-primary btn-lg" data-luxletter-testmail="submit">
-						Send
-					</button>
+					<div data-luxletter-testmail="fields">
+						<label for="test" class="lb-lg">
+							Receiver
+						</label>
+						<f:form.textfield class="form-control input-lg"
+										  property="origin"
+										  id="test"
+										  additionalAttributes="{data-luxletter-testmail:'email'}"
+										  placeholder="your@email.org"/>
+						<button class="btn btn-primary btn-lg" data-luxletter-testmail="submit">
+							Send
+						</button>
+					</div>
 
 
 					<div class="alert alert-success" role="alert" data-luxletter-testmail="message" style="display: none;">
