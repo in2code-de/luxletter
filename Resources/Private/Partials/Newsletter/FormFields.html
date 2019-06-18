@@ -53,6 +53,21 @@
 
 <fieldset>
 	<div class="form-group">
+		<label for="subject" class="lb-lg">
+			<f:translate key="module.newsletter.new.field.subject">Subject</f:translate>*
+		</label>
+		<f:form.textfield class="form-control input-lg"
+						  property="subject"
+						  id="subject"
+						  placeholder="Your new newsletter for product A (2020/01)"
+						  additionalAttributes="{data-luxletter-testmail:'subject'}"
+						  required="required"/>
+		<span class="help-block">
+			<f:translate key="module.newsletter.new.field.subject.description">Email subject</f:translate>
+		</span>
+	</div>
+
+	<div class="form-group">
 		<label for="receiver" class="lb-lg">
 			<f:translate key="module.newsletter.new.field.receiver">Receiver</f:translate>*
 		</label>
@@ -113,6 +128,35 @@
 
 	<div class="row">
 		<div class="col-md-12">
+			<div class="panel panel-default" data-luxletter-wizardstatus="ready" style="display: none;">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						Send this newsletter as test email
+					</h3>
+				</div>
+				<div class="panel-body">
+					<label for="test" class="lb-lg">
+						Receiver
+					</label>
+					<f:form.textfield class="form-control input-lg"
+									  property="origin"
+									  id="test"
+									  additionalAttributes="{data-luxletter-testmail:'email'}"
+									  placeholder="your@email.org"/>
+					<button class="btn btn-primary btn-lg" data-luxletter-testmail="submit">
+						Send
+					</button>
+
+
+					<div class="alert alert-success" role="alert" data-luxletter-testmail="message" style="display: none;">
+						<h4 class="alert-heading">
+							Newsletter was sent
+						</h4>
+						<p>Your test newsletter was sent correctly</p>
+					</div>
+				</div>
+			</div>
+
 			<div data-luxletter-wizardpreview="users">
 				<div class="panel panel-default">
 					<div class="panel-heading">
@@ -139,7 +183,7 @@
 					</h3>
 				</div>
 				<div class="panel-body" data-luxletter-wizardpreview="newsletter">
-					<div class="alert alert-warning" role="alert" data-luxletter-wizardstatus="pending">
+					<div class="alert alert-warning" role="alert">
 						<h4 class="alert-heading">
 							Newsletter is not yet ready to be sent
 						</h4>

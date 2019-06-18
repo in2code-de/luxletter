@@ -62,6 +62,12 @@
 			<trans-unit id="module.newsletter.new.field.origin.description">
 				<source>Please add the absolute URL (https://domain.org/newsletter/) or a page UID where your former created newsletter is located. Afterwards the newsletter will be parsed and prepared for sending.</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.subject">
+				<source>Mail subject</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.subject.description">
+				<source>Choose an email subject for this newsletter.</source>
+			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.receiver">
 				<source>Choose a receiver group</source>
 			</trans-unit>

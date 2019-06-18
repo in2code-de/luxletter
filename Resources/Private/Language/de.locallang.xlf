@@ -82,6 +82,14 @@
 				<source>Please add the absolute URL (https://domain.org/newsletter/) or a page UID where your former created newsletter is located. Afterwards the newsletter will be parsed and prepared for sending.</source>
 				<target state="translated">Bitte tragen Sie die absolute URL (https://domain.org/newsletter/) oder eine Seiten UID ein zum von Ihnen zuvor erstellten Newsletter ein. Anschließend wird dieser von Luxletter gelesen und für den Versand vorbereitet.</target>
 			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.subject">
+				<source>Mail subject</source>
+				<target state="translated">E-Mail Betreff</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.subject.description">
+				<source>Choose an email subject for this newsletter.</source>
+				<target state="translated">Bitte Betreff für Newsletter eintragen.</target>
+			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.receiver">
 				<source>Choose a receiver group</source>
 				<target state="translated">Empfänger-Gruppe auswählen</target>

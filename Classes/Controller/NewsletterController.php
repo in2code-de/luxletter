@@ -4,12 +4,16 @@ namespace In2code\Luxletter\Controller;
 
 use Doctrine\DBAL\DBALException;
 use In2code\Luxletter\Domain\Repository\UserRepository;
+use In2code\Luxletter\Domain\Service\MailService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
+use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
+use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -68,6 +72,28 @@ class NewsletterController extends ActionController
         $response->getBody()->write(json_encode(
             ['html' => $standaloneView->render()]
         ));
+        return $response;
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
+     */
+    public function testMailAjax(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        if (BackendUserUtility::isBackendUserAuthenticated() === false) {
+            throw new \LogicException('You are not authenticated to send mails', 1560872725);
+        }
+        $mailService = ObjectUtility::getObjectManager()->get(
+            MailService::class,
+            $request->getQueryParams()['subject'],
+            $request->getQueryParams()['origin']
+        );
+        $status = $mailService->sendNewsletter($request->getQueryParams()['email']) > 0;
+        $response->getBody()->write(json_encode(['status' => $status]));
         return $response;
     }
 }

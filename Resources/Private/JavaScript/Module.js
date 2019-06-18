@@ -34,6 +34,7 @@ define(['jquery'], function($) {
 			addWizardForm();
 			addWizardUserPreview();
 			addWizardNewsletterPreview();
+			testMailListener();
 		};
 
 		/**
@@ -45,7 +46,7 @@ define(['jquery'], function($) {
 			var wizardLinks = document.querySelectorAll('.wizard > a');
 
 			for (var i = 1; i < fieldsets.length; i++) {
-				fieldsets[i].style.display = 'none';
+				hideElement(fieldsets[i]);
 			}
 			for (var j = 0; j < buttons.length; j++) {
 				buttons[j].addEventListener('click', function(event) {
@@ -56,9 +57,9 @@ define(['jquery'], function($) {
 					wizardLinks[step-1].classList.add('current');
 
 					for (var k = 0; k < fieldsets.length; k++) {
-						fieldsets[k].style.display = 'none';
+						hideElement(fieldsets[k]);
 					}
-					fieldsets[step-1].style.display = 'block';
+					showElement(fieldsets[step-1]);
 				});
 			}
 		};
@@ -112,12 +113,35 @@ define(['jquery'], function($) {
 						var iframe = document.createElement('iframe');
 						iframe.setAttribute(
 							'src',
-							'//' + window.location.host + '/?type=1560777975&tx_luxletter_fe[origin]=' + this.value
+							'//' + window.location.host + '/?type=1560777975&tx_luxletter_fe[origin]='
+							+ encodeURIComponent(this.value)
 						);
 						iframe.setAttribute('class', 'luxletter-iframepreview');
 						container.appendChild(iframe);
 						newsletterPreview = true;
 						showIfNewsletterIsReady();
+					}
+				});
+			}
+		};
+
+		/**
+		 * @returns {void}
+		 */
+		var testMailListener = function() {
+			var input = document.querySelector('[data-luxletter-testmail="submit"]');
+			if (input !== null) {
+				input.addEventListener('click', function(event) {
+					event.preventDefault();
+					var origin = document.querySelector('[data-luxletter-wizardpreviewevent="newsletter"]').value;
+					var email = document.querySelector('[data-luxletter-testmail="email"]').value;
+					var subject = document.querySelector('[data-luxletter-testmail="subject"]').value;
+					if (origin && email && subject) {
+						ajaxConnection(TYPO3.settings.ajaxUrls['/luxletter/testMail'], {
+							origin: origin,
+							email: email,
+							subject: subject,
+						}, 'testMailListenerCallback');
 					}
 				});
 			}
@@ -133,6 +157,17 @@ define(['jquery'], function($) {
 				container.innerHTML = response.html;
 				userPreview = true;
 				showIfNewsletterIsReady();
+			}
+		};
+
+		/**
+		 * @param response
+		 * @returns {void}
+		 */
+		this.testMailListenerCallback = function(response) {
+			var messageElement = document.querySelector('[data-luxletter-testmail="message"]');
+			if (messageElement !== null) {
+				showElement(messageElement);
 			}
 		};
 
@@ -164,9 +199,9 @@ define(['jquery'], function($) {
 		 */
 		var showIfNewsletterIsReady = function() {
 			if (isNewsletterReady()) {
-				var statusElement = document.querySelector('[data-luxletter-wizardstatus="ready"]');
-				if (statusElement !== null) {
-					statusElement.style.display = 'block';
+				var statusElements = document.querySelectorAll('[data-luxletter-wizardstatus="ready"]');
+				for (var i = 0; i < statusElements.length; i++) {
+					showElement(statusElements[i]);
 				}
 			}
 		};
@@ -205,6 +240,22 @@ define(['jquery'], function($) {
 				}
 			}
 			return uri;
+		};
+
+		/**
+		 * @param element
+		 * @returns {void}
+		 */
+		var hideElement = function(element) {
+			element.style.display = 'none';
+		};
+
+		/**
+		 * @param element
+		 * @returns {void}
+		 */
+		var showElement = function(element) {
+			element.style.display = 'block';
 		};
 	}
 
