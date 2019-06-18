@@ -4,8 +4,7 @@ namespace In2code\Luxletter\Controller;
 
 use Doctrine\DBAL\DBALException;
 use In2code\Luxletter\Domain\Repository\UserRepository;
-use In2code\Luxletter\Domain\Service\MailService;
-use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
+use In2code\Luxletter\Mail\SendMail;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
@@ -88,7 +87,7 @@ class NewsletterController extends ActionController
             throw new \LogicException('You are not authenticated to send mails', 1560872725);
         }
         $mailService = ObjectUtility::getObjectManager()->get(
-            MailService::class,
+            SendMail::class,
             $request->getQueryParams()['subject'],
             $request->getQueryParams()['origin']
         );

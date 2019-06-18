@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
-namespace In2code\Luxletter\Domain\Service;
+namespace In2code\Luxletter\Mail;
 
+use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ObjectUtility;
-use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
- * Class MailService
+ * Class SendMail
  * Todo make sender configurable
  */
-class MailService
+class SendMail
 {
     use SignalTrait;
 
