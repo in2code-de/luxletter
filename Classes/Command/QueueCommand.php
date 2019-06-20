@@ -49,7 +49,7 @@ class QueueCommand extends Command {
             $this->sendNewsletterToReceiverInQueue($queue);
             $queueRepository->delete($queue);
         }
-        $output->writeln('Try to send maximum ' . $input->getArgument('amount') . ' emails...');
+        $output->writeln('Just sent ' . $queues->count() . ' emails from the queue...');
         return 0;
     }
 
