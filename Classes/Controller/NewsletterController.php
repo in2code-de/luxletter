@@ -3,9 +3,12 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
 use Doctrine\DBAL\DBALException;
+use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
+use In2code\Luxletter\Domain\Service\ParseNewsletterService;
+use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Mail\SendMail;
 use In2code\Luxletter\Utility\BackendUserUtility;
@@ -75,11 +78,14 @@ class NewsletterController extends ActionController
     /**
      * @return void
      * @throws InvalidArgumentNameException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
      * @throws NoSuchArgumentException
      */
     public function initializeCreateAction(): void
     {
         $this->setDatetimeObjectInNewsletterRequest();
+        $this->parseNewsletterToBodytext();
     }
 
     /**
@@ -179,10 +185,16 @@ class NewsletterController extends ActionController
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
             throw new \LogicException('You are not authenticated to send mails', 1560872725);
         }
+        $parseUrlService = ObjectUtility::getObjectManager()->get(
+            ParseNewsletterUrlService::class,
+            $request->getQueryParams()['origin']
+        );
+        $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
+        $userFactory = ObjectUtility::getObjectManager()->get(UserFactory::class);
         $mailService = ObjectUtility::getObjectManager()->get(
             SendMail::class,
-            $request->getQueryParams()['subject'],
-            $request->getQueryParams()['origin']
+            $parseService->parseBodytext($request->getQueryParams()['subject'], $userFactory->getDummyUser()),
+            $parseUrlService->getParsedContent()
         );
         $status = $mailService->sendNewsletter($request->getQueryParams()['email']) > 0;
         $response->getBody()->write(json_encode(['status' => $status]));
@@ -204,6 +216,22 @@ class NewsletterController extends ActionController
             $datetime = new \DateTime();
         }
         $newsletter['datetime'] = $datetime;
+        $this->request->setArgument('newsletter', $newsletter);
+    }
+
+    /**
+     * @return void
+     * @throws InvalidArgumentNameException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
+     * @throws NoSuchArgumentException
+     */
+    protected function parseNewsletterToBodytext(): void
+    {
+        $newsletter = (array)$this->request->getArgument('newsletter');
+        $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterUrlService::class, $newsletter['origin']);
+        $parseService->setParseVariables(false);
+        $newsletter['bodytext'] = $parseService->getParsedContent();
         $this->request->setArgument('newsletter', $newsletter);
     }
 }

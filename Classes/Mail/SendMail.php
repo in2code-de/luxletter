@@ -49,15 +49,12 @@ class SendMail
     /**
      * MailService constructor.
      * @param string $subject
-     * @param string $origin
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
+     * @param string $bodytext
      */
-    public function __construct(string $subject, string $origin)
+    public function __construct(string $subject, string $bodytext)
     {
         $this->subject = $subject;
-        $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterUrlService::class, $origin);
-        $this->bodytext = $parseService->getParsedContent();
+        $this->bodytext = $bodytext;
     }
 
     /**

@@ -14,7 +14,8 @@ use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
- * Class ParseNewsletterUrlService
+ * Class ParseNewsletterUrlService to fill a container html with a content from a http page.
+ * This is used for testmails and for storing a bodytext in a newsletter record
  */
 class ParseNewsletterUrlService
 {
@@ -31,6 +32,13 @@ class ParseNewsletterUrlService
      * @var string
      */
     protected $containerFile = 'EXT:luxletter/Resources/Private/Templates/Mail/NewsletterContainer.html';
+
+    /**
+     * Decide if variables like {user.firstName} should be parsed with fluid or not
+     *
+     * @var bool
+     */
+    protected $parseVariables = true;
 
     /**
      * ParseNewsletterUrlService constructor.
@@ -60,9 +68,9 @@ class ParseNewsletterUrlService
             $userFactory = ObjectUtility::getObjectManager()->get(UserFactory::class);
             $user = $userFactory->getDummyUser();
         }
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'BeforeParsing', [$user]);
+        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'BeforeParsing', [$user, $this]);
         $content = $this->getNewsletterContainer($this->getContentFromOrigin($user), $user);
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'AfterParsing', [$content]);
+        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'AfterParsing', [$content, $this]);
         return $content;
     }
 
@@ -75,11 +83,17 @@ class ParseNewsletterUrlService
      */
     protected function getNewsletterContainer(string $content, User $user): string
     {
-        $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
-        $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->containerFile));
-        $standaloneView->assignMultiple(['content' => $content, 'user' => $user]);
-        $this->signalDispatch(__CLASS__, __FUNCTION__, [$standaloneView, $content, $user]);
-        return $standaloneView->render();
+        if ($this->isParseVariables()) {
+            $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
+            $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->containerFile));
+            $standaloneView->assignMultiple(['content' => $content, 'user' => $user]);
+            $html = $standaloneView->render();
+        } else {
+            $container = file_get_contents(GeneralUtility::getFileAbsFileName($this->containerFile));
+            $html = str_replace('{content}', $content, $container);
+        }
+        $this->signalDispatch(__CLASS__, __FUNCTION__, [$html, $content, $user, $this]);
+        return $html;
     }
 
     /**
@@ -98,11 +112,12 @@ class ParseNewsletterUrlService
         if ($string === false) {
             throw new \DomainException('Given URL could not be parsed and accessed', 1560709791);
         }
-        $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
-        $standaloneView->setTemplateSource($string);
-        $standaloneView->assignMultiple(['user' => $user]);
-        $this->signalDispatch(__CLASS__, __FUNCTION__, [$standaloneView, $user]);
-        return $standaloneView->render();
+        if ($this->isParseVariables()) {
+            $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
+            $string = $parseService->parseBodytext($string, $user);
+        }
+        $this->signalDispatch(__CLASS__, __FUNCTION__, [$string, $user, $this]);
+        return $string;
     }
 
     /**
@@ -127,5 +142,23 @@ class ParseNewsletterUrlService
         } catch (\Exception $exception) {
         }
         return $string;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isParseVariables(): bool
+    {
+        return $this->parseVariables;
+    }
+
+    /**
+     * @param bool $parseVariables
+     * @return ParseNewsletterUrlService
+     */
+    public function setParseVariables(bool $parseVariables): self
+    {
+        $this->parseVariables = $parseVariables;
+        return $this;
     }
 }

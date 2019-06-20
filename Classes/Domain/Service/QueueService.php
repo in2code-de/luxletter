@@ -20,10 +20,10 @@ class QueueService
      * Add a lot of queue entries from a given newsletter
      *
      * @param Newsletter $newsletter
-     * @return string
+     * @return void
      * @throws IllegalObjectTypeException
      */
-    public function addMailReceiversToQueue(Newsletter $newsletter)
+    public function addMailReceiversToQueue(Newsletter $newsletter): void
     {
         $queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
         $userRepository = ObjectUtility::getObjectManager()->get(UserRepository::class);
