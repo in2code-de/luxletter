@@ -6,6 +6,7 @@ use Doctrine\DBAL\DBALException;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
+use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Mail\SendMail;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
@@ -92,6 +93,8 @@ class NewsletterController extends ActionController
     {
         $this->newsletterRepository->add($newsletter);
         $this->newsletterRepository->persistAll();
+        $queueService = ObjectUtility::getObjectManager()->get(QueueService::class);
+        $queueService->addMailReceiversToQueue($newsletter);
         $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.create.message'));
         $this->redirect('list');
     }
@@ -155,7 +158,7 @@ class NewsletterController extends ActionController
         $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
         $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->wizardUserPreviewFile));
         $standaloneView->assignMultiple([
-            'userPreview' => $userRepository->getUserPreviewFromGroup((int)$request->getQueryParams()['usergroup']),
+            'userPreview' => $userRepository->getUsersFromGroup((int)$request->getQueryParams()['usergroup'], 3),
             'userAmount' => $userRepository->getUserAmountFromGroup((int)$request->getQueryParams()['usergroup'])
         ]);
         $response->getBody()->write(json_encode(

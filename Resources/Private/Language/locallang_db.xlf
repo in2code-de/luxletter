@@ -31,6 +31,19 @@
 			<trans-unit id="tx_luxletter_domain_model_newsletter.bodytext">
 				<source>Bodytext</source>
 			</trans-unit>
+
+			<trans-unit id="tx_luxletter_domain_model_queue">
+				<source>Mail queue</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_queue.email">
+				<source>Email</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_queue.newsletter">
+				<source>Newsletter</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_queue.user">
+				<source>User</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

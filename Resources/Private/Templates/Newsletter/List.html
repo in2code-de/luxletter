@@ -1,6 +1,16 @@
 <f:layout name="Backend"/>
 
 <f:section name="content">
+	<f:if condition="{newsletters}">
+		<div class="row">
+			<div class="col-md-12">
+				<f:link.action action="new" class="btn btn-lg btn-primary" style="width: 250px; margin-bottom: 20px;">
+					<f:translate key="module.newsletter.new.title">Add newsletter</f:translate>
+				</f:link.action>
+			</div>
+		</div>
+	</f:if>
+
 	<div class="row">
 		<div class="col-md-12">
 			<h1>
@@ -82,9 +92,8 @@
 				<f:else>
 					<div class="lux-workflow-new"></div>
 					<f:link.action action="new" class="btn btn-lg-extra btn-primary btn-primary-extra">
-						<span>
-							<f:translate key="module.newsletter.list.createnew.1">No newsletters yet</f:translate></span>
-							<f:translate key="module.newsletter.list.createnew.2">Add a new one</f:translate>
+						<span><f:translate key="module.newsletter.list.createnew.1">No newsletters yet</f:translate></span>
+						<f:translate key="module.newsletter.list.createnew.2">Add a new one</f:translate>
 					</f:link.action>
 				</f:else>
 			</f:if>

@@ -40,6 +40,23 @@
 				<source>Bodytext</source>
 				<target state="translated">E-Mail Inhalt</target>
 			</trans-unit>
+
+			<trans-unit id="tx_luxletter_domain_model_queue">
+				<source>Mail queue</source>
+				<target state="translated">E-Mail Warteschlange</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_queue.email">
+				<source>Email</source>
+				<target state="translated">E-Mail</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_queue.newsletter">
+				<source>Newsletter</source>
+				<target state="translated">Newsletter</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_queue.user">
+				<source>User</source>
+				<target state="translated">Benutzer</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

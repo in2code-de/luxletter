@@ -22,13 +22,16 @@ class UserRepository extends AbstractRepository
 
     /**
      * @param int $groupIdentifier
+     * @param int $limit
      * @return QueryResultInterface
      */
-    public function getUserPreviewFromGroup(int $groupIdentifier): QueryResultInterface
+    public function getUsersFromGroup(int $groupIdentifier, int $limit = 0): QueryResultInterface
     {
         $query = $this->createQuery();
         $query->matching($query->equals('usergroup.uid', $groupIdentifier));
-        $query->setLimit(3);
+        if ($limit > 0) {
+            $query->setLimit($limit);
+        }
         return $query->execute();
     }
 

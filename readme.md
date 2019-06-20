@@ -29,6 +29,7 @@ composer require "in2code/luxletter"
 ## Todos
 
 * Mail queue
+* Configuration for sendervalues
 * Link-rewriting for tracking
 * Image include in newsletters?
 * Dashboard
