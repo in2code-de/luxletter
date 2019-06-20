@@ -7,9 +7,11 @@
 				<f:translate key="module.newsletter.new.title">Add newsletter</f:translate>
 			</h1>
 
+			<f:render partial="Misc/FlashMessages" arguments="{_all}"/>
+
 			<f:render partial="Newsletter/Wizard" arguments="{_all}"/>
 
-			<f:form class="wizardform" action="create" name="workflow">
+			<f:form class="wizardform" action="create" name="newsletter">
 				<f:render partial="Newsletter/FormFields" arguments="{_all}"/>
 			</f:form>
 		</div>

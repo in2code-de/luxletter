@@ -34,6 +34,7 @@
 				type="datetime"
 				property="datetime"
 				id="datetime"
+				data="{date-type:'datetime',date-offset:'0'}"
 				class="form-control t3js-datetimepicker t3js-clearable" />
 		<span class="help-block">
 			<f:translate key="module.newsletter.new.field.datetime.description">Datetime description</f:translate>
@@ -121,9 +122,9 @@
 <fieldset>
 	<div class="alert alert-success" role="alert" data-luxletter-wizardstatus="ready" style="display: none;">
 		<h4 class="alert-heading">
-			Newsletter is ready to be sent
+			<f:translate key="module.newsletter.new.message.ready">Newsletter is ready for dispatch</f:translate>
 		</h4>
-		<p>Choose a testsend or finish the newsletter</p>
+		<p><f:translate key="module.newsletter.new.message.ready.addition">If you click save (see below), the newsletter will be planned for dispatch</f:translate></p>
 	</div>
 
 	<div class="row">
@@ -131,13 +132,13 @@
 			<div class="panel panel-default" data-luxletter-wizardstatus="ready" style="display: none;">
 				<div class="panel-heading">
 					<h3 class="panel-title">
-						Send this newsletter as test email
+						<f:translate key="module.newsletter.new.field.testmail">Testmail</f:translate>
 					</h3>
 				</div>
 				<div class="panel-body">
 					<div data-luxletter-testmail="fields">
 						<label for="test" class="lb-lg">
-							Receiver
+							<f:translate key="module.newsletter.new.field.testmail.receiver">Receiver</f:translate>
 						</label>
 						<f:form.textfield class="form-control input-lg"
 										  property="origin"
@@ -145,16 +146,16 @@
 										  additionalAttributes="{data-luxletter-testmail:'email'}"
 										  placeholder="your@email.org"/>
 						<button class="btn btn-primary btn-lg" data-luxletter-testmail="submit">
-							Send
+							<f:translate key="send">Send</f:translate>
 						</button>
 					</div>
 
 
 					<div class="alert alert-success" role="alert" data-luxletter-testmail="message" style="display: none;">
 						<h4 class="alert-heading">
-							Newsletter was sent
+							<f:translate key="module.newsletter.new.message.testmailsent">Newsletter was sent</f:translate>
 						</h4>
-						<p>Your test newsletter was sent correctly</p>
+						<p><f:translate key="module.newsletter.new.message.testmailsent.addition">Your test newsletter was sent correctly</f:translate></p>
 					</div>
 				</div>
 			</div>
@@ -163,16 +164,16 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h3 class="panel-title">
-							<f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.new.wizarduserpreview.previewreceivers">Preview of the receivers</f:translate>
+							<f:translate key="module.newsletter.new.wizarduserpreview.previewreceivers">Preview of the receivers</f:translate>
 							<span class="badge" title="{userAmount} receivers">{userAmount}</span>
 						</h3>
 					</div>
 					<div class="panel-body">
 						<div class="alert alert-warning" role="alert" data-luxletter-wizardstatus="pending">
 							<h4 class="alert-heading">
-								Newsletter is not yet ready to be sent
+								<f:translate key="module.newsletter.new.message.notready">Newsletter is not yet ready to be sent</f:translate>
 							</h4>
-							<p>Please choose a receiver group</p>
+							<p><f:translate key="module.newsletter.new.message.notready.receiver">Please choose a receiver group</f:translate></p>
 						</div>
 					</div>
 				</div>
@@ -181,15 +182,15 @@
 			<div class="panel panel-default">
 				<div class="panel-heading">
 					<h3 class="panel-title">
-						Newsletter preview
+						<f:translate key="module.newsletter.new.wizarduserpreview.previewnewsletter">Newsletter preview</f:translate>
 					</h3>
 				</div>
 				<div class="panel-body" data-luxletter-wizardpreview="newsletter">
 					<div class="alert alert-warning" role="alert">
 						<h4 class="alert-heading">
-							Newsletter is not yet ready to be sent
+							<f:translate key="module.newsletter.new.message.notready">Newsletter is not yet ready to be sent</f:translate>
 						</h4>
-						<p>Please select an origin for your newsletter</p>
+						<p><f:translate key="module.newsletter.new.message.notready.origin">Please select an origin for your newsletter</f:translate></p>
 					</div>
 				</div>
 			</div>

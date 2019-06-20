@@ -7,6 +7,39 @@
 				<source>Is newsletter receiver group?</source>
 				<target state="translated">Ist eine Newsletter Empfänger Gruppe?</target>
 			</trans-unit>
+
+			<trans-unit id="tx_luxletter_domain_model_newsletter">
+				<source>Newsletter</source>
+				<target state="translated">Newsletter</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.title">
+				<source>Title</source>
+				<target state="translated">Bezeichnung</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.description">
+				<source>Description</source>
+				<target state="translated">Beschreibung</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.datetime">
+				<source>Sending time</source>
+				<target state="translated">Versandzeitpunkt</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.subject">
+				<source>Mail subject</source>
+				<target state="translated">Betreffzeile der E-Mail</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.receiver">
+				<source>Receiver group</source>
+				<target state="translated">Empfänger-Gruppe</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.origin">
+				<source>Origin</source>
+				<target state="translated">Text-Ursprung</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.bodytext">
+				<source>Bodytext</source>
+				<target state="translated">E-Mail Inhalt</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

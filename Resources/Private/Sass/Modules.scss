@@ -163,3 +163,12 @@ label {
   border: none;
   height: 800px;
 }
+
+.luxletter-messages {
+  padding: 15px 0;
+  list-style-type: none;
+  > li {
+    margin: 5px 30px;
+    font-size: 16px;
+  }
+}

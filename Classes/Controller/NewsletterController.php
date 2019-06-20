@@ -3,14 +3,23 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
 use Doctrine\DBAL\DBALException;
+use In2code\Luxletter\Domain\Model\Newsletter;
+use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Mail\SendMail;
 use In2code\Luxletter\Utility\BackendUserUtility;
+use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentNameException;
+use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
+use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
+use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -26,6 +35,20 @@ class NewsletterController extends ActionController
     protected $wizardUserPreviewFile = 'EXT:luxletter/Resources/Private/Templates/Newsletter/WizardUserPreview.html';
 
     /**
+     * @var NewsletterRepository
+     */
+    protected $newsletterRepository = null;
+
+    /**
+     * @param NewsletterRepository $newsletterRepository
+     * @return void
+     */
+    public function injectNewsletterRepository(NewsletterRepository $newsletterRepository)
+    {
+        $this->newsletterRepository = $newsletterRepository;
+    }
+
+    /**
      * @return void
      */
     public function dashboardAction(): void
@@ -37,6 +60,8 @@ class NewsletterController extends ActionController
      */
     public function listAction(): void
     {
+        $newsletters = $this->newsletterRepository->findAll();
+        $this->view->assign('newsletters', $newsletters);
     }
 
     /**
@@ -48,9 +73,71 @@ class NewsletterController extends ActionController
 
     /**
      * @return void
+     * @throws InvalidArgumentNameException
+     * @throws NoSuchArgumentException
      */
-    public function createAction(): void
+    public function initializeCreateAction(): void
     {
+        $this->setDatetimeObjectInNewsletterRequest();
+    }
+
+    /**
+     * @param Newsletter $newsletter
+     * @return void
+     * @throws IllegalObjectTypeException
+     * @throws StopActionException
+     * @throws UnsupportedRequestTypeException
+     */
+    public function createAction(Newsletter $newsletter): void
+    {
+        $this->newsletterRepository->add($newsletter);
+        $this->newsletterRepository->persistAll();
+        $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.create.message'));
+        $this->redirect('list');
+    }
+
+    /**
+     * @param Newsletter $newsletter
+     * @return void
+     * @throws IllegalObjectTypeException
+     * @throws StopActionException
+     * @throws UnsupportedRequestTypeException
+     * @throws UnknownObjectException
+     */
+    public function disableAction(Newsletter $newsletter): void
+    {
+        $newsletter->disable();
+        $this->newsletterRepository->update($newsletter);
+        $this->redirect('list');
+    }
+
+    /**
+     * @param Newsletter $newsletter
+     * @return void
+     * @throws IllegalObjectTypeException
+     * @throws StopActionException
+     * @throws UnsupportedRequestTypeException
+     * @throws UnknownObjectException
+     */
+    public function enableAction(Newsletter $newsletter): void
+    {
+        $newsletter->enable();
+        $this->newsletterRepository->update($newsletter);
+        $this->redirect('list');
+    }
+
+    /**
+     * @param Newsletter $newsletter
+     * @return void
+     * @throws IllegalObjectTypeException
+     * @throws StopActionException
+     * @throws UnsupportedRequestTypeException
+     */
+    public function deleteAction(Newsletter $newsletter)
+    {
+        $this->newsletterRepository->remove($newsletter);
+        $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.delete.message'));
+        $this->redirect('list');
     }
 
     /**
@@ -59,7 +146,10 @@ class NewsletterController extends ActionController
      * @return ResponseInterface
      * @throws DBALException
      */
-    public function wizardUserPreviewAjax(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    public function wizardUserPreviewAjax(
+        ServerRequestInterface $request,
+        ResponseInterface $response
+    ): ResponseInterface
     {
         $userRepository = ObjectUtility::getObjectManager()->get(UserRepository::class);
         $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
@@ -94,5 +184,23 @@ class NewsletterController extends ActionController
         $status = $mailService->sendNewsletter($request->getQueryParams()['email']) > 0;
         $response->getBody()->write(json_encode(['status' => $status]));
         return $response;
+    }
+
+    /**
+     * @return void
+     * @throws InvalidArgumentNameException
+     * @throws NoSuchArgumentException
+     * @throws \Exception
+     */
+    protected function setDatetimeObjectInNewsletterRequest(): void
+    {
+        $newsletter = (array)$this->request->getArgument('newsletter');
+        if (!empty($newsletter['datetime'])) {
+            $datetime = \DateTime::createFromFormat('H:i d-m-Y', $newsletter['datetime']);
+        } else {
+            $datetime = new \DateTime();
+        }
+        $newsletter['datetime'] = $datetime;
+        $this->request->setArgument('newsletter', $newsletter);
     }
 }

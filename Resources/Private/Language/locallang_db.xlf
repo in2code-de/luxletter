@@ -6,6 +6,31 @@
 			<trans-unit id="fe_groups.luxletter_receiver">
 				<source>Is newsletter receiver group?</source>
 			</trans-unit>
+
+			<trans-unit id="tx_luxletter_domain_model_newsletter">
+				<source>Newsletter</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.description">
+				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.datetime">
+				<source>Sending time</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.subject">
+				<source>Mail subject</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.receiver">
+				<source>Receiver group</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.origin">
+				<source>Origin</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.bodytext">
+				<source>Bodytext</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
