@@ -172,3 +172,40 @@ label {
     font-size: 16px;
   }
 }
+
+/**
+ * Dashboard
+ */
+.luxletter-panel-body {
+  min-height: 250px;
+}
+
+.luxletter-panel-body--text {
+  font-size: 3vw;
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  color: $colorMain;
+  line-height: 85%;
+
+  &__addition {
+    font-size: 1vw;
+    color: $colorGreyDark;
+    display: block;
+  }
+}
+
+.relative {
+  position: relative;
+}
+
+.absolutecenter {
+  position: absolute;
+  top: 25%;
+}
+
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}

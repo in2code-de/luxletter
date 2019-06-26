@@ -1,9 +1,38 @@
 <f:layout name="Backend"/>
 
 <f:section name="content">
+
 	<div class="row">
-		<div class="col-md-12">
-			do something
+		<div class="col-md-3">
+			<f:render partial="Newsletter/Dashboard/OverallReceivers" arguments="{_all}" optional="1" />
+		</div>
+		<div class="col-md-3">
+			<f:render partial="Newsletter/Dashboard/OverallOpenrate" arguments="{_all}" optional="1" />
+		</div>
+		<div class="col-md-3">
+			<f:render partial="Newsletter/Dashboard/OverallClickrate" arguments="{_all}" optional="1" />
+		</div>
+		<div class="col-md-3">
+			<f:render partial="Newsletter/Dashboard/OverallUnsubscriberate" arguments="{_all}" optional="1" />
 		</div>
 	</div>
+
+	<div class="row">
+		<div class="col-md-6">
+			<f:render partial="Newsletter/Dashboard/Open" arguments="{_all}" optional="1" />
+		</div>
+		<div class="col-md-6">
+			<f:render partial="Newsletter/Dashboard/Newsletter" arguments="{_all}" optional="1" />
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-6">
+			<f:render partial="Newsletter/Dashboard/Click" arguments="{_all}" optional="1" />
+		</div>
+		<div class="col-md-6">
+			<f:render partial="Newsletter/Dashboard/Links" arguments="{_all}" optional="1" />
+		</div>
+	</div>
+
 </f:section>

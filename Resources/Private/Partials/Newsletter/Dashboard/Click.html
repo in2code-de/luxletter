@@ -1,0 +1,71 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			Click
+			<span class="badge" style="float: right;" title="Overall">400</span>
+		</h3>
+	</div>
+	<div class="panel-body">
+		<canvas
+				id="luxletter-dashboard-click"
+				width="600"
+				height="200"
+				data-chart-data="100,200,100,100,200,100,"
+				data-chart-labels="Jan,Feb,Mar,Apr,May,Jun"></canvas>
+		<script>
+			require(['TYPO3/CMS/Luxletter/Vendor/Chart.min'], function (Chart) {
+				var container = document.getElementById('luxletter-dashboard-click');
+				var ctx = container.getContext('2d');
+
+				/**
+				 * @returns {Array}
+				 */
+				var getDataChartData = function() {
+					var string = container.getAttribute('data-chart-data');
+					return string.split(',');
+				};
+
+				/**
+				 * @returns {Array}
+				 */
+				var getDataChartLabels = function() {
+					var string = container.getAttribute('data-chart-labels');
+					return string.split(',');
+				};
+
+				var data = {
+					datasets: [{
+						label: 'Conversion',
+						data: getDataChartData(),
+						backgroundColor: [
+							'rgba(77, 231, 255, 1)',
+							'rgba(221, 221, 221, 1)'
+						]
+					}],
+					labels: getDataChartLabels()
+				};
+				var options = {
+					legend: {
+						display: false,
+						position: 'right',
+						labels: {
+							fontSize: 18
+						}
+					},
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}]
+					}
+				};
+				new Chart(ctx, {
+					type: 'bar',
+					data: data,
+					options: options
+				});
+			});
+		</script>
+	</div>
+</div>
