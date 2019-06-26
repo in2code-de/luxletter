@@ -7,6 +7,8 @@ use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
+use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
@@ -43,13 +45,15 @@ class ParseNewsletterUrlService
     /**
      * ParseNewsletterUrlService constructor.
      * @param string $origin can be a page uid or a complete url
+     * @throws SiteNotFoundException
+     * @throws InvalidRouteArgumentsException
      */
     public function __construct(string $origin)
     {
         $url = '';
         if (MathUtility::canBeInterpretedAsInteger($origin)) {
             $urlSrervice = ObjectUtility::getObjectManager()->get(FrontendUrlService::class);
-            $url = $urlSrervice->getTypolinkFromParameter($origin);
+            $url = $urlSrervice->getTypolinkFromParameter((int)$origin);
         } elseif (StringUtility::isValidUrl($origin)) {
             $url = $origin;
         }
