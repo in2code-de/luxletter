@@ -13,6 +13,11 @@
 				<target state="translated">Newsletter</target>
 			</trans-unit>
 
+			<trans-unit id="module.newsletter.dashboard.label.overallreceivers">
+				<source>Receiver</source>
+				<target state="translated">Empfänger</target>
+			</trans-unit>
+
 			<trans-unit id="module.newsletter.list.title">
 				<source>Manage your Newsletters</source>
 				<target state="translated">Newsletter verwalten</target>

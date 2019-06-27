@@ -21,7 +21,7 @@ class LogService
      * @return void
      * @throws IllegalObjectTypeException
      */
-    public function logNewsletterDispatch(Newsletter $newsletter, User $user)
+    public function logNewsletterDispatch(Newsletter $newsletter, User $user): void
     {
         $this->log($newsletter, $user, Log::STATUS_DISPATCH);
     }
@@ -34,7 +34,7 @@ class LogService
      * @return void
      * @throws IllegalObjectTypeException
      */
-    protected function log(Newsletter $newsletter, User $user, int $status, array $properties = [])
+    protected function log(Newsletter $newsletter, User $user, int $status, array $properties = []): void
     {
         $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
         $log = ObjectUtility::getObjectManager()->get(Log::class)

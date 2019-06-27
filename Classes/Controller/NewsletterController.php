@@ -5,6 +5,7 @@ namespace In2code\Luxletter\Controller;
 use Doctrine\DBAL\DBALException;
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\Newsletter;
+use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\FrontendUrlService;
@@ -45,19 +46,21 @@ class NewsletterController extends ActionController
     protected $newsletterRepository = null;
 
     /**
-     * @param NewsletterRepository $newsletterRepository
-     * @return void
+     * @var LogRepository
      */
-    public function injectNewsletterRepository(NewsletterRepository $newsletterRepository)
-    {
-        $this->newsletterRepository = $newsletterRepository;
-    }
+    protected $logRepository = null;
 
     /**
      * @return void
+     * @throws DBALException
      */
     public function dashboardAction(): void
     {
+        $this->view->assignMultiple(
+            [
+                'amountReceiver' => $this->logRepository->getNumberOfReceivers()
+            ]
+        );
     }
 
     /**
@@ -234,5 +237,23 @@ class NewsletterController extends ActionController
         $parseService->setParseVariables(false);
         $newsletter['bodytext'] = $parseService->getParsedContent();
         $this->request->setArgument('newsletter', $newsletter);
+    }
+
+    /**
+     * @param NewsletterRepository $newsletterRepository
+     * @return void
+     */
+    public function injectNewsletterRepository(NewsletterRepository $newsletterRepository)
+    {
+        $this->newsletterRepository = $newsletterRepository;
+    }
+
+    /**
+     * @param LogRepository $logRepository
+     * @return void
+     */
+    public function injectLogRepository(LogRepository $logRepository)
+    {
+        $this->logRepository = $logRepository;
     }
 }

@@ -208,7 +208,7 @@ label {
 /**
  * Dashboard
  */
-.luxletter-panel-body--text {
+.luxletter-panel-body-text {
   font-size: 2.5vw;
   display: inline-block;
   width: 100%;
@@ -216,10 +216,18 @@ label {
   color: $colorMain;
   line-height: 85%;
 
-  &__addition {
+  &--addition {
     font-size: 1vw;
     color: $colorGreyDark;
     display: block;
+  }
+
+  &__larger {
+    font-size: 4vw;
+
+    .luxletter-panel-body-text--addition {
+      font-size: 1.5vw;
+    }
   }
 }
 

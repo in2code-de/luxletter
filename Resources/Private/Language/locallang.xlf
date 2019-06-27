@@ -10,6 +10,10 @@
 				<source>Newsletter</source>
 			</trans-unit>
 
+			<trans-unit id="module.newsletter.dashboard.label.overallreceivers">
+				<source>Receiver</source>
+			</trans-unit>
+
 			<trans-unit id="module.newsletter.list.title">
 				<source>Manage your Newsletters</source>
 			</trans-unit>
