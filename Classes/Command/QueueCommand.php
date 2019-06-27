@@ -4,6 +4,7 @@ namespace In2code\Luxletter\Command;
 
 use In2code\Luxletter\Domain\Model\Queue;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
+use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterService;
 use In2code\Luxletter\Mail\SendMail;
 use In2code\Luxletter\Utility\ObjectUtility;
@@ -11,6 +12,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
@@ -38,6 +40,7 @@ class QueueCommand extends Command {
      * @throws InvalidQueryException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws IllegalObjectTypeException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -57,6 +60,7 @@ class QueueCommand extends Command {
      * @return void
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws IllegalObjectTypeException
      */
     protected function sendNewsletterToReceiverInQueue(Queue $queue): void
     {
@@ -67,5 +71,7 @@ class QueueCommand extends Command {
             $parseService->parseBodytext($queue->getNewsletter()->getBodytext(), $queue->getUser())
         );
         $sendMail->sendNewsletter($queue->getEmail());
+        $logService = ObjectUtility::getObjectManager()->get(LogService::class);
+        $logService->logNewsletterDispatch($queue->getNewsletter(), $queue->getUser());
     }
 }

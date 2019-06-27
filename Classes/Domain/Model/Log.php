@@ -11,6 +11,7 @@ class Log extends AbstractEntity
 {
     const TABLE_NAME = 'tx_luxletter_domain_model_log';
     const STATUS_DEFAULT = 0;
+    const STATUS_DISPATCH = 100;
 
     /**
      * @var Newsletter

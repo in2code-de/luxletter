@@ -38,10 +38,10 @@ return [
                 'readOnly' => true
             ]
         ],
-        'newletter' => [
+        'newsletter' => [
             'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
-                . Log::TABLE_NAME . '.newletter',
+                . Log::TABLE_NAME . '.newsletter',
             'config' => [
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -73,7 +73,8 @@ return [
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:' . Log::TABLE_NAME . '.status',
             'config' => [
                 'type' => 'input',
-                'size' => 30
+                'size' => 30,
+                'readOnly' => true
             ]
         ],
         'properties' => [

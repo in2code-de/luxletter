@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Mail;
 
-use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
