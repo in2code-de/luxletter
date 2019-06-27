@@ -4,7 +4,7 @@
 
 ## Introduction
 
-Just build and send newsletters to your customers.
+Email marketing tool in TYPO3. Just build and send newsletters to your customers.
 This extension does not need EXT:lux but works together with the marketing automation tool for TYPO3.
 
 ## Screenshots
@@ -20,7 +20,7 @@ Example newsletter list view:\
 ## Technical requirements
 
 * TYPO3 9 LTS is the basic CMS for this newsletter tool.
-* EXT:lux is not needed to run luxletter but both extensions can work together
+* EXT:lux is **not needed** to run luxletter but both extensions can work together to show more relevant information.
 * This extension needs to be installed with composer (classic installation could work but is not supported).
 * fe_users records are used to send emails to while fe_groups is used to select a group of them
 
@@ -32,9 +32,9 @@ composer require "in2code/luxletter"
 
 ## Changelog
 
-| Version    | Date       | State      | Description                                                                        |
-| ---------- | ---------- | ---------- | ---------------------------------------------------------------------------------- |
-| 1.0.0      | ??         | Task       | Initial release                                                                    |
+| Version    | Date        | State      | Description                                                                        |
+| ---------- | ----------- | ---------- | ---------------------------------------------------------------------------------- |
+| 1.0.0      | coming soon | Task       | Initial release                                                                    |
 
 ## Todos
 
