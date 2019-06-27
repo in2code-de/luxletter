@@ -57,6 +57,31 @@
 				<source>User</source>
 				<target state="translated">Benutzer</target>
 			</trans-unit>
+
+			<trans-unit id="tx_luxletter_domain_model_log">
+				<source>Log</source>
+				<target state="translated">Log</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_log.crdate">
+				<source>Date</source>
+				<target state="translated">Zeitpunkt</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_log.newsletter">
+				<source>Newsletter</source>
+				<target state="translated">Newsletter</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_log.user">
+				<source>User</source>
+				<target state="translated">User</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_log.status">
+				<source>Status</source>
+				<target state="translated">Status</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_log.properties">
+				<source>Properties</source>
+				<target state="translated">Eigenschaften</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

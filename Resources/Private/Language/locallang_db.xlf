@@ -44,6 +44,25 @@
 			<trans-unit id="tx_luxletter_domain_model_queue.user">
 				<source>User</source>
 			</trans-unit>
+
+			<trans-unit id="tx_luxletter_domain_model_log">
+				<source>Log</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_log.crdate">
+				<source>Date</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_log.newsletter">
+				<source>Newsletter</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_log.user">
+				<source>User</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_log.status">
+				<source>Status</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_log.properties">
+				<source>Properties</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
