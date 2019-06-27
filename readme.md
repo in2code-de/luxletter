@@ -7,6 +7,16 @@
 Just build and send newsletters to your customers.
 This extension does not need EXT:lux but works together with the marketing automation tool for TYPO3.
 
+## Screenshots
+
+Example dashboard overview:\
+\
+![Example dashboard overview](Documentation/Images/documentation_dashboard.png "Dashboard")
+
+Example newsletter list view:\
+\
+![Example dashboard overview](Documentation/Images/documentation_newsletterlist.png "Newsletter list")
+
 ## Technical requirements
 
 * TYPO3 9 LTS is the basic CMS for this newsletter tool.

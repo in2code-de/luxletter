@@ -32,17 +32,49 @@ label {
 /**
  * Bootstrap
  */
+.row {
+  @media screen and (min-width: 992px) {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+.row > [class*='col-'] {
+  @media screen and (min-width: 992px) {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.panel,
+.panel-body {
+  height: 100%;
+}
+
 .bg-primary {
   background-color: $colorSoft;
 }
+
 .badge-primary {
   background-color: $colorMain;
 }
+
 .alert-lux {
   background-color: $colorMain;
 }
+
 .input-lg {
   line-height: 1.3 !important;
+}
+
+.progress {
+  margin-bottom: 0;
+}
+
+.progress-bar {
+  background-color: $colorMain;
 }
 
 /**
@@ -176,12 +208,8 @@ label {
 /**
  * Dashboard
  */
-.luxletter-panel-body {
-  min-height: 250px;
-}
-
 .luxletter-panel-body--text {
-  font-size: 3vw;
+  font-size: 2.5vw;
   display: inline-block;
   width: 100%;
   text-align: center;
@@ -195,17 +223,8 @@ label {
   }
 }
 
-.relative {
-  position: relative;
-}
-
-.absolutecenter {
-  position: absolute;
-  top: 25%;
-}
-
 .vcenter {
-  display: inline-block;
-  vertical-align: middle;
-  float: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
