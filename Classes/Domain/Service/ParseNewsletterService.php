@@ -19,7 +19,7 @@ class ParseNewsletterService
      * @param User $user
      * @return string
      */
-    public function parseBodytext(string $bodytext, User $user): string
+    public function parseMailText(string $bodytext, User $user): string
     {
         $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
         $standaloneView->setTemplateSource($bodytext);

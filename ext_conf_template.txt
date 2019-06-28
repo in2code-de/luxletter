@@ -1,0 +1,5 @@
+# cat=basic//010; type=text; label= Webserver domain: Define a domain for frontend plugins (like opt out for the newsletter, etc...)
+domain = https://www.domain.org
+
+# cat=basic/enable/100; type=boolean; label= Rewrite links in newsletter: All absolute links should be rewritten, so a click on a link can be tracked.
+rewriteLinksInNewsletter = 0

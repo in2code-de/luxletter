@@ -53,7 +53,7 @@ class ParseNewsletterUrlService
         $url = '';
         if (MathUtility::canBeInterpretedAsInteger($origin)) {
             $urlSrervice = ObjectUtility::getObjectManager()->get(FrontendUrlService::class);
-            $url = $urlSrervice->getTypolinkFromParameter((int)$origin);
+            $url = $urlSrervice->getTypolinkUrlFromParameter((int)$origin);
         } elseif (StringUtility::isValidUrl($origin)) {
             $url = $origin;
         }
@@ -73,7 +73,7 @@ class ParseNewsletterUrlService
             $user = $userFactory->getDummyUser();
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'BeforeParsing', [$user, $this]);
-        $content = $this->getNewsletterContainer($this->getContentFromOrigin($user), $user);
+        $content = $this->getNewsletterContainerAndContent($this->getContentFromOrigin($user), $user);
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'AfterParsing', [$content, $this]);
         return $content;
     }
@@ -85,7 +85,7 @@ class ParseNewsletterUrlService
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      */
-    protected function getNewsletterContainer(string $content, User $user): string
+    protected function getNewsletterContainerAndContent(string $content, User $user): string
     {
         if ($this->isParseVariables()) {
             $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
@@ -118,7 +118,7 @@ class ParseNewsletterUrlService
         }
         if ($this->isParseVariables()) {
             $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
-            $string = $parseService->parseBodytext($string, $user);
+            $string = $parseService->parseMailText($string, $user);
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__, [$string, $user, $this]);
         return $string;

@@ -2,16 +2,14 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Command;
 
-use In2code\Luxletter\Domain\Model\Queue;
-use In2code\Luxletter\Domain\Repository\QueueRepository;
-use In2code\Luxletter\Domain\Service\LogService;
-use In2code\Luxletter\Domain\Service\ParseNewsletterService;
-use In2code\Luxletter\Mail\SendMail;
+use In2code\Luxletter\Mail\ProgressQueue;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
@@ -37,41 +35,18 @@ class QueueCommand extends Command {
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int|null
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws IllegalObjectTypeException
      * @throws InvalidQueryException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws IllegalObjectTypeException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
-        $queues = $queueRepository->findDispatchableInQueue((int)$input->getArgument('amount'));
-        foreach ($queues as $queue) {
-            /** @var Queue $queue */
-            $this->sendNewsletterToReceiverInQueue($queue);
-            $queueRepository->delete($queue);
-        }
-        $output->writeln('Just sent ' . $queues->count() . ' emails from the queue...');
+        $progressQueue = ObjectUtility::getObjectManager()->get(ProgressQueue::class);
+        $progressed = $progressQueue->progress((int)$input->getArgument('amount'));
+        $output->writeln('Just sent ' . $progressed . ' emails from the queue...');
         return 0;
-    }
-
-    /**
-     * @param Queue $queue
-     * @return void
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
-     * @throws IllegalObjectTypeException
-     */
-    protected function sendNewsletterToReceiverInQueue(Queue $queue): void
-    {
-        $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
-        $sendMail = ObjectUtility::getObjectManager()->get(
-            SendMail::class,
-            $parseService->parseBodytext($queue->getNewsletter()->getSubject(), $queue->getUser()),
-            $parseService->parseBodytext($queue->getNewsletter()->getBodytext(), $queue->getUser())
-        );
-        $sendMail->sendNewsletter($queue->getEmail());
-        $logService = ObjectUtility::getObjectManager()->get(LogService::class);
-        $logService->logNewsletterDispatch($queue->getNewsletter(), $queue->getUser());
     }
 }

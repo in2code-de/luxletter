@@ -13,7 +13,7 @@ class FrontendUtility
     /**
      * Get current scheme, domain and path of the current installation
      *
-     * @return string
+     * @return string like "https://www.domain.org/
      */
     public static function getCurrentUri(): string
     {

@@ -63,6 +63,22 @@
 			<trans-unit id="tx_luxletter_domain_model_log.properties">
 				<source>Properties</source>
 			</trans-unit>
+
+			<trans-unit id="tx_luxletter_domain_model_link">
+				<source>Log</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_link.newsletter">
+				<source>Newsletter</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_link.user">
+				<source>User</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_link.hash">
+				<source>Hash</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_link.target">
+				<source>Target</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

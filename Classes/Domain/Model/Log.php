@@ -14,12 +14,12 @@ class Log extends AbstractEntity
     const STATUS_DISPATCH = 100;
 
     /**
-     * @var Newsletter
+     * @var \In2code\Luxletter\Domain\Model\Newsletter
      */
     protected $newsletter = null;
 
     /**
-     * @var User
+     * @var \In2code\Luxletter\Domain\Model\User
      */
     protected $user = null;
 

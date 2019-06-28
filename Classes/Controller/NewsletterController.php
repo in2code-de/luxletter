@@ -9,6 +9,7 @@ use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\FrontendUrlService;
+use In2code\Luxletter\Domain\Service\LinkHashingService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
@@ -197,7 +198,7 @@ class NewsletterController extends ActionController
         $userFactory = ObjectUtility::getObjectManager()->get(UserFactory::class);
         $mailService = ObjectUtility::getObjectManager()->get(
             SendMail::class,
-            $parseService->parseBodytext($request->getQueryParams()['subject'], $userFactory->getDummyUser()),
+            $parseService->parseMailText($request->getQueryParams()['subject'], $userFactory->getDummyUser()),
             $parseUrlService->getParsedContent()
         );
         $status = $mailService->sendNewsletter($request->getQueryParams()['email']) > 0;
