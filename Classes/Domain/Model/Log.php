@@ -95,7 +95,7 @@ class Log extends AbstractEntity
     {
         $propertiesRaw = $this->properties;
         if ($propertiesRaw !== '') {
-            return json_decode($propertiesRaw);
+            return json_decode($propertiesRaw, true);
         }
         return [];
     }
