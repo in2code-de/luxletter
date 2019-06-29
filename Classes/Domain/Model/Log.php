@@ -12,6 +12,7 @@ class Log extends AbstractEntity
     const TABLE_NAME = 'tx_luxletter_domain_model_log';
     const STATUS_DEFAULT = 0;
     const STATUS_DISPATCH = 100;
+    const STATUS_LINKOPENING = 200;
 
     /**
      * @var \In2code\Luxletter\Domain\Model\Newsletter
@@ -29,9 +30,9 @@ class Log extends AbstractEntity
     protected $status = self::STATUS_DEFAULT;
 
     /**
-     * @var array
+     * @var string
      */
-    protected $properties = [];
+    protected $properties = '';
 
     /**
      * @return Newsletter
@@ -92,7 +93,11 @@ class Log extends AbstractEntity
      */
     public function getProperties(): array
     {
-        return $this->properties;
+        $propertiesRaw = $this->properties;
+        if ($propertiesRaw !== '') {
+            return json_decode($propertiesRaw);
+        }
+        return [];
     }
 
     /**
@@ -101,7 +106,7 @@ class Log extends AbstractEntity
      */
     public function setProperties(array $properties): self
     {
-        $this->properties = $properties;
+        $this->properties = json_encode($properties);
         return $this;
     }
 }

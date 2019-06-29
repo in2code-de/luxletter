@@ -20,7 +20,8 @@ class LogRepository extends AbstractRepository
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
         return (int)$connection->executeQuery(
-            'select count(DISTINCT user) from ' . Log::TABLE_NAME . ' where deleted=0;'
+            'select count(DISTINCT user) from ' . Log::TABLE_NAME .
+            ' where deleted=0 and status=' . Log::STATUS_DISPATCH . ';'
         )->fetchColumn(0);
     }
 }

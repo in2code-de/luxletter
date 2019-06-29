@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
+use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Model\Log;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
@@ -24,6 +25,16 @@ class LogService
     public function logNewsletterDispatch(Newsletter $newsletter, User $user): void
     {
         $this->log($newsletter, $user, Log::STATUS_DISPATCH);
+    }
+
+    /**
+     * @param Link $link
+     * @return void
+     * @throws IllegalObjectTypeException
+     */
+    public function logLinkOpening(Link $link): void
+    {
+        $this->log($link->getNewsletter(), $link->getUser(), Log::STATUS_LINKOPENING, ['target' => $link->getTarget()]);
     }
 
     /**
