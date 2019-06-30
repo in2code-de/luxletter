@@ -12,7 +12,8 @@ class Log extends AbstractEntity
     const TABLE_NAME = 'tx_luxletter_domain_model_log';
     const STATUS_DEFAULT = 0;
     const STATUS_DISPATCH = 100;
-    const STATUS_LINKOPENING = 200;
+    const STATUS_NEWSLETTEROPENING = 200;
+    const STATUS_LINKOPENING = 300;
 
     /**
      * @var \In2code\Luxletter\Domain\Model\Newsletter

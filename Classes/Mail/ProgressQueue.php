@@ -11,6 +11,7 @@ use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
@@ -31,6 +32,7 @@ class ProgressQueue
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws InvalidQueryException
+     * @throws InvalidConfigurationTypeException
      */
     public function progress(int $limit = 50): int
     {
@@ -52,15 +54,22 @@ class ProgressQueue
      * @throws InvalidSlotReturnException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws InvalidConfigurationTypeException
      */
     protected function sendNewsletterToReceiverInQueue(Queue $queue): void
     {
         $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
-        $bodytext = $parseService->parseMailText($queue->getNewsletter()->getBodytext(), $queue->getUser());
+        $bodytext = $parseService->parseMailText(
+            $queue->getNewsletter()->getBodytext(),
+            ['user' => $queue->getUser(), 'newsletter' => $queue->getNewsletter()]
+        );
         $bodytext = $this->hashLinksInBodytext($queue, $bodytext);
         $sendMail = ObjectUtility::getObjectManager()->get(
             SendMail::class,
-            $parseService->parseMailText($queue->getNewsletter()->getSubject(), $queue->getUser()),
+            $parseService->parseMailText(
+                $queue->getNewsletter()->getSubject(),
+                ['user' => $queue->getUser(), 'newsletter' => $queue->getNewsletter()]
+            ),
             $bodytext
         );
         $sendMail->sendNewsletter($queue->getEmail());

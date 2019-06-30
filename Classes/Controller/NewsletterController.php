@@ -18,6 +18,7 @@ use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentNameException;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
@@ -183,6 +184,7 @@ class NewsletterController extends ActionController
      * @return ResponseInterface
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws InvalidConfigurationTypeException
      */
     public function testMailAjax(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
@@ -197,7 +199,10 @@ class NewsletterController extends ActionController
         $userFactory = ObjectUtility::getObjectManager()->get(UserFactory::class);
         $mailService = ObjectUtility::getObjectManager()->get(
             SendMail::class,
-            $parseService->parseMailText($request->getQueryParams()['subject'], $userFactory->getDummyUser()),
+            $parseService->parseMailText(
+                $request->getQueryParams()['subject'],
+                ['user' => $userFactory->getDummyUser()]
+            ),
             $parseUrlService->getParsedContent()
         );
         $status = $mailService->sendNewsletter($request->getQueryParams()['email']) > 0;

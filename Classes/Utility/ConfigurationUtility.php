@@ -6,12 +6,28 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotCon
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
+use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 
 /**
  * Class ConfigurationUtility
  */
 class ConfigurationUtility
 {
+
+    /**
+     * From TypoScript settings
+     *
+     * @return array
+     * @throws InvalidConfigurationTypeException
+     */
+    public static function getExtensionSettings(): array
+    {
+        return ObjectUtility::getConfigurationManager()->getConfiguration(
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
+            'luxletter'
+        );
+    }
 
     /**
      * @return string

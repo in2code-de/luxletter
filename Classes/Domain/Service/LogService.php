@@ -28,6 +28,22 @@ class LogService
     }
 
     /**
+     * Log the opening of a newsletter (via tracking pixel) only once per newsletter and user
+     *
+     * @param Newsletter $newsletter
+     * @param User $user
+     * @return void
+     * @throws IllegalObjectTypeException
+     */
+    public function logNewsletterOpening(Newsletter $newsletter, User $user): void
+    {
+        $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
+        if ($logRepository->isLogRecordExisting($newsletter, $user, Log::STATUS_NEWSLETTEROPENING) === false) {
+            $this->log($newsletter, $user, Log::STATUS_NEWSLETTEROPENING);
+        }
+    }
+
+    /**
      * @param Link $link
      * @return void
      * @throws IllegalObjectTypeException

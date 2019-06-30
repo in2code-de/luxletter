@@ -13,10 +13,10 @@ call_user_func(
             'In2code.luxletter',
             'Fe',
             [
-                'Frontend' => 'preview'
+                'Frontend' => 'preview,trackingPixel'
             ],
             [
-                'Frontend' => 'preview'
+                'Frontend' => 'preview,trackingPixel'
             ]
         );
 

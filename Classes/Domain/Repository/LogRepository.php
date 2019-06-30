@@ -4,6 +4,8 @@ namespace In2code\Luxletter\Domain\Repository;
 
 use Doctrine\DBAL\DBALException;
 use In2code\Luxletter\Domain\Model\Log;
+use In2code\Luxletter\Domain\Model\Newsletter;
+use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Utility\DatabaseUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 
@@ -45,5 +47,24 @@ class LogRepository extends AbstractRepository
             $result['newsletter'] = $nlRepository->findByUid($result['newsletter']);
         }
         return $results;
+    }
+
+    /**
+     * @param Newsletter $newsletter
+     * @param User $user
+     * @param int $status
+     * @return bool
+     */
+    public function isLogRecordExisting(Newsletter $newsletter, User $user, int $status): bool
+    {
+        $querybuilder = DatabaseUtility::getQueryBuilderForTable(Log::TABLE_NAME);
+        $uid = (int)$querybuilder
+            ->select('uid')
+            ->from(Log::TABLE_NAME)
+            ->where('newsletter=' . $newsletter->getUid() . ' and user=' . $user->getUid() . ' and status=' . $status)
+            ->setMaxResults(1)
+            ->execute()
+            ->fetchColumn(0);
+        return $uid > 0;
     }
 }

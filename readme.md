@@ -38,11 +38,12 @@ composer require "in2code/luxletter"
 
 ## Todos
 
-* Mail queue
+* done: Mail queue
 * Configuration for sendervalues
-* Link-rewriting for tracking
+* done: Link-rewriting for tracking
+* Trackingpixel
 * Image include in newsletters?
-* Dashboard
+* in progress: Dashboard
 * HTML for newsletter optimization
 * Opt-Out-Plugin
 * Registration?

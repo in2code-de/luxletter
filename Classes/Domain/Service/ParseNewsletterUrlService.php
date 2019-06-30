@@ -5,12 +5,15 @@ namespace In2code\Luxletter\Domain\Service;
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Signal\SignalTrait;
+use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
+use In2code\Luxletter\Utility\TemplateUtility;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
+use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -29,11 +32,6 @@ class ParseNewsletterUrlService
      * @var string
      */
     protected $url = '';
-
-    /**
-     * @var string
-     */
-    protected $containerFile = 'EXT:luxletter/Resources/Private/Templates/Mail/NewsletterContainer.html';
 
     /**
      * Decide if variables like {user.firstName} should be parsed with fluid or not
@@ -65,6 +63,7 @@ class ParseNewsletterUrlService
      * @return string
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws InvalidConfigurationTypeException
      */
     public function getParsedContent(User $user = null): string
     {
@@ -84,16 +83,27 @@ class ParseNewsletterUrlService
      * @return string
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws InvalidConfigurationTypeException
      */
     protected function getNewsletterContainerAndContent(string $content, User $user): string
     {
-        if ($this->isParseVariables()) {
+        $templateName = 'Mail/NewsletterContainer.html';
+        if ($this->isParsingActive()) {
+            $configuration = ConfigurationUtility::getExtensionSettings();
             $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
-            $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->containerFile));
-            $standaloneView->assignMultiple(['content' => $content, 'user' => $user]);
+            $standaloneView->setTemplateRootPaths($configuration['view']['templateRootPaths']);
+            $standaloneView->setLayoutRootPaths($configuration['view']['layoutRootPaths']);
+            $standaloneView->setPartialRootPaths($configuration['view']['partialRootPaths']);
+            $standaloneView->setTemplate($templateName);
+            $standaloneView->assignMultiple(
+                [
+                    'content' => $content,
+                    'user' => $user
+                ]
+            );
             $html = $standaloneView->render();
         } else {
-            $container = file_get_contents(GeneralUtility::getFileAbsFileName($this->containerFile));
+            $container = file_get_contents(TemplateUtility::getExistingFilePathOfTemplateFileByName($templateName));
             $html = str_replace('{content}', $content, $container);
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__, [$html, $content, $user, $this]);
@@ -105,6 +115,7 @@ class ParseNewsletterUrlService
      * @return string
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws InvalidConfigurationTypeException
      */
     protected function getContentFromOrigin(User $user): string
     {
@@ -116,9 +127,9 @@ class ParseNewsletterUrlService
         if ($string === false) {
             throw new \DomainException('Given URL could not be parsed and accessed', 1560709791);
         }
-        if ($this->isParseVariables()) {
+        if ($this->isParsingActive()) {
             $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
-            $string = $parseService->parseMailText($string, $user);
+            $string = $parseService->parseMailText($string, ['user' => $user]);
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__, [$string, $user, $this]);
         return $string;
@@ -151,7 +162,7 @@ class ParseNewsletterUrlService
     /**
      * @return bool
      */
-    public function isParseVariables(): bool
+    public function isParsingActive(): bool
     {
         return $this->parseVariables;
     }

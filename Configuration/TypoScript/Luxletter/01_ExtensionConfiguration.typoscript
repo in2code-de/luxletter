@@ -1,0 +1,19 @@
+plugin {
+    tx_luxletter_fe {
+        view {
+            templateRootPaths {
+                0 = EXT:luxletter/Resources/Private/Templates/
+            }
+            partialRootPaths {
+                0 = EXT:luxletter/Resources/Private/Partials/
+            }
+            layoutRootPaths {
+                0 = EXT:luxletter/Resources/Private/Layouts/
+            }
+        }
+        features.requireCHashArgumentForActionArguments = 0
+    }
+}
+
+# Copy plugin configuration to module configuration to just use one configuration for both places.
+module.tx_luxletter < plugin.tx_luxletter_fe
