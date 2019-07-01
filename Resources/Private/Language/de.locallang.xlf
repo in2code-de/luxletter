@@ -17,6 +17,18 @@
 				<source>Receiver</source>
 				<target state="translated">Empfänger</target>
 			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.overallopenrate">
+				<source>Open rate</source>
+				<target state="translated">Öffnungsrate</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.diagram.0">
+				<source>All</source>
+				<target state="translated">Alle</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.diagram.1">
+				<source>Opener</source>
+				<target state="translated">Öffner</target>
+			</trans-unit>
 
 			<trans-unit id="module.newsletter.list.title">
 				<source>Manage your Newsletters</source>

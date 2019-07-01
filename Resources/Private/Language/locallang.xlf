@@ -13,6 +13,15 @@
 			<trans-unit id="module.newsletter.dashboard.label.overallreceivers">
 				<source>Receiver</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.overallopenrate">
+				<source>Open rate</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.diagram.0">
+				<source>All</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.diagram.1">
+				<source>Opener</source>
+			</trans-unit>
 
 			<trans-unit id="module.newsletter.list.title">
 				<source>Manage your Newsletters</source>

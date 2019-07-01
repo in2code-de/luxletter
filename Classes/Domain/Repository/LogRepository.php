@@ -50,6 +50,46 @@ class LogRepository extends AbstractRepository
     }
 
     /**
+     * @return float
+     * @throws DBALException
+     */
+    public function getOverallOpenRate(): float
+    {
+        $overallOpenings = $this->getOverallOpenings();
+        $overallSent = $this->getOverallMailsSent();
+        if ($overallOpenings > 0) {
+            return $overallOpenings / $overallSent;
+        }
+        return 0.0;
+    }
+
+    /**
+     * @return int
+     * @throws DBALException
+     */
+    public function getOverallOpenings(): int
+    {
+        $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
+        return (int)$connection->executeQuery(
+            'select count(uid) from ' . Log::TABLE_NAME .
+            ' where deleted = 0 and status=' . Log::STATUS_NEWSLETTEROPENING . ';'
+        )->fetchColumn(0);
+    }
+
+    /**
+     * @return int
+     * @throws DBALException
+     */
+    public function getOverallMailsSent(): int
+    {
+        $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
+        return (int)$connection->executeQuery(
+            'select count(uid) from ' . Log::TABLE_NAME .
+            ' where deleted = 0 and status=' . Log::STATUS_DISPATCH . ';'
+        )->fetchColumn(0);
+    }
+
+    /**
      * @param Newsletter $newsletter
      * @param User $user
      * @param int $status

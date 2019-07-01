@@ -58,7 +58,12 @@ class NewsletterController extends ActionController
     {
         $this->view->assignMultiple(
             [
-                'amountReceiver' => $this->logRepository->getNumberOfReceivers(),
+                'statistic' => [
+                    'overallReceivers' => $this->logRepository->getNumberOfReceivers(),
+                    'overallOpenings' => $this->logRepository->getOverallOpenings(),
+                    'overallMailsSent' => $this->logRepository->getOverallMailsSent(),
+                    'overallOpenRate' => $this->logRepository->getOverallOpenRate(),
+                ],
                 'groupedLinksByHref' => $this->logRepository->getGroupedLinksByHref()
             ]
         );
