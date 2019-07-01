@@ -57,6 +57,10 @@
 				<source>User</source>
 				<target state="translated">Benutzer</target>
 			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_queue.sent">
+				<source>Sent</source>
+				<target state="translated">Gesendet</target>
+			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_log">
 				<source>Log</source>

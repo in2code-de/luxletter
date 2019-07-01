@@ -24,10 +24,10 @@ return [
         'rootLevel' => -1
     ],
     'interface' => [
-        'showRecordFieldList' => 'email,newsletter,user,datetime',
+        'showRecordFieldList' => 'email,newsletter,user,datetime,sent',
     ],
     'types' => [
-        '1' => ['showitem' => 'email,newsletter,user,datetime'],
+        '1' => ['showitem' => 'email,newsletter,user,datetime,sent'],
     ],
     'columns' => [
         'email' => [
@@ -86,6 +86,14 @@ return [
                 ],
                 'readOnly' => true
             ]
-        ]
+        ],
+        'sent' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:' . Queue::TABLE_NAME . '.sent',
+            'config' => [
+                'type' => 'check',
+                'readOnly' => true
+            ]
+        ],
     ]
 ];

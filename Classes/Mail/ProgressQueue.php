@@ -14,6 +14,7 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExis
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
@@ -22,6 +23,18 @@ use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
  */
 class ProgressQueue
 {
+    /**
+     * @var QueueRepository
+     */
+    protected $queueRepository = null;
+
+    /**
+     * ProgressQueue constructor.
+     */
+    public function __construct()
+    {
+        $this->queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
+    }
 
     /**
      * @param int $limit
@@ -33,15 +46,15 @@ class ProgressQueue
      * @throws InvalidSlotReturnException
      * @throws InvalidQueryException
      * @throws InvalidConfigurationTypeException
+     * @throws UnknownObjectException
      */
     public function progress(int $limit = 50): int
     {
-        $queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
-        $queues = $queueRepository->findDispatchableInQueue($limit);
+        $queues = $this->queueRepository->findDispatchableInQueue($limit);
         foreach ($queues as $queue) {
             /** @var Queue $queue */
             $this->sendNewsletterToReceiverInQueue($queue);
-            $queueRepository->delete($queue);
+            $this->markSent($queue);
         }
         return $queues->count();
     }
@@ -96,5 +109,18 @@ class ProgressQueue
             $bodytext = $linkHashing->hashLinks($bodytext);
         }
         return $bodytext;
+    }
+
+    /**
+     * @param Queue $queue
+     * @return void
+     * @throws IllegalObjectTypeException
+     * @throws UnknownObjectException
+     */
+    protected function markSent(Queue $queue)
+    {
+        $queue->setSent();
+        $this->queueRepository->update($queue);
+        $this->queueRepository->persistAll();
     }
 }

@@ -10,15 +10,18 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * Class QueueCommand
  */
-class QueueCommand extends Command {
+class QueueCommand extends Command
+{
 
     /**
      * Configure the command by defining the name, options and arguments
@@ -41,6 +44,8 @@ class QueueCommand extends Command {
      * @throws InvalidQueryException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws InvalidConfigurationTypeException
+     * @throws UnknownObjectException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

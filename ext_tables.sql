@@ -40,6 +40,7 @@ CREATE TABLE tx_luxletter_domain_model_queue (
 	newsletter int(11) DEFAULT '0' NOT NULL,
 	user int(11) DEFAULT '0' NOT NULL,
 	datetime int(11) DEFAULT '0' NOT NULL,
+	sent tinyint(4) unsigned DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,

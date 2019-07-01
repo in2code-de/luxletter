@@ -32,6 +32,11 @@ class Queue extends AbstractEntity
     protected $datetime = null;
 
     /**
+     * @var bool
+     */
+    protected $sent = false;
+
+    /**
      * @return string
      */
     public function getEmail(): string
@@ -100,6 +105,23 @@ class Queue extends AbstractEntity
     public function setDatetime(\DateTime $datetime): self
     {
         $this->datetime = $datetime;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSent(): bool
+    {
+        return $this->sent;
+    }
+
+    /**
+     * @return Queue
+     */
+    public function setSent(): self
+    {
+        $this->sent = true;
         return $this;
     }
 }
