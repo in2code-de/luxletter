@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Model;
 
+use In2code\Luxletter\Domain\Repository\QueueRepository;
+use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
@@ -50,6 +52,12 @@ class Newsletter extends AbstractEntity
      * @var string
      */
     protected $bodytext = '';
+
+    /**
+     * @var null|int
+     * @transient
+     */
+    private $dispatchedProgress = null;
 
     /**
      * @return string
@@ -201,5 +209,26 @@ class Newsletter extends AbstractEntity
     {
         $this->bodytext = $bodytext;
         return $this;
+    }
+
+    /**
+     * Checks the queue progress of this newsletter. 100 means 100% are sent.
+     *
+     * @return int
+     */
+    public function getDispatchProgress(): int
+    {
+        if ($this->dispatchedProgress === null) {
+            $queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
+            $dispatched = $queueRepository->findDispatchedNewsletters($this)->count();
+            $notDispatched = $queueRepository->findNotDispatchedNewsletters($this)->count();
+            $overall = $dispatched + $notDispatched;
+            $result = 0;
+            if ($overall > 0) {
+                $result = (int)(100 - ($notDispatched / $overall * 100));
+            }
+            $this->dispatchedProgress = $result;
+        }
+        return $this->dispatchedProgress;
     }
 }

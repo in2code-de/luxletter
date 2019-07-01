@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
+use In2code\Luxletter\Domain\Model\Newsletter;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
@@ -26,6 +27,36 @@ class QueueRepository extends AbstractRepository
         ];
         $query->matching($query->logicalAnd($and));
         $query->setLimit($limit);
+        return $query->execute();
+    }
+
+    /**
+     * @param Newsletter $newsletter
+     * @return QueryResultInterface
+     */
+    public function findDispatchedNewsletters(Newsletter $newsletter): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        $and = [
+            $query->equals('sent', true),
+            $query->equals('newsletter', $newsletter)
+        ];
+        $query->matching($query->logicalAnd($and));
+        return $query->execute();
+    }
+
+    /**
+     * @param Newsletter $newsletter
+     * @return QueryResultInterface
+     */
+    public function findNotDispatchedNewsletters(Newsletter $newsletter): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        $and = [
+            $query->equals('sent', false),
+            $query->equals('newsletter', $newsletter)
+        ];
+        $query->matching($query->logicalAnd($and));
         return $query->execute();
     }
 }

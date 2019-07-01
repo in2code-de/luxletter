@@ -54,7 +54,7 @@
 								<td>{f:format.date(date:newsletter.datetime,format:'{f:translate(key:\'date\')}')}</td>
 								<td>
 									<div class="progress">
-										<div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+										<div class="progress-bar" role="progressbar" title="{newsletter.dispatchProgress} %" style="width: {newsletter.dispatchProgress}%" aria-valuenow="{newsletter.dispatchProgress}" aria-valuemin="0" aria-valuemax="100"></div>
 									</div>
 								</td>
 								<td>
