@@ -3,13 +3,15 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Mail;
 
 use In2code\Luxletter\Signal\SignalTrait;
+use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * Class SendMail
- * Todo make sender configurable
  */
 class SendMail
 {
@@ -24,26 +26,6 @@ class SendMail
      * @var string
      */
     protected $bodytext = '';
-
-    /**
-     * @var string
-     */
-    protected $fromEmail = 'alex@in2code.de';
-
-    /**
-     * @var string
-     */
-    protected $fromName = 'Alex Kellner';
-
-    /**
-     * @var string
-     */
-    protected $replyEmail = 'alex@in2code.de';
-
-    /**
-     * @var string
-     */
-    protected $replyName = 'Alex Kellner';
 
     /**
      * MailService constructor.
@@ -61,6 +43,8 @@ class SendMail
      * @return int the number of recipients who were accepted for delivery
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public function sendNewsletter(string $email): int
     {
@@ -68,8 +52,8 @@ class SendMail
         $mailMessage = ObjectUtility::getObjectManager()->get(MailMessage::class);
         $mailMessage
             ->setTo([$email => 'Newsletter receiver'])
-            ->setFrom([$this->fromEmail => $this->fromName])
-            ->setReplyTo([$this->replyEmail => $this->replyName])
+            ->setFrom([ConfigurationUtility::getFromEmail() => ConfigurationUtility::getFromName()])
+            ->setReplyTo([ConfigurationUtility::getReplyEmail() => ConfigurationUtility::getReplyName()])
             ->setSubject($this->subject)
             ->setBody($this->bodytext, 'text/html');
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'mailMessage', [$mailMessage]);
