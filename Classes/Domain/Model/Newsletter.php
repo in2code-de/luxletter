@@ -57,7 +57,7 @@ class Newsletter extends AbstractEntity
      * @var null|int
      * @transient
      */
-    private $dispatchedProgress = null;
+    protected $dispatchedProgress = null;
 
     /**
      * @return string
