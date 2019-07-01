@@ -21,13 +21,25 @@
 				<source>Open rate</source>
 				<target state="translated">Öffnungsrate</target>
 			</trans-unit>
-			<trans-unit id="module.newsletter.dashboard.label.diagram.0">
+			<trans-unit id="module.newsletter.dashboard.label.overallopenrate.0">
 				<source>All</source>
 				<target state="translated">Alle</target>
 			</trans-unit>
-			<trans-unit id="module.newsletter.dashboard.label.diagram.1">
+			<trans-unit id="module.newsletter.dashboard.label.overallopenrate.1">
 				<source>Opener</source>
 				<target state="translated">Öffner</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.overallclickrate">
+				<source>Click rate</source>
+				<target state="translated">Klickrate</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.overallclickrate.0">
+				<source>All openers</source>
+				<target state="translated">Alle Öffner</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.overallclickrate.1">
+				<source>All clicks</source>
+				<target state="translated">Alle Klicks</target>
 			</trans-unit>
 
 			<trans-unit id="module.newsletter.list.title">

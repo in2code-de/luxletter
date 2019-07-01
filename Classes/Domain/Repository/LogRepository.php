@@ -50,20 +50,6 @@ class LogRepository extends AbstractRepository
     }
 
     /**
-     * @return float
-     * @throws DBALException
-     */
-    public function getOverallOpenRate(): float
-    {
-        $overallOpenings = $this->getOverallOpenings();
-        $overallSent = $this->getOverallMailsSent();
-        if ($overallOpenings > 0) {
-            return $overallOpenings / $overallSent;
-        }
-        return 0.0;
-    }
-
-    /**
      * @return int
      * @throws DBALException
      */
@@ -80,6 +66,19 @@ class LogRepository extends AbstractRepository
      * @return int
      * @throws DBALException
      */
+    public function getOverallClicks(): int
+    {
+        $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
+        return (int)$connection->executeQuery(
+            'select count(uid) from ' . Log::TABLE_NAME .
+            ' where deleted = 0 and status=' . Log::STATUS_LINKOPENING . ';'
+        )->fetchColumn(0);
+    }
+
+    /**
+     * @return int
+     * @throws DBALException
+     */
     public function getOverallMailsSent(): int
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
@@ -87,6 +86,34 @@ class LogRepository extends AbstractRepository
             'select count(uid) from ' . Log::TABLE_NAME .
             ' where deleted = 0 and status=' . Log::STATUS_DISPATCH . ';'
         )->fetchColumn(0);
+    }
+
+    /**
+     * @return float
+     * @throws DBALException
+     */
+    public function getOverallOpenRate(): float
+    {
+        $overallSent = $this->getOverallMailsSent();
+        $overallOpenings = $this->getOverallOpenings();
+        if ($overallSent > 0) {
+            return $overallOpenings / $overallSent;
+        }
+        return 0.0;
+    }
+
+    /**
+     * @return float
+     * @throws DBALException
+     */
+    public function getOverallClickRate(): float
+    {
+        $overallOpenings = $this->getOverallOpenings();
+        $overallClicks = $this->getOverallClicks();
+        if ($overallOpenings > 0) {
+            return $overallClicks / $overallOpenings;
+        }
+        return 0.0;
     }
 
     /**

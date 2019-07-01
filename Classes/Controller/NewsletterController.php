@@ -61,8 +61,10 @@ class NewsletterController extends ActionController
                 'statistic' => [
                     'overallReceivers' => $this->logRepository->getNumberOfReceivers(),
                     'overallOpenings' => $this->logRepository->getOverallOpenings(),
+                    'overallClicks' => $this->logRepository->getOverallClicks(),
                     'overallMailsSent' => $this->logRepository->getOverallMailsSent(),
                     'overallOpenRate' => $this->logRepository->getOverallOpenRate(),
+                    'overallClickRate' => $this->logRepository->getOverallClickRate()
                 ],
                 'groupedLinksByHref' => $this->logRepository->getGroupedLinksByHref()
             ]

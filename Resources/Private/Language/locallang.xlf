@@ -16,11 +16,20 @@
 			<trans-unit id="module.newsletter.dashboard.label.overallopenrate">
 				<source>Open rate</source>
 			</trans-unit>
-			<trans-unit id="module.newsletter.dashboard.label.diagram.0">
+			<trans-unit id="module.newsletter.dashboard.label.overallopenrate.0">
 				<source>All</source>
 			</trans-unit>
-			<trans-unit id="module.newsletter.dashboard.label.diagram.1">
+			<trans-unit id="module.newsletter.dashboard.label.overallopenrate.1">
 				<source>Opener</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.overallclickrate">
+				<source>Click rate</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.overallclickrate.0">
+				<source>All openers</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.overallclickrate.1">
+				<source>All clicks</source>
 			</trans-unit>
 
 			<trans-unit id="module.newsletter.list.title">
