@@ -39,11 +39,12 @@ composer require "in2code/luxletter"
 ## Todos
 
 * done: Mail queue
-* Configuration for sendervalues
-* done: Link-rewriting for tracking
-* Trackingpixel
-* Image include in newsletters?
+* done: Configuration for sendervalues
+* done: Link-rewriting for tracking via psr-15 (and disabling via data-attribute)
+* done: Trackingpixel for openrate
+* done: Opt-Out-Plugin
 * in progress: Dashboard
-* HTML for newsletter optimization
-* Opt-Out-Plugin
+* Catch bounce mails?
+* Image include in newsletters?
+* HTML for newsletter optimization?
 * Registration?
