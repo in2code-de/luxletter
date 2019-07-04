@@ -53,6 +53,15 @@
 			<trans-unit id="module.newsletter.dashboard.label.overallclickrate.1">
 				<source>All clicks</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.overallunsubscriberate">
+				<source>Unsubscribe rate</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.overallunsubscriberate.0">
+				<source>All openers</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.overallunsubscriberate.1">
+				<source>All unsubscribers</source>
+			</trans-unit>
 
 			<trans-unit id="module.newsletter.list.title">
 				<source>Manage your Newsletters</source>

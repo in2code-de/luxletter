@@ -70,6 +70,18 @@
 				<source>All clicks</source>
 				<target state="translated">Alle Klicks</target>
 			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.overallunsubscriberate">
+				<source>Unsubscribe rate</source>
+				<target state="translated">Abmelderate</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.overallunsubscriberate.0">
+				<source>All openers</source>
+				<target state="translated">Alle Öffner</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.overallunsubscriberate.1">
+				<source>All unsubscribers</source>
+				<target state="translated">Alle Abmelder</target>
+			</trans-unit>
 
 			<trans-unit id="module.newsletter.list.title">
 				<source>Manage your Newsletters</source>
