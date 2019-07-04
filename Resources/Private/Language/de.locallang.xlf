@@ -13,6 +13,35 @@
 				<target state="translated">Newsletter</target>
 			</trans-unit>
 
+			<trans-unit id="fe.unsubscribe.message.1562050511">
+				<source>User invalid</source>
+				<target state="translated">Benutzer ist ungültig</target>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe.message.1562267031">
+				<source>Newsletter invalid</source>
+				<target state="translated">Newsletter ist ungültig</target>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe.message.1562050533">
+				<source>Hash no given</source>
+				<target state="translated">Hash fehlt</target>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe.message.1562066292">
+				<source>User has already unsubscribed from newsletters</source>
+				<target state="translated">Benutzer ist bereits ausgetragen und wird keine weiteren Newsletter mehr erhalten</target>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe.message.1562069583">
+				<source>Hash invalid</source>
+				<target state="translated">Hash ist ungültig</target>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe.message.success">
+				<source>You have successfully unsubscribed from our newsletter service.</source>
+				<target state="translated">Sie werden keine weiteren Newsletter mehr erhalten.</target>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe.message.failed">
+				<source>An error occured. Please try again later.</source>
+				<target state="translated">Unbekannter Fehler. Bitte versuchen Sie es später erneut.</target>
+			</trans-unit>
+
 			<trans-unit id="module.newsletter.dashboard.label.overallreceivers">
 				<source>Receiver</source>
 				<target state="translated">Empfänger</target>

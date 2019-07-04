@@ -16,7 +16,7 @@ class ConfigurationUtility
 {
 
     /**
-     * From TypoScript settings
+     * Get TypoScript settings
      *
      * @return array
      * @throws InvalidConfigurationTypeException
@@ -37,6 +37,29 @@ class ConfigurationUtility
     public static function getDomain(): string
     {
         return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'domain');
+    }
+
+    /**
+     * @return int
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    public static function getPidUnsubscribe(): int
+    {
+        return (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'pidUnsubscribe');
+    }
+
+    /**
+     * @return bool
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    public static function isRewriteLinksInNewsletterActivated(): bool
+    {
+        return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
+                'luxletter',
+                'rewriteLinksInNewsletter'
+            ) === '1';
     }
 
     /**
@@ -80,15 +103,16 @@ class ConfigurationUtility
     }
 
     /**
-     * @return bool
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @return string
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function isRewriteLinksInNewsletterActivated(): bool
+    public static function getEncryptionKey(): string
     {
-        return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
-            'luxletter',
-            'rewriteLinksInNewsletter'
-        ) === '1';
+        $configurationManager = ObjectUtility::getConfigurationManagerCore();
+        $encryptionKey = $configurationManager->getLocalConfigurationValueByPath('SYS/encryptionKey');
+        if (empty($encryptionKey)) {
+            throw new \DomainException('No encryption key found in this TYPO3 installation', 1562069158);
+        }
+        return $encryptionKey;
     }
 }

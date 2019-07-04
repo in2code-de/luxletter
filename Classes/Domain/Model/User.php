@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Model;
 
+use In2code\Luxletter\Utility\StringUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 
@@ -11,6 +12,16 @@ use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 class User extends FrontendUser
 {
     const TABLE_NAME = 'fe_users';
+
+    /**
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\In2code\Luxletter\Domain\Model\Usergroup>
+     */
+    protected $usergroup;
+
+    /**
+     * @var \DateTime
+     */
+    protected $crdate = null;
 
     /**
      * Try to get a readable name in format "lastname, firstname" (if possible)
@@ -38,5 +49,31 @@ class User extends FrontendUser
             }
         }
         return null;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCrdate(): \DateTime
+    {
+        return $this->crdate;
+    }
+
+    /**
+     * @param \DateTime $crdate
+     * @return User
+     */
+    public function setCrdate(\DateTime $crdate): self
+    {
+        $this->crdate = $crdate;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUnsubscribeHash(): string
+    {
+        return StringUtility::getHashFromArguments([$this->getUid(), $this->getCrdate()->format('U')]);
     }
 }

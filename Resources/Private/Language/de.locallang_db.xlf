@@ -107,6 +107,20 @@
 				<source>Target</source>
 				<target state="translated">Ziel</target>
 			</trans-unit>
+
+			<trans-unit id="flexform.fe.removeusergroup">
+				<source>Select usergroup which should be removed on unsubscribe</source>
+				<target state="translated">Benutzergruppe auswählen, die bei einem Austragen aus dem Newsletter entfernt werden soll</target>
+			</trans-unit>
+			<trans-unit id="flexform.fe.text">
+				<source>Show text after unsubscribe</source>
+				<target state="translated">Text nach einem erfolgreichen Austragen anzeigen</target>
+			</trans-unit>
+
+			<trans-unit id="pleasechoose">
+				<source>Please choose...</source>
+				<target state="translated">Bitte wählen...</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

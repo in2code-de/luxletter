@@ -1,8 +1,11 @@
-# cat=basic//010; type=text; label= Webserver domain: Define a domain for frontend plugins (like opt out for the newsletter, etc...)
+# cat=basic//100; type=text; label= Webserver domain: Define a domain for frontend plugins (like opt out for the newsletter, etc...)
 domain = https://www.domain.org
 
-# cat=basic/enable/100; type=boolean; label= Rewrite links in newsletter: All absolute links should be rewritten, so a click on a link can be tracked
-rewriteLinksInNewsletter = 0
+# cat=basic//110; type=int+; label= Unsubscribe PID: Where to find the unsubscribe plugin? Please add the page identifier
+pidUnsubscribe = 6
+
+# cat=basic//120; type=boolean; label= Rewrite links in newsletter: All absolute links should be rewritten, so a click on a link can be tracked
+rewriteLinksInNewsletter = 1
 
 
 # cat=mail//200; type=text; label= Sender email address: Sender email address for your newsletter (Because of SPF defiance it should be a valid email - given from your mailserver administrator)

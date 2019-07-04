@@ -9,6 +9,8 @@ use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use In2code\Luxletter\Utility\TemplateUtility;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -43,8 +45,10 @@ class ParseNewsletterUrlService
     /**
      * ParseNewsletterUrlService constructor.
      * @param string $origin can be a page uid or a complete url
-     * @throws SiteNotFoundException
      * @throws InvalidRouteArgumentsException
+     * @throws SiteNotFoundException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public function __construct(string $origin)
     {

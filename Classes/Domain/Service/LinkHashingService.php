@@ -63,7 +63,7 @@ class LinkHashingService
     }
 
     /**
-     * Try to hash absolute url
+     * Try to hash absolute urls but no a-tags with data-luxletter-parselink="false"
      *
      * @param \DOMElement $aTag
      * @return void
@@ -75,12 +75,16 @@ class LinkHashingService
     {
         $href = $aTag->getAttribute('href');
         if (StringUtility::isValidUrl($href)) {
-            $link = ObjectUtility::getObjectManager()->get(Link::class)
-                ->setNewsletter($this->newsletter)
-                ->setUser($this->user)
-                ->setTarget($href);
-            $aTag->setAttribute('href', $link->getUriFromHash());
-            $this->linkRepository->add($link);
+            if ($aTag->getAttribute('data-luxletter-parselink') !== 'false') {
+                $link = ObjectUtility::getObjectManager()->get(Link::class)
+                    ->setNewsletter($this->newsletter)
+                    ->setUser($this->user)
+                    ->setTarget($href);
+                $aTag->setAttribute('href', $link->getUriFromHash());
+                $this->linkRepository->add($link);
+            } else {
+                $aTag->removeAttribute('data-luxletter-parselink');
+            }
         }
     }
 }

@@ -56,6 +56,17 @@ class LogService
     /**
      * @param Newsletter $newsletter
      * @param User $user
+     * @return void
+     * @throws IllegalObjectTypeException
+     */
+    public function logUnsubscribe(Newsletter $newsletter, User $user): void
+    {
+        $this->log($newsletter, $user, Log::STATUS_UNSUBSCRIBE);
+    }
+
+    /**
+     * @param Newsletter $newsletter
+     * @param User $user
      * @param int $status
      * @param array $properties
      * @return void

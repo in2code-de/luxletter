@@ -22,13 +22,15 @@ class FrontendUrlService
      * @param int $pageIdentifier
      * @param array $arguments
      * @return string
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidRouteArgumentsException
      * @throws SiteNotFoundException
      */
     public function getTypolinkUrlFromParameter(int $pageIdentifier, array $arguments = []): string
     {
-        $url = FrontendUtility::getCurrentUri();
-        $url .= ltrim($this->getUri($pageIdentifier, $arguments)->getPath(), '/');
+        $url = ConfigurationUtility::getDomain();
+        $url .= $this->getUri($pageIdentifier, $arguments)->getPath();
         if ($arguments !== []) {
             $url .= '?' . $this->getUri($pageIdentifier, $arguments)->getQuery();
         }

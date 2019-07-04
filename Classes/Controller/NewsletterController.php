@@ -95,6 +95,7 @@ class NewsletterController extends ActionController
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws NoSuchArgumentException
+     * @throws InvalidConfigurationTypeException
      */
     public function initializeCreateAction(): void
     {
@@ -245,6 +246,7 @@ class NewsletterController extends ActionController
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws NoSuchArgumentException
+     * @throws InvalidConfigurationTypeException
      */
     protected function parseNewsletterToBodytext(): void
     {

@@ -12,6 +12,21 @@ class LocalizationUtility
 
     /**
      * @param string $key
+     * @param string $extensionName
+     * @param array|null $arguments
+     * @return string|null
+     */
+    public static function translate(string $key, string $extensionName = 'Luxletter', array $arguments = null)
+    {
+        $label = LocalizationUtilityExtbase::translate($key, $extensionName, $arguments);
+        if (empty($label)) {
+            $label = $key;
+        }
+        return $label;
+    }
+
+    /**
+     * @param string $key
      * @param array|null $arguments
      * @return string|null
      */
@@ -24,20 +39,5 @@ class LocalizationUtility
             // Use this part for unit testing
             return $key;
         }
-    }
-
-    /**
-     * @param string $key
-     * @param string $extensionName
-     * @param array|null $arguments
-     * @return string|null
-     */
-    public static function translate(string $key, string $extensionName = 'Luxletter', array $arguments = null)
-    {
-        $label = LocalizationUtilityExtbase::translate($key, $extensionName, $arguments);
-        if (empty($label)) {
-            $label = $key;
-        }
-        return $label;
     }
 }

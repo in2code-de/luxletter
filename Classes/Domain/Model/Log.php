@@ -14,6 +14,7 @@ class Log extends AbstractEntity
     const STATUS_DISPATCH = 100;
     const STATUS_NEWSLETTEROPENING = 200;
     const STATUS_LINKOPENING = 300;
+    const STATUS_UNSUBSCRIBE = 400;
 
     /**
      * @var \In2code\Luxletter\Domain\Model\Newsletter

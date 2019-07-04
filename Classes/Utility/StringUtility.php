@@ -9,8 +9,6 @@ class StringUtility
 {
 
     /**
-     * Test string if it is an URL
-     *
      * @param string $value
      * @return bool
      */
@@ -25,6 +23,7 @@ class StringUtility
      */
     public static function getHashFromArguments(array $arguments): string
     {
+        $arguments = array_merge($arguments, [ConfigurationUtility::getEncryptionKey()]);
         return hash('sha256', implode('/', $arguments));
     }
 }

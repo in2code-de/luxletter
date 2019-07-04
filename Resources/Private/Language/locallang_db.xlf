@@ -82,6 +82,17 @@
 			<trans-unit id="tx_luxletter_domain_model_link.target">
 				<source>Target</source>
 			</trans-unit>
+
+			<trans-unit id="flexform.fe.removeusergroup">
+				<source>Select usergroup which should be removed on unsubscribe</source>
+			</trans-unit>
+			<trans-unit id="flexform.fe.text">
+				<source>Show text after unsubscribe</source>
+			</trans-unit>
+
+			<trans-unit id="pleasechoose">
+				<source>Please choose...</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

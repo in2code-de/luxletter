@@ -1,0 +1,26 @@
+<f:layout name="Frontend"/>
+
+Available variables:
+	{success}, {settings}, {user}, {hash}, {usergroupToRemove}
+
+<f:section name="content">
+	<f:render partial="Misc/FlashMessages" arguments="{_all}"/>
+
+	<f:if condition="{success}">
+		<f:then>
+			<div class="alert alert-success" role="alert">
+				<h4 class="alert-heading">
+					<f:translate key="fe.unsubscribe.message.success">You have successfully unsubscribed from our newsletter</f:translate>
+				</h4>
+			</div>
+		</f:then>
+		<f:else>
+			<div class="alert alert-danger" role="alert">
+				<h4 class="alert-heading">
+					<f:translate key="fe.unsubscribe.message.failed">Unknown error</f:translate>
+				</h4>
+			</div>
+		</f:else>
+	</f:if>
+</f:section>
+

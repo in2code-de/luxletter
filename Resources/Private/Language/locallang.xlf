@@ -10,6 +10,28 @@
 				<source>Newsletter</source>
 			</trans-unit>
 
+			<trans-unit id="fe.unsubscribe.message.1562050511">
+				<source>User invalid</source>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe.message.1562267031">
+				<source>Newsletter invalid</source>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe.message.1562050533">
+				<source>Hash no given</source>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe.message.1562066292">
+				<source>User has already unsubscribed from newsletters</source>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe.message.1562069583">
+				<source>Hash invalid</source>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe.message.success">
+				<source>You have successfully unsubscribed from our newsletter service.</source>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe.message.failed">
+				<source>An error occured. Please try again later.</source>
+			</trans-unit>
+
 			<trans-unit id="module.newsletter.dashboard.label.overallreceivers">
 				<source>Receiver</source>
 			</trans-unit>
