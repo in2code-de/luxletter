@@ -68,7 +68,7 @@ class NewsletterController extends ActionController
                     'overallMailsSent' => $this->logRepository->getOverallMailsSent(),
                     'overallOpenRate' => $this->logRepository->getOverallOpenRate(),
                     'overallClickRate' => $this->logRepository->getOverallClickRate(),
-                    'overallUnsubscribeRate' => $this->logRepository->getOverallClickRate()
+                    'overallUnsubscribeRate' => $this->logRepository->getOverallUnsubscribeRate()
                 ],
                 'groupedLinksByHref' => $this->logRepository->getGroupedLinksByHref(),
                 'newsletters' => $this->newsletterRepository->findAll()->getQuery()->setLimit(10)->execute()

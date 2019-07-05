@@ -18,6 +18,7 @@ class PercentViewHelper extends AbstractViewHelper
         parent::initializeArguments();
         $this->registerArgument('number', 'float', 'Any number', true);
         $this->registerArgument('decimals', 'int', 'The number of digits after the decimal point', false, 1);
+        $this->registerArgument('decPoint', 'string', 'Decimal point', false, ',');
         $this->registerArgument('postfix', 'string', 'Any postfix like a percent sign', false, ' %');
     }
 
@@ -27,7 +28,7 @@ class PercentViewHelper extends AbstractViewHelper
     public function render(): string
     {
         $value = $this->arguments['number'] * 100;
-        $value = number_format($value, $this->arguments['decimals']);
+        $value = number_format($value, $this->arguments['decimals'], $this->arguments['decPoint'], '.');
         return (string)$value . $this->arguments['postfix'];
     }
 }
