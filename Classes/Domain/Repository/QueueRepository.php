@@ -32,13 +32,14 @@ class QueueRepository extends AbstractRepository
 
     /**
      * @param Newsletter $newsletter
+     * @param bool $dispatched
      * @return QueryResultInterface
      */
-    public function findDispatchedNewsletters(Newsletter $newsletter): QueryResultInterface
+    public function findAllByNewsletterAndDispatchedStatus(Newsletter $newsletter, bool $dispatched = false): QueryResultInterface
     {
         $query = $this->createQuery();
         $and = [
-            $query->equals('sent', true),
+            $query->equals('sent', $dispatched),
             $query->equals('newsletter', $newsletter)
         ];
         $query->matching($query->logicalAnd($and));
@@ -49,14 +50,10 @@ class QueueRepository extends AbstractRepository
      * @param Newsletter $newsletter
      * @return QueryResultInterface
      */
-    public function findNotDispatchedNewsletters(Newsletter $newsletter): QueryResultInterface
+    public function findAllByNewsletter(Newsletter $newsletter): QueryResultInterface
     {
         $query = $this->createQuery();
-        $and = [
-            $query->equals('sent', false),
-            $query->equals('newsletter', $newsletter)
-        ];
-        $query->matching($query->logicalAnd($and));
+        $query->matching($query->equals('newsletter', $newsletter));
         return $query->execute();
     }
 }

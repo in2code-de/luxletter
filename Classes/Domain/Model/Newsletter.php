@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Model;
 
+use Doctrine\DBAL\DBALException;
+use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
@@ -58,6 +60,26 @@ class Newsletter extends AbstractEntity
      * @transient
      */
     protected $dispatchedProgress = null;
+
+    /**
+     * @var int
+     */
+    protected $queues = 0;
+
+    /**
+     * @var int
+     */
+    protected $openers = 0;
+
+    /**
+     * @var int
+     */
+    protected $clickers = 0;
+
+    /**
+     * @var int
+     */
+    protected $unsubscribers = 0;
 
     /**
      * @return string
@@ -220,8 +242,8 @@ class Newsletter extends AbstractEntity
     {
         if ($this->dispatchedProgress === null) {
             $queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
-            $dispatched = $queueRepository->findDispatchedNewsletters($this)->count();
-            $notDispatched = $queueRepository->findNotDispatchedNewsletters($this)->count();
+            $dispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, true)->count();
+            $notDispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, false)->count();
             $overall = $dispatched + $notDispatched;
             $result = 0;
             if ($overall > 0) {
@@ -230,5 +252,102 @@ class Newsletter extends AbstractEntity
             $this->dispatchedProgress = $result;
         }
         return $this->dispatchedProgress;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQueues(): int
+    {
+        if ($this->queues === 0) {
+            $queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
+            $queues = $queueRepository->findAllByNewsletter($this)->count();
+            $this->queues = $queues;
+        }
+        return $this->queues;
+    }
+
+    /**
+     * @return int
+     * @throws DBALException
+     */
+    public function getOpeners(): int
+    {
+        if ($this->openers === 0) {
+            $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
+            $openers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_NEWSLETTEROPENING));
+            $this->openers = $openers;
+        }
+        return $this->openers;
+    }
+
+    /**
+     * @return int
+     * @throws DBALException
+     */
+    public function getClickers(): int
+    {
+        if ($this->clickers === 0) {
+            $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
+            $clickers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_LINKOPENING));
+            $this->clickers = $clickers;
+        }
+        return $this->clickers;
+    }
+
+    /**
+     * @return int
+     * @throws DBALException
+     */
+    public function getUnsubscribers(): int
+    {
+        if ($this->unsubscribers === 0) {
+            $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
+            $unsubscribers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_UNSUBSCRIBE));
+            $this->unsubscribers = $unsubscribers;
+        }
+        return $this->unsubscribers;
+    }
+
+    /**
+     * @return float
+     * @throws DBALException
+     */
+    public function getOpenRate(): float
+    {
+        $all = $this->getQueues();
+        $openers = $this->getOpeners();
+        if ($all > 0) {
+            return $openers / $all;
+        }
+        return 0.0;
+    }
+
+    /**
+     * @return float
+     * @throws DBALException
+     */
+    public function getClickRate(): float
+    {
+        $openers = $this->getOpeners();
+        $clickers = $this->getClickers();
+        if ($openers > 0) {
+            return $clickers / $openers;
+        }
+        return 0.0;
+    }
+
+    /**
+     * @return float
+     * @throws DBALException
+     */
+    public function getUnsubscribeRate(): float
+    {
+        $openers = $this->getOpeners();
+        $unsubscribers = $this->getUnsubscribers();
+        if ($openers > 0) {
+            return $unsubscribers / $openers;
+        }
+        return 0.0;
     }
 }

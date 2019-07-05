@@ -36,7 +36,7 @@
 				<source>Receiver</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallopenrate">
-				<source>Open rate</source>
+				<source>Openrate</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallopenrate.0">
 				<source>All</source>
@@ -45,7 +45,7 @@
 				<source>Opener</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallclickrate">
-				<source>Click rate</source>
+				<source>Clickrate</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallclickrate.0">
 				<source>All openers</source>
@@ -54,13 +54,22 @@
 				<source>All clicks</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallunsubscriberate">
-				<source>Unsubscribe rate</source>
+				<source>Unsubscriberate</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallunsubscriberate.0">
 				<source>All openers</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallunsubscriberate.1">
 				<source>All unsubscribers</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.openrate">
+				<source>Openrate</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.clickrate">
+				<source>Clickrate</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.dashboard.label.unsubscriberate">
+				<source>Unsubscriberate</source>
 			</trans-unit>
 
 			<trans-unit id="module.newsletter.list.title">

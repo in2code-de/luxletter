@@ -161,4 +161,19 @@ class LogRepository extends AbstractRepository
             ->fetchColumn(0);
         return $uid > 0;
     }
+
+    /**
+     * @param Newsletter $newsletter
+     * @param int $status
+     * @return array
+     * @throws DBALException
+     */
+    public function findByNewsletterAndStatus(Newsletter $newsletter, int $status): array
+    {
+        $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
+        return (array)$connection->executeQuery(
+            'select * from ' . Log::TABLE_NAME .
+            ' where deleted=0 and status=' . $status . ' and newsletter=' . $newsletter->getUid()
+        )->fetchAll();
+    }
 }

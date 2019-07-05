@@ -7,24 +7,23 @@
 	</div>
 	<div class="panel-body">
 		<table class="table">
-			<tr>
-				<th scope="row">Newsletter 2020/02 / Product A</th>
-				<td>13 % Öffnungsrate</td>
-				<td>11 % Klickrate</td>
-				<td>0,25 % Unsubscribe</td>
-			</tr>
-			<tr>
-				<th scope="row">Newsletter 2020/02 / Product B</th>
-				<td>13 % Öffnungsrate</td>
-				<td>11 % Klickrate</td>
-				<td>0,25 % Unsubscribe</td>
-			</tr>
-			<tr>
-				<th scope="row">Newsletter 2020/01 / Product A</th>
-				<td>13 % Öffnungsrate</td>
-				<td>11 % Klickrate</td>
-				<td>0,25 % Unsubscribe</td>
-			</tr>
+			<f:for each="{newsletters}" as="newsletter">
+				<tr>
+					<th scope="row">{newsletter.title}</th>
+					<td>
+						<luxletter:format.percent number="{newsletter.openRate}">35 %</luxletter:format.percent>
+						<f:translate key="module.newsletter.dashboard.label.openrate">Open rate</f:translate>
+					</td>
+					<td>
+						<luxletter:format.percent number="{newsletter.clickRate}">11 %</luxletter:format.percent>
+						<f:translate key="module.newsletter.dashboard.label.clickrate">Click rate</f:translate>
+					</td>
+					<td>
+						<luxletter:format.percent number="{newsletter.unsubscribeRate}">11 %</luxletter:format.percent>
+						<f:translate key="module.newsletter.dashboard.label.unsubscriberate">Unsubscribe rate</f:translate>
+					</td>
+				</tr>
+			</f:for>
 		</table>
 	</div>
 </div>
