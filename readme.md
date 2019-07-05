@@ -43,8 +43,10 @@ composer require "in2code/luxletter"
 * done: Link-rewriting for tracking via psr-15 (and disabling via data-attribute)
 * done: Trackingpixel for openrate
 * done: Opt-Out-Plugin
-* in progress: Dashboard
-* Catch bounce mails?
-* Image include in newsletters?
-* HTML for newsletter optimization?
-* Registration?
+* done: Dashboard
+* Image include in newsletters
+* HTML for newsletter optimization
+
+### Todos for later
+
+* Catch bounce mails
