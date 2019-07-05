@@ -10,8 +10,8 @@
 				id="luxletter-dashboard-open"
 				width="600"
 				height="200"
-				data-chart-data="500,350,600"
-				data-chart-labels="Jan,Feb,Mar"></canvas>
+				data-chart-data="{luxletter:statistic.getListOfPropertiesFromNewsletters(newsletters:newsletters,property:'openers')}"
+				data-chart-labels="{luxletter:statistic.getListOfPropertiesFromNewsletters(newsletters:newsletters,property:'title')}"></canvas>
 		<script>
 			require(['TYPO3/CMS/Luxletter/Vendor/Chart.min'], function (Chart) {
 				var container = document.getElementById('luxletter-dashboard-open');
