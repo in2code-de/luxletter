@@ -1,0 +1,22 @@
+mod {
+	wizards {
+		newContentElement {
+			wizardItems {
+				common {
+					header = Luxletter
+					elements {
+						teaser {
+							iconIdentifier = ctype-teaser
+							title = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser
+							description = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.description
+							tt_content_defValues {
+								CType = teaser
+							}
+						}
+					}
+					show = *
+				}
+			}
+		}
+	}
+}

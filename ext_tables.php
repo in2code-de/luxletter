@@ -17,6 +17,11 @@ call_user_func(
             \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
             ['source' => 'EXT:luxletter/Resources/Public/Icons/lux_white.svg']
         );
+        $iconRegistry->registerIcon(
+            'ctype-teaser',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:luxletter/Resources/Public/Icons/ctype-teaser.svg']
+        );
 
         /**
          * Include Modules
@@ -64,6 +69,13 @@ call_user_func(
             'luxletter',
             'Configuration/TypoScript/FluidStyledMailContent/',
             'FluidStyledMailContent'
+        );
+
+        /**
+         * Add static page TSconfig
+         */
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+            '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:luxletter/Configuration/PageTSConfig/ContentElements.typoscript">'
         );
     }
 );

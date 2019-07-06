@@ -47,11 +47,12 @@ composer require "in2code/luxletter"
 * done: Unsubscribe-Plugin
 * done: Dashboard
 * in progress: HTML for newsletter optimization
-* New CType teaser to build newsletters with content elements
+* in progress: New CType teaser to build newsletters with content elements
 * Image include in newsletters
 * lux: identification with email clicks
 * lux: new view in backend with all email receivers and there newletter actions
 * lux: show email actions in normal detail view?
+* Documentation (how to build newsletters, basic configuration, what can lux do, etc...)
 
 ### Todos for later
 

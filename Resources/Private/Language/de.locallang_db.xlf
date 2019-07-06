@@ -8,6 +8,15 @@
 				<target state="translated">Ist eine Newsletter Empfänger Gruppe?</target>
 			</trans-unit>
 
+			<trans-unit id="ctype.teaser">
+				<source>Teaser element</source>
+				<target state="translated">Teaser Element</target>
+			</trans-unit>
+			<trans-unit id="ctype.teaser.description">
+				<source>Teaser element e.g. for newsletters</source>
+				<target state="translated">Teaser Element z.B. für Newsletter</target>
+			</trans-unit>
+
 			<trans-unit id="tx_luxletter_domain_model_newsletter">
 				<source>Newsletter</source>
 				<target state="translated">Newsletter</target>
