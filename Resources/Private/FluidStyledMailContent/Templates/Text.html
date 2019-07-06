@@ -1,0 +1,27 @@
+<f:layout name="Mail" />
+
+
+
+<f:section name="Content">
+	<f:comment>
+		Header
+	</f:comment>
+	<f:if condition="{data.header}">
+		<tr>
+			<td class="float-center" valign="top">
+				<f:render partial="Header" arguments="{_all}" />
+			</td>
+		</tr>
+	</f:if>
+
+	<f:comment>
+		Text
+	</f:comment>
+	<f:if condition="{data.bodytext}">
+		<tr>
+			<td class="float-center" valign="top">
+				<f:format.html parseFuncTSPath="lib.parseFunc">{data.bodytext}</f:format.html>
+			</td>
+		</tr>
+	</f:if>
+</f:section>

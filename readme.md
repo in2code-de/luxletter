@@ -2,6 +2,8 @@
 
 # Luxletter - a newsletter system build in TYPO3
 
+Inspired by direct_mail
+
 ## Introduction
 
 Email marketing tool in TYPO3. Just build and send newsletters to your customers.

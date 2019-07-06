@@ -1,0 +1,63 @@
+<f:layout name="Mail" />
+
+
+
+<f:section name="Content">
+	<f:comment>
+		Header
+	</f:comment>
+	<f:if condition="{data.header}">
+		<tr>
+			<td class="float-center" valign="top">
+				<f:render partial="Header" arguments="{_all}" />
+			</td>
+		</tr>
+	</f:if>
+
+	<f:comment>
+		Images
+	</f:comment>
+	<f:if condition="{gallery.rows}">
+		<tr>
+			<td class="float-center" valign="top">
+				<f:render section="ImageContainer" arguments="{_all}" />
+			</td>
+		</tr>
+	</f:if>
+</f:section>
+
+
+
+
+
+<f:section name="ImageContainer">
+	<f:for each="{gallery.rows}" as="row">
+		<f:for each="{row.columns}" as="column">
+			<f:if condition="{column.media} && {column.media.type} == 2">
+				<f:alias map="{file:column.media,dimensions:column.dimensions}">
+					<f:if condition="{file.link}">
+						<f:then>
+							<f:link.typolink parameter="{file.link}" title="{file.title}">
+								<f:render section="Image" arguments="{_all}" />
+							</f:link.typolink>
+						</f:then>
+						<f:else>
+							<f:render section="Image" arguments="{_all}" />
+						</f:else>
+					</f:if>
+					<f:if condition="{file.description}">
+						<br>
+						{file.description}
+					</f:if>
+				</f:alias>
+			</f:if>
+		</f:for>
+	</f:for>
+</f:section>
+
+
+
+
+<f:section name="Image">
+	<f:media class="image-embed-item" file="{file}" width="{dimensions.width}" height="{dimensions.height}" alt="{file.alternative}" title="{file.title}" />
+</f:section>

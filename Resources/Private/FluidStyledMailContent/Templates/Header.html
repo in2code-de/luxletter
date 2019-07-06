@@ -1,0 +1,13 @@
+<f:layout name="Mail" />
+
+
+
+<f:section name="Content">
+	<f:if condition="{data.header}">
+		<tr>
+			<td class="float-center" valign="top">
+				<f:render partial="Header" arguments="{_all}" />
+			</td>
+		</tr>
+	</f:if>
+</f:section>
