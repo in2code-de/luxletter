@@ -1,0 +1,61 @@
+<f:switch expression="{data.header_layout}">
+	<f:case value="0">
+		<h1>
+			<b>
+				<f:render section="Header" arguments="{_all}" />
+			</b>
+		</h1>
+	</f:case>
+	<f:case value="1">
+		<h1>
+			<b>
+				<f:render section="Header" arguments="{_all}" />
+			</b>
+		</h1>
+	</f:case>
+	<f:case value="2">
+		<h2>
+			<b>
+				<f:render section="Header" arguments="{_all}" />
+			</b>
+		</h2>
+	</f:case>
+	<f:case value="3">
+		<h3>
+			<b>
+				<f:render section="Header" arguments="{_all}" />
+			</b>
+		</h3>
+	</f:case>
+	<f:case value="4">
+		<h4>
+			<b>
+				<f:render section="Header" arguments="{_all}" />
+			</b>
+		</h4>
+	</f:case>
+	<f:case value="5">
+		<h5>
+			<b>
+				<f:render section="Header" arguments="{_all}" />
+			</b>
+		</h5>
+	</f:case>
+	<f:case value="6">
+		<h6>
+			<b>
+				<f:render section="Header" arguments="{_all}" />
+			</b>
+		</h6>
+	</f:case>
+	<f:case value="100">
+		<f:comment> -- do not show header -- </f:comment>
+	</f:case>
+</f:switch>
+
+
+
+
+<f:section name="Header">
+	<f:link.typolink parameter="{data.header_link}">{data.header}</f:link.typolink>
+</f:section>

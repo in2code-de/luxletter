@@ -57,8 +57,13 @@ call_user_func(
          */
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
             'luxletter',
-            'Configuration/TypoScript/',
-            'Main TypoScript'
+            'Configuration/TypoScript/Basic/',
+            'Basic TypoScript'
+        );
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
+            'luxletter',
+            'Configuration/TypoScript/FluidStyledMailContent/',
+            'FluidStyledMailContent'
         );
     }
 );

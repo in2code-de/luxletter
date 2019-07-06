@@ -1,0 +1,43 @@
+# Fluid Styled Mail Content (needs fluid_styled_content loaded before)
+
+[getTSFE().type == 1562349004]
+lib.contentElement {
+    templateRootPaths {
+        10 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Templates/
+    }
+    partialRootPaths {
+        10 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Partials/
+    }
+    layoutRootPaths {
+        10 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Layouts/
+    }
+}
+[end]
+
+fluidStyledMailContent = PAGE
+fluidStyledMailContent {
+    typeNum = 1562349004
+
+    config {
+        no_cache = 0
+        disableAllHeaderCode = 0
+        disablePrefixComment = 1
+        xhtml_cleaning = 0
+        admPanel = 0
+        debug = 0
+    }
+
+    # Add some css for frontend view
+    cssInline.10 = TEXT
+    cssInline.10.value (
+        html {
+            width: 1024px;
+            margin: auto;
+        }
+    )
+    cssInline.20 = FLUIDTEMPLATE
+    cssInline.20.file = EXT:luxletter/Resources/Private/Partials/Mail/ZurbCss.html
+
+    # Add content
+    10 < styles.content.get
+}

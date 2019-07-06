@@ -42,10 +42,14 @@ composer require "in2code/luxletter"
 * done: Configuration for sendervalues
 * done: Link-rewriting for tracking via psr-15 (and disabling via data-attribute)
 * done: Trackingpixel for openrate
-* done: Opt-Out-Plugin
+* done: Unsubscribe-Plugin
 * done: Dashboard
 * Image include in newsletters
 * HTML for newsletter optimization
+* HTML for news in newsletter
+* lux: identification with email clicks
+* lux: new view in backend with all email receivers and there newletter actions
+* lux: show email actions in normal detail view?
 
 ### Todos for later
 
