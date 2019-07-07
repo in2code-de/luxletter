@@ -30,13 +30,14 @@ class ConfigurationUtility
     }
 
     /**
-     * @return string
+     * @return string like "https://www.luxletter.de" without trailing slash
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public static function getDomain(): string
     {
-        return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'domain');
+        $domain = (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'domain');
+        return rtrim($domain, '/');
     }
 
     /**
@@ -60,6 +61,17 @@ class ConfigurationUtility
                 'luxletter',
                 'rewriteLinksInNewsletter'
             ) === '1';
+    }
+
+    /**
+     * @return int
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    public static function getTypeNumToNumberLocation(): int
+    {
+        return (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)
+            ->get('luxletter', 'addTypeNumToNumberLocation');
     }
 
     /**

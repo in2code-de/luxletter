@@ -6,6 +6,7 @@ use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LinkRepository;
+use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
@@ -74,6 +75,7 @@ class LinkHashingService
     protected function hashLink(\DOMElement $aTag): void
     {
         $href = $aTag->getAttribute('href');
+        $href = $this->convertToAbsoluteHref($href);
         if (StringUtility::isValidUrl($href)) {
             if ($aTag->getAttribute('data-luxletter-parselink') !== 'false') {
                 $link = ObjectUtility::getObjectManager()->get(Link::class)
@@ -86,5 +88,21 @@ class LinkHashingService
                 $aTag->removeAttribute('data-luxletter-parselink');
             }
         }
+    }
+
+    /**
+     * Convert href with leading slash to an absolute url
+     *
+     * @param string $href
+     * @return string
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    protected function convertToAbsoluteHref(string $href): string
+    {
+        if (StringUtility::startsWith($href, '/')) {
+            $href = ConfigurationUtility::getDomain() . $href;
+        }
+        return $href;
     }
 }

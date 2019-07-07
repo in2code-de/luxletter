@@ -15,13 +15,6 @@ use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 class NewsletterRepository extends AbstractRepository
 {
     /**
-     * @var array
-     */
-    protected $defaultOrderings = [
-        'title' => QueryInterface::ORDER_ASCENDING
-    ];
-
-    /**
      * Remove (really remove) all data from all luxletter tables
      *
      * @return void

@@ -54,8 +54,13 @@ class ParseNewsletterUrlService
     {
         $url = '';
         if (MathUtility::canBeInterpretedAsInteger($origin)) {
-            $urlSrervice = ObjectUtility::getObjectManager()->get(FrontendUrlService::class);
-            $url = $urlSrervice->getTypolinkUrlFromParameter((int)$origin);
+            $arguments = [];
+            $typenum = ConfigurationUtility::getTypeNumToNumberLocation();
+            if ($typenum > 0) {
+                $arguments = ['type' => $typenum];
+            }
+            $urlService = ObjectUtility::getObjectManager()->get(FrontendUrlService::class);
+            $url = $urlService->getTypolinkUrlFromParameter((int)$origin, $arguments);
         } elseif (StringUtility::isValidUrl($origin)) {
             $url = $origin;
         }

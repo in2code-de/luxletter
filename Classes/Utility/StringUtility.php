@@ -18,6 +18,16 @@ class StringUtility
     }
 
     /**
+     * @param string $haystack
+     * @param string $needle
+     * @return bool
+     */
+    public static function startsWith(string $haystack, string $needle): bool
+    {
+        return stristr($haystack, $needle) && strrpos($haystack, $needle, -strlen($haystack)) !== false;
+    }
+
+    /**
      * @param array $arguments
      * @return string
      */

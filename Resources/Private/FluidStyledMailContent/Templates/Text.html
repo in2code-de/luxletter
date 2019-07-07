@@ -20,7 +20,7 @@
 	<f:if condition="{data.bodytext}">
 		<tr>
 			<td class="float-center" valign="top">
-				<f:format.html parseFuncTSPath="lib.parseFunc">{data.bodytext}</f:format.html>
+				<f:render partial="Bodytext" arguments="{_all}" />
 			</td>
 		</tr>
 	</f:if>

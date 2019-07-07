@@ -43,7 +43,9 @@
 											<td width="50%" style="padding-right: 20px;"><f:render section="ImageContainer" arguments="{_all}" /></td>
 										</f:if>
 
-										<td width="50%"><f:format.html parseFuncTSPath="lib.parseFunc">{data.bodytext}</f:format.html></td>
+										<td width="50%">
+											<f:render partial="Bodytext" arguments="{_all}" />
+										</td>
 
 										<f:if condition="{data.imageorient} == 17 || {data.imageorient} == 25">
 											<td width="50%" style="padding-left: 20px;"><f:render section="ImageContainer" arguments="{_all}" /></td>
@@ -52,12 +54,12 @@
 								</table>
 							</f:then>
 							<f:else>
-								<f:format.html parseFuncTSPath="lib.parseFunc">{data.bodytext}</f:format.html>
+								<f:render partial="Bodytext" arguments="{_all}" />
 							</f:else>
 						</f:if>
 					</f:then>
 					<f:else>
-						<f:format.html parseFuncTSPath="lib.parseFunc">{data.bodytext}</f:format.html>
+						<f:render partial="Bodytext" arguments="{_all}" />
 					</f:else>
 				</f:if>
 			</td>
