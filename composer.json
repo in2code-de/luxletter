@@ -1,6 +1,6 @@
 {
   "name": "in2code/luxletter",
-  "description": "Free newsletter extension for TYPO3. Works with and without EXT:lux",
+  "description": "Free newsletter extension for TYPO3 for an individual email marketing. A lot of analytics and modern concepts. Works with and without EXT:lux.",
   "keywords": [
     "typo3",
     "newsletter",
