@@ -13,6 +13,21 @@
 			<trans-unit id="ctype.teaser.description">
 				<source>Teaser element e.g. for newsletters</source>
 			</trans-unit>
+			<trans-unit id="ctype.teaser.flexform">
+				<source>Teaser settings</source>
+			</trans-unit>
+			<trans-unit id="ctype.teaser.flexform.limit">
+				<source>Show maximum number of characters</source>
+			</trans-unit>
+			<trans-unit id="ctype.teaser.flexform.append">
+				<source>Append this characters if a bodytext was cropped</source>
+			</trans-unit>
+			<trans-unit id="ctype.teaser.flexform.buttontext">
+				<source>Choose a text for the "read more" button</source>
+			</trans-unit>
+			<trans-unit id="ctype.teaser.flexform.records">
+				<source>Render a teaser of this record(s)</source>
+			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_newsletter">
 				<source>Newsletter</source>

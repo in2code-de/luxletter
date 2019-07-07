@@ -1,5 +1,16 @@
+lib.contentElement {
+    templateRootPaths {
+        32 = EXT:luxletter/Resources/Private/FluidStyledContent/Templates/
+    }
+}
+
+
 tt_content.teaser = FLUIDTEMPLATE
 tt_content.teaser {
     template = FILE
     template.file = EXT:luxletter/Resources/Private/FluidStyledContent/Templates/Teaser.html
+
+    dataProcessing {
+        10 = In2code\Luxletter\DataProcessing\TeaserProcessor
+    }
 }

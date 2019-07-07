@@ -16,6 +16,26 @@
 				<source>Teaser element e.g. for newsletters</source>
 				<target state="translated">Teaser Element z.B. für Newsletter</target>
 			</trans-unit>
+			<trans-unit id="ctype.teaser.flexform">
+				<source>Teaser settings</source>
+				<target state="translated">Teaser Einstellungen</target>
+			</trans-unit>
+			<trans-unit id="ctype.teaser.flexform.limit">
+				<source>Show maximum number of characters</source>
+				<target state="translated">Anzahl Zeichen</target>
+			</trans-unit>
+			<trans-unit id="ctype.teaser.flexform.append">
+				<source>Append this characters if a bodytext was cropped</source>
+				<target state="translated">Zeichen an gekürzten Text anfügen</target>
+			</trans-unit>
+			<trans-unit id="ctype.teaser.flexform.buttontext">
+				<source>Choose a text for the "read more" button</source>
+				<target state="translated">Text für "mehr lesen" Button</target>
+			</trans-unit>
+			<trans-unit id="ctype.teaser.flexform.records">
+				<source>Render a teaser of this record(s)</source>
+				<target state="translated">Teaser dieser Seiteninhalte anzeigen</target>
+			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_newsletter">
 				<source>Newsletter</source>

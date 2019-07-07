@@ -15,7 +15,7 @@ call_user_func(
         $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['luxletter_fe'] = 'select_key,pages,recursive';
 
         /**
-         * Include Flexform
+         * Include Flexform for plugin
          */
         $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['luxletter_fe'] = 'pi_flexform';
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
@@ -50,22 +50,27 @@ call_user_func(
             ],
             'types' => [
                 'teaser' => [
-                    'showitem' => '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,' .
-                        '--palette--;;general,header;' . $frontendLanguageFilePrefix .
-                        'header.ALT.shortcut_formlabel,records;' . $frontendLanguageFilePrefix .
-                        'records_formlabel,--div--;' . $frontendLanguageFilePrefix .
-                        'tabs.appearance,--palette--;;frames,--palette--;;appearanceLinks,' .
-                        '--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,' .
-                        '--palette--;;language,--div--;LLL:EXT:core/Resources/Private/Language/Form/' .
-                        'locallang_tabs.xlf:access,--palette--;;hidden,--palette--;;access,--div--;' .
-                        'LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,--div--;' .
-                        'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:sys_category.tabs.category,' .
-                        'categories,--div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,' .
-                        'rowDescription,--div--;' .
-                        'LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended'
+                    'showitem' => '
+                        --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general;general,' .
+                        'header;' . $frontendLanguageFilePrefix . 'header.ALT.shortcut_formlabel,pi_flexform,
+                        --div--;' . $frontendLanguageFilePrefix . 'tabs.appearance,
+                        --palette--;' . $frontendLanguageFilePrefix . 'palette.appearanceLinks;appearanceLinks,
+                        --div--;' . $frontendLanguageFilePrefix . 'tabs.access,
+                        --palette--;' . $frontendLanguageFilePrefix . 'palette.hidden;hidden,
+                        --palette--;' . $frontendLanguageFilePrefix . 'palette.visibility;visibility,
+                        --palette--;' . $frontendLanguageFilePrefix . 'palette.access;access,'
                 ]
             ]
         ];
         $GLOBALS['TCA']['tt_content'] = array_replace_recursive($GLOBALS['TCA']['tt_content'], $tca);
+
+        /**
+         * Include Flexform for teaser content element
+         */
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+            '*',
+            'FILE:EXT:luxletter/Configuration/FlexForm/FlexFormCeTeaser.xml',
+            'teaser'
+        );
     }
 );

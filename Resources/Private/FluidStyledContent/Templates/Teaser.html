@@ -1,3 +1,6 @@
-<f:if condition="{data.records}">
-	Todo - Render {data.records}
+<f:if condition="{teaserElements}">
+	<f:for each="{teaserElements}" as="teaserElement">
+		<luxletter:format.cropBySelection limit="{flexformConfiguration.limit}" append="{flexformConfiguration.append}" classNameToSelect="ce-bodytext">{teaserElement.html}</luxletter:format.cropBySelection>
+		<p><f:link.page pageUid="{teaserElement.data.pid}" section="{teaserElement.data.uid}" class="btn btn-primary">{flexformConfiguration.buttontext}</f:link.page></p>
+	</f:for>
 </f:if>

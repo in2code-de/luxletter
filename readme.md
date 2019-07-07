@@ -46,8 +46,8 @@ composer require "in2code/luxletter"
 * done: Trackingpixel for openrate
 * done: Unsubscribe-Plugin
 * done: Dashboard
+* done: New CType teaser to build newsletters with content elements
 * in progress: HTML for newsletter optimization
-* in progress: New CType teaser to build newsletters with content elements
 * Image include in newsletters
 * lux: identification with email clicks
 * lux: new view in backend with all email receivers and there newletter actions
