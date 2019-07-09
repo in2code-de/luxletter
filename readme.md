@@ -47,8 +47,7 @@ composer require "in2code/luxletter"
 * done: Unsubscribe-Plugin
 * done: Dashboard
 * done: New CType teaser to build newsletters with content elements
-* in progress: HTML for newsletter optimization
-* Image include in newsletters
+* done: HTML for newsletter optimization
 * lux: identification with email clicks
 * lux: new view in backend with all email receivers and there newletter actions
 * lux: show email actions in normal detail view?
@@ -56,5 +55,6 @@ composer require "in2code/luxletter"
 
 ### Todos for later
 
-* Catch bounce mails
-* HTML for news in newsletter
+* Embed images in mails?
+* Catch bounce mails?
+* HTML for EXT:news in newsletter?

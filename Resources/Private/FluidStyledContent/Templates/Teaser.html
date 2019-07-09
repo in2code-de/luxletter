@@ -1,6 +1,49 @@
 <f:if condition="{teaserElements}">
 	<f:for each="{teaserElements}" as="teaserElement">
 		<luxletter:format.cropBySelection limit="{flexformConfiguration.limit}" append="{flexformConfiguration.append}" classNameToSelect="ce-bodytext">{teaserElement.html}</luxletter:format.cropBySelection>
-		<p><f:link.page pageUid="{teaserElement.data.pid}" section="{teaserElement.data.uid}" class="btn btn-primary">{flexformConfiguration.buttontext}</f:link.page></p>
+
+		<luxletter:condition.isNewsletterTypenum>
+			<f:then>
+				<f:render section="Newsletter" arguments="{_all}" />
+			</f:then>
+			<f:else>
+				<f:render section="Website" arguments="{_all}" />
+			</f:else>
+		</luxletter:condition.isNewsletterTypenum>
 	</f:for>
 </f:if>
+
+
+<f:comment>
+	View for rendering into a newsletter
+</f:comment>
+<f:section name="Newsletter">
+	<table width="100%">
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td align="right">
+				<table class="button success float-right">
+					<tr>
+						<td>
+							<table>
+								<tr>
+									<td><f:link.page pageUid="{teaserElement.data.pid}" section="{teaserElement.data.uid}" class="btn btn-primary">{flexformConfiguration.buttontext}</f:link.page></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+</f:section>
+
+
+<f:comment>
+	View for normal website
+</f:comment>
+<f:section name="Website">
+	<p><f:link.page pageUid="{teaserElement.data.pid}" section="{teaserElement.data.uid}" class="btn btn-primary">{flexformConfiguration.buttontext}</f:link.page></p>
+</f:section>
