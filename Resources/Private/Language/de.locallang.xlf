@@ -225,8 +225,8 @@
 				<target state="translated">Newsletter testweise versenden</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.testmail.receiver">
-				<source>Receivers email address</source>
-				<target state="translated">Empfänger E-Mail-Adresse</target>
+				<source>Test email address:</source>
+				<target state="translated">Test-E-Mail-Adresse</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.message.ready">
 				<source>Newsletter is ready for dispatch</source>
