@@ -1,23 +1,45 @@
 <f:if condition="{teaserElements}">
+	<f:render section="SectionMenu" arguments="{_all}" />
+
 	<f:for each="{teaserElements}" as="teaserElement">
 		<luxletter:format.cropBySelection limit="{flexformConfiguration.limit}" append="{flexformConfiguration.append}" classNameToSelect="ce-bodytext">{teaserElement.html}</luxletter:format.cropBySelection>
-
-		<luxletter:condition.isNewsletterTypenum>
-			<f:then>
-				<f:render section="Newsletter" arguments="{_all}" />
-			</f:then>
-			<f:else>
-				<f:render section="Website" arguments="{_all}" />
-			</f:else>
-		</luxletter:condition.isNewsletterTypenum>
+		<f:render section="MoreButton" arguments="{_all}" />
 	</f:for>
 </f:if>
 
 
 <f:comment>
-	View for rendering into a newsletter
+	View for rendering a section menu
 </f:comment>
-<f:section name="Newsletter">
+<f:section name="SectionMenu">
+	<h4><f:translate key="fe.ce.teaser.quickstart">Quickstart:</f:translate></h4>
+	<ul class="luxletter-teaser-sectionmenu">
+		<f:for each="{teaserElements}" as="teaserElement">
+			<li><a href="#c{teaserElement.data.uid}">{teaserElement.data.header}</a></li>
+		</f:for>
+	</ul>
+</f:section>
+
+
+<f:comment>
+	More button
+</f:comment>
+<f:section name="MoreButton">
+	<luxletter:condition.isNewsletterTypenum>
+		<f:then>
+			<f:render section="MoreButtonNewsletter" arguments="{_all}" />
+		</f:then>
+		<f:else>
+			<f:render section="MoreButtonWebsite" arguments="{_all}" />
+		</f:else>
+	</luxletter:condition.isNewsletterTypenum>
+</f:section>
+
+
+<f:comment>
+	MoreButton: View for rendering into a newsletter
+</f:comment>
+<f:section name="MoreButtonNewsletter">
 	<table width="100%">
 		<tr>
 			<td>&nbsp;</td>
@@ -42,8 +64,8 @@
 
 
 <f:comment>
-	View for normal website
+	MoreButton: View for normal website
 </f:comment>
-<f:section name="Website">
+<f:section name="MoreButtonWebsite">
 	<p><f:link.page pageUid="{teaserElement.data.pid}" section="{teaserElement.data.uid}" class="btn btn-primary">{flexformConfiguration.buttontext}</f:link.page></p>
 </f:section>

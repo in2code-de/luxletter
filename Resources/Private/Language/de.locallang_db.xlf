@@ -36,6 +36,10 @@
 				<source>Render a teaser of this record(s)</source>
 				<target state="translated">Teaser dieser Seiteninhalte anzeigen</target>
 			</trans-unit>
+			<trans-unit id="ctype.teaser.flexform.sectionmenu">
+				<source>Render a section menu before</source>
+				<target state="translated">Sprungmenü davor anzeigen</target>
+			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_newsletter">
 				<source>Newsletter</source>

@@ -63,6 +63,15 @@
                             </config>
                         </TCEforms>
                     </records>
+                    <sectionmenu>
+                        <TCEforms>
+                            <exclude>1</exclude>
+                            <label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.flexform.sectionmenu</label>
+                            <config>
+                                <type>check</type>
+                            </config>
+                        </TCEforms>
+                    </sectionmenu>
                 </el>
             </ROOT>
         </main>

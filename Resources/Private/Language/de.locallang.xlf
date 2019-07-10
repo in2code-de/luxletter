@@ -41,6 +41,10 @@
 				<source>An error occured. Please try again later.</source>
 				<target state="translated">Unbekannter Fehler. Bitte versuchen Sie es später erneut.</target>
 			</trans-unit>
+			<trans-unit id="fe.ce.teaser.quickstart">
+				<source>Quickstart</source>
+				<target state="translated">Schnelleinstieg</target>
+			</trans-unit>
 
 			<trans-unit id="module.newsletter.dashboard.label.overallreceivers">
 				<source>Receiver</source>

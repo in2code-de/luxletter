@@ -40,15 +40,15 @@
 								<table>
 									<tr>
 										<f:if condition="{data.imageorient} == 18 || {data.imageorient} == 26">
-											<td width="50%" style="padding-right: 20px;"><f:render section="ImageContainer" arguments="{_all}" /></td>
+											<td width="33%" style="padding-right: 20px;"><f:render section="ImageContainer" arguments="{_all}" /></td>
 										</f:if>
 
-										<td width="50%">
+										<td width="66%">
 											<f:render partial="Bodytext" arguments="{_all}" />
 										</td>
 
 										<f:if condition="{data.imageorient} == 17 || {data.imageorient} == 25">
-											<td width="50%" style="padding-left: 20px;"><f:render section="ImageContainer" arguments="{_all}" /></td>
+											<td width="33%" style="padding-left: 20px;"><f:render section="ImageContainer" arguments="{_all}" /></td>
 										</f:if>
 									</tr>
 								</table>

@@ -31,6 +31,9 @@
 			<trans-unit id="fe.unsubscribe.message.failed">
 				<source>An error occured. Please try again later.</source>
 			</trans-unit>
+			<trans-unit id="fe.ce.teaser.quickstart">
+				<source>Quickstart</source>
+			</trans-unit>
 
 			<trans-unit id="module.newsletter.dashboard.label.overallreceivers">
 				<source>Receiver</source>
