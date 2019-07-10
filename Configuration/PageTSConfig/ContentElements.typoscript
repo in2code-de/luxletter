@@ -6,7 +6,7 @@ mod {
 					header = Luxletter
 					elements {
 						teaser {
-							iconIdentifier = ctype-teaser
+							iconIdentifier = teaser
 							title = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser
 							description = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.description
 							tt_content_defValues {

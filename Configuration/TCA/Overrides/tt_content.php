@@ -42,10 +42,10 @@ call_user_func(
         $tca = [
             'ctrl' => [
                 'typeicons' => [
-                    'teaser' => 'ctype-teaser'
+                    'teaser' => 'teaser'
                 ],
                 'typeicon_classes' => [
-                    'teaser' => 'ctype-teaser'
+                    'teaser' => 'teaser'
                 ],
             ],
             'types' => [

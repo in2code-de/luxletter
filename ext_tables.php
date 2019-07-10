@@ -18,7 +18,7 @@ call_user_func(
             ['source' => 'EXT:luxletter/Resources/Public/Icons/lux_white.svg']
         );
         $iconRegistry->registerIcon(
-            'ctype-teaser',
+            'teaser',
             \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
             ['source' => 'EXT:luxletter/Resources/Public/Icons/ctype-teaser.svg']
         );
