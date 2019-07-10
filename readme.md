@@ -79,7 +79,7 @@ composer require "in2code/luxletter"
 
 | Version    | Date        | State      | Description                                                                        |
 | ---------- | ----------- | ---------- | ---------------------------------------------------------------------------------- |
-| 1.0.0      | coming soon | Task       | Initial release                                                                    |
+| 0.1.0      | 2019.07.10  | Task       | Initial release of a working newsletter extension                                  |
 
 
 ## Todos
@@ -103,3 +103,9 @@ composer require "in2code/luxletter"
 * Embed images in mails?
 * Catch bounce mails?
 * HTML for EXT:news in newsletter?
+
+
+## Need help with email-marketing or marketing automation?
+
+The company behind Lux, LuxLetter and LuxEnterprise - the complete marketing box for TYPO3 - is looking 
+forward to help you: https://www.in2code.de
