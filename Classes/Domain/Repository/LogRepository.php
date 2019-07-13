@@ -47,7 +47,7 @@ class LogRepository extends AbstractRepository
         $results = (array)$connection->executeQuery(
             'select count(*) as count, properties, newsletter from ' . Log::TABLE_NAME .
             ' where deleted=0 and status=' . Log::STATUS_LINKOPENING .
-            ' group by properties order by count desc limit ' . $limit
+            ' group by properties,newsletter order by count desc limit ' . $limit
         )->fetchAll();
         $nlRepository = ObjectUtility::getObjectManager()->get(NewsletterRepository::class);
         foreach ($results as &$result) {
