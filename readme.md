@@ -1,6 +1,6 @@
 ![LUX](Resources/Public/Icons/lux.svg "LUX")
 
-# Luxletter - a newsletter system build in TYPO3
+# Luxletter - Email marketing in TYPO3. Send newsletters the easy way.
 
 Inspired by TYPO3 extension direct_mail - thank you for your work
 
@@ -23,6 +23,7 @@ This extension does not need EXT:lux but works together with the marketing autom
 * An unsubscribe plugin is already included
 * A teaser content elements helps you to create newsletters out of default content elements in TYPO3
 * Every website can be used as prototype for your newsletter
+* A third party mailserver can be used for newsletters
 
 ### The downside
 
@@ -59,6 +60,11 @@ Example newsletter creation - step 3:
 Create teasers from content elements with a teaser plugin:
 
 ![Example dashboard overview](Documentation/Images/documentation_content_teaser.png "Create teasers")
+
+
+## Documentation
+
+See the full [documentation](Documentation/Index.md) (installation, configuration, newsletters and analysis)
 
 
 ## Technical requirements
