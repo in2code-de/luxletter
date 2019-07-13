@@ -10,62 +10,9 @@
 				id="luxletter-dashboard-open"
 				width="600"
 				height="200"
+				data-chart="bar"
+				data-chart-label="Opener"
 				data-chart-data="{luxletter:statistic.getListOfPropertiesFromNewsletters(newsletters:newsletters,property:'openers')}"
 				data-chart-labels="{luxletter:statistic.getListOfPropertiesFromNewsletters(newsletters:newsletters,property:'title')}"></canvas>
-		<script>
-			require(['TYPO3/CMS/Luxletter/Vendor/Chart.min'], function (Chart) {
-				var container = document.getElementById('luxletter-dashboard-open');
-				var ctx = container.getContext('2d');
-
-				/**
-				 * @returns {Array}
-				 */
-				var getDataChartData = function() {
-					var string = container.getAttribute('data-chart-data');
-					return string.split(',');
-				};
-
-				/**
-				 * @returns {Array}
-				 */
-				var getDataChartLabels = function() {
-					var string = container.getAttribute('data-chart-labels');
-					return string.split(',');
-				};
-
-				var data = {
-					datasets: [{
-						label: 'Opener',
-						data: getDataChartData(),
-						backgroundColor: [
-							'rgba(77, 231, 255, 1)',
-							'rgba(221, 221, 221, 1)'
-						]
-					}],
-					labels: getDataChartLabels()
-				};
-				var options = {
-					legend: {
-						display: false,
-						position: 'right',
-						labels: {
-							fontSize: 18
-						}
-					},
-					scales: {
-						yAxes: [{
-							ticks: {
-								beginAtZero: true
-							}
-						}]
-					}
-				};
-				new Chart(ctx, {
-					type: 'bar',
-					data: data,
-					options: options
-				});
-			});
-		</script>
 	</div>
 </div>

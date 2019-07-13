@@ -7,55 +7,9 @@
 							id="luxletter-dashboard-overallclickrate"
 							width="150"
 							height="150"
+							data-chart="doughnut"
 							data-chart-data="{statistic.overallOpenings},{statistic.overallClicks}"
 							data-chart-labels="{f:translate(key:'module.newsletter.dashboard.label.overallclickrate.0')},{f:translate(key:'module.newsletter.dashboard.label.overallclickrate.1')}"></canvas>
-					<script>
-						require(['TYPO3/CMS/Luxletter/Vendor/Chart.min'], function (Chart) {
-							var container = document.getElementById('luxletter-dashboard-overallclickrate');
-							var ctx = container.getContext('2d');
-
-							/**
-							 * @returns {Array}
-							 */
-							var getDataChartData = function() {
-								var string = container.getAttribute('data-chart-data');
-								return string.split(',');
-							};
-
-							/**
-							 * @returns {Array}
-							 */
-							var getDataChartLabels = function() {
-								var string = container.getAttribute('data-chart-labels');
-								return string.split(',');
-							};
-
-							var data = {
-								datasets: [{
-									data: getDataChartData(),
-									backgroundColor: [
-										'rgba(221, 221, 221, 1)',
-										'rgba(77, 231, 255, 1)'
-									]
-								}],
-								labels: getDataChartLabels()
-							};
-							var options = {
-								legend: {
-									display: false,
-									position: 'right',
-									labels: {
-										fontSize: 14
-									}
-								}
-							};
-							new Chart(ctx, {
-								type: 'doughnut',
-								data: data,
-								options: options
-							});
-						});
-					</script>
 				</div><!--
 
 

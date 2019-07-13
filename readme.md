@@ -1,6 +1,6 @@
 ![LUX](Resources/Public/Icons/lux.svg "LUX")
 
-# Luxletter - a newsletter system build in TYPO3
+# Luxletter - Email marketing in TYPO3. Send newsletters the easy way.
 
 Inspired by TYPO3 extension direct_mail - thank you for your work
 
@@ -8,7 +8,8 @@ Inspired by TYPO3 extension direct_mail - thank you for your work
 ## Introduction
 
 Email marketing tool in TYPO3. Just build and send newsletters to your customers.
-This extension does not need EXT:lux but works together with the marketing automation tool for TYPO3.
+This extension does not need EXT:lux but works together with the marketing automation tool for TYPO3 to get even more
+analytics data.
 
 
 ## Aspects
@@ -23,6 +24,7 @@ This extension does not need EXT:lux but works together with the marketing autom
 * An unsubscribe plugin is already included
 * A teaser content elements helps you to create newsletters out of default content elements in TYPO3
 * Every website can be used as prototype for your newsletter
+* A third party mailserver can be used for newsletters
 
 ### The downside
 
@@ -61,6 +63,11 @@ Create teasers from content elements with a teaser plugin:
 ![Example dashboard overview](Documentation/Images/documentation_content_teaser.png "Create teasers")
 
 
+## Documentation
+
+See the full [documentation](Documentation/Index.md) (installation, configuration, newsletters and analysis)
+
+
 ## Technical requirements
 
 * TYPO3 9 LTS is the basic CMS for this newsletter tool.
@@ -79,6 +86,7 @@ composer require "in2code/luxletter"
 
 | Version    | Date        | State      | Description                                                                        |
 | ---------- | ----------- | ---------- | ---------------------------------------------------------------------------------- |
+| 0.2.0      | 2019.07.13  | Task       | Fix for PHP 7.3, Fix for default sql mode setting, documentation update            |
 | 0.1.0      | 2019.07.10  | Task       | Initial release of a working newsletter extension                                  |
 
 
