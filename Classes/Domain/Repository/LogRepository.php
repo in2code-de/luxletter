@@ -29,6 +29,14 @@ class LogRepository extends AbstractRepository
     }
 
     /**
+     * Example result value:
+     *  0 => [
+     *      'count' => 2,
+     *      'properties' => '{"target":"https:\/\/de.wikipedia.org\/wiki\/Haushund"}',
+     *      'newsletter' => Newsletter::class
+     *      'target' => 'https://de.wikipedia.org/wiki/Haushund'
+     *  ]
+     *
      * @param int $limit
      * @return array
      * @throws DBALException
