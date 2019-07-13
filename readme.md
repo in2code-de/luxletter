@@ -8,7 +8,8 @@ Inspired by TYPO3 extension direct_mail - thank you for your work
 ## Introduction
 
 Email marketing tool in TYPO3. Just build and send newsletters to your customers.
-This extension does not need EXT:lux but works together with the marketing automation tool for TYPO3.
+This extension does not need EXT:lux but works together with the marketing automation tool for TYPO3 to get even more
+analytics data.
 
 
 ## Aspects
@@ -85,6 +86,7 @@ composer require "in2code/luxletter"
 
 | Version    | Date        | State      | Description                                                                        |
 | ---------- | ----------- | ---------- | ---------------------------------------------------------------------------------- |
+| 0.2.0      | 2019.07.13  | Task       | Fix for PHP 7.3, Fix for default sql mode setting, documentation update            |
 | 0.1.0      | 2019.07.10  | Task       | Initial release of a working newsletter extension                                  |
 
 
