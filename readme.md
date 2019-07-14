@@ -100,8 +100,8 @@ composer require "in2code/luxletter"
 * done: Dashboard
 * done: New CType teaser to build newsletters with content elements
 * done: HTML for newsletter optimization
-* in progress: lux: identification with email clicks
-* in progress: lux: new view in backend with all email receivers and there newletter actions
+* done: lux: identification with email clicks (with lux 5.0.0)
+* in progress: lux: new view in backend with all email receivers and there newsletter actions
 * in progress: lux: show email actions in normal detail view?
 * Documentation (how to build newsletters, basic configuration, what can lux do, etc...)
 
