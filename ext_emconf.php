@@ -9,7 +9,7 @@
  ***************************************************************/
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => 'lux - TYPO3 Marketing Automation',
+    'title' => 'luxletter - TYPO3 Email Marketing Newsletter Tool',
     'description' => 'Free newsletter extension for TYPO3 for an individual email marketing. A lot of analytics and modern concepts. Works with and without EXT:lux.',
     'category' => 'plugin',
     'version' => '0.2.0',
