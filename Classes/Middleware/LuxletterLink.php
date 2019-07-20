@@ -2,7 +2,9 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Middleware;
 
+use Doctrine\DBAL\DBALException;
 use In2code\Lux\Domain\Factory\VisitorFactory;
+use In2code\Lux\Domain\Repository\VisitorRepository;
 use In2code\Lux\Domain\Tracker\AttributeTracker;
 use In2code\Lux\Utility\CookieUtility;
 use In2code\Luxletter\Domain\Model\Link;
@@ -36,7 +38,7 @@ class LuxletterLink implements MiddlewareInterface
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
      * @throws UnknownObjectException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -79,7 +81,7 @@ class LuxletterLink implements MiddlewareInterface
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
      * @throws UnknownObjectException
-     * @throws \Doctrine\DBAL\DBALException
+     * @throws DBALException
      * @throws \Exception
      */
     protected function luxIdentification(Link $link): void
@@ -97,6 +99,9 @@ class LuxletterLink implements MiddlewareInterface
                 AttributeTracker::CONTEXT_LUXLETTERLINK
             );
             $attributeTracker->addAttribute('email', $link->getUser()->getEmail());
+            $visitor->setFrontenduser($link->getUser());
+            $visitorRepository = ObjectUtility::getObjectManager()->get(VisitorRepository::class);
+            $visitorRepository->update($visitor);
         }
     }
 }
