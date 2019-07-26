@@ -160,11 +160,18 @@ class NewsletterController extends ActionController
      * @throws StopActionException
      * @throws UnsupportedRequestTypeException
      */
-    public function deleteAction(Newsletter $newsletter)
+    public function deleteAction(Newsletter $newsletter): void
     {
         $this->newsletterRepository->remove($newsletter);
         $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.delete.message'));
         $this->redirect('list');
+    }
+
+    /**
+     * @return void
+     */
+    public function receiverAction(): void
+    {
     }
 
     /**
@@ -264,7 +271,7 @@ class NewsletterController extends ActionController
      * @param NewsletterRepository $newsletterRepository
      * @return void
      */
-    public function injectNewsletterRepository(NewsletterRepository $newsletterRepository)
+    public function injectNewsletterRepository(NewsletterRepository $newsletterRepository): void
     {
         $this->newsletterRepository = $newsletterRepository;
     }
@@ -273,7 +280,7 @@ class NewsletterController extends ActionController
      * @param LogRepository $logRepository
      * @return void
      */
-    public function injectLogRepository(LogRepository $logRepository)
+    public function injectLogRepository(LogRepository $logRepository): void
     {
         $this->logRepository = $logRepository;
     }

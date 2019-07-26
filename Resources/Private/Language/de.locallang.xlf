@@ -12,6 +12,10 @@
 				<source>Newsletter</source>
 				<target state="translated">Newsletter</target>
 			</trans-unit>
+			<trans-unit id="layout.backend.link.actionreceiver">
+				<source>Receiver</source>
+				<target state="translated">Empfänger</target>
+			</trans-unit>
 
 			<trans-unit id="fe.unsubscribe.message.1562050511">
 				<source>User invalid</source>

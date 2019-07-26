@@ -9,6 +9,9 @@
 			<trans-unit id="layout.backend.link.actionnewsletter">
 				<source>Newsletter</source>
 			</trans-unit>
+			<trans-unit id="layout.backend.link.actionreceiver">
+				<source>Receiver</source>
+			</trans-unit>
 
 			<trans-unit id="fe.unsubscribe.message.1562050511">
 				<source>User invalid</source>

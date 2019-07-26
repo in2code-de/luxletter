@@ -75,6 +75,16 @@ class ConfigurationUtility
     }
 
     /**
+     * @return bool
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    public static function isReceiverActionActivated(): bool
+    {
+        return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'receiverAction') === '1';
+    }
+
+    /**
      * @return string
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
