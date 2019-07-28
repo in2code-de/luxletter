@@ -18,6 +18,7 @@
 						class="form-control"
 						prependOptionLabel="Choose usergroup..."
 						prependOptionValue="0"
+						value="{filter.usergroup.uid}"
 						options="{luxletter:usergroup.getReceiverGroups()}" />
 				<label class="input-group-addon fa fa-user" for="usergroup"></label>
 			</div>
@@ -26,7 +27,7 @@
 	<div class="form-group" style="overflow: hidden;">
 		<div class="input-group pull-right">
 			<f:if condition="{filter.set}">
-				<f:link.action class="btn btn-default" style="margin-right: 10px" action="receiver">
+				<f:link.action class="btn btn-default" style="margin-right: 10px" action="receiver" arguments="{filter:'{reset:1}'}">
 					<f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.list.filter.reset">Reset</f:translate>
 				</f:link.action>
 			</f:if>

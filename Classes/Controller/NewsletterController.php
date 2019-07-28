@@ -12,6 +12,7 @@ use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\ParseNewsletterService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
+use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
 use In2code\Luxletter\Mail\SendMail;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\BackendUserUtility;
@@ -178,35 +179,43 @@ class NewsletterController extends ActionController
     }
 
     /**
+     * Always pass a filter to receiverAction. If filter is given, save in session.
+     *
      * @return void
      * @throws InvalidArgumentNameException
+     * @throws NoSuchArgumentException
      */
-    public function initializeReceiverAction()
+    public function initializeReceiverAction(): void
     {
+        $filterArgument = $this->arguments->getArgument('filter');
+        $filterPropertyMapping = $filterArgument->getPropertyMappingConfiguration();
+        $filterPropertyMapping->allowAllProperties();
         if ($this->request->hasArgument('filter') === false) {
-            $this->request->setArgument('filter', ObjectUtility::getObjectManager()->get(Filter::class));
+            $filter = BackendUserUtility::getSessionValue('filter');
+        } else {
+            $filter = (array)$this->request->getArgument('filter');
+            BackendUserUtility::saveValueToSession('filter', $filter);
         }
+        $this->request->setArgument('filter', $filter);
     }
 
     /**
      * @param Filter $filter
      * @return void
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws InvalidQueryException
+     * @throws DBALException
      */
     public function receiverAction(Filter $filter): void
     {
-        $this->view->assign('filter', $filter);
-        $arguments = [
-            'users' => $this->userRepository->getUsersByFilter($filter)
-        ];
-        $signalResult = $this->signalDispatch(
-            __CLASS__,
-            __FUNCTION__ . 'ManipulateArguments',
-            [$arguments, $this, []]
+        $receiverAnalysisService = ObjectUtility::getObjectManager()->get(ReceiverAnalysisService::class);
+        $users = $this->userRepository->getUsersByFilter($filter);
+        $this->view->assignMultiple(
+            [
+                'filter' => $filter,
+                'users' => $users,
+                'activities' => $receiverAnalysisService->getActivitiesStatistic($users)
+            ]
         );
-        $this->view->assignMultiple($signalResult[2] + $arguments);
     }
 
     /**

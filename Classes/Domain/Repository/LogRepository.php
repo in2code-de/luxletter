@@ -184,4 +184,23 @@ class LogRepository extends AbstractRepository
             ' where deleted=0 and status=' . $status . ' and newsletter=' . $newsletter->getUid()
         )->fetchAll();
     }
+
+    /**
+     * @param User $user
+     * @param array $statusWhitelist only want logs with this status (overrules any values from $statusBlacklist)
+     * @param array $statusBlacklist ignore logs with this status
+     * @return array
+     * @throws DBALException
+     */
+    public function findByUser(User $user, array $statusWhitelist = [], array $statusBlacklist = []): array
+    {
+        $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
+        $sql = 'select * from ' . Log::TABLE_NAME . ' where deleted=0 and user=' . $user->getUid();
+        if ($statusWhitelist !== []) {
+            $sql .= ' and status in (' . implode(',', $statusWhitelist) . ')';
+        } elseif ($statusBlacklist !== []) {
+            $sql .= ' and status not in (' . implode(',', $statusBlacklist) . ')';
+        }
+        return (array)$connection->executeQuery($sql)->fetchAll();
+    }
 }

@@ -19,6 +19,13 @@ class Filter
     protected $usergroup = null;
 
     /**
+     * This is just a dummy property, that helps to recognize if a filter is set and save this to the session
+     *
+     * @var bool
+     */
+    protected $reset = false;
+
+    /**
      * @return string
      */
     public function getSearchterm(): string
@@ -59,6 +66,24 @@ class Filter
     public function setUsergroup(?\In2code\Luxletter\Domain\Model\Usergroup $usergroup): self
     {
         $this->usergroup = $usergroup;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReset(): bool
+    {
+        return $this->reset;
+    }
+
+    /**
+     * @param bool $reset
+     * @return Filter
+     */
+    public function setReset(bool $reset): self
+    {
+        $this->reset = $reset;
         return $this;
     }
 
