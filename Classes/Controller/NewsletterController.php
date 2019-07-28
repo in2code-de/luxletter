@@ -4,6 +4,7 @@ namespace In2code\Luxletter\Controller;
 
 use Doctrine\DBAL\DBALException;
 use In2code\Luxletter\Domain\Factory\UserFactory;
+use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
@@ -12,6 +13,7 @@ use In2code\Luxletter\Domain\Service\ParseNewsletterService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Mail\SendMail;
+use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
@@ -27,6 +29,7 @@ use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
@@ -37,6 +40,8 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class NewsletterController extends ActionController
 {
+    use SignalTrait;
+
     /**
      * @var string
      */
@@ -46,6 +51,11 @@ class NewsletterController extends ActionController
      * @var NewsletterRepository
      */
     protected $newsletterRepository = null;
+
+    /**
+     * @var UserRepository
+     */
+    protected $userRepository = null;
 
     /**
      * @var LogRepository
@@ -169,9 +179,34 @@ class NewsletterController extends ActionController
 
     /**
      * @return void
+     * @throws InvalidArgumentNameException
      */
-    public function receiverAction(): void
+    public function initializeReceiverAction()
     {
+        if ($this->request->hasArgument('filter') === false) {
+            $this->request->setArgument('filter', ObjectUtility::getObjectManager()->get(Filter::class));
+        }
+    }
+
+    /**
+     * @param Filter $filter
+     * @return void
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
+     * @throws InvalidQueryException
+     */
+    public function receiverAction(Filter $filter): void
+    {
+        $this->view->assign('filter', $filter);
+        $arguments = [
+            'users' => $this->userRepository->getUsersByFilter($filter)
+        ];
+        $signalResult = $this->signalDispatch(
+            __CLASS__,
+            __FUNCTION__ . 'ManipulateArguments',
+            [$arguments, $this, []]
+        );
+        $this->view->assignMultiple($signalResult[2] + $arguments);
     }
 
     /**
@@ -185,12 +220,11 @@ class NewsletterController extends ActionController
         ResponseInterface $response
     ): ResponseInterface
     {
-        $userRepository = ObjectUtility::getObjectManager()->get(UserRepository::class);
         $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
         $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->wizardUserPreviewFile));
         $standaloneView->assignMultiple([
-            'userPreview' => $userRepository->getUsersFromGroup((int)$request->getQueryParams()['usergroup'], 3),
-            'userAmount' => $userRepository->getUserAmountFromGroup((int)$request->getQueryParams()['usergroup'])
+            'userPreview' => $this->userRepository->getUsersFromGroup((int)$request->getQueryParams()['usergroup'], 3),
+            'userAmount' => $this->userRepository->getUserAmountFromGroup((int)$request->getQueryParams()['usergroup'])
         ]);
         $response->getBody()->write(json_encode(
             ['html' => $standaloneView->render()]
@@ -274,6 +308,15 @@ class NewsletterController extends ActionController
     public function injectNewsletterRepository(NewsletterRepository $newsletterRepository): void
     {
         $this->newsletterRepository = $newsletterRepository;
+    }
+
+    /**
+     * @param UserRepository $userRepository
+     * @return void
+     */
+    public function injectUserRepository(UserRepository $userRepository): void
+    {
+        $this->userRepository = $userRepository;
     }
 
     /**

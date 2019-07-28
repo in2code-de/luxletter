@@ -3,8 +3,10 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
 use Doctrine\DBAL\DBALException;
+use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Utility\DatabaseUtility;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
@@ -46,5 +48,53 @@ class UserRepository extends AbstractRepository
         $query = 'select count(uid) from ' . User::TABLE_NAME . ' ';
         $query .= 'where find_in_set(' . (int)$groupIdentifier . ',usergroup)';
         return (int)$connection->executeQuery($query)->fetchColumn(0);
+    }
+
+    /**
+     * Get all luxletter receiver users
+     *
+     * @param Filter $filter
+     * @return QueryResultInterface
+     * @throws InvalidQueryException
+     */
+    public function getUsersByFilter(Filter $filter): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        $this->buildQueryForFilter($filter, $query);
+        return $query->execute();
+    }
+
+    /**
+     * @param Filter $filter
+     * @param QueryInterface $query
+     * @return void
+     * @throws InvalidQueryException
+     */
+    protected function buildQueryForFilter(Filter $filter, QueryInterface $query): void
+    {
+        $and = [
+            $query->equals('usergroup.luxletterReceiver', true)
+        ];
+        if ($filter->getSearchterms() !== []) {
+            foreach ($filter->getSearchterms() as $searchterm) {
+                $or = [
+                    $query->like('username', '%' . $searchterm . '%'),
+                    $query->like('email', '%' . $searchterm . '%'),
+                    $query->like('name', '%' . $searchterm . '%'),
+                    $query->like('firstName', '%' . $searchterm . '%'),
+                    $query->like('middleName', '%' . $searchterm . '%'),
+                    $query->like('lastName', '%' . $searchterm . '%'),
+                    $query->like('address', '%' . $searchterm . '%'),
+                    $query->like('title', '%' . $searchterm . '%'),
+                    $query->like('company', '%' . $searchterm . '%'),
+                ];
+                $and[] = $query->logicalOr($or);
+            }
+        }
+        if ($filter->getUsergroup() !== null) {
+            $and[] = $query->contains('usergroup', $filter->getUsergroup());
+        }
+        $constraint = $query->logicalAnd($and);
+        $query->matching($constraint);
     }
 }
