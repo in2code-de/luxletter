@@ -37,8 +37,8 @@ class ReceiverAnalysisService
         /** @var User $user */
         foreach ($users as $user) {
             $activities[$user->getUid()] = [
-                'newlettersdispatched' => $logRepository->findByUser($user, [100]),
-                'activities' => $logRepository->findByUser($user, [], [100])
+                'newlettersdispatched' => $logRepository->findRawByUser($user, [100]),
+                'activities' => $logRepository->findRawByUser($user, [], [100])
             ];
         }
         return $activities;

@@ -8,6 +8,7 @@ use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Utility\DatabaseUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
  * Class LogRepository
@@ -192,7 +193,7 @@ class LogRepository extends AbstractRepository
      * @return array
      * @throws DBALException
      */
-    public function findByUser(User $user, array $statusWhitelist = [], array $statusBlacklist = []): array
+    public function findRawByUser(User $user, array $statusWhitelist = [], array $statusBlacklist = []): array
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
         $sql = 'select * from ' . Log::TABLE_NAME . ' where deleted=0 and user=' . $user->getUid();
@@ -201,6 +202,18 @@ class LogRepository extends AbstractRepository
         } elseif ($statusBlacklist !== []) {
             $sql .= ' and status not in (' . implode(',', $statusBlacklist) . ')';
         }
+        $sql .= ' order by crdate desc';
         return (array)$connection->executeQuery($sql)->fetchAll();
+    }
+
+    /**
+     * @param User $user
+     * @return QueryResultInterface
+     */
+    public function findByUser(User $user): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        $query->matching($query->equals('user', $user));
+        return $query->execute();
     }
 }

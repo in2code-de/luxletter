@@ -1,0 +1,247 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			<f:if condition="{visitor.identified}">
+				<img src="{f:uri.resource(path:'Icons/lux_identified_icon.svg',extensionName:'luxletter')}" width="12" alt="identified" title="Identified in lux" />
+			</f:if>
+			{user.readableName}
+		</h3>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-3">
+				<img src="{luxletter:user.getUserImageUrl(user:user,size:150)}" width="150" style="max-width: 100%; margin-top: 20px;" class="img-circle img-responsive" />
+			</div>
+			<div class="col-md-9">
+				<f:if condition="{visitor.identified}">
+					<f:then>
+						<h3 title="UID{user.uid}">
+							{visitor.fullName}
+							<span class="badge" title="{f:translate(key:'LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:tx_lux_domain_model_visitor.scoring')}">{visitor.scoring}</span>
+							<f:if condition="{visitor.hottestCategoryscoring}">
+								<span class="badge badge-primary" title="{visitor.hottestCategoryscoring.category.title}">{visitor.hottestCategoryscoring.scoring}</span>
+							</f:if>
+							<f:if condition="{visitor.identified}"><a href="http://www.google.com/search?q={visitor.fullName}" target="_blank" title="Search on google"><img src="{f:uri.resource(path:'Images/LogoGoogle.svg',extensionName:'Lux')}" width="16" /></a></f:if>
+						</h3>
+
+						<f:if condition="{visitor.importantAttributes} || {visitor.location}">
+							<table class="table table-striped table-hover table-condensed">
+								<f:for each="{visitor.importantAttributes}" as="attribute">
+									<tr>
+										<td>{attribute.label}:</td>
+										<td>{attribute.value}</td>
+									</tr>
+								</f:for>
+								<f:if condition="{visitor.location}">
+									<tr>
+										<td><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.detail.location">Location</f:translate>:</td>
+										<td>{visitor.location}</td>
+									</tr>
+								</f:if>
+							</table>
+						</f:if>
+
+						<div class="row">
+							<div class="col-md-12">
+								<f:link.action action="detail" controller="Lead" extensionName="lux" pluginName="leads" arguments="{visitor:visitor}" class="btn btn-primary pull-right"><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.detail.linkdetail">show</f:translate></f:link.action>
+							</div>
+						</div>
+					</f:then>
+					<f:else>
+						<h3 title="UID{user.uid}">
+							{user.readableName}
+						</h3>
+						<div class="alert alert-warning" role="alert">
+							<h4 class="alert-heading">
+								Not yet identified
+							</h4>
+							<p>This newsletter receiver is not yet identified in lux</p>
+						</div>
+					</f:else>
+				</f:if>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			Activities
+		</h3>
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-6">
+				<h4>Newsletter activities</h4>
+				<f:if condition="{logs}">
+					<f:then>
+						<nav class="timeline timeline--vertical">
+							<f:for each="{logs}" as="log">
+								<div class="timeline__item" title="{lux:format.readableDate(date:log.crdate)} ({f:format.date(date:log.crdate,format:'{f:translate(key:\'LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:date\')}')})">
+									<div style="margin-top: 5px;">
+										<f:render section="statusNewsletter{log.status}" optional="1" arguments="{_all}"/>
+									</div>
+								</div>
+							</f:for>
+						</nav>
+					</f:then>
+					<f:else>
+						<div class="alert alert-warning" role="alert">
+							<h4 class="alert-heading">
+								No newletter information yet
+							</h4>
+							<p>There are no information about newsletter activities yet in luxletter</p>
+						</div>
+					</f:else>
+				</f:if>
+			</div>
+			<div class="col-md-6">
+				<h4>Website activities</h4>
+				<f:if condition="{visitor.identified}">
+					<f:then>
+						<nav class="timeline timeline--vertical">
+							<f:for each="{visitor.logs}" as="log">
+								<div class="timeline__item" title="{lux:format.readableDate(date:log.crdate)} ({f:format.date(date:log.crdate,format:'{f:translate(key:\'LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:date\')}')})">
+									<div style="margin-top: 5px;">
+										<f:render section="statusWebsite{log.status}" optional="1" arguments="{_all}"/>
+									</div>
+								</div>
+							</f:for>
+						</nav>
+					</f:then>
+					<f:else>
+						<div class="alert alert-warning" role="alert">
+							<h4 class="alert-heading">
+								Not yet identified
+							</h4>
+							<p>There are no information about website activities yet in lux</p>
+						</div>
+					</f:else>
+				</f:if>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+<f:comment>
+	Newsletter Status
+</f:comment>
+<f:section name="statusNewsletter100">
+	<strong>Newsletter <f:if condition="{log.newsletter}">"{log.newsletter.title}"</f:if> dispatched</strong><br>
+</f:section>
+
+
+<f:section name="statusNewsletter200">
+	<strong>Newsletter <f:if condition="{log.newsletter}">"{log.newsletter.title}"</f:if> opened</strong><br>
+</f:section>
+
+
+<f:section name="statusNewsletter300">
+	<strong>Clicked a link in Newsletter <f:if condition="{log.newsletter}">"{log.newsletter.title}"</f:if></strong><br>
+	Link: <f:for each="{log.properties}" key="key" as="property"><f:if condition="{key} == 'target'"><f:link.typolink parameter="{property}" target="_blank"/></f:if></f:for>
+</f:section>
+
+
+<f:section name="statusNewsletter400">
+	<strong>Unsubscribed from Newsletters</strong><br>
+</f:section>
+
+
+
+
+
+
+
+<f:comment>
+	Website Status
+</f:comment>
+<f:section name="statusWebsite1">
+	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.1">New lead</f:translate></strong><br />
+	<span title="UID:{log.visitor.uid}"><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:anonym">Anonymous</f:translate></span>
+	<f:if condition="{log.visitor.location}">({log.visitor.location})</f:if>
+</f:section>
+
+
+
+<f:section name="statusWebsite2">
+	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.2">Identified lead:</f:translate></strong><br />
+	<span title="UID:{log.visitor.uid}">{log.visitor.fullName}</span>
+	<f:if condition="{log.visitor.location}">({log.visitor.location})</f:if>
+</f:section>
+
+
+
+<f:section name="statusWebsite21">
+	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.21">Identified lead with "email4link"</f:translate></strong><br />
+	<span title="UID:{log.visitor.uid}">{log.visitor.fullName}</span>
+	<f:if condition="{log.visitor.location}">({log.visitor.location})</f:if>
+</f:section>
+
+
+
+<f:section name="statusWebsite22">
+	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.22">Send asset</f:translate></strong><br />
+	<a href="/{log.href}" target="_blank"><lux:format.getFilenameFromPathAndFilename pathAndFilename="{log.href}" /></a>
+	<span title="UID:{log.visitor.uid}">({log.visitor.fullName})</span>
+</f:section>
+
+
+
+<f:section name="statusWebsite23">
+	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.23">Send asset failed</f:translate></strong><br />
+	<a href="/{log.href}" target="_blank"><lux:format.getFilenameFromPathAndFilename pathAndFilename="{log.href}" /></a>
+	<span title="UID:{log.visitor.uid}">({log.visitor.fullName})</span>
+</f:section>
+
+
+
+<f:section name="statusWebsite25">
+	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.25">Identified lead with "formlistening"</f:translate></strong><br />
+	<span title="UID:{log.visitor.uid}">{log.visitor.fullName}</span>
+	<f:if condition="{log.visitor.location}">({log.visitor.location})</f:if>
+</f:section>
+
+
+
+<f:section name="statusWebsite26">
+	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.26">Identified lead with a "frontendlogin"</f:translate></strong><br />
+	<span title="UID:{log.visitor.uid}">{log.visitor.fullName}</span>
+	<f:if condition="{log.visitor.location}">({log.visitor.location})</f:if>
+</f:section>
+
+
+
+<f:section name="statusWebsite28">
+	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.28">Identified lead with "luxletterlink"</f:translate></strong><br />
+	<span title="UID:{log.visitor.uid}">{log.visitor.fullName}</span>
+	<f:if condition="{log.visitor.location}">({log.visitor.location})</f:if>
+</f:section>
+
+
+
+<f:section name="statusWebsite50">
+	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.50">Download tracked</f:translate></strong><br />
+	<a href="/{log.href}" target="_blank"><lux:format.getFilenameFromPathAndFilename pathAndFilename="{log.href}" /></a>
+	<span title="UID:{log.visitor.uid}">({log.visitor.fullName})</span>
+</f:section>
+
+
+
+<f:section name="statusWebsite60">
+	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.60">Workflow action</f:translate></strong><br />
+	{log.workflowTitle}
+	<span title="UID:{log.visitor.uid}">({log.visitor.fullName})</span>
+</f:section>
+
+
+
+<f:section name="statusWebsite70">
+	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.70">Contextual Content</f:translate></strong><br />
+	<span title="UID{log.shownContentUid}: {lux:repository.getContentHeaderFromContentUid(uid:log.shownContentUid)}"><f:format.crop maxCharacters="25" append=" ..."><lux:repository.getContentHeaderFromContentUid uid="{log.shownContentUid}" /></f:format.crop></span>
+	<span title="UID:{log.visitor.uid}">({log.visitor.fullName})</span>
+</f:section>

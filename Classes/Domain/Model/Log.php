@@ -37,9 +37,14 @@ class Log extends AbstractEntity
     protected $properties = '';
 
     /**
+     * @var \DateTime
+     */
+    protected $crdate = null;
+
+    /**
      * @return Newsletter
      */
-    public function getNewsletter(): Newsletter
+    public function getNewsletter(): ?Newsletter
     {
         return $this->newsletter;
     }
@@ -57,7 +62,7 @@ class Log extends AbstractEntity
     /**
      * @return User
      */
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -109,6 +114,24 @@ class Log extends AbstractEntity
     public function setProperties(array $properties): self
     {
         $this->properties = json_encode($properties);
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCrdate(): \DateTime
+    {
+        return $this->crdate;
+    }
+
+    /**
+     * @param \DateTime $crdate
+     * @return Log
+     */
+    public function setCrdate(\DateTime $crdate): self
+    {
+        $this->crdate = $crdate;
         return $this;
     }
 }

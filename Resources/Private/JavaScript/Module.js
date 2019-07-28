@@ -35,6 +35,8 @@ define(['jquery'], function($) {
 			addWizardUserPreview();
 			addWizardNewsletterPreview();
 			testMailListener();
+			userDetailMockListener();
+			userDetailListener();
 		};
 
 		/**
@@ -148,6 +150,37 @@ define(['jquery'], function($) {
 		};
 
 		/**
+		 * Clicking on a table line simulates a click on the (hidden) detail button
+		 *
+		 * @returns {void}
+		 */
+		var userDetailMockListener = function() {
+			var elements = document.querySelectorAll('[data-luxletter-linkmockaction]');
+			for (var i = 0; i < elements.length; i++) {
+				elements[i].addEventListener('click', function() {
+					var identifier = this.getAttribute('data-luxletter-linkmockaction');
+					document.querySelector('[data-luxletter-linkmock-link="' + identifier + '"]').click();
+				});
+			}
+		};
+
+		/**
+		 * @returns {void}
+		 */
+		var userDetailListener = function() {
+			var elements = document.querySelectorAll('[data-luxletter-action-ajax]');
+			for (var i = 0; i < elements.length; i++) {
+				elements[i].addEventListener('click', function(event) {
+					event.preventDefault();
+					var userIdentifier = this.getAttribute('data-luxletter-action-ajax');
+					ajaxConnection(TYPO3.settings.ajaxUrls['/luxletter/receiverdetail'], {
+						user: userIdentifier,
+					}, 'userDetailListenerCallback');
+				});
+			}
+		};
+
+		/**
 		 * @param response
 		 * @returns {void}
 		 */
@@ -172,6 +205,17 @@ define(['jquery'], function($) {
 			var fieldElements = document.querySelector('[data-luxletter-testmail="fields"]');
 			if (fieldElements !== null) {
 				hideElement(fieldElements);
+			}
+		};
+
+		/**
+		 * @param response
+		 * @returns {void}
+		 */
+		this.userDetailListenerCallback = function(response) {
+			var container = document.getElementById('luxletter-newsletter-receiver-container');
+			if (container !== null) {
+				container.innerHTML = response.html;
 			}
 		};
 

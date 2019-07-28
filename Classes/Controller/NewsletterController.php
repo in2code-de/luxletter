@@ -3,9 +3,11 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
 use Doctrine\DBAL\DBALException;
+use In2code\Lux\Domain\Repository\VisitorRepository;
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Newsletter;
+use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
@@ -47,6 +49,11 @@ class NewsletterController extends ActionController
      * @var string
      */
     protected $wizardUserPreviewFile = 'EXT:luxletter/Resources/Private/Templates/Newsletter/WizardUserPreview.html';
+
+    /**
+     * @var string
+     */
+    protected $receiverDetailFile = 'EXT:luxletter/Resources/Private/Templates/Newsletter/ReceiverDetail.html';
 
     /**
      * @var NewsletterRepository
@@ -229,11 +236,12 @@ class NewsletterController extends ActionController
         ResponseInterface $response
     ): ResponseInterface
     {
+        $userRepository = ObjectUtility::getObjectManager()->get(UserRepository::class);
         $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
         $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->wizardUserPreviewFile));
         $standaloneView->assignMultiple([
-            'userPreview' => $this->userRepository->getUsersFromGroup((int)$request->getQueryParams()['usergroup'], 3),
-            'userAmount' => $this->userRepository->getUserAmountFromGroup((int)$request->getQueryParams()['usergroup'])
+            'userPreview' => $userRepository->getUsersFromGroup((int)$request->getQueryParams()['usergroup'], 3),
+            'userAmount' => $userRepository->getUserAmountFromGroup((int)$request->getQueryParams()['usergroup'])
         ]);
         $response->getBody()->write(json_encode(
             ['html' => $standaloneView->render()]
@@ -272,6 +280,35 @@ class NewsletterController extends ActionController
         );
         $status = $mailService->sendNewsletter($request->getQueryParams()['email']) > 0;
         $response->getBody()->write(json_encode(['status' => $status]));
+        return $response;
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws DBALException
+     */
+    public function receiverDetailAjax(
+        ServerRequestInterface $request,
+        ResponseInterface $response
+    ): ResponseInterface
+    {
+        $userRepository = ObjectUtility::getObjectManager()->get(UserRepository::class);
+        $visitorRepository = ObjectUtility::getObjectManager()->get(VisitorRepository::class);
+        $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
+        $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
+        $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->receiverDetailFile));
+        /** @var User $user */
+        $user = $userRepository->findByUid((int)$request->getQueryParams()['user']);
+        $standaloneView->assignMultiple([
+            'user' => $user,
+            'visitor' => $visitorRepository->findOneByFrontenduser($user),
+            'logs' => $logRepository->findByUser($user)
+        ]);
+        $response->getBody()->write(json_encode(
+            ['html' => $standaloneView->render()]
+        ));
         return $response;
     }
 
