@@ -53,9 +53,11 @@
 						</h3>
 						<div class="alert alert-warning" role="alert">
 							<h4 class="alert-heading">
-								Not yet identified
+								<f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiverdetail.notidentified.title">not yet identified</f:translate>
 							</h4>
-							<p>This newsletter receiver is not yet identified in lux</p>
+							<p>
+								<f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiverdetail.notidentified.text">this newsletter receiver is not yet identified in lux</f:translate>
+							</p>
 						</div>
 					</f:else>
 				</f:if>
@@ -67,20 +69,20 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<h3 class="panel-title">
-			Activities
+			<f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiverdetail.activities.title">activities</f:translate>
 		</h3>
 	</div>
 	<div class="panel-body">
 		<div class="row">
 			<div class="col-md-6">
-				<h4>Newsletter activities</h4>
+				<h4><f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiverdetail.activities.newsletter">newsletter activities</f:translate></h4>
 				<f:if condition="{logs}">
 					<f:then>
 						<nav class="timeline timeline--vertical">
 							<f:for each="{logs}" as="log">
 								<div class="timeline__item" title="{lux:format.readableDate(date:log.crdate)} ({f:format.date(date:log.crdate,format:'{f:translate(key:\'LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:date\')}')})">
 									<div style="margin-top: 5px;">
-										<f:render section="statusNewsletter{log.status}" optional="1" arguments="{_all}"/>
+										<f:render section="statusLog{log.status}" optional="1" arguments="{_all}"/>
 									</div>
 								</div>
 							</f:for>
@@ -89,33 +91,44 @@
 					<f:else>
 						<div class="alert alert-warning" role="alert">
 							<h4 class="alert-heading">
-								No newletter information yet
+								<f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiverdetail.activities.newsletter.noinformation.title">No newsletter information yet</f:translate>
 							</h4>
-							<p>There are no information about newsletter activities yet in luxletter</p>
+							<p><f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiverdetail.activities.newsletter.noinformation.text">There are no information about newsletter activities yet in luxletter</f:translate></p>
 						</div>
 					</f:else>
 				</f:if>
 			</div>
 			<div class="col-md-6">
-				<h4>Website activities</h4>
+				<h4><f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiverdetail.activities.website">website activities</f:translate></h4>
 				<f:if condition="{visitor.identified}">
 					<f:then>
 						<nav class="timeline timeline--vertical">
-							<f:for each="{visitor.logs}" as="log">
-								<div class="timeline__item" title="{lux:format.readableDate(date:log.crdate)} ({f:format.date(date:log.crdate,format:'{f:translate(key:\'LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:date\')}')})">
+							<f:for each="{visitor.pagevisits}" as="pagevisit">
+								<div class="timeline__item" title="PID{pagevisit.page.uid}">
 									<div style="margin-top: 5px;">
-										<f:render section="statusWebsite{log.status}" optional="1" arguments="{_all}"/>
+										{pagevisit.page.title}
+										<span class="badge pull-right" title="{f:format.date(date:pagevisit.crdate,format:'{f:translate(key:\'LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:date\')}')}">{lux:format.readableDate(date:pagevisit.crdate)}</span>
 									</div>
 								</div>
 							</f:for>
+							<f:if condition="{visitor.referrer}">
+								<div class="timeline__item">
+									<div style="margin-top: 5px;">
+										<a href="{visitor.referrer}" target="_blank">{visitor.readableReferrer}</a>
+										<span class="badge pull-right" title="{f:format.date(date:visitor.crdate,format:'{f:translate(key:\'LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:date\')}')}">{lux:format.readableDate(date:visitor.crdate)}</span>
+									</div>
+								</div>
+							</f:if>
 						</nav>
 					</f:then>
 					<f:else>
 						<div class="alert alert-warning" role="alert">
 							<h4 class="alert-heading">
-								Not yet identified
+								<f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiverdetail.activities.website.noinformation.title">Not yet identified</f:translate>
 							</h4>
-							<p>There are no information about website activities yet in lux</p>
+							<p>
+								<f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiverdetail.activities.website.noinformation.text">There are no information about website activities yet in lux</f:translate>
+							</p>
 						</div>
 					</f:else>
 				</f:if>
@@ -131,117 +144,22 @@
 <f:comment>
 	Newsletter Status
 </f:comment>
-<f:section name="statusNewsletter100">
-	<strong>Newsletter <f:if condition="{log.newsletter}">"{log.newsletter.title}"</f:if> dispatched</strong><br>
+<f:section name="statusLog100">
+	<strong>Newletter <f:if condition="{log.newsletter}">"{log.newsletter.title}"</f:if> <f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiverdetail.status.100">dispatched</f:translate></strong><br>
 </f:section>
 
 
-<f:section name="statusNewsletter200">
-	<strong>Newsletter <f:if condition="{log.newsletter}">"{log.newsletter.title}"</f:if> opened</strong><br>
+<f:section name="statusLog200">
+	<strong>Newsletter <f:if condition="{log.newsletter}">"{log.newsletter.title}"</f:if> <f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiverdetail.status.200">opened</f:translate></strong><br>
 </f:section>
 
 
-<f:section name="statusNewsletter300">
-	<strong>Clicked a link in Newsletter <f:if condition="{log.newsletter}">"{log.newsletter.title}"</f:if></strong><br>
+<f:section name="statusLog300">
+	<strong><f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiverdetail.status.300">Clicked a link in newsletter</f:translate> <f:if condition="{log.newsletter}">"{log.newsletter.title}"</f:if></strong><br>
 	Link: <f:for each="{log.properties}" key="key" as="property"><f:if condition="{key} == 'target'"><f:link.typolink parameter="{property}" target="_blank"/></f:if></f:for>
 </f:section>
 
 
-<f:section name="statusNewsletter400">
-	<strong>Unsubscribed from Newsletters</strong><br>
-</f:section>
-
-
-
-
-
-
-
-<f:comment>
-	Website Status
-</f:comment>
-<f:section name="statusWebsite1">
-	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.1">New lead</f:translate></strong><br />
-	<span title="UID:{log.visitor.uid}"><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:anonym">Anonymous</f:translate></span>
-	<f:if condition="{log.visitor.location}">({log.visitor.location})</f:if>
-</f:section>
-
-
-
-<f:section name="statusWebsite2">
-	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.2">Identified lead:</f:translate></strong><br />
-	<span title="UID:{log.visitor.uid}">{log.visitor.fullName}</span>
-	<f:if condition="{log.visitor.location}">({log.visitor.location})</f:if>
-</f:section>
-
-
-
-<f:section name="statusWebsite21">
-	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.21">Identified lead with "email4link"</f:translate></strong><br />
-	<span title="UID:{log.visitor.uid}">{log.visitor.fullName}</span>
-	<f:if condition="{log.visitor.location}">({log.visitor.location})</f:if>
-</f:section>
-
-
-
-<f:section name="statusWebsite22">
-	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.22">Send asset</f:translate></strong><br />
-	<a href="/{log.href}" target="_blank"><lux:format.getFilenameFromPathAndFilename pathAndFilename="{log.href}" /></a>
-	<span title="UID:{log.visitor.uid}">({log.visitor.fullName})</span>
-</f:section>
-
-
-
-<f:section name="statusWebsite23">
-	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.23">Send asset failed</f:translate></strong><br />
-	<a href="/{log.href}" target="_blank"><lux:format.getFilenameFromPathAndFilename pathAndFilename="{log.href}" /></a>
-	<span title="UID:{log.visitor.uid}">({log.visitor.fullName})</span>
-</f:section>
-
-
-
-<f:section name="statusWebsite25">
-	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.25">Identified lead with "formlistening"</f:translate></strong><br />
-	<span title="UID:{log.visitor.uid}">{log.visitor.fullName}</span>
-	<f:if condition="{log.visitor.location}">({log.visitor.location})</f:if>
-</f:section>
-
-
-
-<f:section name="statusWebsite26">
-	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.26">Identified lead with a "frontendlogin"</f:translate></strong><br />
-	<span title="UID:{log.visitor.uid}">{log.visitor.fullName}</span>
-	<f:if condition="{log.visitor.location}">({log.visitor.location})</f:if>
-</f:section>
-
-
-
-<f:section name="statusWebsite28">
-	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.28">Identified lead with "luxletterlink"</f:translate></strong><br />
-	<span title="UID:{log.visitor.uid}">{log.visitor.fullName}</span>
-	<f:if condition="{log.visitor.location}">({log.visitor.location})</f:if>
-</f:section>
-
-
-
-<f:section name="statusWebsite50">
-	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.50">Download tracked</f:translate></strong><br />
-	<a href="/{log.href}" target="_blank"><lux:format.getFilenameFromPathAndFilename pathAndFilename="{log.href}" /></a>
-	<span title="UID:{log.visitor.uid}">({log.visitor.fullName})</span>
-</f:section>
-
-
-
-<f:section name="statusWebsite60">
-	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.60">Workflow action</f:translate></strong><br />
-	{log.workflowTitle}
-	<span title="UID:{log.visitor.uid}">({log.visitor.fullName})</span>
-</f:section>
-
-
-
-<f:section name="statusWebsite70">
-	<strong><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.log.status.70">Contextual Content</f:translate></strong><br />
-	<span title="UID{log.shownContentUid}: {lux:repository.getContentHeaderFromContentUid(uid:log.shownContentUid)}"><f:format.crop maxCharacters="25" append=" ..."><lux:repository.getContentHeaderFromContentUid uid="{log.shownContentUid}" /></f:format.crop></span>
-	<span title="UID:{log.visitor.uid}">({log.visitor.fullName})</span>
+<f:section name="statusLog400">
+	<strong><f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiverdetail.status.400">Unsubscribed from Newsletters</f:translate></strong><br>
 </f:section>

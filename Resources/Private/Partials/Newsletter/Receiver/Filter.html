@@ -6,7 +6,7 @@
 						property="searchterm"
 						id="searchterm"
 						class="form-control"
-						placeholder="{f:translate(key:'LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.list.filter.searchterm')}" />
+						placeholder="{f:translate(key:'LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiver.filter.searchterm')}" />
 				<label class="input-group-addon fa fa-search" for="searchterm"></label>
 			</div>
 		</div>
@@ -16,9 +16,9 @@
 						property="usergroup"
 						id="usergroup"
 						class="form-control"
-						prependOptionLabel="Choose usergroup..."
+						prependOptionLabel="{f:translate(key:'LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiver.filter.usergroup')}"
 						prependOptionValue="0"
-						value="{filter.usergroup.uid}"
+						value="{filter.usergroup}"
 						options="{luxletter:usergroup.getReceiverGroups()}" />
 				<label class="input-group-addon fa fa-user" for="usergroup"></label>
 			</div>

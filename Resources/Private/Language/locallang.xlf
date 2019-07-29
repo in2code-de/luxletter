@@ -220,6 +220,55 @@
 				<source>Newsletter successfully deleted</source>
 			</trans-unit>
 
+			<trans-unit id="module.newsletter.receiver.filter.searchterm">
+				<source>Any searchterm</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.receiver.filter.usergroup">
+				<source>Choose a usergroup...</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.receiver.mostactivest.title">
+				<source>Most activest (number of actions)</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.receiverdetail.notidentified.title">
+				<source>Not yet identified</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.receiverdetail.notidentified.text">
+				<source>This newsletter receiver is not yet identified in lux</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.receiverdetail.activities.title">
+				<source>Activities</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.receiverdetail.activities.newsletter">
+				<source>Newsletter Activities</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.receiverdetail.activities.website">
+				<source>Website Activities</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.receiverdetail.activities.newsletter.noinformation.title">
+				<source>No newsletter information yet</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.receiverdetail.activities.newsletter.noinformation.text">
+				<source>There are no information about newsletter activities yet in luxletter</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.receiverdetail.activities.website.noinformation.title">
+				<source>Not yet identified</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.receiverdetail.activities.website.noinformation.text">
+				<source>There are no information about website activities yet in lux</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.receiverdetail.status.100">
+				<source>dispatched</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.receiverdetail.status.200">
+				<source>opened</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.receiverdetail.status.300">
+				<source>Clicked a link in newsletter</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.receiverdetail.status.400">
+				<source>Unsubscribed from Newsletters</source>
+			</trans-unit>
+
 			<trans-unit id="pleasechoose">
 				<source>Please choose...</source>
 			</trans-unit>
