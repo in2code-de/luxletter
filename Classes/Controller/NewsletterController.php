@@ -177,10 +177,11 @@ class NewsletterController extends ActionController
      * @throws IllegalObjectTypeException
      * @throws StopActionException
      * @throws UnsupportedRequestTypeException
+     * @throws DBALException
      */
     public function deleteAction(Newsletter $newsletter): void
     {
-        $this->newsletterRepository->remove($newsletter);
+        $this->newsletterRepository->removeNewsletterAndQueues($newsletter);
         $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.delete.message'));
         $this->redirect('list');
     }
