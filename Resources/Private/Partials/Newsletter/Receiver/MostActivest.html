@@ -1,0 +1,17 @@
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			<f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiver.mostactivest.title">most activest</f:translate>
+		</h3>
+	</div>
+	<div class="panel-body">
+		<canvas
+				id="luxletter-dashboard-open"
+				width="600"
+				height="200"
+				data-chart="bar"
+				data-chart-label="{f:translate(key:'LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiver.mostactivest.title')}"
+				data-chart-data="{luxletter:statistic.getListOfMostActivestValues(activities:activities)}"
+				data-chart-labels="{luxletter:statistic.getListOfMostActivestUsers(activities:activities)}"></canvas>
+	</div>
+</div>

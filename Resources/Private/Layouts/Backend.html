@@ -17,6 +17,12 @@
 							<f:link.action action="list" controller="Newsletter" class="btn{luxletter:backend.getClassNameOnAction(actionName:'list')}">
 								<f:translate key="layout.backend.link.actionnewsletter">Newsletter</f:translate>
 							</f:link.action>
+
+							<luxletter:condition.isReceiverActionEnabled>
+								<f:link.action action="receiver" controller="Newsletter" class="btn{luxletter:backend.getClassNameOnAction(actionName:'receiver')}">
+									<f:translate key="layout.backend.link.actionreceiver">Receiver</f:translate>
+								</f:link.action>
+							</luxletter:condition.isReceiverActionEnabled>
 						</div>
 						<span style="margin-left:10px;">Luxletter</span>
 					</div>

@@ -17,7 +17,7 @@
 										<f:image image="{user.firstImage}" treatIdAsReference="1" width="32c" height="32c" class="luxletter-mailprefiew--image" alt="image"/>
 									</f:then>
 									<f:else>
-										<img src="{luxletter:user.getGravatarImageUrl(user:user)}" width="32" height="32" class="luxletter-mailprefiew--image" alt="image"/>
+										<img src="{luxletter:user.getUserImageUrl(user:user)}" width="32" height="32" class="luxletter-mailprefiew--image" alt="image"/>
 									</f:else>
 								</f:if>
 								{user.readableName} ({user.email})

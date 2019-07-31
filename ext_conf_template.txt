@@ -11,6 +11,9 @@ rewriteLinksInNewsletter = 1
 # cat=basic//210; type=int+; label= Add typenum: If you just add a number in newletter backend module to describe on which pid the newsletter is located, this typenum will be added. Note: Typenum will not be added to real urls.
 addTypeNumToNumberLocation = 1562349004
 
+# cat=basic//220; type=boolean; label= Show receiver action: show link to receiver view in newsletter module
+receiverAction = 1
+
 
 # cat=mail//300; type=text; label= Sender email address: Sender email address for your newsletter (Because of SPF defiance it should be a valid email - given from your mailserver administrator)
 fromEmail = newsletter@yourserver.org

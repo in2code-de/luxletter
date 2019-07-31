@@ -26,13 +26,14 @@ class User extends FrontendUser
     /**
      * Try to get a readable name in format "lastname, firstname" (if possible)
      *
+     * @param string $splitCharacter
      * @return string
      */
-    public function getReadableName(): string
+    public function getReadableName(string $splitCharacter = ', '): string
     {
         $name = $this->getName();
         if ($this->getLastName() !== '' && $this->getFirstName() !== '') {
-            $name = $this->getLastName() . ', ' . $this->getFirstName();
+            $name = $this->getLastName() . $splitCharacter . $this->getFirstName();
         }
         return $name;
     }

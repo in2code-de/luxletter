@@ -3,15 +3,20 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
 use Doctrine\DBAL\DBALException;
+use In2code\Lux\Domain\Repository\VisitorRepository;
 use In2code\Luxletter\Domain\Factory\UserFactory;
+use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Newsletter;
+use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\ParseNewsletterService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
+use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
 use In2code\Luxletter\Mail\SendMail;
+use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
@@ -27,6 +32,7 @@ use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
@@ -37,15 +43,27 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class NewsletterController extends ActionController
 {
+    use SignalTrait;
+
     /**
      * @var string
      */
     protected $wizardUserPreviewFile = 'EXT:luxletter/Resources/Private/Templates/Newsletter/WizardUserPreview.html';
 
     /**
+     * @var string
+     */
+    protected $receiverDetailFile = 'EXT:luxletter/Resources/Private/Templates/Newsletter/ReceiverDetail.html';
+
+    /**
      * @var NewsletterRepository
      */
     protected $newsletterRepository = null;
+
+    /**
+     * @var UserRepository
+     */
+    protected $userRepository = null;
 
     /**
      * @var LogRepository
@@ -159,12 +177,53 @@ class NewsletterController extends ActionController
      * @throws IllegalObjectTypeException
      * @throws StopActionException
      * @throws UnsupportedRequestTypeException
+     * @throws DBALException
      */
-    public function deleteAction(Newsletter $newsletter)
+    public function deleteAction(Newsletter $newsletter): void
     {
-        $this->newsletterRepository->remove($newsletter);
+        $this->newsletterRepository->removeNewsletterAndQueues($newsletter);
         $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.delete.message'));
         $this->redirect('list');
+    }
+
+    /**
+     * Always pass a filter to receiverAction. If filter is given, save in session.
+     *
+     * @return void
+     * @throws InvalidArgumentNameException
+     * @throws NoSuchArgumentException
+     */
+    public function initializeReceiverAction(): void
+    {
+        $filterArgument = $this->arguments->getArgument('filter');
+        $filterPropertyMapping = $filterArgument->getPropertyMappingConfiguration();
+        $filterPropertyMapping->allowAllProperties();
+        if ($this->request->hasArgument('filter') === false) {
+            $filter = BackendUserUtility::getSessionValue('filter');
+        } else {
+            $filter = (array)$this->request->getArgument('filter');
+            BackendUserUtility::saveValueToSession('filter', $filter);
+        }
+        $this->request->setArgument('filter', $filter);
+    }
+
+    /**
+     * @param Filter $filter
+     * @return void
+     * @throws InvalidQueryException
+     * @throws DBALException
+     */
+    public function receiverAction(Filter $filter): void
+    {
+        $receiverAnalysisService = ObjectUtility::getObjectManager()->get(ReceiverAnalysisService::class);
+        $users = $this->userRepository->getUsersByFilter($filter);
+        $this->view->assignMultiple(
+            [
+                'filter' => $filter,
+                'users' => $users,
+                'activities' => $receiverAnalysisService->getActivitiesStatistic($users)
+            ]
+        );
     }
 
     /**
@@ -226,6 +285,35 @@ class NewsletterController extends ActionController
     }
 
     /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws DBALException
+     */
+    public function receiverDetailAjax(
+        ServerRequestInterface $request,
+        ResponseInterface $response
+    ): ResponseInterface
+    {
+        $userRepository = ObjectUtility::getObjectManager()->get(UserRepository::class);
+        $visitorRepository = ObjectUtility::getObjectManager()->get(VisitorRepository::class);
+        $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
+        $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
+        $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->receiverDetailFile));
+        /** @var User $user */
+        $user = $userRepository->findByUid((int)$request->getQueryParams()['user']);
+        $standaloneView->assignMultiple([
+            'user' => $user,
+            'visitor' => $visitorRepository->findOneByFrontenduser($user),
+            'logs' => $logRepository->findByUser($user)
+        ]);
+        $response->getBody()->write(json_encode(
+            ['html' => $standaloneView->render()]
+        ));
+        return $response;
+    }
+
+    /**
      * @return void
      * @throws InvalidArgumentNameException
      * @throws NoSuchArgumentException
@@ -264,16 +352,25 @@ class NewsletterController extends ActionController
      * @param NewsletterRepository $newsletterRepository
      * @return void
      */
-    public function injectNewsletterRepository(NewsletterRepository $newsletterRepository)
+    public function injectNewsletterRepository(NewsletterRepository $newsletterRepository): void
     {
         $this->newsletterRepository = $newsletterRepository;
+    }
+
+    /**
+     * @param UserRepository $userRepository
+     * @return void
+     */
+    public function injectUserRepository(UserRepository $userRepository): void
+    {
+        $this->userRepository = $userRepository;
     }
 
     /**
      * @param LogRepository $logRepository
      * @return void
      */
-    public function injectLogRepository(LogRepository $logRepository)
+    public function injectLogRepository(LogRepository $logRepository): void
     {
         $this->logRepository = $logRepository;
     }

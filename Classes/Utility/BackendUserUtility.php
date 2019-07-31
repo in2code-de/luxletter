@@ -13,9 +13,28 @@ class BackendUserUtility
     /**
      * @return bool
      */
-    public static function isBackendUserAuthenticated()
+    public static function isBackendUserAuthenticated(): bool
     {
         return self::getBackendUserAuthentication() !== null;
+    }
+
+    /**
+     * @param string $key
+     * @param array $data
+     * @return void
+     */
+    public static function saveValueToSession(string $key, array $data): void
+    {
+        self::getBackendUserAuthentication()->setAndSaveSessionData($key . '_luxletter', $data);
+    }
+
+    /**
+     * @param string $key
+     * @return array
+     */
+    public static function getSessionValue(string $key): array
+    {
+        return (array)self::getBackendUserAuthentication()->getSessionData($key . '_luxletter');
     }
 
     /**

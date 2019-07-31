@@ -86,6 +86,7 @@ composer require "in2code/luxletter"
 
 | Version    | Date        | State      | Description                                                                        |
 | ---------- | ----------- | ---------- | ---------------------------------------------------------------------------------- |
+| 0.3.0      | 2019.07.31  | Task       | Support for lux, Add signal, Receiver module                                       |
 | 0.2.0      | 2019.07.13  | Task       | Fix for PHP 7.3, Fix for default sql mode setting, documentation update            |
 | 0.1.0      | 2019.07.10  | Task       | Initial release of a working newsletter extension                                  |
 
@@ -100,8 +101,8 @@ composer require "in2code/luxletter"
 * done: Dashboard
 * done: New CType teaser to build newsletters with content elements
 * done: HTML for newsletter optimization
-* in progress: lux: identification with email clicks
-* in progress: lux: new view in backend with all email receivers and there newletter actions
+* done: lux: identification with email clicks (with lux 5.0.0)
+* in progress: lux: new view in backend with all email receivers and there newsletter actions
 * in progress: lux: show email actions in normal detail view?
 * Documentation (how to build newsletters, basic configuration, what can lux do, etc...)
 

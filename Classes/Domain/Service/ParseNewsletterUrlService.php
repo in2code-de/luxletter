@@ -45,10 +45,12 @@ class ParseNewsletterUrlService
     /**
      * ParseNewsletterUrlService constructor.
      * @param string $origin can be a page uid or a complete url
-     * @throws InvalidRouteArgumentsException
-     * @throws SiteNotFoundException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws InvalidRouteArgumentsException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
+     * @throws SiteNotFoundException
      */
     public function __construct(string $origin)
     {
@@ -64,7 +66,8 @@ class ParseNewsletterUrlService
         } elseif (StringUtility::isValidUrl($origin)) {
             $url = $origin;
         }
-        $this->url = $url;
+        $this->signalDispatch(__CLASS__, 'constructor', [$url, $origin, $this]);
+        $this->setUrl($url);
     }
 
     /**
@@ -183,6 +186,24 @@ class ParseNewsletterUrlService
     public function setParseVariables(bool $parseVariables): self
     {
         $this->parseVariables = $parseVariables;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param string $url
+     * @return ParseNewsletterUrlService
+     */
+    public function setUrl(string $url): self
+    {
+        $this->url = $url;
         return $this;
     }
 }

@@ -1,0 +1,157 @@
+$bulletsize: 1.5rem;
+$bulletlinespacing: 2rem;
+$linewidth: 3px;
+
+.timeline {
+  position: relative;
+  background: $white;
+
+  &:before {
+    content: '';
+    display: block;
+    background-color: $colorGrey;
+    position: absolute;
+  }
+
+  &--vertical {
+    margin: 0 0 0 calc(#{$bulletsize} + #{$bulletlinespacing} + 1rem);
+
+    &:before {
+      width: $linewidth;
+      height: 100%;
+      top: 0;
+      left: calc(-#{$bulletsize} / 2 - #{$linewidth} / 2 - #{$bulletlinespacing});
+    }
+
+    .timeline__item {
+
+      &:before {
+        background-color: $colorGrey;
+      }
+
+      &:first-child {
+
+        &:before {
+          background-color: $colorMain;
+        }
+
+        &:after {
+          width: $linewidth;
+          height: 50%;
+          top: 0;
+          left: calc(-#{$bulletsize} / 2 - #{$linewidth} / 2 - #{$bulletlinespacing});
+        }
+      }
+
+      &:last-child {
+
+        &:after {
+          width: $linewidth;
+          height: 50%;
+          bottom: 0;
+          left: calc(-#{$bulletsize} / 2 - #{$linewidth} / 2 - #{$bulletlinespacing});
+        }
+      }
+    }
+  }
+
+  &--horizontal {
+    display: flex;
+    justify-content: space-between;
+
+    &:before {
+      width: 100%;
+      height: $linewidth;
+      //top: calc(-#{$bulletsize} / 2 - #{$linewidth} / 2 - #{$bulletlinespacing});
+      top: 34px;
+    }
+
+    .timeline__item {
+
+      width: 100px;
+      text-align: center;
+
+      &:before {
+        left: calc(50% - #{$bulletsize} / 2);
+        //top: calc(-#{$bulletsize} - #{$bulletlinespacing});
+        top: 28px;
+      }
+
+      &:first-child {
+
+        &:before {
+          background-color: $colorGrey;
+        }
+
+        &:after {
+          width: 50%;
+          height: $linewidth;
+          left: 0;
+          //top: calc(-#{$bulletsize} / 2 - #{$linewidth} / 2 - #{$bulletlinespacing});
+          top: 34px;
+        }
+      }
+
+      &:last-child {
+
+        &:before {
+          background-color: $colorGrey;
+        }
+
+        &:after {
+          width: 50%;
+          height: $linewidth;
+          //bottom: 0;
+          //top: calc(-#{$bulletsize} / 2 - #{$linewidth} / 2 - #{$bulletlinespacing});
+          top: 34px;
+          right: 0;
+        }
+      }
+    }
+  }
+
+  &__thin {
+    width: 85%;
+    margin: 10px auto 5px auto;
+  }
+
+  &__item {
+    margin: 0 0 1rem 0;
+    max-width: 300px;
+    padding: 0.5rem;
+    position: relative;
+
+    &:before {
+      content: '';
+      display: block;
+      width: $bulletsize;
+      height: $bulletsize;
+      background-color: $colorMain;
+      border-radius: $bulletsize;
+      position: absolute;
+      z-index: 1;
+      top: calc(50% - #{$bulletsize} / 2);
+      left: calc(-#{$bulletsize} - #{$bulletlinespacing});
+    }
+
+    &:first-child {
+
+      &:after {
+        content: '';
+        display: block;
+        background-color: $white;
+        position: absolute;
+      }
+    }
+
+    &:last-child {
+
+      &:after {
+        content: '';
+        display: block;
+        background-color: $white;
+        position: absolute;
+      }
+    }
+  }
+}
