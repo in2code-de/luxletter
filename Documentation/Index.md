@@ -12,6 +12,6 @@
 
 [Creating and sending Newsletters](Newsletter/Index.md)
 
-### Analysis
+### Analysis and Receiver activities
 
-[Analysis and Diagrams](Analysis/Index.md)
+[Analysis of your Receivers](Analysis/Index.md)
