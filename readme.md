@@ -9,7 +9,7 @@ Inspired by TYPO3 extension direct_mail - thank you for your work
 
 Email marketing tool in TYPO3. Just build and send newsletters to your customers.
 This extension does not need EXT:lux but works together with the marketing automation tool for TYPO3 to get even more
-analytics data.
+receiver analytics data.
 
 
 ## Aspects
