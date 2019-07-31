@@ -43,7 +43,7 @@
 
 						<div class="row">
 							<div class="col-md-12">
-								<f:link.action action="detail" controller="Lead" extensionName="lux" pluginName="leads" arguments="{visitor:visitor}" class="btn btn-primary pull-right"><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.detail.linkdetail">show</f:translate></f:link.action>
+								<f:be.link route="lux_LuxLeads" parameters="{tx_lux_lux_luxleads:{visitor:visitor.uid,action:'detail'}}" class="btn btn-primary"><f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.detail.linkdetail">show</f:translate></f:be.link>
 							</div>
 						</div>
 					</f:then>
