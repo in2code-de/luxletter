@@ -7,6 +7,7 @@ use In2code\Luxletter\Domain\Repository\QueueRepository;
 use In2code\Luxletter\Domain\Service\LinkHashingService;
 use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterService;
+use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
@@ -23,6 +24,8 @@ use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
  */
 class ProgressQueue
 {
+    use SignalTrait;
+
     /**
      * @var QueueRepository
      */
@@ -51,6 +54,7 @@ class ProgressQueue
     public function progress(int $limit = 50): int
     {
         $queues = $this->queueRepository->findDispatchableInQueue($limit);
+        $this->signalDispatch(__CLASS__, __FUNCTION__, [$queues]);
         foreach ($queues as $queue) {
             /** @var Queue $queue */
             $this->sendNewsletterToReceiverInQueue($queue);
@@ -97,6 +101,8 @@ class ProgressQueue
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
      */
     protected function hashLinksInBodytext(Queue $queue, string $bodytext): string
     {

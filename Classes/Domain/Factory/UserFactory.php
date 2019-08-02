@@ -10,7 +10,7 @@ use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
- * Class UserFactory
+ * Class UserFactory to get some dummy values for test newsletters
  */
 class UserFactory
 {
