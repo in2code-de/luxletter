@@ -21,7 +21,7 @@ fromEmail = newsletter@yourserver.org
 # cat=mail//310; type=text; label= Sender name: Name of the sender for your newsletter
 fromName = Sender name
 
-# cat=mail//320; type=text; label= Reply email address: Real email address of a person that should receive answers to this newletter email
+# cat=mail//320; type=text; label= Reply email address: Real email address of a person that should receive answers to this newsletter email
 replyEmail = personal@youremail.org
 
 # cat=mail//320; type=text; label= Sender name: Name of the sender for your newsletter (mostly the same as fromName)

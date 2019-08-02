@@ -11,7 +11,7 @@ use TYPO3\CMS\Frontend\ContentObject\DataProcessorInterface;
 
 /**
  * Class TeaserProcessor
- * to render default CTypes of TYPO3 with a cropped bodytext
+ * to pass rendered content elements and all there data to FLUID
  */
 class TeaserProcessor implements DataProcessorInterface
 {

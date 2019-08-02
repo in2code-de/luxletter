@@ -48,7 +48,8 @@ class SendMail
      */
     public function sendNewsletter(string $email): int
     {
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'beforeSend', [$this]);
+        $send = true;
+        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'beforeSend', [&$send, $email, $this]);
         $mailMessage = ObjectUtility::getObjectManager()->get(MailMessage::class);
         $mailMessage
             ->setTo([$email => 'Newsletter receiver'])
@@ -56,7 +57,10 @@ class SendMail
             ->setReplyTo([ConfigurationUtility::getReplyEmail() => ConfigurationUtility::getReplyName()])
             ->setSubject($this->subject)
             ->setBody($this->bodytext, 'text/html');
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'mailMessage', [$mailMessage]);
-        return $mailMessage->send();
+        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'mailMessage', [$mailMessage, &$send, $email, $this]);
+        if ($send === true) {
+            return $mailMessage->send();
+        }
+        return 0;
     }
 }

@@ -6,18 +6,23 @@ use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LinkRepository;
+use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
+use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * Class LinkHashingService to rewrite links in newsletter to be able to track link clicks
  */
 class LinkHashingService
 {
+    use SignalTrait;
+
     /**
      * @var Newsletter
      */
@@ -51,6 +56,8 @@ class LinkHashingService
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
      */
     public function hashLinks(string $content): string
     {
@@ -60,6 +67,7 @@ class LinkHashingService
         foreach ($links as $link) {
             $this->hashLink($link);
         }
+        $this->signalDispatch(__CLASS__, __FUNCTION__, [$dom, $this]);
         return $dom->saveHTML();
     }
 
@@ -68,9 +76,11 @@ class LinkHashingService
      *
      * @param \DOMElement $aTag
      * @return void
-     * @throws IllegalObjectTypeException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws IllegalObjectTypeException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
      */
     protected function hashLink(\DOMElement $aTag): void
     {
@@ -83,6 +93,7 @@ class LinkHashingService
                     ->setUser($this->user)
                     ->setTarget($href);
                 $aTag->setAttribute('href', $link->getUriFromHash());
+                $this->signalDispatch(__CLASS__, __FUNCTION__, [$link, $this]);
                 $this->linkRepository->add($link);
             } else {
                 $aTag->removeAttribute('data-luxletter-parselink');

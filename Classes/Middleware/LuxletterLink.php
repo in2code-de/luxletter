@@ -10,6 +10,7 @@ use In2code\Lux\Utility\CookieUtility;
 use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Repository\LinkRepository;
 use In2code\Luxletter\Domain\Service\LogService;
+use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ExtensionUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
@@ -22,6 +23,8 @@ use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
+use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
+use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * Class LuxletterLink
@@ -29,16 +32,19 @@ use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
  */
 class LuxletterLink implements MiddlewareInterface
 {
+    use SignalTrait;
 
     /**
      * @param ServerRequestInterface $request
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
+     * @throws DBALException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
      * @throws UnknownObjectException
-     * @throws DBALException
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -46,6 +52,7 @@ class LuxletterLink implements MiddlewareInterface
             $linkRepository = ObjectUtility::getObjectManager()->get(LinkRepository::class);
             /** @var Link $link */
             $link = $linkRepository->findOneByHash($this->getHash());
+            $this->signalDispatch(__CLASS__, __FUNCTION__, [$link, $request, $handler]);
             $this->luxIdentification($link);
             if ($link !== null) {
                 $logService = ObjectUtility::getObjectManager()->get(LogService::class);
@@ -58,6 +65,8 @@ class LuxletterLink implements MiddlewareInterface
 
     /**
      * @return bool
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
      */
     protected function isLuxletterLink(): bool
     {
@@ -66,10 +75,14 @@ class LuxletterLink implements MiddlewareInterface
 
     /**
      * @return string|null
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
      */
     protected function getHash(): ?string
     {
-        return GeneralUtility::_GP('luxletterlink');
+        $hash = GeneralUtility::_GP('luxletterlink');
+        $this->signalDispatch(__CLASS__, __FUNCTION__, [&$hash]);
+        return $hash;
     }
 
     /**
@@ -86,7 +99,9 @@ class LuxletterLink implements MiddlewareInterface
      */
     protected function luxIdentification(Link $link): void
     {
-        if (ExtensionUtility::isLuxAvailable('5.0.0')) {
+        $identification = true;
+        $this->signalDispatch(__CLASS__, __FUNCTION__, [&$identification, $link]);
+        if (ExtensionUtility::isLuxAvailable('5.0.0') && $identification === true) {
             $idCookie = CookieUtility::getLuxId();
             if ($idCookie === '') {
                 $idCookie = CookieUtility::setLuxId();
