@@ -15,3 +15,7 @@
 ### Analysis and Receiver activities
 
 [Analysis of your Receivers](Analysis/Index.md)
+
+### Tech corner and FAQ
+
+[Tech corner and FAQ](Tech/Index.md)

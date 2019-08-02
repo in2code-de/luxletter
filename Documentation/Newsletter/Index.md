@@ -45,6 +45,8 @@ This is a page with some content elements. Every element is a newsletter content
 **Note** You can use variables in your content that should be filled with fe_users.* field values. So
 a `{user.lastName}` will be filled with the individual lastname of the user when the mail is sent.
 
+**Note** Only the part between the opening and the ending body-tag will be parsed into the newsletter.
+
 **Note** It's of course up to you how you build your newsletters and the technique behind
 (TYPO3 with Content Elements on one page, TYPO3 with Content Elements on different pages, TYPO3 with
 a news plugin, etc...)

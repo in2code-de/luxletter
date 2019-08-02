@@ -2,7 +2,7 @@
 
 # Luxletter - Email marketing in TYPO3. Send newsletters the easy way.
 
-Inspired by TYPO3 extension direct_mail - thank you for your work
+Inspired by TYPO3 extension direct_mail - thank to the authors for the great work
 
 
 ## Introduction
@@ -10,26 +10,28 @@ Inspired by TYPO3 extension direct_mail - thank you for your work
 Email marketing tool in TYPO3. Just build and send newsletters to your customers.
 This extension does not need EXT:lux but works together with the marketing automation tool for TYPO3 to get even more
 receiver analytics data.
+Just add some HTML as content for your newsletters anywhere in the web or directly on your website, parse it and go for
+it.
 
 
-## Aspects
+## Aspects of luxletter
 
 ### The upside
 
-* A modern dashboard shows you the relevant information in the backend
+* A useful and nice **dashboard** shows you the relevant information in the backend
 * Modern newsletter extension for TYPO3 9
-* Tracking of clicks via PSR-15 interface in TYPO3
-* Sending mails in queue via symfony command controller
-* Records for fe_groups (and there related fe_users) are used to send mails to
-* An unsubscribe plugin is already included
-* A teaser content element helps you to create newsletters out of default content elements in TYPO3
+* Tracking of clicks via **PSR-15 interface** in TYPO3
+* Sending mails in queue via **symfony command controller**
+* Records for **fe_groups** (and there related fe_users) are used to send mails to
+* An **unsubscribe plugin** is already included
+* A **teaser content element** helps you to create newsletters out of default content elements in TYPO3
 * Every website can be used as prototype for your newsletter
-* A third party mailserver can be used for newsletters
+* A **third party mailserver** can be used for newsletters
 
 ### The downside
 
 * At the moment there is no bounce-management (Do you want to sponsor it? Contact us!)
-* fe_users records are needed to send emails
+* fe_users records are needed to send emails (sorry guys - no tt_address at the moment  )
 * There is no registration plugin for fe_users in EXT:luxletter. Please use a different extension (like femanager) for this task
 
 
@@ -41,27 +43,31 @@ Example dashboard overview:
 
 Example newsletter im mail inbox:
 
-![Example dashboard overview](Documentation/Images/documentation_mail_newsletter.png "Example newsletter in mail inbox")
+![example mail](Documentation/Images/documentation_mail_newsletter.png "Example newsletter in mail inbox")
 
 Example newsletter list view:
 
-![Example dashboard overview](Documentation/Images/documentation_newsletterlist.png "Newsletter list")
+![Newsletter list](Documentation/Images/documentation_newsletterlist.png "Newsletter list")
 
 Example newsletter creation - step 1:
 
-![Example dashboard overview](Documentation/Images/documentation_newnewsletter_step1.png "Creation: Step 1")
+![Step1](Documentation/Images/documentation_newnewsletter_step1.png "Creation: Step 1")
 
 Example newsletter creation - step 2:
 
-![Example dashboard overview](Documentation/Images/documentation_newnewsletter_step2.png "Creation: Step 2")
+![Step2](Documentation/Images/documentation_newnewsletter_step2.png "Creation: Step 2")
 
 Example newsletter creation - step 3:
 
-![Example dashboard overview](Documentation/Images/documentation_newnewsletter_step3.png "Creation: Step 3")
+![Step3](Documentation/Images/documentation_newnewsletter_step3.png "Creation: Step 3")
+
+See the receiver activities if you have also installed the free extension lux:
+
+![Receiver details](Documentation/Images/documentation_receiver_detail.png "Receiver details with free extension lux")
 
 Create teasers from content elements with a teaser plugin:
 
-![Example dashboard overview](Documentation/Images/documentation_content_teaser.png "Create teasers")
+![Teaser content elements](Documentation/Images/documentation_content_teaser.png "Create teasers")
 
 
 ## Documentation
