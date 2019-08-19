@@ -83,6 +83,13 @@ See the full [documentation](Documentation/Index.md) (installation, configuratio
 * fe_users records are used to send emails to while fe_groups is used to select a group of them
 
 
+## Sponsored features (please get in contact to us if you want to sponsor a new feature)
+
+* Import of fe_users from tt_address (to migrate easier from direct_mail to luxletter)
+* Editview of existing newsletters (reparse function?)
+* Move global newsletter configuration to records to use different settings per newsletter
+
+
 ## Installation with composer
 
 ```
