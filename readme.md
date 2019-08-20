@@ -100,6 +100,7 @@ composer require "in2code/luxletter"
 
 | Version    | Date        | State      | Description                                                                        |
 | ---------- | ----------- | ---------- | ---------------------------------------------------------------------------------- |
+| 1.1.0      | 2019.08.20  | Bugfix     | Some css fixes, Fix for default image and small code cleanup                       |
 | 1.0.0      | 2019.08.02  | Task       | First stable TER release with a useful documentation                               |
 | 0.3.0      | 2019.07.31  | Task       | Support for lux, Add signal, Receiver module                                       |
 | 0.2.0      | 2019.07.13  | Task       | Fix for PHP 7.3, Fix for default sql mode setting, documentation update            |
