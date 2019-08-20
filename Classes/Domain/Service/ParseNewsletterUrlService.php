@@ -135,10 +135,13 @@ class ParseNewsletterUrlService
             throw new \LogicException('Given URL was invalid and was not parsed', 1560709687);
         }
         $string = GeneralUtility::getUrl($this->url);
-        $string = $this->getBodyFromHtml($string);
         if ($string === false) {
-            throw new \DomainException('Given URL could not be parsed and accessed', 1560709791);
+            throw new \DomainException(
+                'Given URL could not be parsed and accessed. Typenum definition in site-configuration not set?',
+                1560709791
+            );
         }
+        $string = $this->getBodyFromHtml($string);
         if ($this->isParsingActive()) {
             $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
             $string = $parseService->parseMailText($string, ['user' => $user]);
