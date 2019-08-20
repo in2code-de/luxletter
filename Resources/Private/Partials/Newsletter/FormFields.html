@@ -127,7 +127,7 @@
 
 	<div class="row">
 		<div class="col-md-12">
-			<div class="panel panel-default" data-luxletter-wizardstatus="ready" style="display: none;">
+			<div class="panel panel-default" data-luxletter-wizardstatus="ready" style="display: none; height: auto;">
 				<div class="panel-heading">
 					<h3 class="panel-title">
 						<f:translate key="module.newsletter.new.field.testmail">Testmail</f:translate>
@@ -135,16 +135,16 @@
 				</div>
 				<div class="panel-body">
 					<div data-luxletter-testmail="fields" style="display: flex; flex-direction: row;">
-						<label for="test" class="lb-lg">
+						<label for="test" class="lb-lg" style="width:15%;">
 							<f:translate key="module.newsletter.new.field.testmail.receiver">Receiver</f:translate>
 						</label>
 						<f:form.textfield class="form-control input-lg"
 										  name="testmail"
 										  id="test"
 										  additionalAttributes="{data-luxletter-testmail:'email'}"
-										  style="margin: 0 20px; width: 80%;"
+										  style="margin: 0 20px; width:75%;"
 										  placeholder="your@email.org"/>
-						<button class="btn btn-primary" data-luxletter-testmail="submit">
+						<button class="btn btn-primary" data-luxletter-testmail="submit" style="width:10%;">
 							<f:translate key="send">Send</f:translate>
 						</button>
 					</div>
