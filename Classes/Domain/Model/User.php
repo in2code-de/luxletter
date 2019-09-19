@@ -55,7 +55,7 @@ class User extends FrontendUser
     /**
      * @return \DateTime
      */
-    public function getCrdate(): \DateTime
+    public function getCrdate(): ?\DateTime
     {
         return $this->crdate;
     }
