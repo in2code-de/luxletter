@@ -9,6 +9,7 @@ use In2code\Luxletter\Domain\Repository\UsergroupRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
+use In2code\Luxletter\Exception\UserValuesAreMissingException;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
@@ -57,8 +58,12 @@ class FrontendController extends ActionController
      */
     public function previewAction(string $origin): string
     {
-        $urlService = ObjectUtility::getObjectManager()->get(ParseNewsletterUrlService::class, $origin);
-        return $urlService->getParsedContent();
+        try {
+            $urlService = ObjectUtility::getObjectManager()->get(ParseNewsletterUrlService::class, $origin);
+            return $urlService->getParsedContent();
+        } catch (\Exception $exception) {
+            return 'Origin ' . htmlspecialchars($origin) . ' could not be converted into a valid url!';
+        }
     }
 
     /**
@@ -113,6 +118,7 @@ class FrontendController extends ActionController
      * @param Newsletter|null $newsletter
      * @param string $hash
      * @return void
+     * @throws UserValuesAreMissingException
      */
     protected function checkArgumentsForUnsubscribeAction(
         User $user = null,

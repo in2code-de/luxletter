@@ -48,3 +48,7 @@ No, not at the moment. We focused on fe_users.
 ### What about bounce mail handling?
 
 At the moment there is no bounce mail handling integrated.
+
+### Scheduler task is failing while sending a newsletter
+
+Look at the sys log to see which problem caused this issue. E.g. if fe_users.crdate is empty, etc...

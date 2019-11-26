@@ -5,6 +5,7 @@ namespace In2code\Luxletter\ViewHelpers\Mail;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Service\FrontendUrlService;
+use In2code\Luxletter\Exception\UserValuesAreMissingException;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
@@ -35,6 +36,7 @@ class GetUnsubscribeUrlViewHelper extends AbstractViewHelper
      * @throws SiteNotFoundException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws UserValuesAreMissingException
      */
     public function render(): string
     {
@@ -80,6 +82,7 @@ class GetUnsubscribeUrlViewHelper extends AbstractViewHelper
 
     /**
      * @return string
+     * @throws UserValuesAreMissingException
      */
     protected function getHash(): string
     {
