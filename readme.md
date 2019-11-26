@@ -98,14 +98,15 @@ composer require "in2code/luxletter"
 
 ## Changelog
 
-| Version    | Date        | State      | Description                                                                        |
-| ---------- | ----------- | ---------- | ---------------------------------------------------------------------------------- |
-| 1.1.1      | 2019.09.19  | Bugfix     | Don't throw an exception for empty fe_users.crdate fields                          |
-| 1.1.0      | 2019.08.20  | Bugfix     | Some css fixes, Fix for default image and small code cleanup                       |
-| 1.0.0      | 2019.08.02  | Task       | First stable TER release with a useful documentation                               |
-| 0.3.0      | 2019.07.31  | Task       | Support for lux, Add signal, Receiver module                                       |
-| 0.2.0      | 2019.07.13  | Task       | Fix for PHP 7.3, Fix for default sql mode setting, documentation update            |
-| 0.1.0      | 2019.07.10  | Task       | Initial release of a working newsletter extension                                  |
+| Version    | Date        | State      | Description                                                                                          |
+| ---------- | ----------- | ---------- | ---------------------------------------------------------------------------------------------------- |
+| 1.2.0      | 2019.11.26  | Task       | Show helpful messages in some exceptional cases. Use mediumtext for bodytext for more space now.     |
+| 1.1.1      | 2019.09.19  | Bugfix     | Don't throw an exception for empty fe_users.crdate fields                                            |
+| 1.1.0      | 2019.08.20  | Bugfix     | Some css fixes, Fix for default image and small code cleanup                                         |
+| 1.0.0      | 2019.08.02  | Task       | First stable TER release with a useful documentation                                                 |
+| 0.3.0      | 2019.07.31  | Task       | Support for lux, Add signal, Receiver module                                                         |
+| 0.2.0      | 2019.07.13  | Task       | Fix for PHP 7.3, Fix for default sql mode setting, documentation update                              |
+| 0.1.0      | 2019.07.10  | Task       | Initial release of a working newsletter extension                                                    |
 
 
 
