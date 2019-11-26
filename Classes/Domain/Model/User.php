@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Model;
 
+use In2code\Luxletter\Exception\UserValuesAreMissingException;
 use In2code\Luxletter\Utility\StringUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
@@ -72,9 +73,14 @@ class User extends FrontendUser
 
     /**
      * @return string
+     * @throws UserValuesAreMissingException
      */
     public function getUnsubscribeHash(): string
     {
-        return StringUtility::getHashFromArguments([$this->getUid(), $this->getCrdate()->format('U')]);
+        if (is_a($this->crdate, \DateTime::class)) {
+            return StringUtility::getHashFromArguments([$this->getUid(), $this->getCrdate()->format('U')]);
+        } else {
+            throw new UserValuesAreMissingException('fe_users.crdate is empty for uid=' . $this->getUid(), 1574764265);
+        }
     }
 }
