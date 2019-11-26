@@ -23,7 +23,6 @@
     "ext-libxml": "*"
   },
   "replace": {
-    "luxletter": "self.version",
     "typo3-ter/luxletter": "self.version"
   },
   "suggest": {
