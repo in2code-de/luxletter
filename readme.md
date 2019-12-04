@@ -100,6 +100,7 @@ composer require "in2code/luxletter"
 
 | Version    | Date        | State      | Description                                                                                          |
 | ---------- | ----------- | ---------- | ---------------------------------------------------------------------------------------------------- |
+| 1.2.2      | 2019.12.11  | Bugfix     | Don't stop sending if there are users without email address in the receiver group                    |
 | 1.2.1      | 2019.11.26  | Bugfix     | Fix problem on packagist.org                                                                         |
 | 1.2.0      | 2019.11.26  | Task       | Show helpful messages in some exceptional cases. Use mediumtext for bodytext for more space now.     |
 | 1.1.1      | 2019.09.19  | Bugfix     | Don't throw an exception for empty fe_users.crdate fields                                            |
