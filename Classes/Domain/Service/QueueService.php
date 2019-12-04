@@ -37,14 +37,16 @@ class QueueService
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'users', [$users, $newsletter]);
         /** @var User $user */
         foreach ($users as $user) {
-            $queue = ObjectUtility::getObjectManager()->get(Queue::class);
-            $queue
-                ->setEmail($user->getEmail())
-                ->setUser($user)
-                ->setNewsletter($newsletter)
-                ->setDatetime($newsletter->getDatetime());
-            $this->signalDispatch(__CLASS__, __FUNCTION__ . 'user', [$queue, $user, $newsletter]);
-            $queueRepository->add($queue);
+            if ($user->isValidEmail()) {
+                $queue = ObjectUtility::getObjectManager()->get(Queue::class);
+                $queue
+                    ->setEmail($user->getEmail())
+                    ->setUser($user)
+                    ->setNewsletter($newsletter)
+                    ->setDatetime($newsletter->getDatetime());
+                $this->signalDispatch(__CLASS__, __FUNCTION__ . 'user', [$queue, $user, $newsletter]);
+                $queueRepository->add($queue);
+            }
         }
     }
 }
