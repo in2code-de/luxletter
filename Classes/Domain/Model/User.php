@@ -4,6 +4,7 @@ namespace In2code\Luxletter\Domain\Model;
 
 use In2code\Luxletter\Exception\UserValuesAreMissingException;
 use In2code\Luxletter\Utility\StringUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Domain\Model\FileReference;
 use TYPO3\CMS\Extbase\Domain\Model\FrontendUser;
 
@@ -82,5 +83,13 @@ class User extends FrontendUser
         } else {
             throw new UserValuesAreMissingException('fe_users.crdate is empty for uid=' . $this->getUid(), 1574764265);
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isValidEmail(): bool
+    {
+        return $this->getEmail() !== '' && GeneralUtility::validEmail($this->getEmail());
     }
 }
