@@ -1,5 +1,30 @@
 <fieldset>
 	<div class="form-group">
+		<div class="lb-lg">
+			<f:translate key="module.newsletter.configuration.select.configuration">Configuration</f:translate>*
+		</div>
+		<span class="help-block">
+			<f:translate key="module.newsletter.configuration.select.configuration.description">Useful title</f:translate>
+		</span>
+		<f:for each="{newsletterConfigurations}" as="newsletterConfiguration">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					{newsletterConfiguration.title}
+				</div>
+				<div class="panel-body">
+					<label class="lb-lg"><f:form.radio property="configurationId" value="{newsletterConfiguration.identifier}" /> {newsletterConfiguration.title}</label>
+					<span class="help-block">{newsletterConfiguration.description}</span>
+				</div>
+			</div>
+		</f:for>
+	</div>
+	<button class="btn btn-primary btn-lg pull-right" data-wizardform-gotostep="2">
+		<f:translate key="module.newsletter.wizard.next">Next</f:translate>
+	</button>
+</fieldset>
+
+<fieldset>
+	<div class="form-group">
 		<label for="title" class="lb-lg">
 			<f:translate key="module.newsletter.new.field.title">Title</f:translate>*
 		</label>
@@ -20,7 +45,7 @@
 		<f:form.textarea class="form-control input-lg"
 						 property="description"
 						 id="description"
-						 style="height: 100px;"></f:form.textarea>
+						 style="height: 100px;" />
 		<span class="help-block">
 			<f:translate key="module.newsletter.new.field.description.description">Example description</f:translate>
 		</span>
@@ -41,9 +66,14 @@
 		</span>
 	</div>
 
-	<button class="btn btn-primary btn-lg pull-right" data-wizardform-gotostep="2">
-		<f:translate key="module.newsletter.wizard.next">Next</f:translate>
-	</button>
+	<div style="margin: 20px 0;">
+		<button class="btn btn-primary btn-lg" data-wizardform-gotostep="1">
+			<f:translate key="module.newsletter.wizard.back">Back</f:translate>
+		</button>
+		<button class="btn btn-primary btn-lg pull-right" data-wizardform-gotostep="3">
+			<f:translate key="module.newsletter.wizard.next">Next</f:translate>
+		</button>
+	</div>
 </fieldset>
 
 
@@ -102,10 +132,10 @@
 	</div>
 
 	<div style="margin: 20px 0;">
-		<button class="btn btn-primary btn-lg" data-wizardform-gotostep="1">
+		<button class="btn btn-primary btn-lg" data-wizardform-gotostep="2">
 			<f:translate key="module.newsletter.wizard.back">Back</f:translate>
 		</button>
-		<button class="btn btn-primary btn-lg pull-right" data-wizardform-gotostep="3">
+		<button class="btn btn-primary btn-lg pull-right" data-wizardform-gotostep="4">
 			<f:translate key="module.newsletter.wizard.next">Next</f:translate>
 		</button>
 	</div>
@@ -196,7 +226,7 @@
 		</div>
 	</div>
 
-	<button class="btn btn-primary btn-lg" data-wizardform-gotostep="2">
+	<button class="btn btn-primary btn-lg" data-wizardform-gotostep="3">
 		<f:translate key="module.newsletter.wizard.back">Back</f:translate>
 	</button>
 	<f:form.hidden property="bodytext" value=""/>

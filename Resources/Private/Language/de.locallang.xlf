@@ -157,14 +157,18 @@
 				<target state="translated">Neuen Newsletter hinzufügen</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.wizard.1">
+				<source>Configuration</source>
+				<target state="translated">Konfiguration</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.wizard.2">
 				<source>Main</source>
 				<target state="translated">Start</target>
 			</trans-unit>
-			<trans-unit id="module.newsletter.wizard.2">
+			<trans-unit id="module.newsletter.wizard.3">
 				<source>Details</source>
 				<target state="translated">Details</target>
 			</trans-unit>
-			<trans-unit id="module.newsletter.wizard.3">
+			<trans-unit id="module.newsletter.wizard.4">
 				<source>Preview</source>
 				<target state="translated">Vorschau</target>
 			</trans-unit>
@@ -179,6 +183,18 @@
 			<trans-unit id="module.newsletter.new.field.title">
 				<source>Newsletter title</source>
 				<target state="translated">Newsletter Bezeichnung</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.configuration.select.configuration">
+				<source>Newsletter configuration</source>
+				<target state="translated">Newsletter Konfiguration</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.configuration.select.prependOptionLabel">
+				<source>Extension configuration</source>
+				<target state="translated">Extension Konfiguration</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.configuration.select.configuration.description">
+				<source>Please choose one configuration</source>
+				<target state="translated">Bitte eine Konfiguration auswählen</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.title.description">
 				<source>We would recommend you to use a meaningful title that separates each newsletter</source>

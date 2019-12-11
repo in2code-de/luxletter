@@ -119,12 +119,15 @@
 				<source>Add new newsletter</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.wizard.1">
-				<source>Main</source>
+				<source>Configuration</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.wizard.2">
-				<source>Details</source>
+				<source>Main</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.wizard.3">
+				<source>Details</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.wizard.4">
 				<source>Preview</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.wizard.back">
@@ -136,11 +139,20 @@
 			<trans-unit id="module.newsletter.new.field.title">
 				<source>Newsletter title</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.configuration.select.configuration">
+				<source>Newsletter configuration</source>
+			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.title.description">
 				<source>We would recommend you to use a meaningful title that separates each newsletter</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.description">
 				<source>Description</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.configuration.select.configuration.description">
+				<source>Please choose one configuration</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.configuration.select.prependOptionLabel">
+				<source>Extension configuration</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.description.description">
 				<source>You can add a small description for internal useage</source>

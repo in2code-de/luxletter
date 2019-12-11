@@ -42,6 +42,7 @@ class ConfigurationUtility
 
     public static function getYamlFolder(): string
     {
+        //@TODO use path from project not web
         $yamlFolder = (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'yamlFolder');
         return GeneralUtility::getFileAbsFileName($yamlFolder);
     }
