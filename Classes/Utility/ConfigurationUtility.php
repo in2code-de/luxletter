@@ -40,6 +40,12 @@ class ConfigurationUtility
         return rtrim($domain, '/');
     }
 
+    public static function getYamlFolder(): string
+    {
+        $yamlFolder = (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'yamlFolder');
+        return GeneralUtility::getFileAbsFileName($yamlFolder);
+    }
+
     /**
      * @return int
      * @throws ExtensionConfigurationExtensionNotConfiguredException

@@ -82,6 +82,11 @@ class Newsletter extends AbstractEntity
     protected $unsubscribers = 0;
 
     /**
+     * @var string
+     */
+    protected $configurationId;
+
+    /**
      * @return string
      */
     public function getTitle(): string
@@ -349,5 +354,23 @@ class Newsletter extends AbstractEntity
             return $unsubscribers / $openers;
         }
         return 0.0;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConfigurationId(): ?string
+    {
+        return $this->configurationId;
+    }
+
+    /**
+     * @param string $configurationId
+     * @return Newsletter
+     */
+    public function setConfigurationId(?string $configurationId): Newsletter
+    {
+        $this->configurationId = $configurationId;
+        return $this;
     }
 }

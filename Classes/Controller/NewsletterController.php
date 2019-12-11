@@ -8,6 +8,7 @@ use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
+use In2code\Luxletter\Domain\Repository\Configuration\ConfigurationRepository;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
@@ -71,6 +72,11 @@ class NewsletterController extends ActionController
     protected $logRepository = null;
 
     /**
+     * @var ConfigurationRepository
+     */
+    protected $configurationRepository;
+
+    /**
      * @return void
      * @throws DBALException
      */
@@ -108,6 +114,8 @@ class NewsletterController extends ActionController
      */
     public function newAction(): void
     {
+        $newsletterConfigurations = $this->configurationRepository->findAll();
+        $this->view->assign('newsletterConfigurations', $newsletterConfigurations);
     }
 
     /**
@@ -373,5 +381,13 @@ class NewsletterController extends ActionController
     public function injectLogRepository(LogRepository $logRepository): void
     {
         $this->logRepository = $logRepository;
+    }
+
+    /**
+     * @param ConfigurationRepository $configurationRepository
+     */
+    public function injectYamlConfigurationRepository(ConfigurationRepository $configurationRepository): void
+    {
+        $this->configurationRepository = $configurationRepository;
     }
 }

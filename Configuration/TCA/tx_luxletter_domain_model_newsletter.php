@@ -23,10 +23,10 @@ return [
         'rootLevel' => -1
     ],
     'interface' => [
-        'showRecordFieldList' => 'disabled,title,description,datetime,subject,receiver,origin,bodytext',
+        'showRecordFieldList' => 'disabled,title,description,datetime,subject,receiver,origin,bodytext,configuration_id',
     ],
     'types' => [
-        '1' => ['showitem' => 'disabled,title,description,datetime,subject,receiver,origin,bodytext'],
+        '1' => ['showitem' => 'disabled,configuration_id,title,description,datetime,subject,receiver,origin,bodytext'],
     ],
     'columns' => [
         'disabled' => [
@@ -117,6 +117,15 @@ return [
                 'rows' => 3,
                 'readOnly' => true
             ]
-        ]
-    ]
+        ],
+        'configuration_id' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
+                . Newsletter::TABLE_NAME . '.configuration_id',
+            'config' => [
+                'type' => 'input',
+                'readOnly' => true
+            ],
+        ],
+    ],
 ];

@@ -1,6 +1,9 @@
 # cat=basic//100; type=text; label= Webserver domain: Define a domain for frontend plugins (like opt out for the newsletter, etc...)
 domain = https://www.domain.org
 
+# cat=basic//105; type=text; label= Yaml configuration folder: Define a folder that holds YAML files allowing for different newsletter configurations
+yamlFolder =
+
 # cat=basic//110; type=int+; label= Unsubscribe PID: Where to find the unsubscribe plugin? Please add the page identifier
 pidUnsubscribe = 6
 

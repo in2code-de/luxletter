@@ -86,10 +86,15 @@
 				</f:then>
 				<f:else>
 					<div class="lux-workflow-new"></div>
-					<f:link.action action="new" class="btn btn-lg-extra btn-primary btn-primary-extra">
+					<f:link.action action="new" class="btn btn-lg-extra btn-primary">
 						<span><f:translate key="module.newsletter.list.createnew.1">No newsletters yet</f:translate></span>
 						<f:translate key="module.newsletter.list.createnew.2">Add a new one</f:translate>
 					</f:link.action>
+					<f:for each="{newsletterConfigurations}" as="configuration">
+						<f:link.action action="new" class="btn btn-lg-extra btn-primary">
+							{configuration.title}
+						</f:link.action>
+					</f:for>
 				</f:else>
 			</f:if>
 
