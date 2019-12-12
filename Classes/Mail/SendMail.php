@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Mail;
 
 use In2code\Luxletter\Signal\SignalTrait;
-use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
@@ -28,14 +27,38 @@ class SendMail
     protected $bodytext = '';
 
     /**
+     * @var string
+     */
+    protected $fromEmail = '';
+
+    /**
+     * @var string
+     */
+    protected $fromName = '';
+
+    /**
+     * @var string
+     */
+    protected $replyEmail = '';
+
+    /**
+     * @var string
+     */
+    protected $replyName = '';
+
+    /**
      * MailService constructor.
      * @param string $subject
      * @param string $bodytext
      */
-    public function __construct(string $subject, string $bodytext)
+    public function __construct(string $subject, string $bodytext, string $fromEmail, string $fromName, string $replyEmail, string $replyName)
     {
         $this->subject = $subject;
         $this->bodytext = $bodytext;
+        $this->fromEmail = $fromEmail;
+        $this->fromName = $fromName;
+        $this->replyEmail = $replyEmail;
+        $this->replyName = $replyName;
     }
 
     /**
@@ -53,8 +76,8 @@ class SendMail
         $mailMessage = ObjectUtility::getObjectManager()->get(MailMessage::class);
         $mailMessage
             ->setTo([$email => 'Newsletter receiver'])
-            ->setFrom([ConfigurationUtility::getFromEmail() => ConfigurationUtility::getFromName()])
-            ->setReplyTo([ConfigurationUtility::getReplyEmail() => ConfigurationUtility::getReplyName()])
+            ->setFrom([$this->fromEmail => $this->fromName])
+            ->setReplyTo([$this->replyEmail => $this->replyName])
             ->setSubject($this->subject)
             ->setBody($this->bodytext, 'text/html');
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'mailMessage', [$mailMessage, &$send, $email, $this]);

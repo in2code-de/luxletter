@@ -3,12 +3,12 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Mail;
 
 use In2code\Luxletter\Domain\Model\Queue;
+use In2code\Luxletter\Domain\Repository\Configuration\ConfigurationRepository;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
 use In2code\Luxletter\Domain\Service\LinkHashingService;
 use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterService;
 use In2code\Luxletter\Signal\SignalTrait;
-use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
@@ -32,11 +32,17 @@ class ProgressQueue
     protected $queueRepository = null;
 
     /**
+     * @var ConfigurationRepository
+     */
+    protected $configurationRepository;
+
+    /**
      * ProgressQueue constructor.
      */
     public function __construct()
     {
         $this->queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
+        $this->configurationRepository = ObjectUtility::getObjectManager()->get(ConfigurationRepository::class);
     }
 
     /**
@@ -72,6 +78,7 @@ class ProgressQueue
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidConfigurationTypeException
+     * @throws \Exception
      */
     protected function sendNewsletterToReceiverInQueue(Queue $queue): void
     {
@@ -81,13 +88,18 @@ class ProgressQueue
             ['user' => $queue->getUser(), 'newsletter' => $queue->getNewsletter()]
         );
         $bodytext = $this->hashLinksInBodytext($queue, $bodytext);
+        $configuration = $this->configurationRepository->findOneByIdentifier($queue->getNewsletter()->getConfigurationId());
         $sendMail = ObjectUtility::getObjectManager()->get(
             SendMail::class,
             $parseService->parseMailText(
                 $queue->getNewsletter()->getSubject(),
                 ['user' => $queue->getUser(), 'newsletter' => $queue->getNewsletter()]
             ),
-            $bodytext
+            $bodytext,
+            $configuration->getFromEmail(),
+            $configuration->getFromName(),
+            $configuration->getReplyEmail(),
+            $configuration->getReplyName()
         );
         $sendMail->sendNewsletter($queue->getEmail());
         $logService = ObjectUtility::getObjectManager()->get(LogService::class);
@@ -103,10 +115,12 @@ class ProgressQueue
      * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws \Exception
      */
     protected function hashLinksInBodytext(Queue $queue, string $bodytext): string
     {
-        if (ConfigurationUtility::isRewriteLinksInNewsletterActivated()) {
+        $configuration = $this->configurationRepository->findOneByIdentifier($queue->getNewsletter()->getConfigurationId());
+        if ($configuration->isRewriteLinksInNewsletterActivated()) {
             $linkHashing = ObjectUtility::getObjectManager()->get(
                 LinkHashingService::class,
                 $queue->getNewsletter(),
