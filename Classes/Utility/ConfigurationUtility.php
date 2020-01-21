@@ -5,6 +5,7 @@ namespace In2code\Luxletter\Utility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
@@ -42,8 +43,8 @@ class ConfigurationUtility
 
     public static function getYamlFolder(): string
     {
-        //@TODO use path from project not web
         $yamlFolder = (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'yamlFolder');
+        $yamlFolder = Environment::getProjectPath() . DIRECTORY_SEPARATOR . $yamlFolder;
         return GeneralUtility::getFileAbsFileName($yamlFolder);
     }
 
