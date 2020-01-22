@@ -19,6 +19,7 @@ use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
 use In2code\Luxletter\Mail\SendMail;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\BackendUserUtility;
+use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
@@ -285,7 +286,11 @@ class NewsletterController extends ActionController
                 $request->getQueryParams()['subject'],
                 ['user' => $userFactory->getDummyUser()]
             ),
-            $parseUrlService->getParsedContent()
+            $parseUrlService->getParsedContent(),
+            ConfigurationUtility::getFromEmail(),
+            ConfigurationUtility::getFromName(),
+            ConfigurationUtility::getReplyEmail(),
+            ConfigurationUtility::getReplyName()
         );
         $status = $mailService->sendNewsletter($request->getQueryParams()['email']) > 0;
         $response->getBody()->write(json_encode(['status' => $status]));
