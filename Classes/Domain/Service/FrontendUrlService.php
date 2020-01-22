@@ -29,12 +29,13 @@ class FrontendUrlService
      */
     public function getTypolinkUrlFromParameter(int $pageIdentifier, array $arguments = []): string
     {
-        $url = ConfigurationUtility::getDomain();
-        $url .= $this->getUri($pageIdentifier, $arguments)->getPath();
-        if ($arguments !== []) {
-            $url .= '?' . $this->getUri($pageIdentifier, $arguments)->getQuery();
-        }
-        return $url;
+        return (string)$this->getUri($pageIdentifier, $arguments);
+//        $url = ConfigurationUtility::getDomain();
+//        $url .= $this->getUri($pageIdentifier, $arguments)->getPath();
+//        if ($arguments !== []) {
+//            $url .= '?' . $this->getUri($pageIdentifier, $arguments)->getQuery();
+//        }
+//        return $url;
     }
 
     /**
