@@ -36,7 +36,7 @@ class ParseNewsletterService
         $standaloneView->setTemplateSource($bodytext);
         $standaloneView->assignMultiple($properties);
         $string = $standaloneView->render();
-        $this->signalDispatch(__CLASS__, __FUNCTION__, [$string, $properties, $this]);
+        $this->signalDispatch(__CLASS__, __FUNCTION__, [&$string, $properties, $this]);
         return $string;
     }
 }
