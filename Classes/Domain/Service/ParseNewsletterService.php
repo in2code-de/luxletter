@@ -2,7 +2,6 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
-use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;

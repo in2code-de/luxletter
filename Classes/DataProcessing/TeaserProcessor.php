@@ -59,7 +59,7 @@ class TeaserProcessor implements DataProcessorInterface
 
     /**
      * @param int $identifier
-     * @return int
+     * @return string
      */
     protected function getHtmlOfTeaserElement(int $identifier): string
     {
