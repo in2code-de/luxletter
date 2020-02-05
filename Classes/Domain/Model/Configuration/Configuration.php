@@ -78,7 +78,7 @@ class Configuration
 
     public function isRewriteLinksInNewsletterActivated(): bool
     {
-        return (bool)$this->configuration['rewriteLinksInNewsletterActivated'];
+        return (bool)$this->configuration['rewriteLinksInNewsletter'];
     }
 
     public function getFromEmail(): string
