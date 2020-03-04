@@ -134,7 +134,7 @@ class FrontendController extends ActionController
         if ($hash === '') {
             throw new \InvalidArgumentException('Hash not given', 1562050533);
         }
-        $usergroupToRemove = $this->usergroupRepository->findByUid((int)$this->settings['removeusergroup']);
+        $usergroupToRemove = $newsletter->getReceiver();
         if ($user->getUsergroup()->contains($usergroupToRemove) === false) {
             throw new \LogicException('Usergroup not assigned to user', 1562066292);
         }
