@@ -93,7 +93,7 @@ class FrontendController extends ActionController
         try {
             $this->checkArgumentsForUnsubscribeAction($user, $newsletter, $hash);
             /** @var Usergroup $usergroupToRemove */
-            $usergroupToRemove = $this->usergroupRepository->findByUid((int)$this->settings['removeusergroup']);
+            $usergroupToRemove = $newsletter->getReceiver();
             $user->removeUsergroup($usergroupToRemove);
             $this->userRepository->update($user);
             $this->userRepository->persistAll();
