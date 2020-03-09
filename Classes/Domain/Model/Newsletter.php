@@ -7,6 +7,7 @@ use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Object\Exception;
 
 /**
  * Class User
@@ -57,7 +58,6 @@ class Newsletter extends AbstractEntity
 
     /**
      * @var null|int
-     * @transient
      */
     protected $dispatchedProgress = null;
 
@@ -146,7 +146,7 @@ class Newsletter extends AbstractEntity
     /**
      * @return \DateTime
      */
-    public function getDatetime(): \DateTime
+    public function getDatetime(): ?\DateTime
     {
         return $this->datetime;
     }
@@ -182,7 +182,7 @@ class Newsletter extends AbstractEntity
     /**
      * @return Usergroup
      */
-    public function getReceiver(): Usergroup
+    public function getReceiver(): ?Usergroup
     {
         return $this->receiver;
     }
@@ -237,6 +237,7 @@ class Newsletter extends AbstractEntity
      * Checks the queue progress of this newsletter. 100 means 100% are sent.
      *
      * @return int
+     * @throws Exception
      */
     public function getDispatchProgress(): int
     {
@@ -256,6 +257,7 @@ class Newsletter extends AbstractEntity
 
     /**
      * @return int
+     * @throws Exception
      */
     public function getQueues(): int
     {
@@ -270,6 +272,7 @@ class Newsletter extends AbstractEntity
     /**
      * @return int
      * @throws DBALException
+     * @throws Exception
      */
     public function getOpeners(): int
     {
@@ -284,6 +287,7 @@ class Newsletter extends AbstractEntity
     /**
      * @return int
      * @throws DBALException
+     * @throws Exception
      */
     public function getClickers(): int
     {
@@ -298,6 +302,7 @@ class Newsletter extends AbstractEntity
     /**
      * @return int
      * @throws DBALException
+     * @throws Exception
      */
     public function getUnsubscribers(): int
     {
@@ -312,6 +317,7 @@ class Newsletter extends AbstractEntity
     /**
      * @return float
      * @throws DBALException
+     * @throws Exception
      */
     public function getOpenRate(): float
     {
@@ -326,6 +332,7 @@ class Newsletter extends AbstractEntity
     /**
      * @return float
      * @throws DBALException
+     * @throws Exception
      */
     public function getClickRate(): float
     {
@@ -340,6 +347,7 @@ class Newsletter extends AbstractEntity
     /**
      * @return float
      * @throws DBALException
+     * @throws Exception
      */
     public function getUnsubscribeRate(): float
     {
