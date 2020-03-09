@@ -15,6 +15,7 @@ use In2code\Luxletter\Domain\Service\ParseNewsletterService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
+use In2code\Luxletter\Exception\AuthenticationFailedException;
 use In2code\Luxletter\Mail\SendMail;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\BackendUserUtility;
@@ -266,13 +267,14 @@ class NewsletterController extends ActionController
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws Exception
+     * @throws AuthenticationFailedException
      */
     public function testMailAjax(
         ServerRequestInterface $request,
         ResponseInterface $response = null
     ): ResponseInterface {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
-            throw new \LogicException('You are not authenticated to send mails', 1560872725);
+            throw new AuthenticationFailedException('You are not authenticated to send mails', 1560872725);
         }
         if ($response === null) {
             $response = ObjectUtility::getObjectManager()->get(JsonResponse::class);

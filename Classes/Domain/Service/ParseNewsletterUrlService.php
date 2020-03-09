@@ -4,6 +4,8 @@ namespace In2code\Luxletter\Domain\Service;
 
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\User;
+use In2code\Luxletter\Exception\InvalidUrlException;
+use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
@@ -16,6 +18,7 @@ use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -125,18 +128,21 @@ class ParseNewsletterUrlService
     /**
      * @param User $user
      * @return string
+     * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws InvalidConfigurationTypeException
+     * @throws InvalidUrlException
+     * @throws MisconfigurationException
+     * @throws Exception
      */
     protected function getContentFromOrigin(User $user): string
     {
         if ($this->url === '') {
-            throw new \LogicException('Given URL was invalid and was not parsed', 1560709687);
+            throw new InvalidUrlException('Given URL was invalid and was not parsed', 1560709687);
         }
         $string = GeneralUtility::getUrl($this->url);
         if ($string === false) {
-            throw new \DomainException(
+            throw new MisconfigurationException(
                 'Given URL could not be parsed and accessed. Typenum definition in site-configuration not set?',
                 1560709791
             );

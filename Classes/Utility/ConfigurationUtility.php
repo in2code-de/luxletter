@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Utility;
 
+use In2code\Luxletter\Exception\MisconfigurationException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -127,13 +128,14 @@ class ConfigurationUtility
     /**
      * @return string
      * @SuppressWarnings(PHPMD.Superglobals)
+     * @throws MisconfigurationException
      */
     public static function getEncryptionKey(): string
     {
         $configurationManager = ObjectUtility::getConfigurationManagerCore();
         $encryptionKey = $configurationManager->getLocalConfigurationValueByPath('SYS/encryptionKey');
         if (empty($encryptionKey)) {
-            throw new \DomainException('No encryption key found in this TYPO3 installation', 1562069158);
+            throw new MisconfigurationException('No encryption key found in this TYPO3 installation', 1562069158);
         }
         return $encryptionKey;
     }

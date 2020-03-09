@@ -9,15 +9,15 @@ use In2code\Luxletter\Domain\Repository\UsergroupRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
+use In2code\Luxletter\Exception\ArgumentMissingException;
+use In2code\Luxletter\Exception\AuthenticationFailedException;
+use In2code\Luxletter\Exception\MissingRelationException;
 use In2code\Luxletter\Exception\UserValuesAreMissingException;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
-use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * Class FrontendController
@@ -41,20 +41,18 @@ class FrontendController extends ActionController
 
     /**
      * @return void
+     * @throws AuthenticationFailedException
      */
     public function initializePreviewAction(): void
     {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
-            throw new \LogicException('You are not authenticated to see this view', 1560778826);
+            throw new AuthenticationFailedException('You are not authenticated to see this view', 1560778826);
         }
     }
 
     /**
      * @param string $origin
      * @return string
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
-     * @throws InvalidConfigurationTypeException
      */
     public function previewAction(string $origin): string
     {
@@ -118,6 +116,9 @@ class FrontendController extends ActionController
      * @param Newsletter|null $newsletter
      * @param string $hash
      * @return void
+     * @throws ArgumentMissingException
+     * @throws AuthenticationFailedException
+     * @throws MissingRelationException
      * @throws UserValuesAreMissingException
      */
     protected function checkArgumentsForUnsubscribeAction(
@@ -126,20 +127,20 @@ class FrontendController extends ActionController
         string $hash = ''
     ): void {
         if ($user === null) {
-            throw new \InvalidArgumentException('User not given', 1562050511);
+            throw new ArgumentMissingException('User not given', 1562050511);
         }
         if ($newsletter === null) {
-            throw new \InvalidArgumentException('Newsletter not given', 1562267031);
+            throw new ArgumentMissingException('Newsletter not given', 1562267031);
         }
         if ($hash === '') {
-            throw new \InvalidArgumentException('Hash not given', 1562050533);
+            throw new ArgumentMissingException('Hash not given', 1562050533);
         }
         $usergroupToRemove = $this->usergroupRepository->findByUid((int)$this->settings['removeusergroup']);
         if ($user->getUsergroup()->contains($usergroupToRemove) === false) {
-            throw new \LogicException('Usergroup not assigned to user', 1562066292);
+            throw new MissingRelationException('Usergroup not assigned to user', 1562066292);
         }
         if ($user->getUnsubscribeHash() !== $hash) {
-            throw new \LogicException('Given hash is incorrect', 1562069583);
+            throw new AuthenticationFailedException('Given hash is incorrect', 1562069583);
         }
     }
 
