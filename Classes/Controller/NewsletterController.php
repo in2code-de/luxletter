@@ -24,13 +24,14 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentNameException;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
-use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
@@ -117,6 +118,7 @@ class NewsletterController extends ActionController
      * @throws InvalidSlotReturnException
      * @throws NoSuchArgumentException
      * @throws InvalidConfigurationTypeException
+     * @throws Exception
      */
     public function initializeCreateAction(): void
     {
@@ -127,9 +129,11 @@ class NewsletterController extends ActionController
     /**
      * @param Newsletter $newsletter
      * @return void
+     * @throws Exception
      * @throws IllegalObjectTypeException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
      * @throws StopActionException
-     * @throws UnsupportedRequestTypeException
      */
     public function createAction(Newsletter $newsletter): void
     {
@@ -146,7 +150,6 @@ class NewsletterController extends ActionController
      * @return void
      * @throws IllegalObjectTypeException
      * @throws StopActionException
-     * @throws UnsupportedRequestTypeException
      * @throws UnknownObjectException
      */
     public function disableAction(Newsletter $newsletter): void
@@ -161,7 +164,6 @@ class NewsletterController extends ActionController
      * @return void
      * @throws IllegalObjectTypeException
      * @throws StopActionException
-     * @throws UnsupportedRequestTypeException
      * @throws UnknownObjectException
      */
     public function enableAction(Newsletter $newsletter): void
@@ -176,7 +178,6 @@ class NewsletterController extends ActionController
      * @return void
      * @throws IllegalObjectTypeException
      * @throws StopActionException
-     * @throws UnsupportedRequestTypeException
      * @throws DBALException
      */
     public function deleteAction(Newsletter $newsletter): void
@@ -212,6 +213,7 @@ class NewsletterController extends ActionController
      * @return void
      * @throws InvalidQueryException
      * @throws DBALException
+     * @throws Exception
      */
     public function receiverAction(Filter $filter): void
     {
@@ -228,15 +230,19 @@ class NewsletterController extends ActionController
 
     /**
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
+     * @param ResponseInterface $response Todo: Second parameter is removed in TYPO3 10
      * @return ResponseInterface
      * @throws DBALException
+     * @throws Exception
      */
     public function wizardUserPreviewAjax(
         ServerRequestInterface $request,
-        ResponseInterface $response
+        ResponseInterface $response = null
     ): ResponseInterface
     {
+        if ($response === null) {
+            $response = ObjectUtility::getObjectManager()->get(JsonResponse::class);
+        }
         $userRepository = ObjectUtility::getObjectManager()->get(UserRepository::class);
         $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
         $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->wizardUserPreviewFile));
@@ -252,18 +258,24 @@ class NewsletterController extends ActionController
 
     /**
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
+     * @param ResponseInterface $response Todo: Second parameter is removed in TYPO3 10
      * @return ResponseInterface
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws Exception
      */
-    public function testMailAjax(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
-    {
+    public function testMailAjax(
+        ServerRequestInterface $request,
+        ResponseInterface $response = null
+    ): ResponseInterface {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
             throw new \LogicException('You are not authenticated to send mails', 1560872725);
+        }
+        if ($response === null) {
+            $response = ObjectUtility::getObjectManager()->get(JsonResponse::class);
         }
         $parseUrlService = ObjectUtility::getObjectManager()->get(
             ParseNewsletterUrlService::class,
@@ -286,15 +298,17 @@ class NewsletterController extends ActionController
 
     /**
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
+     * @param ResponseInterface $response Todo: Second parameter is removed in TYPO3 10
      * @return ResponseInterface
-     * @throws DBALException
+     * @throws Exception
      */
     public function receiverDetailAjax(
         ServerRequestInterface $request,
-        ResponseInterface $response
-    ): ResponseInterface
-    {
+        ResponseInterface $response = null
+    ): ResponseInterface {
+        if ($response === null) {
+            $response = ObjectUtility::getObjectManager()->get(JsonResponse::class);
+        }
         $userRepository = ObjectUtility::getObjectManager()->get(UserRepository::class);
         $visitorRepository = ObjectUtility::getObjectManager()->get(VisitorRepository::class);
         $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
@@ -338,6 +352,7 @@ class NewsletterController extends ActionController
      * @throws InvalidSlotReturnException
      * @throws NoSuchArgumentException
      * @throws InvalidConfigurationTypeException
+     * @throws Exception
      */
     protected function parseNewsletterToBodytext(): void
     {
