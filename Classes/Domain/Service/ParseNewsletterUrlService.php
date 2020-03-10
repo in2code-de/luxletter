@@ -54,6 +54,7 @@ class ParseNewsletterUrlService
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws SiteNotFoundException
+     * @throws Exception
      */
     public function __construct(string $origin)
     {
@@ -76,9 +77,12 @@ class ParseNewsletterUrlService
     /**
      * @param User|null $user
      * @return string
+     * @throws Exception
+     * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws InvalidConfigurationTypeException
+     * @throws InvalidUrlException
+     * @throws MisconfigurationException
      */
     public function getParsedContent(User $user = null): string
     {
@@ -99,6 +103,7 @@ class ParseNewsletterUrlService
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws InvalidConfigurationTypeException
+     * @throws Exception
      */
     protected function getNewsletterContainerAndContent(string $content, User $user): string
     {
@@ -143,7 +148,8 @@ class ParseNewsletterUrlService
         $string = GeneralUtility::getUrl($this->url);
         if ($string === false) {
             throw new MisconfigurationException(
-                'Given URL could not be parsed and accessed. Typenum definition in site-configuration not set?',
+                'Given URL could not be parsed and accessed (Tried to read url: ' . $this->url
+                    . '). Typenum definition in site-configuration not set?',
                 1560709791
             );
         }

@@ -60,7 +60,8 @@ class FrontendController extends ActionController
             $urlService = ObjectUtility::getObjectManager()->get(ParseNewsletterUrlService::class, $origin);
             return $urlService->getParsedContent();
         } catch (\Exception $exception) {
-            return 'Origin ' . htmlspecialchars($origin) . ' could not be converted into a valid url!';
+            return 'Origin ' . htmlspecialchars($origin) . ' could not be converted into a valid url!<br>'
+                . 'Message: ' . $exception->getMessage();
         }
     }
 

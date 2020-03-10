@@ -34,10 +34,14 @@ class ConfigurationUtility
      * @return string like "https://www.luxletter.de" without trailing slash
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws MisconfigurationException
      */
     public static function getDomain(): string
     {
         $domain = (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'domain');
+        if ($domain === 'https://www.domain.org') {
+            throw new MisconfigurationException('domain.org is still given in extension configuration', 1583792089);
+        }
         return rtrim($domain, '/');
     }
 
