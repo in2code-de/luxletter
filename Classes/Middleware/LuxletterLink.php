@@ -20,8 +20,9 @@ use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Http\RedirectResponse;
+use TYPO3\CMS\Core\Package\Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\Exception;
+use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbase;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
@@ -46,6 +47,7 @@ class LuxletterLink implements MiddlewareInterface
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws UnknownObjectException
+     * @throws ExceptionExtbase
      * @throws Exception
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
@@ -88,37 +90,20 @@ class LuxletterLink implements MiddlewareInterface
     }
 
     /**
-     * Identification of user in EXT:lux
+     * Identification of user in EXT:lux: Set a session cookie that can be removed once it was read by lux
      *
      * @param Link $link
      * @return void
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws IllegalObjectTypeException
-     * @throws UnknownObjectException
-     * @throws DBALException
-     * @throws \Exception
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
+     * @throws Exception
      */
     protected function luxIdentification(Link $link): void
     {
         $identification = true;
         $this->signalDispatch(__CLASS__, __FUNCTION__, [&$identification, $link]);
-        if (ExtensionUtility::isLuxAvailable('5.0.0') && $identification === true) {
-            $idCookie = CookieUtility::getLuxId();
-            if ($idCookie === '') {
-                $idCookie = CookieUtility::setLuxId();
-            }
-            $visitorFactory = ObjectUtility::getObjectManager()->get(VisitorFactory::class, $idCookie);
-            $visitor = $visitorFactory->getVisitor();
-            $attributeTracker = ObjectUtility::getObjectManager()->get(
-                AttributeTracker::class,
-                $visitor,
-                AttributeTracker::CONTEXT_LUXLETTERLINK
-            );
-            $attributeTracker->addAttribute('email', $link->getUser()->getEmail());
-            $visitor->setFrontenduser($link->getUser());
-            $visitorRepository = ObjectUtility::getObjectManager()->get(VisitorRepository::class);
-            $visitorRepository->update($visitor);
+        if (ExtensionUtility::isLuxAvailable('7.0.0') && $identification === true) {
+            CookieUtility::setCookie('luxletterlinkhash', $link->getHash());
         }
     }
 }
