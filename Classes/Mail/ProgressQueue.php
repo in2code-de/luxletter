@@ -12,6 +12,7 @@ use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
@@ -56,6 +57,7 @@ class ProgressQueue
      * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
      * @throws UnknownObjectException
+     * @throws TransportExceptionInterface
      */
     public function progress(int $limit = 50): int
     {
@@ -81,6 +83,7 @@ class ProgressQueue
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
+     * @throws TransportExceptionInterface
      */
     protected function sendNewsletterToReceiverInQueue(Queue $queue): void
     {
