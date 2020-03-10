@@ -7,6 +7,7 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotCon
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 
@@ -142,5 +143,24 @@ class ConfigurationUtility
             throw new MisconfigurationException('No encryption key found in this TYPO3 installation', 1562069158);
         }
         return $encryptionKey;
+    }
+
+    /**
+     * @param string $versionToCompare like "1.2.3"
+     * @return bool
+     */
+    public static function isVersionToCompareSameOrLowerThenCurrentTypo3Version(string $versionToCompare): bool
+    {
+        return VersionNumberUtility::convertVersionNumberToInteger($versionToCompare) <= self::getCurrentTypo3Version();
+    }
+
+    /**
+     * Return current TYPO3 version as integer - e.g. 10003000 (10.3.0) or 9005014 (9.5.14)
+     *
+     * @return int
+     */
+    protected static function getCurrentTypo3Version(): int
+    {
+        return VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version());
     }
 }

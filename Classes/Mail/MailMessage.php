@@ -2,15 +2,14 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Mail;
 
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Mail\MailMessage as MailMessageCore;
-use TYPO3\CMS\Core\Utility\MailUtility;
 
 /**
  * Class MailMessage
  */
 class MailMessage extends MailMessageCore
 {
-
     /**
      * Inject own Mailer class to overwrite mail settings
      */
@@ -20,25 +19,23 @@ class MailMessage extends MailMessageCore
     }
 
     /**
-     * Sends the message and call our initializeMailer() function
+     * Sends the message.
      *
-     * @return int the number of recipients who were accepted for delivery
+     * This is a short-hand method. It is however more useful to create
+     * a Mailer instance which can be used via Mailer->send($message);
+     *
+     * @return bool whether the message was accepted or not
+     * @throws TransportExceptionInterface
      */
-    public function send()
+    public function send(): bool
     {
-        // Ensure to always have a From: header set
-        if (empty($this->getFrom())) {
-            $this->setFrom(MailUtility::getSystemFrom());
-        }
-        if (empty($this->getReplyTo())) {
-            $replyTo = MailUtility::getSystemReplyTo();
-            if (!empty($replyTo)) {
-                $this->setReplyTo($replyTo);
-            }
-        }
         $this->initializeMailer();
-        $this->sent = true;
-        $this->getHeaders()->addTextHeader('X-Mailer', $this->mailerHeader);
-        return $this->mailer->send($this, $this->failedRecipients);
+        $this->sent = false;
+        $this->mailer->send($this);
+        $sentMessage = $this->mailer->getSentMessage();
+        if ($sentMessage) {
+            $this->sent = true;
+        }
+        return $this->sent;
     }
 }

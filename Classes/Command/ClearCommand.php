@@ -7,6 +7,7 @@ use In2code\Luxletter\Utility\ObjectUtility;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Extbase\Object\Exception;
 
 /**
  * Class ClearCommand
@@ -18,7 +19,7 @@ class ClearCommand extends Command {
      */
     public function configure()
     {
-        $this->setDescription('Clean all data of luxletter!!!');
+        $this->setDescription('Remove all data of (newsletter, log, queue, link) luxletter!!!');
     }
 
     /**
@@ -27,6 +28,7 @@ class ClearCommand extends Command {
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int|null
+     * @throws Exception
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

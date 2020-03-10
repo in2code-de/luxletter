@@ -16,6 +16,8 @@ use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
+use In2code\Luxletter\Exception\InvalidUrlException;
+use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Mail\SendMail;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\BackendUserUtility;
@@ -23,6 +25,7 @@ use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Http\JsonResponse;
@@ -114,12 +117,14 @@ class NewsletterController extends ActionController
 
     /**
      * @return void
+     * @throws Exception
      * @throws InvalidArgumentNameException
+     * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws InvalidUrlException
+     * @throws MisconfigurationException
      * @throws NoSuchArgumentException
-     * @throws InvalidConfigurationTypeException
-     * @throws Exception
      */
     public function initializeCreateAction(): void
     {
@@ -261,13 +266,16 @@ class NewsletterController extends ActionController
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response Todo: Second parameter is removed in TYPO3 10
      * @return ResponseInterface
+     * @throws AuthenticationFailedException
+     * @throws Exception
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws Exception
-     * @throws AuthenticationFailedException
+     * @throws InvalidUrlException
+     * @throws MisconfigurationException
+     * @throws TransportExceptionInterface
      */
     public function testMailAjax(
         ServerRequestInterface $request,
@@ -293,7 +301,7 @@ class NewsletterController extends ActionController
             ),
             $parseUrlService->getParsedContent()
         );
-        $status = $mailService->sendNewsletter($request->getQueryParams()['email']) > 0;
+        $status = $mailService->sendNewsletter($request->getQueryParams()['email']);
         $response->getBody()->write(json_encode(['status' => $status]));
         return $response;
     }
@@ -349,12 +357,14 @@ class NewsletterController extends ActionController
 
     /**
      * @return void
+     * @throws Exception
      * @throws InvalidArgumentNameException
+     * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws InvalidUrlException
+     * @throws MisconfigurationException
      * @throws NoSuchArgumentException
-     * @throws InvalidConfigurationTypeException
-     * @throws Exception
      */
     protected function parseNewsletterToBodytext(): void
     {

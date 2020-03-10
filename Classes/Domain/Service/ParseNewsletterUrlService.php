@@ -55,6 +55,7 @@ class ParseNewsletterUrlService
      * @throws InvalidSlotReturnException
      * @throws SiteNotFoundException
      * @throws Exception
+     * @throws MisconfigurationException
      */
     public function __construct(string $origin)
     {

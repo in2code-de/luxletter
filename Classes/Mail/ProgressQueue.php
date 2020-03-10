@@ -7,12 +7,15 @@ use In2code\Luxletter\Domain\Repository\QueueRepository;
 use In2code\Luxletter\Domain\Service\LinkHashingService;
 use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterService;
+use In2code\Luxletter\Exception\ArgumentMissingException;
+use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
@@ -42,13 +45,16 @@ class ProgressQueue
     /**
      * @param int $limit
      * @return int Number of progressed queued mails
+     * @throws ArgumentMissingException
+     * @throws Exception
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
+     * @throws InvalidConfigurationTypeException
+     * @throws InvalidQueryException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws InvalidQueryException
-     * @throws InvalidConfigurationTypeException
+     * @throws MisconfigurationException
      * @throws UnknownObjectException
      */
     public function progress(int $limit = 50): int
@@ -66,12 +72,15 @@ class ProgressQueue
     /**
      * @param Queue $queue
      * @return void
-     * @throws IllegalObjectTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
+     * @throws ArgumentMissingException
+     * @throws Exception
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws IllegalObjectTypeException
      * @throws InvalidConfigurationTypeException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
+     * @throws MisconfigurationException
      */
     protected function sendNewsletterToReceiverInQueue(Queue $queue): void
     {
@@ -103,6 +112,9 @@ class ProgressQueue
      * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws ArgumentMissingException
+     * @throws MisconfigurationException
+     * @throws Exception
      */
     protected function hashLinksInBodytext(Queue $queue, string $bodytext): string
     {
