@@ -1,0 +1,11 @@
+services:
+
+  In2code\Luxletter\:
+    resource: '../Classes/*'
+
+  In2code\Luxletter\Widget\OpenRateWidget:
+    arguments: ['luxletterOpenRate']
+    tags:
+      - name: dashboard.widget
+        identifier: luxletterOpenRate
+        widgetGroups: 'general'

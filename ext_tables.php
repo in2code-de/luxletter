@@ -13,6 +13,11 @@ call_user_func(
             \TYPO3\CMS\Core\Imaging\IconRegistry::class
         );
         $iconRegistry->registerIcon(
+            'extension-luxletter',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:luxletter/Resources/Public/Icons/Extension.svg']
+        );
+        $iconRegistry->registerIcon(
             'extension-lux-module',
             \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
             ['source' => 'EXT:luxletter/Resources/Public/Icons/lux_white.svg']

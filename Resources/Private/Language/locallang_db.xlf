@@ -115,6 +115,28 @@
 				<source>Show text after unsubscribe</source>
 			</trans-unit>
 
+			<trans-unit id="module.dashboard.preset.luxletter.title">
+				<source>Luxletter dashboard</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.preset.luxletter.description">
+				<source>Show all Luxletter widgets in an own dashboard</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.group.luxletter.title">
+				<source>Luxletter</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.openingrate.title">
+				<source>Newsletter openrate</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.openingrate.description">
+				<source>Show the openrate of the newsletters</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.openingrate.label.0">
+				<source>Opener</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.openingrate.label.1">
+				<source>Non Opener</source>
+			</trans-unit>
+
 			<trans-unit id="pleasechoose">
 				<source>Please choose...</source>
 			</trans-unit>
