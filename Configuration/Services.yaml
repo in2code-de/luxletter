@@ -23,3 +23,17 @@ services:
       - name: dashboard.widget
         identifier: luxletterUnsubscribeRate
         widgetGroups: 'luxletter'
+
+  In2code\Luxletter\Widget\ReceiverWidget:
+    arguments: ['luxletterReceiver']
+    tags:
+      - name: dashboard.widget
+        identifier: luxletterReceiver
+        widgetGroups: 'luxletter'
+
+  In2code\Luxletter\Widget\NewsletterWidget:
+    arguments: ['luxletterNewsletter']
+    tags:
+      - name: dashboard.widget
+        identifier: luxletterNewsletter
+        widgetGroups: 'luxletter'

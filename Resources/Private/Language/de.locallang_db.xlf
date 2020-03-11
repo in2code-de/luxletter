@@ -222,6 +222,22 @@
 				<source>Subscriber</source>
 				<target state="translated">Angemeldete</target>
 			</trans-unit>
+			<trans-unit id="module.dashboard.widget.receiver.title">
+				<source>Newsletter receiver</source>
+				<target state="translated">Newsletter Empfänger</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.receiver.description">
+				<source>Show the number of newsletter receivers</source>
+				<target state="translated">Zeige die Anzahl der Newsletter-Empfänger</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.newsletter.title">
+				<source>Newsletters</source>
+				<target state="translated">Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.newsletter.description">
+				<source>Show the number of newsletters</source>
+				<target state="translated">Zeige die Anzahl der Newsletter</target>
+			</trans-unit>
 
 			<trans-unit id="pleasechoose">
 				<source>Please choose...</source>

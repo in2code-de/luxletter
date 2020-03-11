@@ -169,6 +169,18 @@
 			<trans-unit id="module.dashboard.widget.unsubscriberate.label.1">
 				<source>Subscriber</source>
 			</trans-unit>
+			<trans-unit id="module.dashboard.widget.receiver.title">
+				<source>Newsletter receiver</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.receiver.description">
+				<source>Show the number of newsletter receivers</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.newsletter.title">
+				<source>Newsletters</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.newsletter.description">
+				<source>Show the number of newsletters</source>
+			</trans-unit>
 
 			<trans-unit id="pleasechoose">
 				<source>Please choose...</source>
