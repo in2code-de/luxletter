@@ -6,6 +6,7 @@ use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Utility\FrontendUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
@@ -14,7 +15,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class GetUserImageUrlViewHelper extends AbstractViewHelper
 {
-
     /**
      * @var string
      */
@@ -38,6 +38,7 @@ class GetUserImageUrlViewHelper extends AbstractViewHelper
 
     /**
      * @return string
+     * @throws Exception
      */
     public function render(): string
     {
@@ -49,12 +50,13 @@ class GetUserImageUrlViewHelper extends AbstractViewHelper
     }
 
     /**
+     * @param string $url
      * @return string
+     * @throws Exception
      */
     protected function getImageUrlFromFrontenduser(string $url): string
     {
-        if ($this->getUser() !== null && $this->getUser()->getImage() !== null
-            && $this->getUser()->getImage()->count() > 0) {
+        if ($this->isFrontendUserWithImage()) {
             foreach ($this->getUser()->getImage() as $imageObject) {
                 $file = $imageObject->getOriginalResource()->getOriginalFile();
                 $imageService = ObjectUtility::getObjectManager()->get(ImageService::class);
@@ -107,5 +109,15 @@ class GetUserImageUrlViewHelper extends AbstractViewHelper
         /** @var User $user */
         $user = $this->arguments['user'];
         return $user;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isFrontendUserWithImage(): bool
+    {
+        return $this->getUser() !== null
+            && $this->getUser()->getImage() !== null
+            && $this->getUser()->getImage()->count() > 0;
     }
 }
