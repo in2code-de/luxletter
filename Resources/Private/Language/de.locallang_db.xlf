@@ -170,13 +170,37 @@
 				<source>Show the openrate of the newsletters</source>
 				<target state="translated">Zeige die Öffnungsrate der Newsletter</target>
 			</trans-unit>
+			<trans-unit id="module.dashboard.widget.openingrate.label">
+				<source>Receiver</source>
+				<target state="translated">Empfänger</target>
+			</trans-unit>
 			<trans-unit id="module.dashboard.widget.openingrate.label.0">
 				<source>Opener</source>
 				<target state="translated">Öffner</target>
 			</trans-unit>
 			<trans-unit id="module.dashboard.widget.openingrate.label.1">
-				<source>Non Opener</source>
-				<target state="translated">Nicht Öffner</target>
+				<source>All - Opener</source>
+				<target state="translated">Alle - Öffner</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.clickrate.title">
+				<source>Newsletter clickrate</source>
+				<target state="translated">Newsletter Klickrate</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.clickrate.description">
+				<source>Show the clickrate of the newsletters</source>
+				<target state="translated">Zeige die Klickrate der Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.clickrate.label">
+				<source>Receiver</source>
+				<target state="translated">Empfänger</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.clickrate.label.0">
+				<source>Clicker</source>
+				<target state="translated">Klicker</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.clickrate.label.1">
+				<source>Opener - Clicker</source>
+				<target state="translated">Öffner - Klicker</target>
 			</trans-unit>
 
 			<trans-unit id="pleasechoose">
