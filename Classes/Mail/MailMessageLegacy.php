@@ -8,7 +8,7 @@ use TYPO3\CMS\Core\Utility\MailUtility;
 
 /**
  * Class MailMessageLegacy
- * Todo: Can be removed when TYPO3 9 suppored is dropped
+ * Todo: Can be removed when TYPO3 9 support is dropped
  */
 class MailMessageLegacy extends MailMessageCore
 {
@@ -26,7 +26,7 @@ class MailMessageLegacy extends MailMessageCore
      * @return int the number of recipients who were accepted for delivery
      * @throws TransportExceptionInterface
      */
-    public function send()
+    public function sendMail()
     {
         // Ensure to always have a From: header set
         if (empty($this->getFrom())) {

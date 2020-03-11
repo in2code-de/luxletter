@@ -86,7 +86,8 @@ class SendMail
             ->html($this->bodytext, 'text/html');
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'mailMessage', [$mailMessage, &$send, $email, $this]);
         if ($send === true) {
-            return $mailMessage->send();
+            // Todo: Can be renamed to send() when TYPO3 9 support is dropped
+            return $mailMessage->sendMail();
         }
         return false;
     }

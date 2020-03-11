@@ -26,8 +26,9 @@ class MailMessage extends MailMessageCore
      *
      * @return bool whether the message was accepted or not
      * @throws TransportExceptionInterface
+     * Todo: sendMail() can be renamed to send() to overrule parent::send() when T3 9 support is dropped
      */
-    public function send(): bool
+    public function sendMail(): bool
     {
         $this->initializeMailer();
         $this->sent = false;
