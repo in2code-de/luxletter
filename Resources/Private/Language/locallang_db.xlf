@@ -154,6 +154,21 @@
 			<trans-unit id="module.dashboard.widget.clickrate.label.1">
 				<source>Opener but no clicker</source>
 			</trans-unit>
+			<trans-unit id="module.dashboard.widget.unsubscriberate.title">
+				<source>Newsletter unsubscriberate</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.unsubscriberate.description">
+				<source>Show the unsubscriberate of the newsletters</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.unsubscriberate.label">
+				<source>Receiver</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.unsubscriberate.label.0">
+				<source>Unsubscriber</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.unsubscriberate.label.1">
+				<source>Subscriber</source>
+			</trans-unit>
 
 			<trans-unit id="pleasechoose">
 				<source>Please choose...</source>

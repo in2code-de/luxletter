@@ -104,6 +104,15 @@ class ClickRateWidget extends AbstractDoughnutChartWidget
     }
 
     /**
+     * @return string
+     * @throws DBALException
+     */
+    protected function getClickRate(): string
+    {
+        return number_format($this->logRepository->getOverallClickRate() * 100, 1, ',', '.') . '%';
+    }
+
+    /**
      * @param string $key e.g. "browser.label"
      * @return string
      */
@@ -116,15 +125,6 @@ class ClickRateWidget extends AbstractDoughnutChartWidget
             $label = $key;
         }
         return $label;
-    }
-
-    /**
-     * @return string
-     * @throws DBALException
-     */
-    protected function getClickRate(): string
-    {
-        return number_format($this->logRepository->getOverallClickRate() * 100, 1, ',', '.') . '%';
     }
 
     /**

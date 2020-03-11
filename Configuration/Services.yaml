@@ -8,11 +8,18 @@ services:
     tags:
       - name: dashboard.widget
         identifier: luxletterOpenRate
-        widgetGroups: 'general'
+        widgetGroups: 'luxletter'
 
   In2code\Luxletter\Widget\ClickRateWidget:
     arguments: ['luxletterClickRate']
     tags:
       - name: dashboard.widget
         identifier: luxletterClickRate
-        widgetGroups: 'general'
+        widgetGroups: 'luxletter'
+
+  In2code\Luxletter\Widget\UnsubscribeRateWidget:
+    arguments: ['luxletterUnsubscribeRate']
+    tags:
+      - name: dashboard.widget
+        identifier: luxletterUnsubscribeRate
+        widgetGroups: 'luxletter'

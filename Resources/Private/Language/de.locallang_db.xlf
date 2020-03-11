@@ -202,6 +202,26 @@
 				<source>Opener - Clicker</source>
 				<target state="translated">Öffner - Klicker</target>
 			</trans-unit>
+			<trans-unit id="module.dashboard.widget.unsubscriberate.title">
+				<source>Newsletter unsubscriberate</source>
+				<target state="translated">Newsletter Abmelderate</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.unsubscriberate.description">
+				<source>Show the unsubscriberate of the newsletters</source>
+				<target state="translated">Zeige die Abmelderate der Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.unsubscriberate.label">
+				<source>Receiver</source>
+				<target state="translated">Empfänger</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.unsubscriberate.label.0">
+				<source>Unsubscriber</source>
+				<target state="translated">Abmelder</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.unsubscriberate.label.1">
+				<source>Subscriber</source>
+				<target state="translated">Angemeldete</target>
+			</trans-unit>
 
 			<trans-unit id="pleasechoose">
 				<source>Please choose...</source>

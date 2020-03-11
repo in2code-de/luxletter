@@ -10,14 +10,14 @@ use TYPO3\CMS\Dashboard\Widgets\AbstractDoughnutChartWidget;
 use TYPO3\CMS\Extbase\Object\Exception;
 
 /**
- * Class OpenRateWidget
+ * Class UnsubscribeRateWidget
  */
-class OpenRateWidget extends AbstractDoughnutChartWidget
+class UnsubscribeRateWidget extends AbstractDoughnutChartWidget
 {
     protected $title =
-        'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.openingrate.title';
+        'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.unsubscriberate.title';
     protected $description =
-        'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.openingrate.description';
+        'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.unsubscriberate.description';
     protected $iconIdentifier = 'extension-luxletter';
     protected $height = 4;
     protected $width = 2;
@@ -50,7 +50,7 @@ class OpenRateWidget extends AbstractDoughnutChartWidget
             'labels' => $this->getData()['titles'],
             'datasets' => [
                 [
-                    'label' => $this->getWidgetLabel('openingrate.label'),
+                    'label' => $this->getWidgetLabel('unsubscriberate.label'),
                     'backgroundColor' => [
                         $this->chartColors[0],
                         '#dddddd'
@@ -70,7 +70,7 @@ class OpenRateWidget extends AbstractDoughnutChartWidget
     public function getTitle(): string
     {
         $this->initialize();
-        return parent::getTitle() . ' ' . $this->getOpenRate();
+        return parent::getTitle() . ' ' . $this->getUnsubscribeRate();
     }
 
     /**
@@ -80,8 +80,8 @@ class OpenRateWidget extends AbstractDoughnutChartWidget
      *          66
      *      ],
      *      'titles' => [
-     *          'Openers',
-     *          'NonOpeners'
+     *          'Label',
+     *          'Label 2'
      *      ]
      *  ]
      *
@@ -93,12 +93,12 @@ class OpenRateWidget extends AbstractDoughnutChartWidget
     {
         return [
             'amounts' => [
-                $this->logRepository->getOverallOpenings(),
-                ($this->logRepository->getOverallMailsSent() - $this->logRepository->getOverallOpenings())
+                $this->logRepository->getOverallUnsubscribes(),
+                ($this->logRepository->getOverallMailsSent() - $this->logRepository->getOverallUnsubscribes())
             ],
             'titles' => [
-                $this->getWidgetLabel('openingrate.label.0'),
-                $this->getWidgetLabel('openingrate.label.1')
+                $this->getWidgetLabel('unsubscriberate.label.0'),
+                $this->getWidgetLabel('unsubscriberate.label.1')
             ]
         ];
     }
@@ -107,9 +107,9 @@ class OpenRateWidget extends AbstractDoughnutChartWidget
      * @return string
      * @throws DBALException
      */
-    protected function getOpenRate(): string
+    protected function getUnsubscribeRate(): string
     {
-        return number_format($this->logRepository->getOverallOpenRate() * 100, 1, ',', '.') . '%';
+        return number_format($this->logRepository->getOverallUnsubscribeRate() * 100, 1, ',', '.') . '%';
     }
 
     /**
