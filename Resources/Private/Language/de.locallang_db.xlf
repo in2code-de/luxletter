@@ -238,6 +238,30 @@
 				<source>Show the number of newsletters</source>
 				<target state="translated">Zeige die Anzahl der Newsletter</target>
 			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersopenrate.title">
+				<source>Open rate of the latest newsletters</source>
+				<target state="translated">Öffnungsrate der letzten Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersopenrate.description">
+				<source>Show the open rate of the latest 10 newsletters</source>
+				<target state="translated">Zeige die Öffnungsrate der letzten 10 Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersopenrate.label">
+				<source>Opener</source>
+				<target state="translated">Öffner</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersclickrate.title">
+				<source>Click rate of the latest newsletters</source>
+				<target state="translated">Klickrate der letzten Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersclickrate.description">
+				<source>Show the click rate of the latest 10 newsletters</source>
+				<target state="translated">Zeige die Klickrate der letzten 10 Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersclickrate.label">
+				<source>Clicker</source>
+				<target state="translated">Klicker</target>
+			</trans-unit>
 
 			<trans-unit id="pleasechoose">
 				<source>Please choose...</source>

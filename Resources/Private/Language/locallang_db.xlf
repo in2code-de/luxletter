@@ -181,6 +181,24 @@
 			<trans-unit id="module.dashboard.widget.newsletter.description">
 				<source>Show the number of newsletters</source>
 			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersopenrate.title">
+				<source>Open rate of the latest newsletters</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersopenrate.description">
+				<source>Show the open rate of the latest 8 newsletters</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersopenrate.label">
+				<source>Opener</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersclickrate.title">
+				<source>Click rate of the latest newsletters</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersclickrate.description">
+				<source>Show the click rate of the latest 10 newsletters</source>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersclickrate.label">
+				<source>Clicker</source>
+			</trans-unit>
 
 			<trans-unit id="pleasechoose">
 				<source>Please choose...</source>

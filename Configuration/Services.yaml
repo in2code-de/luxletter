@@ -37,3 +37,17 @@ services:
       - name: dashboard.widget
         identifier: luxletterNewsletter
         widgetGroups: 'luxletter'
+
+  In2code\Luxletter\Widget\LastNewslettersOpenRateWidget:
+    arguments: ['luxletterLastNewslettersOpenRate']
+    tags:
+      - name: dashboard.widget
+        identifier: luxletterLastNewslettersOpenRate
+        widgetGroups: 'luxletter'
+
+  In2code\Luxletter\Widget\LastNewslettersClickRateWidget:
+    arguments: ['luxletterLastNewslettersClickRate']
+    tags:
+      - name: dashboard.widget
+        identifier: luxletterLastNewslettersClickRate
+        widgetGroups: 'luxletter'
