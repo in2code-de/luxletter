@@ -7,9 +7,11 @@ use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Mail\ProgressQueue;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
@@ -52,12 +54,17 @@ class QueueCommand extends Command
      * @throws ArgumentMissingException
      * @throws MisconfigurationException
      * @throws Exception
+     * @throws TransportExceptionInterface
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $progressQueue = ObjectUtility::getObjectManager()->get(ProgressQueue::class);
+        $progressQueue = ObjectUtility::getObjectManager()->get(ProgressQueue::class, $output);
         $progressed = $progressQueue->progress((int)$input->getArgument('amount'));
-        $output->writeln('Successfully sent ' . $progressed . ' email(s) from the queue...');
+        if ($progressed > 0) {
+            $output->writeln('Successfully sent ' . $progressed . ' email(s) from the queue...');
+        } else {
+            $output->writeln('No mails in queue found');
+        }
         return 0;
     }
 }

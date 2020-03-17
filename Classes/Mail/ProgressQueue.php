@@ -12,6 +12,8 @@ use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
@@ -36,11 +38,20 @@ class ProgressQueue
     protected $queueRepository = null;
 
     /**
-     * ProgressQueue constructor.
+     * @var OutputInterface
      */
-    public function __construct()
+    protected $output = null;
+
+    /**
+     * ProgressQueue constructor.
+     * @noinspection PhpUnhandledExceptionInspection
+     * @param OutputInterface $output
+     * @throws Exception
+     */
+    public function __construct(OutputInterface $output)
     {
         $this->queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
+        $this->output = $output;
     }
 
     /**
@@ -62,11 +73,17 @@ class ProgressQueue
     public function progress(int $limit = 50): int
     {
         $queues = $this->queueRepository->findDispatchableInQueue($limit);
-        $this->signalDispatch(__CLASS__, __FUNCTION__, [$queues]);
-        foreach ($queues as $queue) {
-            /** @var Queue $queue */
-            $this->sendNewsletterToReceiverInQueue($queue);
-            $this->markSent($queue);
+        if ($queues->count() > 0) {
+            $progress = new ProgressBar($this->output, $queues->count());
+            $progress->start();
+            $this->signalDispatch(__CLASS__, __FUNCTION__, [$queues]);
+            foreach ($queues as $queue) {
+                /** @var Queue $queue */
+                $this->sendNewsletterToReceiverInQueue($queue);
+                $this->markSent($queue);
+                $progress->advance();
+            }
+            $this->output->writeln('');
         }
         return $queues->count();
     }
