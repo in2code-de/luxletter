@@ -17,6 +17,7 @@ use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
 /**
@@ -72,6 +73,7 @@ class FrontendController extends ActionController
      * @param User|null $user
      * @return string
      * @throws IllegalObjectTypeException
+     * @throws Exception
      */
     public function trackingPixelAction(Newsletter $newsletter = null, User $user = null): string
     {

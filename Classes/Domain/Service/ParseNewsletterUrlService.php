@@ -150,7 +150,7 @@ class ParseNewsletterUrlService
         if ($string === false) {
             throw new MisconfigurationException(
                 'Given URL could not be parsed and accessed (Tried to read url: ' . $this->url
-                    . '). Typenum definition in site-configuration not set?',
+                . '). Typenum definition in site-configuration not set? Fluid Styled Mail Content TypoScript added?',
                 1560709791
             );
         }
