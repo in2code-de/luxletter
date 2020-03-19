@@ -8,10 +8,10 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class CropBySelectionViewHelper
+ * @noinspection PhpUnused
  */
 class CropBySelectionViewHelper extends AbstractViewHelper
 {
-
     /**
      * @var bool
      */

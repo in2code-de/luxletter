@@ -7,10 +7,10 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class GetClassNameOnActionViewHelper
+ * @noinspection PhpUnused
  */
 class GetClassNameOnActionViewHelper extends AbstractViewHelper
 {
-
     /**
      * @return void
      */

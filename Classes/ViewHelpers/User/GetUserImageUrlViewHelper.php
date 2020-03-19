@@ -12,6 +12,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class GetUserImageUrlViewHelper
+ * @noinspection PhpUnused
  */
 class GetUserImageUrlViewHelper extends AbstractViewHelper
 {

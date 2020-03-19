@@ -5,14 +5,15 @@ namespace In2code\Luxletter\ViewHelpers\Statistic;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class GetListOfMostActivestUsersViewHelper
+ * @noinspection PhpUnused
  */
 class GetListOfMostActivestUsersViewHelper extends AbstractViewHelper
 {
-
     /**
      * @return void
      */
@@ -25,6 +26,7 @@ class GetListOfMostActivestUsersViewHelper extends AbstractViewHelper
 
     /**
      * @return string
+     * @throws Exception
      */
     public function render(): string
     {
@@ -36,6 +38,7 @@ class GetListOfMostActivestUsersViewHelper extends AbstractViewHelper
     /**
      * @param array $userIdentifiers
      * @return array
+     * @throws Exception
      */
     protected function convertUserIdentifiersToNames(array $userIdentifiers): array
     {
