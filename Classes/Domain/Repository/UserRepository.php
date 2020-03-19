@@ -46,7 +46,7 @@ class UserRepository extends AbstractRepository
     {
         $connection = DatabaseUtility::getConnectionForTable(User::TABLE_NAME);
         $query = 'select count(uid) from ' . User::TABLE_NAME . ' ';
-        $query .= 'where find_in_set(' . (int)$groupIdentifier . ',usergroup)';
+        $query .= 'where find_in_set(' . (int)$groupIdentifier . ',usergroup) and deleted=0 and disable=0';
         return (int)$connection->executeQuery($query)->fetchColumn(0);
     }
 
