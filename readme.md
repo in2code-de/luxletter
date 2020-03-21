@@ -37,6 +37,10 @@ it.
 
 ## Screenshots
 
+Example dashboard in TYPO3 module:
+
+![Example dashboard in TYPO3](Documentation/Images/documentation_typo3moduledashboard.png "Dashboard TYPO3")
+
 Example dashboard overview:
 
 ![Example dashboard overview](Documentation/Images/documentation_dashboard.png "Dashboard")
@@ -100,7 +104,8 @@ composer require "in2code/luxletter"
 
 | Version    | Date        | State      | Description                                                                                          |
 | ---------- | ----------- | ---------- | ---------------------------------------------------------------------------------------------------- |
-| 1.2.3      | 2019.03.19  | Task       | Pass value by reference in signal to change newsletter content                                       |
+| 2.0.0      | 2020.03.21  | Task       | Update for TYPO3 10 and lux 7, Add widgets to TYPO3 dashboard, Support Mailmessage in TYPO3 9+10     |
+| 1.2.3      | 2020.03.19  | Task       | Pass value by reference in signal to change newsletter content                                       |
 | 1.2.2      | 2019.12.11  | Bugfix     | Don't stop sending if there are users without email address in the receiver group                    |
 | 1.2.1      | 2019.11.26  | Bugfix     | Fix problem on packagist.org                                                                         |
 | 1.2.0      | 2019.11.26  | Task       | Show helpful messages in some exceptional cases. Use mediumtext for bodytext for more space now.     |
