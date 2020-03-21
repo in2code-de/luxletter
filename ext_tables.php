@@ -13,6 +13,11 @@ call_user_func(
             \TYPO3\CMS\Core\Imaging\IconRegistry::class
         );
         $iconRegistry->registerIcon(
+            'extension-luxletter',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:luxletter/Resources/Public/Icons/Extension.svg']
+        );
+        $iconRegistry->registerIcon(
             'extension-lux-module',
             \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
             ['source' => 'EXT:luxletter/Resources/Public/Icons/lux_white.svg']
@@ -21,6 +26,16 @@ call_user_func(
             'teaser',
             \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
             ['source' => 'EXT:luxletter/Resources/Public/Icons/ctype-teaser.svg']
+        );
+        $iconRegistry->registerIcon(
+            'luxletter-widget-receiver',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:luxletter/Resources/Public/Icons/widget_receiver.svg']
+        );
+        $iconRegistry->registerIcon(
+            'luxletter-widget-newsletter',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:luxletter/Resources/Public/Icons/widget_newsletter.svg']
         );
 
         /**

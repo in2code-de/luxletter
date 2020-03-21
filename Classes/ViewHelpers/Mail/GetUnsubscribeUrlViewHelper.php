@@ -5,6 +5,7 @@ namespace In2code\Luxletter\ViewHelpers\Mail;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Service\FrontendUrlService;
+use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Exception\UserValuesAreMissingException;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
@@ -12,14 +13,15 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotCon
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class GetUnsubscribeUrlViewHelper
+ * @noinspection PhpUnused
  */
 class GetUnsubscribeUrlViewHelper extends AbstractViewHelper
 {
-
     /**
      * @return void
      */
@@ -32,11 +34,13 @@ class GetUnsubscribeUrlViewHelper extends AbstractViewHelper
 
     /**
      * @return string
-     * @throws InvalidRouteArgumentsException
-     * @throws SiteNotFoundException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws InvalidRouteArgumentsException
+     * @throws SiteNotFoundException
      * @throws UserValuesAreMissingException
+     * @throws MisconfigurationException
+     * @throws Exception
      */
     public function render(): string
     {

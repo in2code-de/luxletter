@@ -25,6 +25,7 @@ fluidStyledMailContent {
         xhtml_cleaning = 0
         admPanel = 0
         debug = 0
+        linkVars =
     }
 
     # Add some css for frontend view

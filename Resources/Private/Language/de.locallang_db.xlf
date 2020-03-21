@@ -150,6 +150,119 @@
 				<target state="translated">Text nach einem erfolgreichen Austragen anzeigen</target>
 			</trans-unit>
 
+			<trans-unit id="module.dashboard.preset.luxletter.title">
+				<source>Luxletter dashboard</source>
+				<target state="translated">Luxletter dashboard</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.preset.luxletter.description">
+				<source>Show all Luxletter widgets in an own dashboard</source>
+				<target state="translated">Zeige alle Luxletter Widgets in einem eigenen Dashboard</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.group.luxletter.title">
+				<source>Luxletter</source>
+				<target state="translated">Luxletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.openingrate.title">
+				<source>Newsletter openrate</source>
+				<target state="translated">Newsletter Öffnungsrate</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.openingrate.description">
+				<source>Show the openrate of the newsletters</source>
+				<target state="translated">Zeige die Öffnungsrate der Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.openingrate.label">
+				<source>Receiver</source>
+				<target state="translated">Empfänger</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.openingrate.label.0">
+				<source>Opener</source>
+				<target state="translated">Öffner</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.openingrate.label.1">
+				<source>All - Opener</source>
+				<target state="translated">Alle - Öffner</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.clickrate.title">
+				<source>Newsletter clickrate</source>
+				<target state="translated">Newsletter Klickrate</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.clickrate.description">
+				<source>Show the clickrate of the newsletters</source>
+				<target state="translated">Zeige die Klickrate der Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.clickrate.label">
+				<source>Receiver</source>
+				<target state="translated">Empfänger</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.clickrate.label.0">
+				<source>Clicker</source>
+				<target state="translated">Klicker</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.clickrate.label.1">
+				<source>Opener - Clicker</source>
+				<target state="translated">Öffner - Klicker</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.unsubscriberate.title">
+				<source>Newsletter unsubscriberate</source>
+				<target state="translated">Newsletter Abmelderate</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.unsubscriberate.description">
+				<source>Show the unsubscriberate of the newsletters</source>
+				<target state="translated">Zeige die Abmelderate der Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.unsubscriberate.label">
+				<source>Receiver</source>
+				<target state="translated">Empfänger</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.unsubscriberate.label.0">
+				<source>Unsubscriber</source>
+				<target state="translated">Abmelder</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.unsubscriberate.label.1">
+				<source>Subscriber</source>
+				<target state="translated">Angemeldete</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.receiver.title">
+				<source>Newsletter receiver</source>
+				<target state="translated">Newsletter Empfänger</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.receiver.description">
+				<source>Show the number of newsletter receivers</source>
+				<target state="translated">Zeige die Anzahl der Newsletter-Empfänger</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.newsletter.title">
+				<source>Newsletters</source>
+				<target state="translated">Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.newsletter.description">
+				<source>Show the number of newsletters</source>
+				<target state="translated">Zeige die Anzahl der Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersopenrate.title">
+				<source>Open rate of the latest newsletters</source>
+				<target state="translated">Öffnungsrate der letzten Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersopenrate.description">
+				<source>Show the open rate of the latest 10 newsletters</source>
+				<target state="translated">Zeige die Öffnungsrate der letzten 10 Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersopenrate.label">
+				<source>Opener</source>
+				<target state="translated">Öffner</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersclickrate.title">
+				<source>Click rate of the latest newsletters</source>
+				<target state="translated">Klickrate der letzten Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersclickrate.description">
+				<source>Show the click rate of the latest 10 newsletters</source>
+				<target state="translated">Zeige die Klickrate der letzten 10 Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.dashboard.widget.lastnewslettersclickrate.label">
+				<source>Clicker</source>
+				<target state="translated">Klicker</target>
+			</trans-unit>
+
 			<trans-unit id="pleasechoose">
 				<source>Please choose...</source>
 				<target state="translated">Bitte wählen...</target>

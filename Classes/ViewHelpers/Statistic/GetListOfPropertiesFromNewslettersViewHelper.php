@@ -4,12 +4,14 @@ namespace In2code\Luxletter\ViewHelpers\Statistic;
 
 use In2code\Luxletter\Domain\Model\Newsletter;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use TYPO3\CMS\Extbase\Reflection\Exception\PropertyNotAccessibleException;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class GetOpenersViewHelper
  * to get a commaseparated list of openers from newsletters
+ * @noinspection PhpUnused
  */
 class GetListOfPropertiesFromNewslettersViewHelper extends AbstractViewHelper
 {
@@ -27,6 +29,7 @@ class GetListOfPropertiesFromNewslettersViewHelper extends AbstractViewHelper
 
     /**
      * @return string
+     * @throws PropertyNotAccessibleException
      */
     public function render(): string
     {

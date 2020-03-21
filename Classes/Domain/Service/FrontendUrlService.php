@@ -2,8 +2,8 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
+use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\ConfigurationUtility;
-use In2code\Luxletter\Utility\FrontendUtility;
 use Psr\Http\Message\UriInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
@@ -17,7 +17,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class FrontendUrlService
 {
-
     /**
      * @param int $pageIdentifier
      * @param array $arguments
@@ -26,6 +25,7 @@ class FrontendUrlService
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidRouteArgumentsException
      * @throws SiteNotFoundException
+     * @throws MisconfigurationException
      */
     public function getTypolinkUrlFromParameter(int $pageIdentifier, array $arguments = []): string
     {
@@ -42,6 +42,7 @@ class FrontendUrlService
      * @return string
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws MisconfigurationException
      */
     public function getFrontendUrlFromParameter(array $arguments): string
     {

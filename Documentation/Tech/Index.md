@@ -52,3 +52,48 @@ At the moment there is no bounce mail handling integrated.
 ### Scheduler task is failing while sending a newsletter
 
 Look at the sys log to see which problem caused this issue. E.g. if fe_users.crdate is empty, etc...
+
+### Mail sending is too slow
+
+Check how many mails can be sent per hour. Ask your hoster. Modify the queue settings.
+
+### Mail could not be parsed in preview when adding an origin
+
+This could have different reasons:
+
+#### 1. Type definition is missing in site configuration
+
+If you define any type-parameters in your site configuration, you have to define also the types for luxletter:
+
+| Type | Explanation |
+|------|-------------|
+| 1560777975 | Needed for a prerendering |
+| 1562349004 | Needed for the newsletter rendering |
+| 1561894816 | Type for tracking pixel (neede for open rate) |
+
+Example configuration:
+
+```
+...
+rootPageId: 1
+routes:
+  -
+    route: robots.txt
+    type: staticText
+    content: "Disallow: /typo3/\r\n"
+routeEnhancers:
+  PageTypeSuffix:
+    type: PageType
+    default: /
+    index: ''
+    suffix: /
+    map:
+      preview.html: 1560777975
+      newsletter.html: 1562349004
+      pixel.png: 1561894816
+...
+```
+
+#### 2. TypoScript for Fluid Styled Mail Content is missing
+
+Just add the TypoScript for Fluid Styled Mail Content in static template

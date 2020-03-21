@@ -57,7 +57,7 @@ class Queue extends AbstractEntity
     /**
      * @return Newsletter
      */
-    public function getNewsletter(): Newsletter
+    public function getNewsletter(): ?Newsletter
     {
         return $this->newsletter;
     }

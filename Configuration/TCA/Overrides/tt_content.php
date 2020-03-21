@@ -12,7 +12,8 @@ call_user_func(
         /**
          * Disable not needed fields in tt_content
          */
-        $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['luxletter_fe'] = 'select_key,pages,recursive';
+        $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['luxletter_fe']
+            = 'select_key,pages,recursive';
 
         /**
          * Include Flexform for plugin
@@ -51,8 +52,10 @@ call_user_func(
             'types' => [
                 'teaser' => [
                     'showitem' => '
-                        --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general;general,' .
-                        'header;' . $frontendLanguageFilePrefix . 'header.ALT.shortcut_formlabel,pi_flexform,
+                        --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general, 
+                        --palette--;;general,
+                        header;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:header.ALT.html_formlabel,
+                        pi_flexform,
                         --div--;' . $frontendLanguageFilePrefix . 'tabs.appearance,
                         --palette--;' . $frontendLanguageFilePrefix . 'palette.appearanceLinks;appearanceLinks,
                         --div--;' . $frontendLanguageFilePrefix . 'tabs.access,

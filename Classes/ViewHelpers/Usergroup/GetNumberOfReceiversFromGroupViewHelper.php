@@ -4,14 +4,15 @@ namespace In2code\Luxletter\ViewHelpers\Usergroup;
 
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class GetNumberOfReceiversFromGroupViewHelper
+ * @noinspection PhpUnused
  */
 class GetNumberOfReceiversFromGroupViewHelper extends AbstractViewHelper
 {
-
     /**
      * @return void
      */
@@ -23,6 +24,7 @@ class GetNumberOfReceiversFromGroupViewHelper extends AbstractViewHelper
 
     /**
      * @return int
+     * @throws Exception
      */
     public function render(): int
     {
