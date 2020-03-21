@@ -2,6 +2,19 @@
 
 # Luxletter - Email marketing in TYPO3. Send newsletters the easy way.
 
+
+## TYPO3 Dashboard Module
+
+In addition to the build in dashboard, since TYPO3 10 it is possible to install another dashboard for system wide
+diagrams in TYPO3. 
+You could do this simply with `composer require typo3/cms-dashboard`. Once it is available, you can add some widgets
+from Lux. 
+
+This is a screenshot from default values:
+
+![Example dashboard in TYPO3](../Images/documentation_typo3moduledashboard.png "Dashboard TYPO3")
+
+
 ## Analyses
 
 As soon as you will open the luxletter module, you will see an analyses dashboard that helps you to get a feeling
