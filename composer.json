@@ -44,7 +44,7 @@
   "require-dev": {
     "typo3/cms-core": ">=9.5.0 <9.6.0",
     "nimut/testing-framework": "*",
-    "mikey179/vfsStream": "*",
+    "mikey179/vfsstream": "*",
     "phpunit/phpunit": "*",
     "squizlabs/php_codesniffer": "*",
     "phpmd/phpmd": "@stable"
