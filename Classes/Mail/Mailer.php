@@ -9,11 +9,10 @@ use TYPO3\CMS\Core\Mail\Mailer as MailerCore;
  */
 class Mailer extends MailerCore
 {
-
     /**
-     * Use own mail settings and overrule TYPO3 mailsettings
+     * Use own mail settings and overrule TYPO3 mailsettings or if not set fallback to default values
      *
-     *  Example configuration
+     *  Example configuration for luxletter only:
      *     $GLOBALS['TYPO3_CONF_VARS']['MAIL_LUXLETTER']['transport'] = 'smtp';
      *     $GLOBALS['TYPO3_CONF_VARS']['MAIL_LUXLETTER']['transport_smtp_server'] = 'sslout.de:465';
      *     $GLOBALS['TYPO3_CONF_VARS']['MAIL_LUXLETTER']['transport_smtp_encrypt'] = 'ssl';

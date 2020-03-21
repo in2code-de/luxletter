@@ -6,6 +6,7 @@ use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -24,6 +25,7 @@ class ParseNewsletterService
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws Exception
      */
     public function parseMailText(string $bodytext, array $properties): string
     {

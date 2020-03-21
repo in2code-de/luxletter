@@ -8,6 +8,7 @@ use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
 /**
@@ -15,12 +16,12 @@ use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
  */
 class LogService
 {
-
     /**
      * @param Newsletter $newsletter
      * @param User $user
      * @return void
      * @throws IllegalObjectTypeException
+     * @throws Exception
      */
     public function logNewsletterDispatch(Newsletter $newsletter, User $user): void
     {
@@ -34,6 +35,7 @@ class LogService
      * @param User $user
      * @return void
      * @throws IllegalObjectTypeException
+     * @throws Exception
      */
     public function logNewsletterOpening(Newsletter $newsletter, User $user): void
     {
@@ -47,6 +49,7 @@ class LogService
      * @param Link $link
      * @return void
      * @throws IllegalObjectTypeException
+     * @throws Exception
      */
     public function logLinkOpening(Link $link): void
     {
@@ -58,6 +61,7 @@ class LogService
      * @param User $user
      * @return void
      * @throws IllegalObjectTypeException
+     * @throws Exception
      */
     public function logUnsubscribe(Newsletter $newsletter, User $user): void
     {
@@ -71,6 +75,7 @@ class LogService
      * @param array $properties
      * @return void
      * @throws IllegalObjectTypeException
+     * @throws Exception
      */
     protected function log(Newsletter $newsletter, User $user, int $status, array $properties = []): void
     {

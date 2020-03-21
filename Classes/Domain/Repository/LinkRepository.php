@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
+use In2code\Luxletter\Exception\ArgumentMissingException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
 /**
@@ -27,11 +28,12 @@ class LinkRepository extends AbstractRepository
      * @param object $object
      * @return void
      * @throws IllegalObjectTypeException
+     * @throws ArgumentMissingException
      */
     public function add($object)
     {
         if ($object->getHash() === '') {
-            throw new \LogicException('Cannot persist a non hashed link object', 1561838265);
+            throw new ArgumentMissingException('Cannot persist a non hashed link object', 1561838265);
         }
         if ($this->isHashAlreadyExisting($object->getHash()) === false) {
             parent::add($object);

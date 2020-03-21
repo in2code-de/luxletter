@@ -8,10 +8,10 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
 /**
  * Class IsNewsletterTypenumViewHelper
+ * @noinspection PhpUnused
  */
 class IsNewsletterTypenumViewHelper extends AbstractConditionViewHelper
 {
-
     /**
      * @param null $arguments
      * @return bool

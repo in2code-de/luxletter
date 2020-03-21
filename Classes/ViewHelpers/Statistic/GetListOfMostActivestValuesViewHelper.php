@@ -6,6 +6,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class GetListOfMostActivestValuesViewHelper
+ * @noinspection PhpUnused
  */
 class GetListOfMostActivestValuesViewHelper extends AbstractViewHelper
 {

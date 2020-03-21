@@ -6,10 +6,10 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Class PercentViewHelper
+ * @noinspection PhpUnused
  */
 class PercentViewHelper extends AbstractViewHelper
 {
-
     /**
      * @return void
      */

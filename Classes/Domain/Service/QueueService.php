@@ -9,6 +9,7 @@ use In2code\Luxletter\Domain\Repository\QueueRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
@@ -28,6 +29,7 @@ class QueueService
      * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws Exception
      */
     public function addMailReceiversToQueue(Newsletter $newsletter): void
     {

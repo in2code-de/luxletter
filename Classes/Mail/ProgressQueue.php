@@ -7,12 +7,18 @@ use In2code\Luxletter\Domain\Repository\QueueRepository;
 use In2code\Luxletter\Domain\Service\LinkHashingService;
 use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterService;
+use In2code\Luxletter\Exception\ArgumentMissingException;
+use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
@@ -32,33 +38,52 @@ class ProgressQueue
     protected $queueRepository = null;
 
     /**
-     * ProgressQueue constructor.
+     * @var OutputInterface
      */
-    public function __construct()
+    protected $output = null;
+
+    /**
+     * ProgressQueue constructor.
+     * @noinspection PhpUnhandledExceptionInspection
+     * @param OutputInterface $output
+     * @throws Exception
+     */
+    public function __construct(OutputInterface $output)
     {
         $this->queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
+        $this->output = $output;
     }
 
     /**
      * @param int $limit
      * @return int Number of progressed queued mails
+     * @throws ArgumentMissingException
+     * @throws Exception
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
+     * @throws InvalidConfigurationTypeException
+     * @throws InvalidQueryException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws InvalidQueryException
-     * @throws InvalidConfigurationTypeException
+     * @throws MisconfigurationException
      * @throws UnknownObjectException
+     * @throws TransportExceptionInterface
      */
     public function progress(int $limit = 50): int
     {
         $queues = $this->queueRepository->findDispatchableInQueue($limit);
-        $this->signalDispatch(__CLASS__, __FUNCTION__, [$queues]);
-        foreach ($queues as $queue) {
-            /** @var Queue $queue */
-            $this->sendNewsletterToReceiverInQueue($queue);
-            $this->markSent($queue);
+        if ($queues->count() > 0) {
+            $progress = new ProgressBar($this->output, $queues->count());
+            $progress->start();
+            $this->signalDispatch(__CLASS__, __FUNCTION__, [$queues]);
+            foreach ($queues as $queue) {
+                /** @var Queue $queue */
+                $this->sendNewsletterToReceiverInQueue($queue);
+                $this->markSent($queue);
+                $progress->advance();
+            }
+            $this->output->writeln('');
         }
         return $queues->count();
     }
@@ -66,12 +91,16 @@ class ProgressQueue
     /**
      * @param Queue $queue
      * @return void
-     * @throws IllegalObjectTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
+     * @throws ArgumentMissingException
+     * @throws Exception
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws IllegalObjectTypeException
      * @throws InvalidConfigurationTypeException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
+     * @throws MisconfigurationException
+     * @throws TransportExceptionInterface
      */
     protected function sendNewsletterToReceiverInQueue(Queue $queue): void
     {
@@ -103,6 +132,9 @@ class ProgressQueue
      * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws ArgumentMissingException
+     * @throws MisconfigurationException
+     * @throws Exception
      */
     protected function hashLinksInBodytext(Queue $queue, string $bodytext): string
     {

@@ -6,12 +6,15 @@ use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LinkRepository;
+use In2code\Luxletter\Exception\ArgumentMissingException;
+use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
@@ -42,6 +45,7 @@ class LinkHashingService
      * LinkHashingService constructor.
      * @param Newsletter $newsletter
      * @param User $user
+     * @throws Exception
      */
     public function __construct(Newsletter $newsletter, User $user)
     {
@@ -53,11 +57,14 @@ class LinkHashingService
     /**
      * @param string $content
      * @return string
+     * @throws ArgumentMissingException
+     * @throws Exception
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws MisconfigurationException
      */
     public function hashLinks(string $content): string
     {
@@ -81,6 +88,9 @@ class LinkHashingService
      * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws MisconfigurationException
+     * @throws ArgumentMissingException
+     * @throws Exception
      */
     protected function hashLink(\DOMElement $aTag): void
     {
@@ -108,6 +118,7 @@ class LinkHashingService
      * @return string
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws MisconfigurationException
      */
     protected function convertToAbsoluteHref(string $href): string
     {

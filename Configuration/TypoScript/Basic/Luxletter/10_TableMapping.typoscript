@@ -1,4 +1,4 @@
-# Table Mapping
+# Table Mapping (Todo: still needed in TYPO3 9 - can be removed with TYPO3 10 and newer)
 config.tx_extbase {
     persistence {
         classes {

@@ -6,6 +6,7 @@ use Doctrine\DBAL\DBALException;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
@@ -29,6 +30,7 @@ class ReceiverAnalysisService
      * @param QueryResultInterface $users
      * @return array
      * @throws DBALException
+     * @throws Exception
      */
     public function getActivitiesStatistic(QueryResultInterface $users): array
     {
