@@ -118,7 +118,7 @@ class ProgressQueue
             ),
             $bodytext
         );
-        $sendMail->sendNewsletter([$queue->getEmail() => 'Newsletter receiver']);
+        $sendMail->sendNewsletter([$queue->getEmail() => $queue->getUser()->getReadableName()]);
         $logService = ObjectUtility::getObjectManager()->get(LogService::class);
         $logService->logNewsletterDispatch($queue->getNewsletter(), $queue->getUser());
     }
