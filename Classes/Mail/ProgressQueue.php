@@ -118,7 +118,7 @@ class ProgressQueue
             ),
             $bodytext
         );
-        $sendMail->sendNewsletter($queue->getEmail());
+        $sendMail->sendNewsletter([$queue->getEmail() => 'Newsletter receiver']);
         $logService = ObjectUtility::getObjectManager()->get(LogService::class);
         $logService->logNewsletterDispatch($queue->getNewsletter(), $queue->getUser());
     }
@@ -154,6 +154,7 @@ class ProgressQueue
      * @return void
      * @throws IllegalObjectTypeException
      * @throws UnknownObjectException
+     * @throws Exception
      */
     protected function markSent(Queue $queue)
     {

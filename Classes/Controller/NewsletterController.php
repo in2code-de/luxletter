@@ -301,7 +301,7 @@ class NewsletterController extends ActionController
             ),
             $parseUrlService->getParsedContent()
         );
-        $status = $mailService->sendNewsletter($request->getQueryParams()['email']);
+        $status = $mailService->sendNewsletter([$request->getQueryParams()['email'] => 'Newsletter receiver']);
         $response->getBody()->write(json_encode(['status' => $status]));
         return $response;
     }
