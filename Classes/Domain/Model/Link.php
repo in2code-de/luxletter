@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Model;
 
 use In2code\Luxletter\Domain\Service\FrontendUrlService;
+use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
@@ -98,6 +99,7 @@ class Link extends AbstractEntity
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws Exception
+     * @throws MisconfigurationException
      */
     public function getUriFromHash(): string
     {

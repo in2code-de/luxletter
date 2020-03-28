@@ -38,6 +38,11 @@ class ProgressQueue
     protected $queueRepository = null;
 
     /**
+     * @var ParseNewsletterService
+     */
+    protected $parseService = null;
+
+    /**
      * @var OutputInterface
      */
     protected $output = null;
@@ -51,6 +56,7 @@ class ProgressQueue
     public function __construct(OutputInterface $output)
     {
         $this->queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
+        $this->parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
         $this->output = $output;
     }
 
@@ -104,23 +110,59 @@ class ProgressQueue
      */
     protected function sendNewsletterToReceiverInQueue(Queue $queue): void
     {
-        $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
-        $bodytext = $parseService->parseMailText(
-            $queue->getNewsletter()->getBodytext(),
-            ['user' => $queue->getUser(), 'newsletter' => $queue->getNewsletter()]
-        );
-        $bodytext = $this->hashLinksInBodytext($queue, $bodytext);
         $sendMail = ObjectUtility::getObjectManager()->get(
             SendMail::class,
-            $parseService->parseMailText(
-                $queue->getNewsletter()->getSubject(),
-                ['user' => $queue->getUser(), 'newsletter' => $queue->getNewsletter()]
-            ),
-            $bodytext
+            $this->getSubject($queue),
+            $this->getBodyText($queue)
         );
         $sendMail->sendNewsletter([$queue->getEmail() => $queue->getUser()->getReadableName()]);
         $logService = ObjectUtility::getObjectManager()->get(LogService::class);
         $logService->logNewsletterDispatch($queue->getNewsletter(), $queue->getUser());
+    }
+
+    /**
+     * @param Queue $queue
+     * @return string
+     * @throws Exception
+     * @throws InvalidConfigurationTypeException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
+     */
+    protected function getSubject(Queue $queue): string
+    {
+        return $this->parseService->parseMailText(
+            $queue->getNewsletter()->getSubject(),
+            [
+                'user' => $queue->getUser(),
+                'newsletter' => $queue->getNewsletter()
+            ]
+        );
+    }
+
+    /**
+     * @param Queue $queue
+     * @return string
+     * @throws ArgumentMissingException
+     * @throws Exception
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws IllegalObjectTypeException
+     * @throws InvalidConfigurationTypeException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
+     * @throws MisconfigurationException
+     */
+    protected function getBodyText(Queue $queue): string
+    {
+        $bodytext = $this->parseService->parseMailText(
+            $queue->getNewsletter()->getBodytext(),
+            [
+                'user' => $queue->getUser(),
+                'newsletter' => $queue->getNewsletter()
+            ]
+        );
+        $bodytext = $this->hashLinksInBodytext($queue, $bodytext);
+        return $bodytext;
     }
 
     /**

@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Utility;
 
+use In2code\Luxletter\Exception\MisconfigurationException;
+
 /**
  * Class StringUtility
  */
@@ -30,6 +32,7 @@ class StringUtility
     /**
      * @param array $arguments
      * @return string
+     * @throws MisconfigurationException
      */
     public static function getHashFromArguments(array $arguments): string
     {
