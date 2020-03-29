@@ -5,8 +5,10 @@ namespace In2code\Luxletter\Domain\Service;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\Queue;
 use In2code\Luxletter\Domain\Model\User;
+use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
+use In2code\Luxletter\Exception\RecordInDatabaseNotFoundException;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Extbase\Object\Exception;
@@ -23,6 +25,26 @@ class QueueService
     use SignalTrait;
 
     /**
+     * @var UserRepository
+     */
+    protected $userRepository = null;
+
+    /**
+     * @var NewsletterRepository
+     */
+    protected $newsletterRepository = null;
+
+    /**
+     * QueueService constructor.
+     * @throws Exception
+     */
+    public function __construct()
+    {
+        $this->userRepository = ObjectUtility::getObjectManager()->get(UserRepository::class);
+        $this->newsletterRepository = ObjectUtility::getObjectManager()->get(NewsletterRepository::class);
+    }
+
+    /**
      * Add mail receivers to the queue based on a given newsletter with a relation to a frontenduser group
      *
      * @param Newsletter $newsletter
@@ -34,13 +56,77 @@ class QueueService
      */
     public function addMailReceiversToQueue(Newsletter $newsletter): void
     {
-        $userRepository = ObjectUtility::getObjectManager()->get(UserRepository::class);
-        $users = $userRepository->getUsersFromGroup($newsletter->getReceiver()->getUid());
+        $users = $this->userRepository->getUsersFromGroup($newsletter->getReceiver()->getUid());
         $this->signalDispatch(__CLASS__, __FUNCTION__, [$users, $newsletter]);
         /** @var User $user */
         foreach ($users as $user) {
             $this->addUserToQueue($newsletter, $user);
         }
+    }
+
+    /**
+     * This function is part of the API and can be used from registration extensions to add users to a queue after
+     * a registration (e.g.)
+     *
+     * @param int $userIdentifier fe_users.uid
+     * @return void
+     * @throws RecordInDatabaseNotFoundException
+     * @throws Exception
+     * @throws IllegalObjectTypeException
+     *
+     * @api
+     */
+    public function addUserWithLatestNewsletterToQueue(int $userIdentifier): void
+    {
+        /** @var User $user */
+        $user = $this->userRepository->findByIdentifier($userIdentifier);
+        if ($user === null) {
+            throw new RecordInDatabaseNotFoundException(
+                'fe_user with uid ' . $userIdentifier . ' not found',
+                1585479087
+            );
+        }
+        $newsletter = $this->newsletterRepository->findLatestNewsletter();
+        if ($newsletter === null) {
+            throw new RecordInDatabaseNotFoundException('No newsletter found', 1585479408);
+        }
+        $this->addUserToQueue($newsletter, $user);
+    }
+
+    /**
+     * This function is part of the API and can be used from registration extensions to add users to a queue after
+     * a registration (e.g.)
+     *
+     * @param int $userIdentifier fe_users.uid
+     * @param int $newsletterIdentifier tx_luxletter_domain_model_newsletter.uid
+     * @return void
+     * @throws Exception
+     * @throws IllegalObjectTypeException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
+     * @throws RecordInDatabaseNotFoundException
+     *
+     * @api
+     */
+    public function addUserWithNewsletterToQueue(int $userIdentifier, int $newsletterIdentifier): void
+    {
+        /** @var User $user */
+        $user = $this->userRepository->findByIdentifier($userIdentifier);
+        if ($user === null) {
+            throw new RecordInDatabaseNotFoundException(
+                'fe_user with uid ' . $userIdentifier . ' not found',
+                1585479415
+            );
+        }
+        /** @var Newsletter $newsletter */
+        $newsletter = $this->newsletterRepository->findByIdentifier($newsletterIdentifier);
+        if ($newsletter === null) {
+            throw new RecordInDatabaseNotFoundException(
+                Newsletter::TABLE_NAME . ' with uid ' . $newsletterIdentifier . ' not found',
+                1585479403
+            );
+        }
+        $this->addUserToQueue($newsletter, $user);
     }
 
     /**
