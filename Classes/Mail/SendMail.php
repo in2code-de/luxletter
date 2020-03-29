@@ -41,7 +41,7 @@ class SendMail
     }
 
     /**
-     * @param string $email
+     * @param array $receiver ['a@mail.org' => 'Receivername']
      * @return bool the number of recipients who were accepted for delivery
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
@@ -50,21 +50,21 @@ class SendMail
      * @throws TransportExceptionInterface
      * @throws Exception
      */
-    public function sendNewsletter(string $email): bool
+    public function sendNewsletter(array $receiver): bool
     {
         if (ConfigurationUtility::isVersionToCompareSameOrLowerThenCurrentTypo3Version('10.0.0')) {
             // TYPO3 10
-            return $this->send($email);
+            return $this->send($receiver);
         } else {
             // TYPO3 9
-            return $this->sendLegacy($email);
+            return $this->sendLegacy($receiver);
         }
     }
 
     /**
      * Send with new MailMessage from TYPO3 10
      *
-     * @param string $email
+     * @param array $receiver
      * @return bool
      * @throws Exception
      * @throws ExtensionConfigurationExtensionNotConfiguredException
@@ -73,18 +73,18 @@ class SendMail
      * @throws InvalidSlotReturnException
      * @throws TransportExceptionInterface
      */
-    protected function send(string $email): bool
+    protected function send(array $receiver): bool
     {
         $send = true;
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'beforeSend', [&$send, $email, $this]);
+        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'beforeSend', [&$send, $receiver, $this]);
         $mailMessage = ObjectUtility::getObjectManager()->get(MailMessage::class);
         $mailMessage
-            ->setTo([$email => 'Newsletter receiver'])
+            ->setTo($receiver)
             ->setFrom([ConfigurationUtility::getFromEmail() => ConfigurationUtility::getFromName()])
             ->setReplyTo([ConfigurationUtility::getReplyEmail() => ConfigurationUtility::getReplyName()])
             ->setSubject($this->subject)
             ->html($this->bodytext, 'text/html');
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'mailMessage', [$mailMessage, &$send, $email, $this]);
+        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'mailMessage', [$mailMessage, &$send, $receiver, $this]);
         if ($send === true) {
             // Todo: Can be renamed to send() when TYPO3 9 support is dropped
             return $mailMessage->sendMail();
@@ -95,7 +95,7 @@ class SendMail
     /**
      * Send with old MailMessage from TYPO3 9
      *
-     * @param string $email
+     * @param array $receiver
      * @return bool
      * @throws Exception
      * @throws ExtensionConfigurationExtensionNotConfiguredException
@@ -105,18 +105,18 @@ class SendMail
      * @throws TransportExceptionInterface
      * Todo: Can be removed when TYPO3 9 support is dropped
      */
-    protected function sendLegacy(string $email): bool
+    protected function sendLegacy(array $receiver): bool
     {
         $send = true;
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'beforeSendLegacy', [&$send, $email, $this]);
+        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'beforeSendLegacy', [&$send, $receiver, $this]);
         $mailMessage = ObjectUtility::getObjectManager()->get(MailMessageLegacy::class);
         $mailMessage
-            ->setTo([$email => 'Newsletter receiver'])
+            ->setTo($receiver)
             ->setFrom([ConfigurationUtility::getFromEmail() => ConfigurationUtility::getFromName()])
             ->setReplyTo([ConfigurationUtility::getReplyEmail() => ConfigurationUtility::getReplyName()])
             ->setSubject($this->subject)
             ->setBody($this->bodytext, 'text/html');
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'mailMessageLegacy', [$mailMessage, &$send, $email, $this]);
+        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'mailMessageLegacy', [$mailMessage, &$send, $receiver, $this]);
         if ($send === true) {
             return $mailMessage->send() > 0;
         }

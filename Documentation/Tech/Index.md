@@ -14,6 +14,24 @@ If you want to manipulate the PHP, there are a lot of signals added to the exten
 `signalDispatch`. You will find a lot of methods where you can stop mail sending, manipulate values, etc...
 
 
+## Add new users to the queue
+
+If you want to implement in your frontend user registration that new users with a frontenduser group are automatically
+get the latest or a defined newsletter, there are 2 API functions in luxletter, that can be used for this stuff.
+
+```
+# Add fe_users.uid=123 to the queue and send him the latest newsletter
+$queueService = $this->objectManager->get(\In2code\Luxletter\Domain\Service\QueueService::class);
+$queueService->addUserWithLatestNewsletterToQueue(123);
+```
+
+```
+# Add fe_users.uid=123 to the queue and send him newsletter with uid 234
+$queueService = $this->objectManager->get(\In2code\Luxletter\Domain\Service\QueueService::class);
+$queueService->addUserWithNewsletterToQueue(123, 234);
+```
+
+
 ## FAQ
 
 

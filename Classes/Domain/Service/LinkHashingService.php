@@ -118,7 +118,6 @@ class LinkHashingService
      * @return string
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws MisconfigurationException
      */
     protected function convertToAbsoluteHref(string $href): string
     {

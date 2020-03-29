@@ -104,6 +104,7 @@ composer require "in2code/luxletter"
 
 | Version    | Date        | State      | Description                                                                                          |
 | ---------- | ----------- | ---------- | ---------------------------------------------------------------------------------------------------- |
+| 2.1.0      | 2020.03.29  | Feature    | User real receiver name in mails, Add API functions to send existing newsletters to new registered users |
 | 2.0.1      | 2020.03.23  | Bugfix     | Prevent exception direct after a new installation when configuration was not yet changed             |
 | 2.0.0      | 2020.03.21  | Task       | Update for TYPO3 10 and lux 7, Add widgets to TYPO3 dashboard, Support Mailmessage in TYPO3 9+10     |
 | 1.2.3      | 2020.03.19  | Task       | Pass value by reference in signal to change newsletter content                                       |

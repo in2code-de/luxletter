@@ -293,15 +293,16 @@ class NewsletterController extends ActionController
         );
         $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
         $userFactory = ObjectUtility::getObjectManager()->get(UserFactory::class);
+        $user = $userFactory->getDummyUser();
         $mailService = ObjectUtility::getObjectManager()->get(
             SendMail::class,
             $parseService->parseMailText(
                 $request->getQueryParams()['subject'],
-                ['user' => $userFactory->getDummyUser()]
+                ['user' => $user]
             ),
             $parseUrlService->getParsedContent()
         );
-        $status = $mailService->sendNewsletter($request->getQueryParams()['email']);
+        $status = $mailService->sendNewsletter([$request->getQueryParams()['email'] => $user->getReadableName()]);
         $response->getBody()->write(json_encode(['status' => $status]));
         return $response;
     }
