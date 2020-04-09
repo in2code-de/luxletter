@@ -134,6 +134,21 @@ plugin {
         }
     }
 }
+module {
+    tx_luxletter {
+        view {
+            templateRootPaths {
+                1 = EXT:yoursitepackage/Resources/Private/Templates/Extensions/Luxletter/
+            }
+            partialRootPaths {
+                1 = EXT:yoursitepackage/Resources/Private/Partials/Extensions/Luxletter/
+            }
+            layoutRootPaths {
+                1 = EXT:yoursitepackage/Resources/Private/Layouts/Extensions/Luxletter/
+            }
+        }
+    }
+}
 ```
 
 The existing template is using the **Zurb Foundation email template**

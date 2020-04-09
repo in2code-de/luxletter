@@ -123,6 +123,8 @@ Just add a new task of type `Execute console commands (scheduler)`. After that, 
 **Note** Be careful and don't set this number too high to keep the mailserver save. A number between 50 and 250 is a
 good solution.
 
+**Note** If your TYPO3-Backend is getting locked after using the scheduler-task, delete the file "LOCK_BACKEND" in typo3conf and be sure to have set the correct "Schedulable Command". BTW: If you forgot to set "Frequency" initially, TYPO3 sets the Command back to "backend:lock".
+
 <img src="../Images/documenation_installation_scheduler1.png" width="800" alt="scheduler task 1" />
 <img src="../Images/documenation_installation_scheduler2.png" width="800" alt="scheduler task 2" />
 
