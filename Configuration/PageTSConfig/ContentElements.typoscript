@@ -2,7 +2,7 @@ mod {
 	wizards {
 		newContentElement {
 			wizardItems {
-				common {
+				luxletter {
 					header = Luxletter
 					elements {
 						teaser {
