@@ -22,7 +22,8 @@ class TemplateUtility
     public static function getExistingFilePathOfTemplateFileByName(string $templateName): string
     {
         $templateRootPaths = ConfigurationUtility::getExtensionSettings()['view']['templateRootPaths'];
-        foreach (array_reverse($templateRootPaths) as $rootPath) {
+        krsort($templateRootPaths);
+        foreach ($templateRootPaths as $rootPath) {
             $pathAndFilename = GeneralUtility::getFileAbsFileName($rootPath . $templateName);
             if (file_exists($pathAndFilename)) {
                 return $pathAndFilename;

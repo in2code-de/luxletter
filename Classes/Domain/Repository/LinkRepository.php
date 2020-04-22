@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
 use In2code\Luxletter\Exception\ArgumentMissingException;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
 /**
@@ -17,7 +18,7 @@ class LinkRepository extends AbstractRepository
      */
     public function isHashAlreadyExisting(string $hash): bool
     {
-        /** @noinspection PhpMethodParametersCountMismatchInspection PhpParamsInspection */
+        /** @noinspection PhpUndefinedMethodInspection */
         $link = $this->findOneByHash($hash);
         return $link !== null;
     }
@@ -29,6 +30,7 @@ class LinkRepository extends AbstractRepository
      * @return void
      * @throws IllegalObjectTypeException
      * @throws ArgumentMissingException
+     * @throws Exception
      */
     public function add($object)
     {
