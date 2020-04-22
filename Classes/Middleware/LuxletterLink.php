@@ -2,10 +2,6 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Middleware;
 
-use Doctrine\DBAL\DBALException;
-use In2code\Lux\Domain\Factory\VisitorFactory;
-use In2code\Lux\Domain\Repository\VisitorRepository;
-use In2code\Lux\Domain\Tracker\AttributeTracker;
 use In2code\Lux\Utility\CookieUtility;
 use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Repository\LinkRepository;
@@ -17,14 +13,11 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Package\Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbase;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
-use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
@@ -40,13 +33,9 @@ class LuxletterLink implements MiddlewareInterface
      * @param ServerRequestInterface $request
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
-     * @throws DBALException
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws UnknownObjectException
      * @throws ExceptionExtbase
      * @throws Exception
      */
