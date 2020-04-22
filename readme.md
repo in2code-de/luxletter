@@ -104,6 +104,7 @@ composer require "in2code/luxletter"
 
 | Version    | Date        | State      | Description                                                                                          |
 | ---------- | ----------- | ---------- | ---------------------------------------------------------------------------------------------------- |
+| 2.2.1      | 2020.04.22  | Bugfix     | Fix CSS class in backend module, fix possible problem with template orderings                        |
 | 2.2.0      | 2020.04.20  | Task       | Update for TYPO3 10.4 LTS                                                                            |
 | 2.1.0      | 2020.03.29  | Feature    | User real receiver name in mails, Add API functions to send existing newsletters to new registered users |
 | 2.0.1      | 2020.03.23  | Bugfix     | Prevent exception direct after a new installation when configuration was not yet changed             |
