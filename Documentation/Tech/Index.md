@@ -115,3 +115,9 @@ routeEnhancers:
 #### 2. TypoScript for Fluid Styled Mail Content is missing
 
 Just add the TypoScript for Fluid Styled Mail Content in static template
+
+
+### Images are not loaded in my Newsletter Mail
+
+If you are using `fluidStyledMailContent` luxletter will set `config.absRefPrefix` to the configured
+domain automaticly. If you are using your own rendering typenum, you have to set absRefPrefix manually.
