@@ -83,7 +83,7 @@ class SendMail
             ->setFrom([ConfigurationUtility::getFromEmail() => ConfigurationUtility::getFromName()])
             ->setReplyTo([ConfigurationUtility::getReplyEmail() => ConfigurationUtility::getReplyName()])
             ->setSubject($this->subject)
-            ->html($this->bodytext, 'text/html');
+            ->html($this->bodytext);
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'mailMessage', [$mailMessage, &$send, $receiver, $this]);
         if ($send === true) {
             // Todo: Can be renamed to send() when TYPO3 9 support is dropped
