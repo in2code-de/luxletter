@@ -15,6 +15,7 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotCon
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
@@ -22,6 +23,7 @@ use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * Class ParseNewsletterUrlService to fill a container html with a content from a http page.
@@ -116,6 +118,8 @@ class ParseNewsletterUrlService
             $standaloneView->setLayoutRootPaths($configuration['view']['layoutRootPaths']);
             $standaloneView->setPartialRootPaths($configuration['view']['partialRootPaths']);
             $standaloneView->setTemplate($templateName);
+            $standaloneView->assign('settings', $configuration['settings'] ?? []);
+            $standaloneView->assignMultiple($this->getContentObjectVariables($configuration ?? []));
             $standaloneView->assignMultiple(
                 [
                     'content' => $content,
@@ -129,6 +133,34 @@ class ParseNewsletterUrlService
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__, [$html, $content, $user, $this]);
         return $html;
+    }
+
+    /**
+     * Compile rendered content objects in variables array ready to assign to the view
+     *
+     * @param array $conf Configuration array
+     * @return array the variables to be assigned
+     */
+    protected function getContentObjectVariables(array $conf): array
+    {
+        $tsService = ObjectUtility::getObjectManager()->get(TypoScriptService::class);
+        $tsConf = $tsService->convertPlainArrayToTypoScriptArray($conf);
+
+        $variables = [];
+        $variablesToProcess = (array)($tsConf['variables.'] ?? []);
+        $contentObjectRenderer = ObjectUtility::getObjectManager()->get(ContentObjectRenderer::class);
+        foreach ($variablesToProcess as $variableName => $cObjType) {
+            if (is_array($cObjType)) {
+                continue;
+            }
+            $variables[$variableName] = $contentObjectRenderer->cObjGetSingle(
+                $cObjType,
+                $variablesToProcess[$variableName . '.'],
+                'variables.' . $variableName
+            );
+        }
+
+        return $variables;
     }
 
     /**
