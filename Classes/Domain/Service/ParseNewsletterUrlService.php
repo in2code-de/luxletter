@@ -204,7 +204,7 @@ class ParseNewsletterUrlService
         try {
             $document = new \DOMDocument;
             libxml_use_internal_errors(true);
-            $document->loadHtml($string);
+            @$document->loadHtml($string);
             libxml_use_internal_errors(false);
             $xpath = new \DOMXpath($document);
             $result = '';
