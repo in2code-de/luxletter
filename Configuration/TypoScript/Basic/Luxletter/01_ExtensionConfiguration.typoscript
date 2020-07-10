@@ -12,6 +12,16 @@ plugin {
             }
         }
         features.requireCHashArgumentForActionArguments = 0
+
+        settings {
+            # Example setting. Can be used in HTML for newsletter with {foo}
+#           foo = bar
+        }
+        variables {
+            # Example variable. Can be used HTML for newsletter with {subject}
+#           subject = TEXT
+#           subject.value = My own Newsletter
+        }
     }
 }
 
