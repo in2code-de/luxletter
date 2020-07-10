@@ -11,10 +11,6 @@ use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use In2code\Luxletter\Utility\TemplateUtility;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -23,10 +19,9 @@ use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
-use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
- * Class ParseNewsletterUrlService to fill a container html with a content from a http page.
+ * Class ParseNewsletterUrlService to fill a container html with a content from a http(s) page.
  * This is used for testmails and for storing a bodytext in a newsletter record
  */
 class ParseNewsletterUrlService
@@ -50,14 +45,9 @@ class ParseNewsletterUrlService
     /**
      * ParseNewsletterUrlService constructor.
      * @param string $origin can be a page uid or a complete url
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws InvalidRouteArgumentsException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws SiteNotFoundException
      * @throws Exception
-     * @throws MisconfigurationException
      */
     public function __construct(string $origin)
     {
@@ -118,12 +108,12 @@ class ParseNewsletterUrlService
             $standaloneView->setLayoutRootPaths($configuration['view']['layoutRootPaths']);
             $standaloneView->setPartialRootPaths($configuration['view']['partialRootPaths']);
             $standaloneView->setTemplate($templateName);
-            $standaloneView->assign('settings', $configuration['settings'] ?? []);
             $standaloneView->assignMultiple($this->getContentObjectVariables($configuration ?? []));
             $standaloneView->assignMultiple(
                 [
                     'content' => $content,
-                    'user' => $user
+                    'user' => $user,
+                    'settings', $configuration['settings'] ?? []
                 ]
             );
             $html = $standaloneView->render();
@@ -138,17 +128,28 @@ class ParseNewsletterUrlService
     /**
      * Compile rendered content objects in variables array ready to assign to the view
      *
-     * @param array $conf Configuration array
+     *  Example TypoScript:
+     *      plugin {
+     *          tx_luxletter_fe {
+     *              variables {
+     *                  subject = TEXT
+     *                  subject.value = My own Newsletter
+     *              }
+     *          }
+     *      }
+     *
+     * @param array $configuration TypoScript configuration array
      * @return array the variables to be assigned
+     * @throws Exception
      */
-    protected function getContentObjectVariables(array $conf): array
+    protected function getContentObjectVariables(array $configuration): array
     {
         $tsService = ObjectUtility::getObjectManager()->get(TypoScriptService::class);
-        $tsConf = $tsService->convertPlainArrayToTypoScriptArray($conf);
+        $tsConfiguration = $tsService->convertPlainArrayToTypoScriptArray($configuration);
 
         $variables = [];
-        $variablesToProcess = (array)($tsConf['variables.'] ?? []);
-        $contentObjectRenderer = ObjectUtility::getObjectManager()->get(ContentObjectRenderer::class);
+        $variablesToProcess = (array)($tsConfiguration['variables.'] ?? []);
+        $contentObjectRenderer = ObjectUtility::getContentObject();
         foreach ($variablesToProcess as $variableName => $cObjType) {
             if (is_array($cObjType)) {
                 continue;
@@ -166,7 +167,6 @@ class ParseNewsletterUrlService
     /**
      * @param User $user
      * @return string
-     * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
