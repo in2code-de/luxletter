@@ -5,6 +5,7 @@ namespace In2code\Luxletter\Utility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Core\Configuration\ConfigurationManager as ConfigurationManagerCore;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
+use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
@@ -26,6 +27,7 @@ class ObjectUtility
 
     /**
      * @return ConfigurationManager
+     * @throws Exception
      * @codeCoverageIgnore
      */
     public static function getConfigurationManager(): ConfigurationManager
@@ -35,6 +37,7 @@ class ObjectUtility
 
     /**
      * @return ConfigurationManagerCore
+     * @throws Exception
      */
     public static function getConfigurationManagerCore(): ConfigurationManagerCore
     {
@@ -43,6 +46,7 @@ class ObjectUtility
 
     /**
      * @return ContentObjectRenderer
+     * @throws Exception
      * @codeCoverageIgnore
      */
     public static function getContentObject(): ContentObjectRenderer

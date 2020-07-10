@@ -104,6 +104,7 @@ composer require "in2code/luxletter"
 
 | Version    | Date        | State      | Description                                                                                          |
 | ---------- | ----------- | ---------- | ---------------------------------------------------------------------------------------------------- |
+| 2.4.0      | 2020.07.10  | Feature    | Settings and variables can be used via TS, fix possible charset and parsing problems                 |
 | 2.3.0      | 2020.05.10  | Task       | Support lux 8.0.0 now                                                                                |
 | 2.2.2      | 2020.04.23  | Bugfix     | Fix problem "Table tx_luxletter_domain_model_user doesn't exist" in links from newsletters           |
 | 2.2.1      | 2020.04.22  | Bugfix     | Fix CSS class in backend module, fix possible problem with template orderings                        |

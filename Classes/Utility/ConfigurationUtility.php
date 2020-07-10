@@ -3,25 +3,24 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Utility;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
+use TYPO3\CMS\Extbase\Object\Exception;
 
 /**
  * Class ConfigurationUtility
  */
 class ConfigurationUtility
 {
-
     /**
      * Get TypoScript settings
      *
      * @return array
      * @throws InvalidConfigurationTypeException
+     * @throws Exception
      */
     public static function getExtensionSettings(): array
     {
@@ -33,8 +32,6 @@ class ConfigurationUtility
 
     /**
      * @return string like "https://www.luxletter.de" without trailing slash
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public static function getDomain(): string
     {
@@ -44,8 +41,6 @@ class ConfigurationUtility
 
     /**
      * @return int
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public static function getPidUnsubscribe(): int
     {
@@ -54,8 +49,6 @@ class ConfigurationUtility
 
     /**
      * @return bool
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public static function isRewriteLinksInNewsletterActivated(): bool
     {
@@ -67,8 +60,6 @@ class ConfigurationUtility
 
     /**
      * @return int
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public static function getTypeNumToNumberLocation(): int
     {
@@ -78,8 +69,6 @@ class ConfigurationUtility
 
     /**
      * @return bool
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public static function isReceiverActionActivated(): bool
     {
@@ -88,8 +77,6 @@ class ConfigurationUtility
 
     /**
      * @return string
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public static function getFromEmail(): string
     {
@@ -98,8 +85,6 @@ class ConfigurationUtility
 
     /**
      * @return string
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public static function getFromName(): string
     {
@@ -108,8 +93,6 @@ class ConfigurationUtility
 
     /**
      * @return string
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public static function getReplyEmail(): string
     {
@@ -118,8 +101,6 @@ class ConfigurationUtility
 
     /**
      * @return string
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public static function getReplyName(): string
     {
@@ -128,8 +109,9 @@ class ConfigurationUtility
 
     /**
      * @return string
-     * @SuppressWarnings(PHPMD.Superglobals)
      * @throws MisconfigurationException
+     * @throws Exception
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function getEncryptionKey(): string
     {
