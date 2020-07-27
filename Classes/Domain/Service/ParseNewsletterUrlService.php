@@ -113,7 +113,7 @@ class ParseNewsletterUrlService
                 [
                     'content' => $content,
                     'user' => $user,
-                    'settings', $configuration['settings'] ?? []
+                    'settings' => $configuration['settings'] ?? []
                 ]
             );
             $html = $standaloneView->render();
