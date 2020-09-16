@@ -1,4 +1,4 @@
-define(['jquery'], function($) {
+define(['jquery', 'TYPO3/CMS/Backend/Notification'], function($, notification) {
 	'use strict';
 
 	/**
@@ -6,7 +6,7 @@ define(['jquery'], function($) {
 	 *
 	 * @class LuxletterBackend
 	 */
-	function LuxletterBackend($) {
+	function LuxletterBackend($, notification) {
 		'use strict';
 
 		/**
@@ -198,13 +198,13 @@ define(['jquery'], function($) {
 		 * @returns {void}
 		 */
 		this.testMailListenerCallback = function(response) {
-			var messageElement = document.querySelector('[data-luxletter-testmail="message"]');
-			if (messageElement !== null) {
-				showElement(messageElement);
-			}
-			var fieldElements = document.querySelector('[data-luxletter-testmail="fields"]');
-			if (fieldElements !== null) {
-				hideElement(fieldElements);
+			var headerElement = document.querySelector('[data-luxletter-testmail="testmail-header"]');
+			var messageElement = document.querySelector('[data-luxletter-testmail="testmail-message"]');
+			if (headerElement !== null && messageElement !== null) {
+				notification.success(
+					headerElement.getAttribute("data-luxletter-testmail-title"),
+					messageElement.getAttribute("data-luxletter-testmail-message")
+				);
 			}
 		};
 
@@ -312,7 +312,7 @@ define(['jquery'], function($) {
 	 * Init
 	 */
 	$(document).ready(function () {
-		var LuxletterBackendObject = new LuxletterBackend($);
+		var LuxletterBackendObject = new LuxletterBackend($, notification);
 		LuxletterBackendObject.initialize();
 	})
 });
