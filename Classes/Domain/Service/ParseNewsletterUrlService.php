@@ -103,6 +103,7 @@ class ParseNewsletterUrlService
         $templateName = 'Mail/NewsletterContainer.html';
         if ($this->isParsingActive()) {
             $configuration = ConfigurationUtility::getExtensionSettings();
+            $this->signalDispatch(__CLASS__, __FUNCTION__ . 'BeforeParsing', [$content, &$configuration, $user, $this]);
             $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
             $standaloneView->setTemplateRootPaths($configuration['view']['templateRootPaths']);
             $standaloneView->setLayoutRootPaths($configuration['view']['layoutRootPaths']);
