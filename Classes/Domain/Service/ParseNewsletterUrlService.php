@@ -240,10 +240,11 @@ class ParseNewsletterUrlService
      */
     protected static function simulateFrontendEnvironment()
     {
-        static::$tsfeBackup = $GLOBALS['TSFE'] ?? null;
-        $GLOBALS['TSFE'] = new \stdClass();
-        $GLOBALS['TSFE']->cObj = ObjectUtility::getContentObject();
-        $GLOBALS['TSFE']->cObjectDepthCounter = 100;
+        if (!$GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {
+            $GLOBALS['TSFE'] = new \stdClass();
+            $GLOBALS['TSFE']->cObj = ObjectUtility::getContentObject();
+            $GLOBALS['TSFE']->cObjectDepthCounter = 100;
+        }
     }
 
     /**
@@ -253,7 +254,9 @@ class ParseNewsletterUrlService
      */
     protected static function resetFrontendEnvironment()
     {
-        $GLOBALS['TSFE'] = static::$tsfeBackup;
+        if (!$GLOBALS['TSFE'] instanceof TypoScriptFrontendController) {
+            $GLOBALS['TSFE'] = null;
+        }
     }
 
     /**
