@@ -19,6 +19,7 @@ use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Class ParseNewsletterUrlService to fill a container html with a content from a http(s) page.
@@ -41,6 +42,13 @@ class ParseNewsletterUrlService
      * @var bool
      */
     protected $parseVariables = true;
+
+    /**
+     * Contains a backup of the current $GLOBALS['TSFE'] if used in BE mode
+     *
+     * @var TypoScriptFrontendController
+     */
+    protected static $tsfeBackup;
 
     /**
      * ParseNewsletterUrlService constructor.
@@ -144,6 +152,9 @@ class ParseNewsletterUrlService
      */
     protected function getContentObjectVariables(array $configuration): array
     {
+        if (TYPO3_MODE === 'BE') {
+            self::simulateFrontendEnvironment();
+        }
         $tsService = ObjectUtility::getObjectManager()->get(TypoScriptService::class);
         $tsConfiguration = $tsService->convertPlainArrayToTypoScriptArray($configuration);
 
@@ -159,6 +170,10 @@ class ParseNewsletterUrlService
                 $variablesToProcess[$variableName . '.'],
                 'variables.' . $variableName
             );
+        }
+
+        if (TYPO3_MODE === 'BE') {
+            self::resetFrontendEnvironment();
         }
 
         return $variables;
@@ -217,6 +232,28 @@ class ParseNewsletterUrlService
         } catch (\Exception $exception) {
         }
         return $string;
+    }
+
+    /**
+     * Sets the $TSFE->cObjectDepthCounter in Backend mode
+     * This somewhat hacky work around is currently needed because the cObjGetSingle() function of \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer relies on this setting
+     */
+    protected static function simulateFrontendEnvironment()
+    {
+        static::$tsfeBackup = $GLOBALS['TSFE'] ?? null;
+        $GLOBALS['TSFE'] = new \stdClass();
+        $GLOBALS['TSFE']->cObj = ObjectUtility::getContentObject();
+        $GLOBALS['TSFE']->cObjectDepthCounter = 100;
+    }
+
+    /**
+     * Resets $GLOBALS['TSFE'] if it was previously changed by simulateFrontendEnvironment()
+     *
+     * @see simulateFrontendEnvironment()
+     */
+    protected static function resetFrontendEnvironment()
+    {
+        $GLOBALS['TSFE'] = static::$tsfeBackup;
     }
 
     /**
