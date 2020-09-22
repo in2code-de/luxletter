@@ -29,6 +29,13 @@ class ParseNewsletterUrlService
     use SignalTrait;
 
     /**
+     * Hold origin
+     *
+     * @var string
+     */
+    protected $origin = '';
+
+    /**
      * Hold url from origin
      *
      * @var string
@@ -64,6 +71,7 @@ class ParseNewsletterUrlService
             $url = $origin;
         }
         $this->signalDispatch(__CLASS__, 'constructor', [$url, $origin, $this]);
+        $this->setOrigin($origin);
         $this->setUrl($url);
     }
 
@@ -235,6 +243,22 @@ class ParseNewsletterUrlService
     {
         $this->parseVariables = $parseVariables;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOrigin(): string
+    {
+        return $this->origin;
+    }
+
+    /**
+     * @param string $origin
+     */
+    public function setOrigin(string $origin)
+    {
+        $this->origin = $origin;
     }
 
     /**
