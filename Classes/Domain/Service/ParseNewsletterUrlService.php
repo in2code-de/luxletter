@@ -119,7 +119,7 @@ class ParseNewsletterUrlService
             $this->signalDispatch(
                 __CLASS__,
                 __FUNCTION__ . 'PostParsing',
-                [$standaloneView, $content, &$configuration, $user, $this]
+                [$standaloneView, $content, $configuration, $user, $this]
             );
             $html = $standaloneView->render();
         } else {
