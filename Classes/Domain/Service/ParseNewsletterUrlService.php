@@ -124,6 +124,11 @@ class ParseNewsletterUrlService
                     'settings' => $configuration['settings'] ?? []
                 ]
             );
+            $this->signalDispatch(
+                __CLASS__,
+                __FUNCTION__ . 'PostParsing',
+                [$standaloneView, $content, $configuration, $user, $this]
+            );
             $html = $standaloneView->render();
         } else {
             $container = file_get_contents(TemplateUtility::getExistingFilePathOfTemplateFileByName($templateName));
