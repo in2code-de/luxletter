@@ -134,7 +134,7 @@ class ParseNewsletterUrlService
             $container = file_get_contents(TemplateUtility::getExistingFilePathOfTemplateFileByName($templateName));
             $html = str_replace('{content}', $content, $container);
         }
-        $this->signalDispatch(__CLASS__, __FUNCTION__, [$html, $content, $user, $this]);
+        $this->signalDispatch(__CLASS__, __FUNCTION__, [&$html, &$content, $user, $this]);
         return $html;
     }
 
