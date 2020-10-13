@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\ViewHelpers\Queue;
 
+use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Extbase\Object\Exception;
@@ -19,7 +20,7 @@ class GetNumberOfReceiversFromQueueViewHelper extends AbstractViewHelper
     public function initializeArguments()
     {
         parent::initializeArguments();
-        $this->registerArgument('newsletter', 'object', 'Newsletter object', true);
+        $this->registerArgument('newsletter', Newsletter::class, 'Newsletter object', true);
     }
 
     /**
