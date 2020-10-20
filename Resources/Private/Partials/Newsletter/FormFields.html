@@ -6,6 +6,7 @@
 		<f:form.textfield class="form-control input-lg"
 						  property="title"
 						  id="title"
+						  value="{luxletter:backend.pageTitle()}"
 						  placeholder="Newsletter Product A 2020/01"
 						  required="required"/>
 		<span class="help-block">
@@ -60,6 +61,7 @@
 		<f:form.textfield class="form-control input-lg"
 						  property="subject"
 						  id="subject"
+						  value="Newsletter [{luxletter:backend.pageTitle()}]"
 						  placeholder="Your new newsletter for product A (2020/01)"
 						  additionalAttributes="{data-luxletter-testmail:'subject'}"
 						  required="required"/>
