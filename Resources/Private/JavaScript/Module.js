@@ -124,6 +124,9 @@ define(['jquery'], function($) {
 						showIfNewsletterIsReady();
 					}
 				});
+				if (input.value.length !== 0) {
+					input.dispatchEvent(new Event('blur'));
+				}
 			}
 		};
 
