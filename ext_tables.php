@@ -69,6 +69,7 @@ call_user_func(
                 'access' => 'user,group',
                 'icon' => 'EXT:luxletter/Resources/Public/Icons/lux_module_newsletter.svg',
                 'labels' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_mod_newsletter.xlf',
+                'navigationComponentId' => 'TYPO3/CMS/Backend/PageTree/PageTreeElement',
             ]
         );
 
