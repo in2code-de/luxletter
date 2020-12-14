@@ -2,8 +2,45 @@
 
 # Luxletter - Email marketing in TYPO3. Send newsletters the easy way.
 
+## Change templates
 
-## Tech corner or extending luxletter
+Change templates path in TypoScript setup via your sitepackage extension (e.g. EXT:sitepackage) - 
+`EXT:sitepackage/Configuration/TypoScript/setup.typoscript`:
+ 
+```
+plugin {
+	tx_luxletter_fe {
+		view {
+			templateRootPaths {
+				0 = EXT:luxletter/Resources/Private/Templates/
+				1 = EXT:sitepackage/Resources/Private/Templates/
+			}
+			partialRootPaths {
+				0 = EXT:luxletter/Resources/Private/Partials/
+				1 = EXT:sitepackage/Resources/Private/Partials/
+			}
+			layoutRootPaths {
+				0 = EXT:luxletter/Resources/Private/Layouts/
+				1 = EXT:sitepackage/Resources/Private/Layouts/
+			}
+		}
+	}
+}
+module.tx_luxletter < plugin.tx_luxletter_fe
+```
+
+Next copy the template file NewsletterContainer.html to your sitepackage in 
+`EXT:sitepackage/Resources/Private/Templates/Mail/` and modyfiy it a bit with your wanted HTML.
+
+Now you can include the file with a ext_typoscript_setup.typoscript file 
+(that is **important** to include the TypoScript after the TypoScript of luxletter):
+
+`@import 'EXT:sitepackage/Configuration/TypoScript/setup.typoscript'`
+
+**Note:** The ordering of the TypoScript is the key to change the template files
+**Note:** You can check this in the TypoScript Object Browser
+
+## Extending luxletter
 
 There are some possibilities to extend luxletter.
 All HTML-Templates (and Partials and Layouts) can be overwritten by your extension in the way how templates can
