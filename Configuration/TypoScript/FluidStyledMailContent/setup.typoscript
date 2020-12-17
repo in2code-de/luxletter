@@ -36,8 +36,8 @@ fluidStyledMailContent {
             margin: auto;
         }
     )
-    cssInline.20 = FLUIDTEMPLATE
-    cssInline.20.file = EXT:luxletter/Resources/Private/Partials/Mail/ZurbCss.html
+    headerData.10 = FLUIDTEMPLATE
+    headerData.10.file = EXT:luxletter/Resources/Private/Partials/Mail/ZurbCss.html
 
     # Add content
     10 < styles.content.get
