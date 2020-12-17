@@ -3,13 +3,13 @@
 [getTSFE().type == 1562349004]
 lib.contentElement {
     templateRootPaths {
-        10 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Templates/
+        100 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Templates/
     }
     partialRootPaths {
-        10 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Partials/
+        100 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Partials/
     }
     layoutRootPaths {
-        10 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Layouts/
+        100 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Layouts/
     }
 }
 [end]
@@ -36,8 +36,8 @@ fluidStyledMailContent {
             margin: auto;
         }
     )
-    cssInline.20 = FLUIDTEMPLATE
-    cssInline.20.file = EXT:luxletter/Resources/Private/Partials/Mail/ZurbCss.html
+    headerData.10 = FLUIDTEMPLATE
+    headerData.10.file = EXT:luxletter/Resources/Private/Partials/Mail/ZurbCss.html
 
     # Add content
     10 < styles.content.get

@@ -93,7 +93,7 @@
 			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_link">
-				<source>Log</source>
+				<source>Link</source>
 			</trans-unit>
 			<trans-unit id="tx_luxletter_domain_model_link.newsletter">
 				<source>Newsletter</source>

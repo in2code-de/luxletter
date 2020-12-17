@@ -41,7 +41,7 @@ class Link extends AbstractEntity
     /**
      * @return Newsletter
      */
-    public function getNewsletter(): Newsletter
+    public function getNewsletter(): ?Newsletter
     {
         return $this->newsletter;
     }
@@ -59,7 +59,7 @@ class Link extends AbstractEntity
     /**
      * @return User
      */
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }

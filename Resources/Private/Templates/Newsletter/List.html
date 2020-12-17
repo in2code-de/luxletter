@@ -59,7 +59,7 @@
 								</td>
 								<td>
 									<span title="UID{newsletter.receiver.uid}">{newsletter.receiver.title}</span>
-									<span class="badge" title="Amount" style="margin-left:15px;"><luxletter:usergroup.getNumberOfReceiversFromGroup usergroup="{newsletter.receiver.uid}" /></span>
+									<span class="badge" title="Amount" style="margin-left:15px;"><luxletter:queue.getNumberOfReceiversFromQueue newsletter="{newsletter}" /></span>
 								</td>
 								<td>
 									<f:if condition="{newsletter.enabled}">

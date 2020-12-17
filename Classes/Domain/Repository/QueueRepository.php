@@ -26,7 +26,9 @@ class QueueRepository extends AbstractRepository
         $and = [
             $query->lessThan('datetime', time()),
             $query->equals('sent', false),
-            $query->equals('newsletter.disabled', false)
+            $query->equals('newsletter.disabled', false),
+            $query->equals('user.deleted', false),
+            $query->equals('user.disable', false)
         ];
         $query->matching($query->logicalAnd($and));
         $query->setLimit($limit);
