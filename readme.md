@@ -81,7 +81,7 @@ See the full [documentation](Documentation/Index.md) (installation, configuratio
 
 ## Technical requirements
 
-* TYPO3 9 LTS is the basic CMS for this newsletter tool.
+* TYPO3 9 or 10 LTS is the basic CMS for this newsletter tool.
 * EXT:lux is **not needed** to run luxletter but both extensions can work together to show more relevant information.
 * This extension needs to be **installed with composer** (classic installation could work but is not supported and tested).
 * fe_users records are used to send emails to while fe_groups is used to select a group of them
@@ -104,6 +104,7 @@ composer require "in2code/luxletter"
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 3.1.0      | 2021.01.10  | Feature    | Autoreleases to TER added, small bugfix with deleted receivers                                                                                                                             |
 | !!! 3.0.0  | 2020.12.17  | Feature    | templateRootPaths for content element rendering increased from 10 to 100 - please update your TypoScript! Signal added, show correct number of receivers, Some other smaller bugfixes      |
 | 2.4.0      | 2020.07.10  | Feature    | Settings and variables can be used via TS, fix possible charset and parsing problems                                                                                                       |
 | 2.3.0      | 2020.05.10  | Task       | Support lux 8.0.0 now                                                                                                                                                                      |
