@@ -46,8 +46,8 @@ class LuxletterLink implements MiddlewareInterface
             /** @var Link $link */
             $link = $linkRepository->findOneByHash($this->getHash());
             $this->signalDispatch(__CLASS__, __FUNCTION__, [$link, $request, $handler]);
-            $this->luxIdentification($link);
             if ($link !== null) {
+                $this->luxIdentification($link);
                 $logService = ObjectUtility::getObjectManager()->get(LogService::class);
                 $logService->logLinkOpening($link);
                 return new RedirectResponse($link->getTarget(), 302);
