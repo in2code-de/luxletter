@@ -61,6 +61,7 @@
   },
   "extra": {
     "typo3/cms": {
+      "extension-key": "luxletter"
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
       "web-dir": ".Build/Web"
     }
