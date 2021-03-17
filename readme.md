@@ -104,6 +104,7 @@ composer require "in2code/luxletter"
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 3.1.2      | 2021.03.17  | Task       | Add extension key to composer.json                                                                                                                                                         |
 | 3.1.1      | 2021.01.19  | Bugfix     | Prevent exception on missing links in middleware                                                                                                                                           |
 | 3.1.0      | 2021.01.10  | Feature    | Autoreleases to TER added, small bugfix with deleted receivers                                                                                                                             |
 | !!! 3.0.0  | 2020.12.17  | Feature    | templateRootPaths for content element rendering increased from 10 to 100 - please update your TypoScript! Signal added, show correct number of receivers, Some other smaller bugfixes      |
