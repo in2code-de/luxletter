@@ -3,8 +3,6 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
-use In2code\Luxletter\Utility\ConfigurationUtility;
-use Psr\Http\Message\UriInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
@@ -39,14 +37,14 @@ class FrontendUrlService
 
     /**
      * @param array $arguments
+     * @param Site $site
      * @return string
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws MisconfigurationException
      */
-    public function getFrontendUrlFromParameter(array $arguments): string
+    public function getFrontendUrlFromParameter(array $arguments, Site $site): string
     {
-        $url = ConfigurationUtility::getDomain();
+        /** @var SiteService $siteService */
+        $siteService = GeneralUtility::makeInstance(SiteService::class);
+        $url = $siteService->getDomainFromSite($site);
         $url .= '/?' . http_build_query($arguments);
         return $url;
     }

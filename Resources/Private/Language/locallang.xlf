@@ -161,7 +161,7 @@
 				<source>Mail subject</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.subject.description">
-				<source>Choose an email subject for this newsletter.</source>
+				<source>Choose an email subject for this newsletter. It's possible to use variables like {user.email} or {user.firstName}</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.receiver">
 				<source>Receiver</source>

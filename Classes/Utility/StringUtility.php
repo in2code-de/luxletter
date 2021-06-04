@@ -30,6 +30,18 @@ class StringUtility
     }
 
     /**
+     * Check if string ends with another string
+     *
+     * @param string $haystack
+     * @param string $needle
+     * @return bool
+     */
+    public static function endsWith(string $haystack, string $needle): bool
+    {
+        return stristr($haystack, $needle) !== false && substr($haystack, (strlen($needle) * -1)) === $needle;
+    }
+
+    /**
      * @param array $arguments
      * @return string
      * @throws MisconfigurationException

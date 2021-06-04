@@ -1,10 +1,3 @@
-# cat=basic//100; type=text; label= Webserver domain: Define a domain for frontend plugins (like opt out for the newsletter, etc...)
-domain = https://www.domain.org
-
-# cat=basic//110; type=int+; label= Unsubscribe PID: Where to find the unsubscribe plugin? Please add the page identifier
-pidUnsubscribe = 6
-
-
 # cat=basic//200; type=boolean; label= Rewrite links in newsletter: All absolute links should be rewritten, so a click on a link can be tracked
 rewriteLinksInNewsletter = 1
 
@@ -13,16 +6,3 @@ addTypeNumToNumberLocation = 1562349004
 
 # cat=basic//220; type=boolean; label= Show receiver action: show link to receiver view in newsletter module
 receiverAction = 1
-
-
-# cat=mail//300; type=text; label= Sender email address: Sender email address for your newsletter (Because of SPF defiance it should be a valid email - given from your mailserver administrator)
-fromEmail = newsletter@yourserver.org
-
-# cat=mail//310; type=text; label= Sender name: Name of the sender for your newsletter
-fromName = Sender name
-
-# cat=mail//320; type=text; label= Reply email address: Real email address of a person that should receive answers to this newsletter email
-replyEmail = personal@youremail.org
-
-# cat=mail//320; type=text; label= Sender name: Name of the sender for your newsletter (mostly the same as fromName)
-replyName = Sender name

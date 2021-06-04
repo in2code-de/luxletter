@@ -9,11 +9,12 @@ use In2code\Luxletter\Domain\Repository\LinkRepository;
 use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Signal\SignalTrait;
-use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
@@ -116,13 +117,17 @@ class LinkHashingService
      *
      * @param string $href
      * @return string
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws MisconfigurationException
+     * @throws SiteNotFoundException
      */
     protected function convertToAbsoluteHref(string $href): string
     {
         if (StringUtility::startsWith($href, '/')) {
-            $href = ConfigurationUtility::getDomain() . $href;
+            /** @var SiteService $siteService */
+            $siteService = GeneralUtility::makeInstance(SiteService::class);
+            $href = $siteService->getDomainFromSite(
+                $this->newsletter->getConfiguration()->getSiteConfiguration()
+            ) . $href;
         }
         return $href;
     }

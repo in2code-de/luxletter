@@ -213,8 +213,8 @@
 				<target state="translated">E-Mail Betreff</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.subject.description">
-				<source>Choose an email subject for this newsletter.</source>
-				<target state="translated">Bitte Betreff für Newsletter eintragen.</target>
+				<source>Choose an email subject for this newsletter. It's possible to use variables like {user.email} or {user.firstName}</source>
+				<target state="translated">Bitte Betreff für Newsletter eintragen. Variablen können verwendet werden wie bsp {user.email} oder {user.firstName}</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.receiver">
 				<source>Receiver</source>

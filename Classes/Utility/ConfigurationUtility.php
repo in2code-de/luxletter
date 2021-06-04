@@ -31,16 +31,6 @@ class ConfigurationUtility
     }
 
     /**
-     * @return string like "https://www.luxletter.de" without trailing slash
-     */
-    public static function getDomain(): string
-    {
-        throw new \LogicException('This function must be replaced by site configuration: ' . __FUNCTION__);
-        $domain = (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'domain');
-        return rtrim($domain, '/');
-    }
-
-    /**
      * @return string like "https://www.domain.org/"
      */
     public static function getCurrentDomain(): string
@@ -79,42 +69,6 @@ class ConfigurationUtility
     public static function isReceiverActionActivated(): bool
     {
         return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'receiverAction') === '1';
-    }
-
-    /**
-     * @return string
-     */
-    public static function getFromEmail(): string
-    {
-        throw new \LogicException('This function must be replaced by settings domain model: ' . __FUNCTION__);
-        return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'fromEmail');
-    }
-
-    /**
-     * @return string
-     */
-    public static function getFromName(): string
-    {
-        throw new \LogicException('This function must be replaced by settings domain model: ' . __FUNCTION__);
-        return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'fromName');
-    }
-
-    /**
-     * @return string
-     */
-    public static function getReplyEmail(): string
-    {
-        throw new \LogicException('This function must be replaced by settings domain model: ' . __FUNCTION__);
-        return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'replyEmail');
-    }
-
-    /**
-     * @return string
-     */
-    public static function getReplyName(): string
-    {
-        throw new \LogicException('This function must be replaced by settings domain model: ' . __FUNCTION__);
-        return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'replyName');
     }
 
     /**

@@ -7,7 +7,6 @@ use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Mail\ProgressQueue;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

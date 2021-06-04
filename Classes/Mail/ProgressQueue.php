@@ -111,10 +111,12 @@ class ProgressQueue
     protected function sendNewsletterToReceiverInQueue(Queue $queue): void
     {
         if ($queue->getUser() !== null) {
+            /** @var SendMail $sendMail */
             $sendMail = ObjectUtility::getObjectManager()->get(
                 SendMail::class,
                 $this->getSubject($queue),
-                $this->getBodyText($queue)
+                $this->getBodyText($queue),
+                $queue->getNewsletter()->getConfiguration()
             );
             $sendMail->sendNewsletter([$queue->getEmail() => $queue->getUser()->getReadableName()]);
             $logService = ObjectUtility::getObjectManager()->get(LogService::class);
@@ -160,7 +162,8 @@ class ProgressQueue
             $queue->getNewsletter()->getBodytext(),
             [
                 'user' => $queue->getUser(),
-                'newsletter' => $queue->getNewsletter()
+                'newsletter' => $queue->getNewsletter(),
+                'site' => $queue->getNewsletter()->getConfiguration()->getSiteConfiguration()
             ]
         );
         $bodytext = $this->hashLinksInBodytext($queue, $bodytext);
