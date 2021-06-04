@@ -111,11 +111,3 @@ services:
         iconIdentifier: 'extension-luxletter'
         height: 'medium'
         width: 'medium'
-
-#
-#  In2code\Luxletter\Widget\NewsletterWidget:
-#    arguments: ['luxletterNewsletter']
-#    tags:
-#      - name: dashboard.widget
-#        identifier: luxletterNewsletter
-#        widgetGroups: 'luxletter'
