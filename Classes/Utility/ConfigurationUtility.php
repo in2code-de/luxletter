@@ -35,8 +35,19 @@ class ConfigurationUtility
      */
     public static function getDomain(): string
     {
+        throw new \LogicException('This function must be replaced by site configuration');
         $domain = (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'domain');
         return rtrim($domain, '/');
+    }
+
+    /**
+     * @return string like "https://www.domain.org/"
+     */
+    public static function getCurrentDomain(): string
+    {
+        $uri = parse_url(GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'), PHP_URL_SCHEME);
+        $uri .= '://' . GeneralUtility::getIndpEnv('HTTP_HOST') . '/';
+        return $uri;
     }
 
     /**
@@ -44,6 +55,7 @@ class ConfigurationUtility
      */
     public static function getPidUnsubscribe(): int
     {
+        throw new \LogicException('This function must be replaced by site configuration');
         return (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'pidUnsubscribe');
     }
 
@@ -80,6 +92,7 @@ class ConfigurationUtility
      */
     public static function getFromEmail(): string
     {
+        throw new \LogicException('This function must be replaced by settings domain model');
         return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'fromEmail');
     }
 
@@ -88,6 +101,7 @@ class ConfigurationUtility
      */
     public static function getFromName(): string
     {
+        throw new \LogicException('This function must be replaced by settings domain model');
         return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'fromName');
     }
 
@@ -96,6 +110,7 @@ class ConfigurationUtility
      */
     public static function getReplyEmail(): string
     {
+        throw new \LogicException('This function must be replaced by settings domain model');
         return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'replyEmail');
     }
 
@@ -104,6 +119,7 @@ class ConfigurationUtility
      */
     public static function getReplyName(): string
     {
+        throw new \LogicException('This function must be replaced by settings domain model');
         return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'replyName');
     }
 

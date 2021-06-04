@@ -108,6 +108,28 @@
 				<source>Target</source>
 			</trans-unit>
 
+			<trans-unit id="tx_luxletter_domain_model_settings">
+				<source>Settings</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_settings.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_settings.from_email">
+				<source>Sender email</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_settings.from_name">
+				<source>Sender name</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_settings.reply_email">
+				<source>Reply to email</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_settings.reply_name">
+				<source>Reply name</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_settings.site">
+				<source>Site</source>
+			</trans-unit>
+
 			<trans-unit id="flexform.fe.removeusergroup">
 				<source>Select usergroup which should be removed on unsubscribe</source>
 			</trans-unit>

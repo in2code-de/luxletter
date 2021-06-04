@@ -10,6 +10,7 @@ use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
+use In2code\Luxletter\Domain\Repository\SettingsRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\ParseNewsletterService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
@@ -76,6 +77,37 @@ class NewsletterController extends ActionController
     protected $logRepository = null;
 
     /**
+     * @var SettingsRepository
+     */
+    protected $settingsRepository = null;
+
+    /**
+     * NewsletterController constructor.
+     * @param NewsletterRepository|null $newsletterRepository
+     * @param UserRepository|null $userRepository
+     * @param LogRepository|null $logRepository
+     * @param SettingsRepository|null $settingsRepository
+     * @throws Exception
+     */
+    public function __construct(
+        NewsletterRepository $newsletterRepository = null,
+        UserRepository $userRepository = null,
+        LogRepository $logRepository = null,
+        SettingsRepository $settingsRepository = null
+    ) {
+        $this->newsletterRepository = $newsletterRepository ?: ObjectUtility::getObjectManager()->get(
+            NewsletterRepository::class
+        );
+        $this->userRepository = $userRepository ?: ObjectUtility::getObjectManager()->get(
+            UserRepository::class
+        );
+        $this->logRepository = $logRepository ?: ObjectUtility::getObjectManager()->get(LogRepository::class);
+        $this->settingsRepository = $settingsRepository ?: ObjectUtility::getObjectManager()->get(
+            SettingsRepository::class
+        );
+    }
+
+    /**
      * @return void
      * @throws DBALException
      */
@@ -104,8 +136,10 @@ class NewsletterController extends ActionController
      */
     public function listAction(): void
     {
-        $newsletters = $this->newsletterRepository->findAll();
-        $this->view->assign('newsletters', $newsletters);
+        $this->view->assignMultiple([
+            'newsletters' => $this->newsletterRepository->findAll(),
+            'luxlettersettings' => $this->settingsRepository->findAll()
+        ]);
     }
 
     /**
@@ -374,32 +408,5 @@ class NewsletterController extends ActionController
         $parseService->setParseVariables(false);
         $newsletter['bodytext'] = $parseService->getParsedContent();
         $this->request->setArgument('newsletter', $newsletter);
-    }
-
-    /**
-     * @param NewsletterRepository $newsletterRepository
-     * @return void
-     */
-    public function injectNewsletterRepository(NewsletterRepository $newsletterRepository): void
-    {
-        $this->newsletterRepository = $newsletterRepository;
-    }
-
-    /**
-     * @param UserRepository $userRepository
-     * @return void
-     */
-    public function injectUserRepository(UserRepository $userRepository): void
-    {
-        $this->userRepository = $userRepository;
-    }
-
-    /**
-     * @param LogRepository $logRepository
-     * @return void
-     */
-    public function injectLogRepository(LogRepository $logRepository): void
-    {
-        $this->logRepository = $logRepository;
     }
 }
