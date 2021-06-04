@@ -3,10 +3,10 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Widget\DataProvider;
 
 use Doctrine\DBAL\DBALException;
-use In2code\Lux\Utility\LocalizationUtility;
-use In2code\Lux\Utility\ObjectUtility;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
+use In2code\Luxletter\Utility\LocalizationUtility;
+use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Dashboard\WidgetApi;
 use TYPO3\CMS\Dashboard\Widgets\ChartDataProviderInterface;
 use TYPO3\CMS\Extbase\Object\Exception;
@@ -78,7 +78,7 @@ class LastNewslettersOpenRateDataProvider implements ChartDataProviderInterface
      */
     protected function getWidgetLabel(string $key): string
     {
-        $label = LocalizationUtility::getLanguageService()->sL(
+        $label = LocalizationUtility::translate(
             'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.' . $key
         );
         if (empty($label)) {
