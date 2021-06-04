@@ -23,10 +23,10 @@ return [
         'rootLevel' => -1
     ],
     'interface' => [
-        'showRecordFieldList' => 'disabled,title,description,datetime,subject,receiver,origin,bodytext',
+        'showRecordFieldList' => 'disabled,title,description,datetime,subject,receiver,configuration,origin,bodytext',
     ],
     'types' => [
-        '1' => ['showitem' => 'disabled,title,description,datetime,subject,receiver,origin,bodytext'],
+        '1' => ['showitem' => 'disabled,title,description,datetime,subject,receiver,configuration,origin,bodytext'],
     ],
     'columns' => [
         'disabled' => [
@@ -93,6 +93,22 @@ return [
                     ['', 0],
                 ],
                 'foreign_table' => Usergroup::TABLE_NAME,
+                'foreign_table_where' => 'AND 1',
+                'default' => 0,
+                'readOnly' => true
+            ]
+        ],
+        'configuration' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
+                . Newsletter::TABLE_NAME . '.configuration',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['', 0],
+                ],
+                'foreign_table' => \In2code\Luxletter\Domain\Model\Configuration::TABLE_NAME,
                 'foreign_table_where' => 'AND 1',
                 'default' => 0,
                 'readOnly' => true

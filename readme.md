@@ -100,10 +100,20 @@ See the full [documentation](Documentation/Index.md) (installation, configuratio
 composer require "in2code/luxletter"
 ```
 
+
+## Breaking changes !!!
+
+| Version                     | Situation                                           | Upgrade instructions                                                                                                                                                                      |
+| --------------------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| From former versions to 4.x | Multiple sender can be defined in records           | Add one (ore more) record(s) with sender information on any sysfolder, Update your site configuration with a unsubscribe pid, Create new newsletter records with new configuration        |
+
+
+
 ## Changelog
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| !!! 4.0.0  | 2021.06.10  | Feature    | Multiple sender configuration supported (see breaking changes above)                                                                                                                       |
 | 3.1.4      | 2021.06.04  | Bugfix     | Allow rendering of widgets without EXT:lux                                                                                                                                                 |
 | 3.1.3      | 2021.04.29  | Task       | Pass arguments in signal as reference                                                                                                                                                      |
 | 3.1.2      | 2021.03.17  | Task       | Add extension key to composer.json                                                                                                                                                         |

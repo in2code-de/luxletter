@@ -28,11 +28,13 @@ call_user_func(
         /**
          * Add an absRefPrefix for FluidStyledMailContent (could be overruled by site configuration)
          */
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
-            'luxletterFluidStyledMailContent',
-            'setup',
-            'fluidStyledMailContent.config.absRefPrefix = '
-            . \In2code\Luxletter\Utility\ConfigurationUtility::getCurrentDomain()
-        );
+        if (\TYPO3\CMS\Core\Core\Environment::isCli() === false) {
+            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
+                'luxletterFluidStyledMailContent',
+                'setup',
+                'fluidStyledMailContent.config.absRefPrefix = '
+                . \In2code\Luxletter\Utility\ConfigurationUtility::getCurrentDomain()
+            );
+        }
     }
 );

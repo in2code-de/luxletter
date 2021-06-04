@@ -34,7 +34,7 @@ class GetTrackingPixelUrlViewHelper extends AbstractViewHelper
      */
     public function render(): string
     {
-        $url = ConfigurationUtility::getDomain();
+        $url = ConfigurationUtility::getCurrentDomain();
         $url .= '/?type=1561894816';
         $url .= '&tx_luxletter_fe[user]=' . $this->getUserIdentifier();
         $url .= '&tx_luxletter_fe[newsletter]=' . $this->getNewsletterIdentifier();

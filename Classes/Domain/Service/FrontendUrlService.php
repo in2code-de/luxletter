@@ -9,6 +9,7 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotCon
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -29,11 +30,10 @@ class FrontendUrlService
      */
     public function getTypolinkUrlFromParameter(int $pageIdentifier, array $arguments = []): string
     {
-        $url = ConfigurationUtility::getDomain();
-        $url .= $this->getUri($pageIdentifier, $arguments)->getPath();
-        if ($arguments !== []) {
-            $url .= '?' . $this->getUri($pageIdentifier, $arguments)->getQuery();
-        }
+        /** @var Site $site */
+        $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageIdentifier);
+        $uri = $site->getRouter()->generateUri($pageIdentifier, $arguments);
+        $url = $uri->__tostring();
         return $url;
     }
 
@@ -49,20 +49,5 @@ class FrontendUrlService
         $url = ConfigurationUtility::getDomain();
         $url .= '/?' . http_build_query($arguments);
         return $url;
-    }
-
-    /**
-     * Generates an absolute URL for a page (based on Site Handling)
-     *
-     * @param int $pageId
-     * @param array $arguments
-     * @return UriInterface
-     * @throws SiteNotFoundException
-     * @throws InvalidRouteArgumentsException
-     */
-    protected function getUri(int $pageId, array $arguments = []): UriInterface
-    {
-        $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageId);
-        return $site->getRouter()->generateUri($pageId, $arguments);
     }
 }

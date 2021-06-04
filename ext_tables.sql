@@ -11,6 +11,7 @@ CREATE TABLE tx_luxletter_domain_model_newsletter (
 	datetime int(11) DEFAULT '0' NOT NULL,
 	subject varchar(255) DEFAULT '' NOT NULL,
 	receiver int(11) DEFAULT '0' NOT NULL,
+	configuration int(11) DEFAULT '0' NOT NULL,
 	origin varchar(255) DEFAULT '' NOT NULL,
 	bodytext mediumtext NOT NULL,
 	disabled tinyint(4) unsigned DEFAULT '0' NOT NULL,
@@ -107,7 +108,7 @@ CREATE TABLE tx_luxletter_domain_model_link (
 	KEY language (l10n_parent,sys_language_uid)
 );
 
-CREATE TABLE tx_luxletter_domain_model_settings (
+CREATE TABLE tx_luxletter_domain_model_configuration (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
 

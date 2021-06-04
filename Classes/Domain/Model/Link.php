@@ -103,6 +103,7 @@ class Link extends AbstractEntity
      */
     public function getUriFromHash(): string
     {
+        /** @var FrontendUrlService $urlService */
         $urlService = ObjectUtility::getObjectManager()->get(FrontendUrlService::class);
         return $urlService->getFrontendUrlFromParameter(['luxletterlink' => $this->getHash()]);
     }

@@ -12,8 +12,8 @@ use TYPO3\CMS\Extbase\Object\Exception;
 /**
  * Class ClearCommand
  */
-class ClearCommand extends Command {
-
+class ClearCommand extends Command
+{
     /**
      * Configure the command by defining the name, options and arguments
      */

@@ -7,12 +7,15 @@ use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Service\FrontendUrlService;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Exception\UserValuesAreMissingException;
-use In2code\Luxletter\Utility\ConfigurationUtility;
+use In2code\Luxletter\Utility\FrontendUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
+use TYPO3\CMS\Core\Site\Entity\Site;
+use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
@@ -28,8 +31,9 @@ class GetUnsubscribeUrlViewHelper extends AbstractViewHelper
     public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerArgument('newsletter', Newsletter::class, 'Newsletter', false, null);
-        $this->registerArgument('user', User::class, 'User', false, null);
+        $this->registerArgument('newsletter', Newsletter::class, 'Newsletter object', false, null);
+        $this->registerArgument('user', User::class, 'User object', false, null);
+        $this->registerArgument('site', Site::class, 'Site object', true);
     }
 
     /**
@@ -44,9 +48,10 @@ class GetUnsubscribeUrlViewHelper extends AbstractViewHelper
      */
     public function render(): string
     {
+        /** @var FrontendUrlService $frontendUrlService */
         $frontendUrlService = ObjectUtility::getObjectManager()->get(FrontendUrlService::class);
         $url = $frontendUrlService->getTypolinkUrlFromParameter(
-            ConfigurationUtility::getPidUnsubscribe(),
+            $this->getPidUnsubscribe(),
             [
                 'tx_luxletter_fe' => [
                     'user' => $this->getUserIdentifier(),
@@ -56,6 +61,24 @@ class GetUnsubscribeUrlViewHelper extends AbstractViewHelper
             ]
         );
         return $url;
+    }
+
+    /**
+     * @return int
+     * @throws MisconfigurationException
+     * @throws SiteNotFoundException
+     */
+    protected function getPidUnsubscribe(): int
+    {
+        $site = $this->arguments['site'];
+        $unsubscribePid = (int)$site->getConfiguration()['luxletterUnsubscribePid'];
+        if ($unsubscribePid === 0) {
+            throw new MisconfigurationException(
+                'No unsubscribe page identifier found in site configuration',
+                1622811392
+            );
+        }
+        return $unsubscribePid;
     }
 
     /**

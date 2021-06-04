@@ -47,6 +47,11 @@ class Newsletter extends AbstractEntity
     protected $receiver = null;
 
     /**
+     * @var \In2code\Luxletter\Domain\Model\Configuration
+     */
+    protected $configuration = null;
+
+    /**
      * @var string
      */
     protected $origin = '';
@@ -194,6 +199,24 @@ class Newsletter extends AbstractEntity
     public function setReceiver(Usergroup $receiver): self
     {
         $this->receiver = $receiver;
+        return $this;
+    }
+
+    /**
+     * @return Configuration
+     */
+    public function getConfiguration(): Configuration
+    {
+        return $this->configuration;
+    }
+
+    /**
+     * @param Configuration $configuration
+     * @return Newsletter
+     */
+    public function setConfiguration(Configuration $configuration): self
+    {
+        $this->configuration = $configuration;
         return $this;
     }
 

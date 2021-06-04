@@ -22,6 +22,6 @@ class GetDomainViewHelper extends AbstractViewHelper
      */
     public function render(): string
     {
-        return ConfigurationUtility::getDomain();
+        return ConfigurationUtility::getCurrentDomain();
     }
 }

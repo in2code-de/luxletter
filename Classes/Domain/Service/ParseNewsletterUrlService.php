@@ -11,6 +11,7 @@ use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use In2code\Luxletter\Utility\TemplateUtility;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -76,6 +77,7 @@ class ParseNewsletterUrlService
     }
 
     /**
+     * @param Site $site
      * @param User|null $user
      * @return string
      * @throws Exception
@@ -85,28 +87,29 @@ class ParseNewsletterUrlService
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      */
-    public function getParsedContent(User $user = null): string
+    public function getParsedContent(Site $site, User $user = null): string
     {
         if ($user === null) {
             $userFactory = ObjectUtility::getObjectManager()->get(UserFactory::class);
             $user = $userFactory->getDummyUser();
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'BeforeParsing', [$user, $this]);
-        $content = $this->getNewsletterContainerAndContent($this->getContentFromOrigin($user), $user);
+        $content = $this->getNewsletterContainerAndContent($this->getContentFromOrigin($user), $site, $user);
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'AfterParsing', [$content, $this]);
         return $content;
     }
 
     /**
      * @param string $content
+     * @param Site $site
      * @param User $user
      * @return string
+     * @throws Exception
+     * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws InvalidConfigurationTypeException
-     * @throws Exception
      */
-    protected function getNewsletterContainerAndContent(string $content, User $user): string
+    protected function getNewsletterContainerAndContent(string $content, Site $site, User $user): string
     {
         $templateName = 'Mail/NewsletterContainer.html';
         if ($this->isParsingActive()) {
@@ -121,6 +124,7 @@ class ParseNewsletterUrlService
                 [
                     'content' => $content,
                     'user' => $user,
+                    'site' => $site,
                     'settings' => $configuration['settings'] ?? []
                 ]
             );

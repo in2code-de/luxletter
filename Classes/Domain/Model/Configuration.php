@@ -11,9 +11,9 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 /**
  * Class Settings
  */
-class Settings extends AbstractEntity
+class Configuration extends AbstractEntity
 {
-    const TABLE_NAME = 'tx_luxletter_domain_model_settings';
+    const TABLE_NAME = 'tx_luxletter_domain_model_configuration';
 
     /**
      * @var string
@@ -55,7 +55,7 @@ class Settings extends AbstractEntity
 
     /**
      * @param string $title
-     * @return Settings
+     * @return Configuration
      */
     public function setTitle(string $title): self
     {
@@ -73,7 +73,7 @@ class Settings extends AbstractEntity
 
     /**
      * @param string $fromEmail
-     * @return Settings
+     * @return Configuration
      */
     public function setFromEmail(string $fromEmail): self
     {
@@ -91,7 +91,7 @@ class Settings extends AbstractEntity
 
     /**
      * @param string $fromName
-     * @return Settings
+     * @return Configuration
      */
     public function setFromName(string $fromName): self
     {
@@ -109,7 +109,7 @@ class Settings extends AbstractEntity
 
     /**
      * @param string $replyEmail
-     * @return Settings
+     * @return Configuration
      */
     public function setReplyEmail(string $replyEmail): self
     {
@@ -127,7 +127,7 @@ class Settings extends AbstractEntity
 
     /**
      * @param string $replyName
-     * @return Settings
+     * @return Configuration
      */
     public function setReplyName(string $replyName): self
     {
@@ -157,7 +157,7 @@ class Settings extends AbstractEntity
 
     /**
      * @param string $site
-     * @return Settings
+     * @return Configuration
      */
     public function setSite(string $site): self
     {

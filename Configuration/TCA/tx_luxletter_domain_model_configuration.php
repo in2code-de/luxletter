@@ -1,9 +1,9 @@
 <?php
-use In2code\Luxletter\Domain\Model\Settings;
+use In2code\Luxletter\Domain\Model\Configuration;
 
 return [
     'ctrl' => [
-        'title' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:' . Settings::TABLE_NAME,
+        'title' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:' . Configuration::TABLE_NAME,
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -18,7 +18,7 @@ return [
             'starttime' => 'starttime',
             'endtime' => 'endtime',
         ],
-        'iconfile' => 'EXT:luxletter/Resources/Public/Icons/' . Settings::TABLE_NAME . '.svg',
+        'iconfile' => 'EXT:luxletter/Resources/Public/Icons/' . Configuration::TABLE_NAME . '.svg',
         'rootLevel' => -1
     ],
     'interface' => [
@@ -31,7 +31,7 @@ return [
         'title' => [
             'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
-                . Settings::TABLE_NAME . '.title',
+                . Configuration::TABLE_NAME . '.title',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
@@ -42,7 +42,7 @@ return [
         'from_email' => [
             'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
-                . Settings::TABLE_NAME . '.from_email',
+                . Configuration::TABLE_NAME . '.from_email',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
@@ -53,7 +53,7 @@ return [
         'from_name' => [
             'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
-                . Settings::TABLE_NAME . '.from_name',
+                . Configuration::TABLE_NAME . '.from_name',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
@@ -64,7 +64,7 @@ return [
         'reply_email' => [
             'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
-                . Settings::TABLE_NAME . '.reply_email',
+                . Configuration::TABLE_NAME . '.reply_email',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
@@ -75,7 +75,7 @@ return [
         'reply_name' => [
             'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
-                . Settings::TABLE_NAME . '.reply_name',
+                . Configuration::TABLE_NAME . '.reply_name',
             'config' => [
                 'type' => 'input',
                 'size' => 30,
@@ -86,7 +86,7 @@ return [
         'site' => [
             'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
-                . Settings::TABLE_NAME . '.site',
+                . Configuration::TABLE_NAME . '.site',
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',

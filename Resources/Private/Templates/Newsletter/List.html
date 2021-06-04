@@ -2,22 +2,14 @@
 
 
 <f:section name="content">
-	<f:if condition="{luxlettersettings}">
+	<f:if condition="{configurations}">
 		<f:then>
 			<f:render section="Newsletters" arguments="{_all}"/>
 		</f:then>
 		<f:else>
-			<f:render section="NoSettings" arguments="{_all}"/>
+			<f:render section="NoConfigurations" arguments="{_all}"/>
 		</f:else>
 	</f:if>
-</f:section>
-
-
-<f:section name="NoSettings">
-	<div class="alert alert-danger" role="alert">
-		<h4 class="alert-heading">No configuration found</h4>
-		<p class="mb-0">Please add a settings record with sender information in the list view before you start with your first newsletter</p>
-	</div>
 </f:section>
 
 
@@ -115,5 +107,13 @@
 			</f:if>
 
 		</div>
+	</div>
+</f:section>
+
+
+<f:section name="NoConfigurations">
+	<div class="alert alert-danger" role="alert">
+		<h4 class="alert-heading"><f:translate key="module.newsletter.list.createnew.noconfiguration">No configuration found</f:translate></h4>
+		<p class="mb-0"><f:translate key="module.newsletter.list.createnew.noconfigurationdetails">Please add a record</f:translate></p>
 	</div>
 </f:section>

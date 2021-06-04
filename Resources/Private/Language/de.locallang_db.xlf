@@ -141,31 +141,31 @@
 				<target state="translated">Ziel</target>
 			</trans-unit>
 
-			<trans-unit id="tx_luxletter_domain_model_settings">
-				<source>Settings</source>
-				<target state="translated">Einstellungen</target>
+			<trans-unit id="tx_luxletter_domain_model_configuration">
+				<source>Sender configuration</source>
+				<target state="translated">Sender Einstellungen</target>
 			</trans-unit>
-			<trans-unit id="tx_luxletter_domain_model_settings.title">
+			<trans-unit id="tx_luxletter_domain_model_configuration.title">
 				<source>Title</source>
 				<target state="translated">Bezeichnung</target>
 			</trans-unit>
-			<trans-unit id="tx_luxletter_domain_model_settings.from_email">
+			<trans-unit id="tx_luxletter_domain_model_configuration.from_email">
 				<source>Sender email</source>
 				<target state="translated">Absender E-Mail-Adresse</target>
 			</trans-unit>
-			<trans-unit id="tx_luxletter_domain_model_settings.from_name">
+			<trans-unit id="tx_luxletter_domain_model_configuration.from_name">
 				<source>Sender name</source>
 				<target state="translated">Absender Name</target>
 			</trans-unit>
-			<trans-unit id="tx_luxletter_domain_model_settings.reply_email">
+			<trans-unit id="tx_luxletter_domain_model_configuration.reply_email">
 				<source>Reply to email</source>
 				<target state="translated">Antworten E-Mail-Adresse</target>
 			</trans-unit>
-			<trans-unit id="tx_luxletter_domain_model_settings.reply_name">
+			<trans-unit id="tx_luxletter_domain_model_configuration.reply_name">
 				<source>Reply name</source>
 				<target state="translated">Antworten Name</target>
 			</trans-unit>
-			<trans-unit id="tx_luxletter_domain_model_settings.site">
+			<trans-unit id="tx_luxletter_domain_model_configuration.site">
 				<source>Site</source>
 				<target state="translated">Seitenbaum</target>
 			</trans-unit>
