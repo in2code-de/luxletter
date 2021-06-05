@@ -42,6 +42,50 @@ class SiteService
      */
     public function getDomainFromSite(Site $site): string
     {
+        $this->checkForValidSite($site);
+        return $site->getConfiguration()['base'];
+    }
+
+    /**
+     * @param int $pageIdentifier
+     * @param array $arguments
+     * @return string
+     * @throws MisconfigurationException
+     */
+    public function getPageUrlFromParameter(int $pageIdentifier, array $arguments = []): string
+    {
+        /** @var Site $site */
+        $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageIdentifier);
+        $this->checkForValidSite($site);
+        $uri = $site->getRouter()->generateUri($pageIdentifier, $arguments);
+        return $uri->__tostring();
+    }
+
+    /**
+     * Just build an url with a domain and some arguments (so not page needed)
+     *
+     * @param array $arguments
+     * @param Site $site
+     * @return string
+     * @throws MisconfigurationException
+     */
+    public function getFrontendUrlFromParameter(array $arguments, Site $site): string
+    {
+        $this->checkForValidSite($site);
+        /** @var SiteService $siteService */
+        $siteService = GeneralUtility::makeInstance(SiteService::class);
+        $url = $siteService->getDomainFromSite($site);
+        $url .= '?' . http_build_query($arguments);
+        return $url;
+    }
+
+    /**
+     * @param Site $site
+     * @return void
+     * @throws MisconfigurationException
+     */
+    protected function checkForValidSite(Site $site): void
+    {
         $base = $site->getConfiguration()['base'];
         if (StringUtility::startsWith($base, 'http') === false || StringUtility::endsWith($base, '/') === false) {
             throw new MisconfigurationException(
@@ -49,6 +93,5 @@ class SiteService
                 1622832844
             );
         }
-        return $base;
     }
 }

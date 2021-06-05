@@ -2,11 +2,10 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Model;
 
-use In2code\Luxletter\Domain\Service\FrontendUrlService;
+use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\StringUtility;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
@@ -95,16 +94,15 @@ class Link extends AbstractEntity
      * Get hashed uri
      *
      * @return string
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws MisconfigurationException
+     * @throws SiteNotFoundException
      */
     public function getUriFromHash(): string
     {
         $site = $this->getNewsletter()->getConfiguration()->getSiteConfiguration();
-        /** @var FrontendUrlService $urlService */
-        $urlService = GeneralUtility::makeInstance(FrontendUrlService::class);
-        return $urlService->getFrontendUrlFromParameter(['luxletterlink' => $this->getHash()], $site);
+        /** @var SiteService $siteService */
+        $siteService = GeneralUtility::makeInstance(SiteService::class);
+        return $siteService->getFrontendUrlFromParameter(['luxletterlink' => $this->getHash()], $site);
     }
 
     /**

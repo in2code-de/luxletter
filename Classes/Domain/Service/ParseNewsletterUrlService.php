@@ -55,7 +55,6 @@ class ParseNewsletterUrlService
      * @param string $origin can be a page uid or a complete url
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws Exception
      */
     public function __construct(string $origin)
     {
@@ -66,8 +65,9 @@ class ParseNewsletterUrlService
             if ($typenum > 0) {
                 $arguments = ['type' => $typenum];
             }
-            $urlService = ObjectUtility::getObjectManager()->get(FrontendUrlService::class);
-            $url = $urlService->getTypolinkUrlFromParameter((int)$origin, $arguments);
+            /** @var SiteService $siteService */
+            $siteService = GeneralUtility::makeInstance(SiteService::class);
+            $url = $siteService->getPageUrlFromParameter((int)$origin, $arguments);
         } elseif (StringUtility::isValidUrl($origin)) {
             $url = $origin;
         }
@@ -90,7 +90,7 @@ class ParseNewsletterUrlService
     public function getParsedContent(Site $site, User $user = null): string
     {
         if ($user === null) {
-            $userFactory = ObjectUtility::getObjectManager()->get(UserFactory::class);
+            $userFactory = GeneralUtility::makeInstance(UserFactory::class);
             $user = $userFactory->getDummyUser();
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'BeforeParsing', [$user, $this]);
@@ -114,7 +114,7 @@ class ParseNewsletterUrlService
         $templateName = 'Mail/NewsletterContainer.html';
         if ($this->isParsingActive()) {
             $configuration = ConfigurationUtility::getExtensionSettings();
-            $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
+            $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
             $standaloneView->setTemplateRootPaths($configuration['view']['templateRootPaths']);
             $standaloneView->setLayoutRootPaths($configuration['view']['layoutRootPaths']);
             $standaloneView->setPartialRootPaths($configuration['view']['partialRootPaths']);
@@ -161,7 +161,7 @@ class ParseNewsletterUrlService
      */
     protected function getContentObjectVariables(array $configuration): array
     {
-        $tsService = ObjectUtility::getObjectManager()->get(TypoScriptService::class);
+        $tsService = GeneralUtility::makeInstance(TypoScriptService::class);
         $tsConfiguration = $tsService->convertPlainArrayToTypoScriptArray($configuration);
 
         $variables = [];
@@ -205,7 +205,7 @@ class ParseNewsletterUrlService
         }
         $string = $this->getBodyFromHtml($string);
         if ($this->isParsingActive()) {
-            $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
+            $parseService = GeneralUtility::makeInstance(ParseNewsletterService::class);
             $string = $parseService->parseMailText($string, ['user' => $user]);
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__, [$string, $user, $this]);
