@@ -17,10 +17,11 @@ class QueueRepository extends AbstractRepository
 {
     /**
      * @param int $limit
+     * @param int $newsletterIdentifier
      * @return QueryResultInterface
      * @throws InvalidQueryException
      */
-    public function findDispatchableInQueue(int $limit): QueryResultInterface
+    public function findDispatchableInQueue(int $limit, int $newsletterIdentifier): QueryResultInterface
     {
         $query = $this->createQuery();
         $and = [
@@ -31,6 +32,9 @@ class QueueRepository extends AbstractRepository
             $query->equals('user.deleted', false),
             $query->equals('user.disable', false)
         ];
+        if ($newsletterIdentifier > 0) {
+            $and[] = $query->equals('newsletter.uid', $newsletterIdentifier);
+        }
         $query->matching($query->logicalAnd($and));
         $query->setLimit($limit);
         $query->setOrderings(['tstamp' => QueryInterface::ORDER_ASCENDING]);

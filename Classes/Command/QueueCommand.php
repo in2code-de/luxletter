@@ -33,6 +33,12 @@ class QueueCommand extends Command
     {
         $this->setDescription('Send a bunch of emails from the queue.');
         $this->addArgument('amount', InputArgument::OPTIONAL, 'How many mails should be send per wave?', 50);
+        $this->addArgument(
+            'newsletter',
+            InputArgument::OPTIONAL,
+            'Newsletter uid if only queued mails from a specific NL should be send',
+            0
+        );
     }
 
     /**
@@ -58,7 +64,10 @@ class QueueCommand extends Command
     {
         /** @var ProgressQueue $progressQueue */
         $progressQueue = GeneralUtility::makeInstance(ProgressQueue::class, $output);
-        $progressed = $progressQueue->progress((int)$input->getArgument('amount'));
+        $progressed = $progressQueue->progress(
+            (int)$input->getArgument('amount'),
+            (int)$input->getArgument('newsletter')
+        );
         if ($progressed > 0) {
             $output->writeln('Successfully sent ' . $progressed . ' email(s) from the queue...');
         } else {

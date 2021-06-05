@@ -63,6 +63,7 @@ class ProgressQueue
 
     /**
      * @param int $limit
+     * @param int $newsletterIdentifier
      * @return int Number of progressed queued mails
      * @throws ArgumentMissingException
      * @throws Exception
@@ -74,12 +75,12 @@ class ProgressQueue
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
-     * @throws UnknownObjectException
      * @throws TransportExceptionInterface
+     * @throws UnknownObjectException
      */
-    public function progress(int $limit = 50): int
+    public function progress(int $limit, int $newsletterIdentifier): int
     {
-        $queues = $this->queueRepository->findDispatchableInQueue($limit);
+        $queues = $this->queueRepository->findDispatchableInQueue($limit, $newsletterIdentifier);
         if ($queues->count() > 0) {
             $progress = new ProgressBar($this->output, $queues->count());
             $progress->start();
