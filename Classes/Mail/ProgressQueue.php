@@ -17,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
@@ -187,7 +188,8 @@ class ProgressQueue
     protected function hashLinksInBodytext(Queue $queue, string $bodytext): string
     {
         if (ConfigurationUtility::isRewriteLinksInNewsletterActivated()) {
-            $linkHashing = ObjectUtility::getObjectManager()->get(
+            /** @var LinkHashingService $linkHashing */
+            $linkHashing = GeneralUtility::makeInstance(
                 LinkHashingService::class,
                 $queue->getNewsletter(),
                 $queue->getUser()

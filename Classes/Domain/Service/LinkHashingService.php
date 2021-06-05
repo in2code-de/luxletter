@@ -99,6 +99,7 @@ class LinkHashingService
         $href = $this->convertToAbsoluteHref($href);
         if (StringUtility::isValidUrl($href)) {
             if ($aTag->getAttribute('data-luxletter-parselink') !== 'false') {
+                /** @var Link $link */
                 $link = ObjectUtility::getObjectManager()->get(Link::class)
                     ->setNewsletter($this->newsletter)
                     ->setUser($this->user)
@@ -123,6 +124,7 @@ class LinkHashingService
     protected function convertToAbsoluteHref(string $href): string
     {
         if (StringUtility::startsWith($href, '/')) {
+            $href = ltrim($href, '/');
             /** @var SiteService $siteService */
             $siteService = GeneralUtility::makeInstance(SiteService::class);
             $href = $siteService->getDomainFromSite(

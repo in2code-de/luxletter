@@ -45,7 +45,7 @@ class FrontendUrlService
         /** @var SiteService $siteService */
         $siteService = GeneralUtility::makeInstance(SiteService::class);
         $url = $siteService->getDomainFromSite($site);
-        $url .= '/?' . http_build_query($arguments);
+        $url .= '?' . http_build_query($arguments);
         return $url;
     }
 }
