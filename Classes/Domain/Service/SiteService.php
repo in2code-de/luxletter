@@ -34,6 +34,9 @@ class SiteService
     }
 
     /**
+     * Get a domain from a site configuration that can be used to prefix (e.g.) links or assets in newsletter bodytext
+     *
+     * @param Site $site
      * @return string "https://www.domain.org/"
      * @throws MisconfigurationException
      */

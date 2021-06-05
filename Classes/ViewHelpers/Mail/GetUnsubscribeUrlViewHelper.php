@@ -7,15 +7,12 @@ use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Service\FrontendUrlService;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Exception\UserValuesAreMissingException;
-use In2code\Luxletter\Utility\FrontendUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
 use TYPO3\CMS\Core\Site\Entity\Site;
-use TYPO3\CMS\Core\Site\SiteFinder;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 

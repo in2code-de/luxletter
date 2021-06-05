@@ -35,7 +35,7 @@ class ConfigurationUtility
      */
     public static function getCurrentDomain(): string
     {
-        if (GeneralUtility::getIndpEnv('HTTP_HOST') === 'null') {
+        if (GeneralUtility::getIndpEnv('HTTP_HOST') === null) {
             throw new \LogicException(__FUNCTION__ . ' must not be called from CLI context', 1622812071);
         }
         $uri = parse_url(GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'), PHP_URL_SCHEME);

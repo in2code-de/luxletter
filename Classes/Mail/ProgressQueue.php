@@ -138,7 +138,8 @@ class ProgressQueue
             $queue->getNewsletter()->getSubject(),
             [
                 'user' => $queue->getUser(),
-                'newsletter' => $queue->getNewsletter()
+                'newsletter' => $queue->getNewsletter(),
+                'site' => $queue->getNewsletter()->getConfiguration()->getSiteConfiguration()
             ]
         );
     }
