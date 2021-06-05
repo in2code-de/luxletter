@@ -17,19 +17,24 @@ class QueueRepository extends AbstractRepository
 {
     /**
      * @param int $limit
+     * @param int $newsletterIdentifier
      * @return QueryResultInterface
      * @throws InvalidQueryException
      */
-    public function findDispatchableInQueue(int $limit): QueryResultInterface
+    public function findDispatchableInQueue(int $limit, int $newsletterIdentifier): QueryResultInterface
     {
         $query = $this->createQuery();
         $and = [
             $query->lessThan('datetime', time()),
             $query->equals('sent', false),
             $query->equals('newsletter.disabled', false),
+            $query->greaterThan('newsletter.configuration', 0),
             $query->equals('user.deleted', false),
             $query->equals('user.disable', false)
         ];
+        if ($newsletterIdentifier > 0) {
+            $and[] = $query->equals('newsletter.uid', $newsletterIdentifier);
+        }
         $query->matching($query->logicalAnd($and));
         $query->setLimit($limit);
         $query->setOrderings(['tstamp' => QueryInterface::ORDER_ASCENDING]);
@@ -82,5 +87,18 @@ class QueueRepository extends AbstractRepository
             ->setMaxResults(1)
             ->execute()
             ->fetchColumn() > 0;
+    }
+
+    /**
+     * @return void
+     */
+    public function truncate(): void
+    {
+        $tables = [
+            Queue::TABLE_NAME
+        ];
+        foreach ($tables as $table) {
+            DatabaseUtility::getConnectionForTable($table)->truncate($table);
+        }
     }
 }

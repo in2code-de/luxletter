@@ -11,7 +11,6 @@ use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
  */
 class LinkRepository extends AbstractRepository
 {
-
     /**
      * @param string $hash
      * @return bool

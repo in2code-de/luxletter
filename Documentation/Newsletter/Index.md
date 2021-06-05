@@ -123,13 +123,13 @@ plugin {
     tx_luxletter_fe {
         view {
             templateRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Templates/Extensions/Luxletter/
+                2 = EXT:yoursitepackage/Resources/Private/Templates/Extensions/Luxletter/
             }
             partialRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Partials/Extensions/Luxletter/
+                2 = EXT:yoursitepackage/Resources/Private/Partials/Extensions/Luxletter/
             }
             layoutRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Layouts/Extensions/Luxletter/
+                2 = EXT:yoursitepackage/Resources/Private/Layouts/Extensions/Luxletter/
             }
         }
     }
@@ -138,13 +138,13 @@ module {
     tx_luxletter {
         view {
             templateRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Templates/Extensions/Luxletter/
+                2 = EXT:yoursitepackage/Resources/Private/Templates/Extensions/Luxletter/
             }
             partialRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Partials/Extensions/Luxletter/
+                2 = EXT:yoursitepackage/Resources/Private/Partials/Extensions/Luxletter/
             }
             layoutRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Layouts/Extensions/Luxletter/
+                2 = EXT:yoursitepackage/Resources/Private/Layouts/Extensions/Luxletter/
             }
         }
     }

@@ -100,10 +100,31 @@ See the full [documentation](Documentation/Index.md) (installation, configuratio
 composer require "in2code/luxletter"
 ```
 
+
+## Breaking changes !!!
+
+### Upgrade to 4.x
+
+Multiple sender can now be defined in records, in addition it's not needed to define a domain in extension configuration
+any more. We now look into site configuration. But that change needs you to adjust some stuff.
+
+Breaking changes in detail and what you have to do step by step after you have updated the extension:
+
+* Add one (ore more) record(s) with sender information on any sysfolder
+* Update your site configuration with an unsubscribe pid (so you could use different unsubscribe plugins now)
+* Create new newsletter records with the new sender configuration. **Note:** Old newsletters won't be queued any more because a sender configuration is missing
+* Update your HTML template files (compare your files with `EXT:luxletter/Resources/Private/Templates/Mail/NewsletterContainer.html`)
+  * If you are using the viewhelper `luxletter:mail.getUnsubscribeUrl` now another argument must be passed: `site` - example: `{luxletter:mail.getUnsubscribeUrl(newsletter:newsletter,user:user,site:site)}`
+  * If you are usint the viewhelper `luxletter:configuration.getDomain` also `site` must be passed as argument - example: `{luxletter:configuration.getDomain(site:site)}`
+  * If you have changed the TrackingPixel.html partial file, take also care that `site` is now passed to `luxletter:mail.getTrackingPixelUrl` - example: `{luxletter:mail.getTrackingPixelUrl(newsletter:newsletter,user:user,site:site)}`
+
+
+
 ## Changelog
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| !!! 4.0.0  | 2021.06.10  | Feature    | Multiple sender configuration supported (see breaking changes above), Testmails can be send multiple times, TYPO3 9 support finally dropped                                                |
 | 3.1.4      | 2021.06.04  | Bugfix     | Allow rendering of widgets without EXT:lux                                                                                                                                                 |
 | 3.1.3      | 2021.04.29  | Task       | Pass arguments in signal as reference                                                                                                                                                      |
 | 3.1.2      | 2021.03.17  | Task       | Add extension key to composer.json                                                                                                                                                         |

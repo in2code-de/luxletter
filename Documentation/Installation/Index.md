@@ -132,4 +132,14 @@ good solution.
 
 As an alternative, you could also process the queue directly from the console:
 
-`./vendor/bin/typo3cms luxletter:queue 50`
+```
+# Send 50 newsletters that are queued
+./vendor/bin/typo3 luxletter:queue
+
+# Send a specific number of newsletters from queue
+./vendor/bin/typo3cms luxletter:queue 10
+
+# Send some queued newsletters from newsletter with uid 123
+./vendor/bin/typo3cms luxletter:queue 10 123
+```
+

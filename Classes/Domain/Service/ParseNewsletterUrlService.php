@@ -11,6 +11,7 @@ use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use In2code\Luxletter\Utility\TemplateUtility;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -54,7 +55,6 @@ class ParseNewsletterUrlService
      * @param string $origin can be a page uid or a complete url
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws Exception
      */
     public function __construct(string $origin)
     {
@@ -65,8 +65,9 @@ class ParseNewsletterUrlService
             if ($typenum > 0) {
                 $arguments = ['type' => $typenum];
             }
-            $urlService = ObjectUtility::getObjectManager()->get(FrontendUrlService::class);
-            $url = $urlService->getTypolinkUrlFromParameter((int)$origin, $arguments);
+            /** @var SiteService $siteService */
+            $siteService = GeneralUtility::makeInstance(SiteService::class);
+            $url = $siteService->getPageUrlFromParameter((int)$origin, $arguments);
         } elseif (StringUtility::isValidUrl($origin)) {
             $url = $origin;
         }
@@ -76,6 +77,7 @@ class ParseNewsletterUrlService
     }
 
     /**
+     * @param Site $site
      * @param User|null $user
      * @return string
      * @throws Exception
@@ -85,33 +87,34 @@ class ParseNewsletterUrlService
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      */
-    public function getParsedContent(User $user = null): string
+    public function getParsedContent(Site $site, User $user = null): string
     {
         if ($user === null) {
-            $userFactory = ObjectUtility::getObjectManager()->get(UserFactory::class);
+            $userFactory = GeneralUtility::makeInstance(UserFactory::class);
             $user = $userFactory->getDummyUser();
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'BeforeParsing', [$user, $this]);
-        $content = $this->getNewsletterContainerAndContent($this->getContentFromOrigin($user), $user);
+        $content = $this->getNewsletterContainerAndContent($this->getContentFromOrigin($user), $site, $user);
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'AfterParsing', [$content, $this]);
         return $content;
     }
 
     /**
      * @param string $content
+     * @param Site $site
      * @param User $user
      * @return string
+     * @throws Exception
+     * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws InvalidConfigurationTypeException
-     * @throws Exception
      */
-    protected function getNewsletterContainerAndContent(string $content, User $user): string
+    protected function getNewsletterContainerAndContent(string $content, Site $site, User $user): string
     {
         $templateName = 'Mail/NewsletterContainer.html';
         if ($this->isParsingActive()) {
             $configuration = ConfigurationUtility::getExtensionSettings();
-            $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
+            $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
             $standaloneView->setTemplateRootPaths($configuration['view']['templateRootPaths']);
             $standaloneView->setLayoutRootPaths($configuration['view']['layoutRootPaths']);
             $standaloneView->setPartialRootPaths($configuration['view']['partialRootPaths']);
@@ -121,6 +124,7 @@ class ParseNewsletterUrlService
                 [
                     'content' => $content,
                     'user' => $user,
+                    'site' => $site,
                     'settings' => $configuration['settings'] ?? []
                 ]
             );
@@ -157,7 +161,7 @@ class ParseNewsletterUrlService
      */
     protected function getContentObjectVariables(array $configuration): array
     {
-        $tsService = ObjectUtility::getObjectManager()->get(TypoScriptService::class);
+        $tsService = GeneralUtility::makeInstance(TypoScriptService::class);
         $tsConfiguration = $tsService->convertPlainArrayToTypoScriptArray($configuration);
 
         $variables = [];
@@ -201,7 +205,7 @@ class ParseNewsletterUrlService
         }
         $string = $this->getBodyFromHtml($string);
         if ($this->isParsingActive()) {
-            $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
+            $parseService = GeneralUtility::makeInstance(ParseNewsletterService::class);
             $string = $parseService->parseMailText($string, ['user' => $user]);
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__, [$string, $user, $this]);

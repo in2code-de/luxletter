@@ -2,7 +2,10 @@
 	<f:render section="SectionMenu" arguments="{_all}" />
 
 	<f:for each="{teaserElements}" as="teaserElement">
-		<luxletter:format.cropBySelection limit="{flexformConfiguration.limit}" append="{flexformConfiguration.append}" classNameToSelect="ce-bodytext">{teaserElement.html}</luxletter:format.cropBySelection>
+		<luxletter:format.cropBySelection
+				limit="{flexformConfiguration.limit}"
+				append="{flexformConfiguration.append}"
+				classNameToSelect="ce-bodytext">{teaserElement.html}</luxletter:format.cropBySelection>
 		<f:render section="MoreButton" arguments="{_all}" />
 	</f:for>
 </f:if>
@@ -51,7 +54,11 @@
 						<td>
 							<table>
 								<tr>
-									<td><f:link.page pageUid="{teaserElement.data.pid}" section="{teaserElement.data.uid}" class="btn btn-primary">{flexformConfiguration.buttontext}</f:link.page></td>
+									<td><f:link.page
+											pageUid="{teaserElement.data.pid}"
+											section="{teaserElement.data.uid}"
+											absolute="1"
+											class="btn btn-primary">{flexformConfiguration.buttontext}</f:link.page></td>
 								</tr>
 							</table>
 						</td>
@@ -67,5 +74,9 @@
 	MoreButton: View for normal website
 </f:comment>
 <f:section name="MoreButtonWebsite">
-	<p><f:link.page pageUid="{teaserElement.data.pid}" section="{teaserElement.data.uid}" class="btn btn-primary">{flexformConfiguration.buttontext}</f:link.page></p>
+	<p><f:link.page
+			pageUid="{teaserElement.data.pid}"
+			section="{teaserElement.data.uid}"
+			absolute="1"
+			class="btn btn-primary">{flexformConfiguration.buttontext}</f:link.page></p>
 </f:section>

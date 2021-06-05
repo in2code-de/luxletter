@@ -31,20 +31,16 @@ class ConfigurationUtility
     }
 
     /**
-     * @return string like "https://www.luxletter.de" without trailing slash
+     * @return string like "https://www.domain.org/"
      */
-    public static function getDomain(): string
+    public static function getCurrentDomain(): string
     {
-        $domain = (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'domain');
-        return rtrim($domain, '/');
-    }
-
-    /**
-     * @return int
-     */
-    public static function getPidUnsubscribe(): int
-    {
-        return (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'pidUnsubscribe');
+        if (GeneralUtility::getIndpEnv('HTTP_HOST') === null) {
+            throw new \LogicException(__FUNCTION__ . ' must not be called from CLI context', 1622812071);
+        }
+        $uri = parse_url(GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'), PHP_URL_SCHEME);
+        $uri .= '://' . GeneralUtility::getIndpEnv('HTTP_HOST') . '/';
+        return $uri;
     }
 
     /**
@@ -73,38 +69,6 @@ class ConfigurationUtility
     public static function isReceiverActionActivated(): bool
     {
         return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'receiverAction') === '1';
-    }
-
-    /**
-     * @return string
-     */
-    public static function getFromEmail(): string
-    {
-        return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'fromEmail');
-    }
-
-    /**
-     * @return string
-     */
-    public static function getFromName(): string
-    {
-        return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'fromName');
-    }
-
-    /**
-     * @return string
-     */
-    public static function getReplyEmail(): string
-    {
-        return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'replyEmail');
-    }
-
-    /**
-     * @return string
-     */
-    public static function getReplyName(): string
-    {
-        return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'replyName');
     }
 
     /**

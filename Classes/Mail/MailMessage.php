@@ -2,7 +2,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Mail;
 
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Mail\MailMessage as MailMessageCore;
 
 /**
@@ -15,28 +15,6 @@ class MailMessage extends MailMessageCore
      */
     private function initializeMailer()
     {
-        $this->mailer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(Mailer::class);
-    }
-
-    /**
-     * Sends the message.
-     *
-     * This is a short-hand method. It is however more useful to create
-     * a Mailer instance which can be used via Mailer->send($message);
-     *
-     * @return bool whether the message was accepted or not
-     * @throws TransportExceptionInterface
-     * Todo: sendMail() can be renamed to send() to overrule parent::send() when T3 9 support is dropped
-     */
-    public function sendMail(): bool
-    {
-        $this->initializeMailer();
-        $this->sent = false;
-        $this->mailer->send($this);
-        $sentMessage = $this->mailer->getSentMessage();
-        if ($sentMessage) {
-            $this->sent = true;
-        }
-        return $this->sent;
+        $this->mailer = GeneralUtility::makeInstance(Mailer::class);
     }
 }

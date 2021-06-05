@@ -1,4 +1,5 @@
 <?php
+use In2code\Luxletter\Domain\Model\Configuration;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\Usergroup;
 
@@ -22,16 +23,13 @@ return [
         'iconfile' => 'EXT:luxletter/Resources/Public/Icons/' . Newsletter::TABLE_NAME . '.svg',
         'rootLevel' => -1
     ],
-    'interface' => [
-        'showRecordFieldList' => 'disabled,title,description,datetime,subject,receiver,origin,bodytext',
-    ],
     'types' => [
-        '1' => ['showitem' => 'disabled,title,description,datetime,subject,receiver,origin,bodytext'],
+        '1' => ['showitem' => 'disabled,title,description,datetime,subject,receiver,configuration,origin,bodytext'],
     ],
     'columns' => [
         'disabled' => [
             'exclude' => true,
-            'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.hidden',
+            'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
             'config' => [
                 'type' => 'check',
             ],
@@ -63,14 +61,14 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 13,
-                'max' => 20,
                 'eval' => 'datetime',
                 'checkbox' => 0,
                 'default' => 0,
                 'range' => [
                     'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
                 ],
-                'readOnly' => true
+                'readOnly' => true,
+                'renderType' => 'inputDateTime'
             ]
         ],
         'subject' => [
@@ -93,6 +91,22 @@ return [
                     ['', 0],
                 ],
                 'foreign_table' => Usergroup::TABLE_NAME,
+                'foreign_table_where' => 'AND 1',
+                'default' => 0,
+                'readOnly' => true
+            ]
+        ],
+        'configuration' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
+                . Newsletter::TABLE_NAME . '.configuration',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['', 0],
+                ],
+                'foreign_table' => Configuration::TABLE_NAME,
                 'foreign_table_where' => 'AND 1',
                 'default' => 0,
                 'readOnly' => true
