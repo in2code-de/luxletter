@@ -1,6 +1,19 @@
 <f:layout name="Backend"/>
 
+
 <f:section name="content">
+	<f:if condition="{configurations}">
+		<f:then>
+			<f:render section="Newsletters" arguments="{_all}"/>
+		</f:then>
+		<f:else>
+			<f:render section="NoConfigurations" arguments="{_all}"/>
+		</f:else>
+	</f:if>
+</f:section>
+
+
+<f:section name="Newsletters">
 	<f:if condition="{newsletters}">
 		<div class="row">
 			<div class="col-md-12">
@@ -94,5 +107,13 @@
 			</f:if>
 
 		</div>
+	</div>
+</f:section>
+
+
+<f:section name="NoConfigurations">
+	<div class="alert alert-danger" role="alert">
+		<h4 class="alert-heading"><f:translate key="module.newsletter.list.createnew.noconfiguration">No configuration found</f:translate></h4>
+		<p class="mb-0"><f:translate key="module.newsletter.list.createnew.noconfigurationdetails">Please add a record</f:translate></p>
 	</div>
 </f:section>

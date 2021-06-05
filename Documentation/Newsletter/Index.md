@@ -93,7 +93,7 @@ But luxletter will render your content again with TABLE-mechanism if you are add
 Example output:
 <img src="../Images/documentation_newsletter_type.png" width="800" alt="typenum for newsletter markup" />
 
-**Note** If you are using Sites in TYPO3 9, typenum should be defined in the configuration. Example:
+**Note** Typenum routing should be defined in the configuration. Example:
 
 ```
 routeEnhancers:
@@ -123,13 +123,13 @@ plugin {
     tx_luxletter_fe {
         view {
             templateRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Templates/Extensions/Luxletter/
+                2 = EXT:yoursitepackage/Resources/Private/Templates/Extensions/Luxletter/
             }
             partialRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Partials/Extensions/Luxletter/
+                2 = EXT:yoursitepackage/Resources/Private/Partials/Extensions/Luxletter/
             }
             layoutRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Layouts/Extensions/Luxletter/
+                2 = EXT:yoursitepackage/Resources/Private/Layouts/Extensions/Luxletter/
             }
         }
     }
@@ -138,13 +138,13 @@ module {
     tx_luxletter {
         view {
             templateRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Templates/Extensions/Luxletter/
+                2 = EXT:yoursitepackage/Resources/Private/Templates/Extensions/Luxletter/
             }
             partialRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Partials/Extensions/Luxletter/
+                2 = EXT:yoursitepackage/Resources/Private/Partials/Extensions/Luxletter/
             }
             layoutRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Layouts/Extensions/Luxletter/
+                2 = EXT:yoursitepackage/Resources/Private/Layouts/Extensions/Luxletter/
             }
         }
     }
@@ -155,7 +155,7 @@ The existing template is using the **Zurb Foundation email template**
 (see https://foundation.zurb.com/emails/docs/css-guide.html for details)
 
 **Note** There is also an unsubscribe link in the footer - look for 
-`<f:link.external uri="{luxletter:mail.getUnsubscribeUrl(newsletter:newsletter,user:user)}" additionalAttributes="{data-luxletter-parselink:'false'}">Unsubscribe now</f:link.external>`
+`<f:link.external uri="{luxletter:mail.getUnsubscribeUrl(newsletter:newsletter,user:user,site:site)}" additionalAttributes="{data-luxletter-parselink:'false'}">Unsubscribe now</f:link.external>`
 
 **Note** Normally links in luxletter should be rewritten, so clicks can be tracked. But in some
 cases you don't want to rewrite all links. Some should not be rewritten. Just add an attribute
@@ -194,16 +194,17 @@ Clicking on `Add new newsletter` starts a process where you can create new newsl
 | Field                   | Description                                                                             |
 | ----------------------- | --------------------------------------------------------------------------------------- |
 | Newsletter title        | Add a useful title to your newsletter                                                   | 
-| Description             | Add a useful title to your newsletter                                                   | 
 | Newsletter start        | If you select a start time (optional), newsletters will not be send before this time    | 
+| Description             | Add a useful title to your newsletter                                                   | 
 
 <img src="../Images/documentation_newnewsletter_step2.png" width="800" alt="create new newsletter - step 2" />
 
 | Field                   | Description                                                                             |
 | ----------------------- | --------------------------------------------------------------------------------------- |
+| Sender                  | Choose a sender record                                                                  | 
+| Receiver                | Choose a receiver group (frontenduser groups that marked as luxletter groups)           | 
 | Mail subject            | Mail subject (also variables are allowed like {user.lastName}                           | 
-| Choose a receiver group | Choose a receiver group (frontenduser groups that marked as luxletter groups)           | 
-| Newsletter location     | Choose where your HTML for the newsletter is located. An absolute URL like https://domain.org/newsletter.html is possible. If you add a number, the page will be parsed (typenum is automaticly added) | 
+| Newsletter location     | Choose where your HTML for the newsletter is located. An absolute URL like https://domain.org/newsletter.html is possible. If you add a number (PID), the page will be parsed (typenum is automaticly added) | 
 
 <img src="../Images/documentation_newnewsletter_step3.png" width="800" alt="create new newsletter - step 3" />
 

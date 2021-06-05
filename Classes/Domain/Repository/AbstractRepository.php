@@ -14,7 +14,6 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
  */
 abstract class AbstractRepository extends Repository
 {
-
     /**
      * @var array
      */

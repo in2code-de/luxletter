@@ -17,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
@@ -62,6 +63,7 @@ class ProgressQueue
 
     /**
      * @param int $limit
+     * @param int $newsletterIdentifier
      * @return int Number of progressed queued mails
      * @throws ArgumentMissingException
      * @throws Exception
@@ -73,12 +75,12 @@ class ProgressQueue
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
-     * @throws UnknownObjectException
      * @throws TransportExceptionInterface
+     * @throws UnknownObjectException
      */
-    public function progress(int $limit = 50): int
+    public function progress(int $limit, int $newsletterIdentifier): int
     {
-        $queues = $this->queueRepository->findDispatchableInQueue($limit);
+        $queues = $this->queueRepository->findDispatchableInQueue($limit, $newsletterIdentifier);
         if ($queues->count() > 0) {
             $progress = new ProgressBar($this->output, $queues->count());
             $progress->start();
@@ -111,10 +113,12 @@ class ProgressQueue
     protected function sendNewsletterToReceiverInQueue(Queue $queue): void
     {
         if ($queue->getUser() !== null) {
+            /** @var SendMail $sendMail */
             $sendMail = ObjectUtility::getObjectManager()->get(
                 SendMail::class,
                 $this->getSubject($queue),
-                $this->getBodyText($queue)
+                $this->getBodyText($queue),
+                $queue->getNewsletter()->getConfiguration()
             );
             $sendMail->sendNewsletter([$queue->getEmail() => $queue->getUser()->getReadableName()]);
             $logService = ObjectUtility::getObjectManager()->get(LogService::class);
@@ -136,7 +140,8 @@ class ProgressQueue
             $queue->getNewsletter()->getSubject(),
             [
                 'user' => $queue->getUser(),
-                'newsletter' => $queue->getNewsletter()
+                'newsletter' => $queue->getNewsletter(),
+                'site' => $queue->getNewsletter()->getConfiguration()->getSiteConfiguration()
             ]
         );
     }
@@ -160,7 +165,8 @@ class ProgressQueue
             $queue->getNewsletter()->getBodytext(),
             [
                 'user' => $queue->getUser(),
-                'newsletter' => $queue->getNewsletter()
+                'newsletter' => $queue->getNewsletter(),
+                'site' => $queue->getNewsletter()->getConfiguration()->getSiteConfiguration()
             ]
         );
         $bodytext = $this->hashLinksInBodytext($queue, $bodytext);
@@ -183,7 +189,8 @@ class ProgressQueue
     protected function hashLinksInBodytext(Queue $queue, string $bodytext): string
     {
         if (ConfigurationUtility::isRewriteLinksInNewsletterActivated()) {
-            $linkHashing = ObjectUtility::getObjectManager()->get(
+            /** @var LinkHashingService $linkHashing */
+            $linkHashing = GeneralUtility::makeInstance(
                 LinkHashingService::class,
                 $queue->getNewsletter(),
                 $queue->getUser()

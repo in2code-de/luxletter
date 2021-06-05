@@ -7,14 +7,17 @@ use In2code\Lux\Domain\Repository\VisitorRepository;
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Newsletter;
+use In2code\Luxletter\Domain\Model\Configuration;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
+use In2code\Luxletter\Domain\Repository\ConfigurationRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\ParseNewsletterService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
+use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
@@ -76,6 +79,37 @@ class NewsletterController extends ActionController
     protected $logRepository = null;
 
     /**
+     * @var ConfigurationRepository
+     */
+    protected $configurationRepository = null;
+
+    /**
+     * NewsletterController constructor.
+     * @param NewsletterRepository|null $newsletterRepository
+     * @param UserRepository|null $userRepository
+     * @param LogRepository|null $logRepository
+     * @param ConfigurationRepository|null $configurationRepository
+     * @throws Exception
+     */
+    public function __construct(
+        NewsletterRepository $newsletterRepository = null,
+        UserRepository $userRepository = null,
+        LogRepository $logRepository = null,
+        ConfigurationRepository $configurationRepository = null
+    ) {
+        $this->newsletterRepository = $newsletterRepository ?: ObjectUtility::getObjectManager()->get(
+            NewsletterRepository::class
+        );
+        $this->userRepository = $userRepository ?: ObjectUtility::getObjectManager()->get(
+            UserRepository::class
+        );
+        $this->logRepository = $logRepository ?: ObjectUtility::getObjectManager()->get(LogRepository::class);
+        $this->configurationRepository = $configurationRepository ?: ObjectUtility::getObjectManager()->get(
+            ConfigurationRepository::class
+        );
+    }
+
+    /**
      * @return void
      * @throws DBALException
      */
@@ -104,8 +138,10 @@ class NewsletterController extends ActionController
      */
     public function listAction(): void
     {
-        $newsletters = $this->newsletterRepository->findAll();
-        $this->view->assign('newsletters', $newsletters);
+        $this->view->assignMultiple([
+            'newsletters' => $this->newsletterRepository->findAll(),
+            'configurations' => $this->configurationRepository->findAll()
+        ]);
     }
 
     /**
@@ -113,6 +149,9 @@ class NewsletterController extends ActionController
      */
     public function newAction(): void
     {
+        $this->view->assignMultiple([
+            'configurations' => $this->configurationRepository->findAll()
+        ]);
     }
 
     /**
@@ -236,19 +275,12 @@ class NewsletterController extends ActionController
 
     /**
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response Todo: Second parameter is removed in TYPO3 10
      * @return ResponseInterface
      * @throws DBALException
      * @throws Exception
      */
-    public function wizardUserPreviewAjax(
-        ServerRequestInterface $request,
-        ResponseInterface $response = null
-    ): ResponseInterface
+    public function wizardUserPreviewAjax(ServerRequestInterface $request): ResponseInterface
     {
-        if ($response === null) {
-            $response = ObjectUtility::getObjectManager()->get(JsonResponse::class);
-        }
         $userRepository = ObjectUtility::getObjectManager()->get(UserRepository::class);
         $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
         $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->wizardUserPreviewFile));
@@ -256,6 +288,7 @@ class NewsletterController extends ActionController
             'userPreview' => $userRepository->getUsersFromGroup((int)$request->getQueryParams()['usergroup'], 3),
             'userAmount' => $userRepository->getUserAmountFromGroup((int)$request->getQueryParams()['usergroup'])
         ]);
+        $response = ObjectUtility::getJsonResponse();
         $response->getBody()->write(json_encode(
             ['html' => $standaloneView->render()]
         ));
@@ -264,7 +297,6 @@ class NewsletterController extends ActionController
 
     /**
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response Todo: Second parameter is removed in TYPO3 10
      * @return ResponseInterface
      * @throws AuthenticationFailedException
      * @throws Exception
@@ -277,21 +309,23 @@ class NewsletterController extends ActionController
      * @throws MisconfigurationException
      * @throws TransportExceptionInterface
      */
-    public function testMailAjax(
-        ServerRequestInterface $request,
-        ResponseInterface $response = null
-    ): ResponseInterface {
+    public function testMailAjax(ServerRequestInterface $request): ResponseInterface
+    {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
             throw new AuthenticationFailedException('You are not authenticated to send mails', 1560872725);
         }
-        if ($response === null) {
-            $response = ObjectUtility::getObjectManager()->get(JsonResponse::class);
-        }
+        /** @var ParseNewsletterUrlService $parseUrlService */
         $parseUrlService = ObjectUtility::getObjectManager()->get(
             ParseNewsletterUrlService::class,
             $request->getQueryParams()['origin']
         );
+        /** @var ParseNewsletterService $parseService */
         $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
+        /** @var ConfigurationRepository $configurationRepository */
+        $configurationRepository = ObjectUtility::getObjectManager()->get(ConfigurationRepository::class);
+        /** @var Configuration $configuration */
+        $configuration = $configurationRepository->findByUid($request->getQueryParams()['configuration']);
+        /** @var UserFactory $userFactory */
         $userFactory = ObjectUtility::getObjectManager()->get(UserFactory::class);
         $user = $userFactory->getDummyUser();
         $mailService = ObjectUtility::getObjectManager()->get(
@@ -300,26 +334,22 @@ class NewsletterController extends ActionController
                 $request->getQueryParams()['subject'],
                 ['user' => $user]
             ),
-            $parseUrlService->getParsedContent()
+            $parseUrlService->getParsedContent($configuration->getSiteConfiguration()),
+            $configuration
         );
         $status = $mailService->sendNewsletter([$request->getQueryParams()['email'] => $user->getReadableName()]);
+        $response = ObjectUtility::getJsonResponse();
         $response->getBody()->write(json_encode(['status' => $status]));
         return $response;
     }
 
     /**
      * @param ServerRequestInterface $request
-     * @param ResponseInterface $response Todo: Second parameter is removed in TYPO3 10
      * @return ResponseInterface
      * @throws Exception
      */
-    public function receiverDetailAjax(
-        ServerRequestInterface $request,
-        ResponseInterface $response = null
-    ): ResponseInterface {
-        if ($response === null) {
-            $response = ObjectUtility::getObjectManager()->get(JsonResponse::class);
-        }
+    public function receiverDetailAjax(ServerRequestInterface $request): ResponseInterface
+    {
         $userRepository = ObjectUtility::getObjectManager()->get(UserRepository::class);
         $visitorRepository = ObjectUtility::getObjectManager()->get(VisitorRepository::class);
         $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
@@ -332,6 +362,7 @@ class NewsletterController extends ActionController
             'visitor' => $visitorRepository->findOneByFrontenduser($user),
             'logs' => $logRepository->findByUser($user)
         ]);
+        $response = ObjectUtility::getJsonResponse();
         $response->getBody()->write(json_encode(
             ['html' => $standaloneView->render()]
         ));
@@ -370,36 +401,12 @@ class NewsletterController extends ActionController
     protected function parseNewsletterToBodytext(): void
     {
         $newsletter = (array)$this->request->getArgument('newsletter');
+        /** @var ParseNewsletterUrlService $parseService */
         $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterUrlService::class, $newsletter['origin']);
         $parseService->setParseVariables(false);
-        $newsletter['bodytext'] = $parseService->getParsedContent();
+        /** @var Configuration $configuration */
+        $configuration = $this->configurationRepository->findByUid((int)$newsletter['configuration']);
+        $newsletter['bodytext'] = $parseService->getParsedContent($configuration->getSiteConfiguration());
         $this->request->setArgument('newsletter', $newsletter);
-    }
-
-    /**
-     * @param NewsletterRepository $newsletterRepository
-     * @return void
-     */
-    public function injectNewsletterRepository(NewsletterRepository $newsletterRepository): void
-    {
-        $this->newsletterRepository = $newsletterRepository;
-    }
-
-    /**
-     * @param UserRepository $userRepository
-     * @return void
-     */
-    public function injectUserRepository(UserRepository $userRepository): void
-    {
-        $this->userRepository = $userRepository;
-    }
-
-    /**
-     * @param LogRepository $logRepository
-     * @return void
-     */
-    public function injectLogRepository(LogRepository $logRepository): void
-    {
-        $this->logRepository = $logRepository;
     }
 }

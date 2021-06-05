@@ -58,12 +58,13 @@ call_user_func(
         }
         // Add module for analysis
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-            'In2code.luxletter',
+            'Luxletter',
             'lux',
             'luxletter',
             '',
             [
-                'Newsletter' => 'dashboard, list, new, create, enable, disable, delete, receiver',
+                \In2code\Luxletter\Controller\NewsletterController::class =>
+                    'dashboard, list, new, create, enable, disable, delete, receiver',
             ],
             [
                 'access' => 'user,group',

@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Model\Dto;
 
+use In2code\Luxletter\Domain\Model\Usergroup;
+
 /**
  * Class Filter
  */
@@ -14,7 +16,7 @@ class Filter
     protected $searchterm = '';
 
     /**
-     * @var \In2code\Luxletter\Domain\Model\Usergroup
+     * @var Usergroup
      */
     protected $usergroup = null;
 
@@ -52,18 +54,18 @@ class Filter
     }
 
     /**
-     * @return \In2code\Luxletter\Domain\Model\Usergroup
+     * @return Usergroup
      */
-    public function getUsergroup(): ?\In2code\Luxletter\Domain\Model\Usergroup
+    public function getUsergroup(): ?Usergroup
     {
         return $this->usergroup;
     }
 
     /**
-     * @param \In2code\Luxletter\Domain\Model\Usergroup $usergroup
+     * @param Usergroup $usergroup
      * @return Filter
      */
-    public function setUsergroup(?\In2code\Luxletter\Domain\Model\Usergroup $usergroup): self
+    public function setUsergroup(?Usergroup $usergroup): self
     {
         $this->usergroup = $usergroup;
         return $this;

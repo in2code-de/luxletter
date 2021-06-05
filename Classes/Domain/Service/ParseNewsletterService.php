@@ -4,7 +4,7 @@ namespace In2code\Luxletter\Domain\Service;
 
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
-use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
@@ -30,7 +30,8 @@ class ParseNewsletterService
     public function parseMailText(string $bodytext, array $properties): string
     {
         $configuration = ConfigurationUtility::getExtensionSettings();
-        $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
+        /** @var StandaloneView $standaloneView */
+        $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
         $standaloneView->setTemplateRootPaths($configuration['view']['templateRootPaths']);
         $standaloneView->setLayoutRootPaths($configuration['view']['layoutRootPaths']);
         $standaloneView->setPartialRootPaths($configuration['view']['partialRootPaths']);

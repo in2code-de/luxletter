@@ -9,13 +9,14 @@ use In2code\Luxletter\Domain\Repository\UsergroupRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
+use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
 use In2code\Luxletter\Exception\MissingRelationException;
 use In2code\Luxletter\Exception\UserValuesAreMissingException;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
-use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
@@ -58,11 +59,14 @@ class FrontendController extends ActionController
     public function previewAction(string $origin): string
     {
         try {
-            $urlService = ObjectUtility::getObjectManager()->get(ParseNewsletterUrlService::class, $origin);
-            return $urlService->getParsedContent();
+            /** @var SiteService $siteService */
+            $siteService = GeneralUtility::makeInstance(SiteService::class);
+            /** @var ParseNewsletterUrlService $urlService */
+            $urlService = GeneralUtility::makeInstance(ParseNewsletterUrlService::class, $origin);
+            return $urlService->getParsedContent($siteService->getSite());
         } catch (\Exception $exception) {
-            return 'Origin ' . htmlspecialchars($origin) . ' could not be converted into a valid url!<br>'
-                . 'Message: ' . $exception->getMessage();
+            return 'Error: Origin ' . htmlspecialchars($origin) . ' could not be converted into a valid url!<br>'
+                . 'Reason: ' . $exception->getMessage() . ' (' . $exception->getCode() . ')';
         }
     }
 

@@ -115,6 +115,14 @@
 				<source>Just create a new one</source>
 				<target state="translated">Neuen Newsletter erzeugen</target>
 			</trans-unit>
+			<trans-unit id="module.newsletter.list.createnew.noconfiguration">
+				<source>No configuration yet</source>
+				<target state="translated">Noch keine Konfiguration vorhanden</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.createnew.noconfigurationdetails">
+				<source>Please create a sender configuration in a sysfolder first</source>
+				<target state="translated">Bitte erstelle zuerst eine Senderkonfiguration in einem Sysfolder</target>
+			</trans-unit>
 			<trans-unit id="module.newsletter.list.tableheader.title">
 				<source>Title</source>
 				<target state="translated">Bezeichnung</target>
@@ -193,8 +201,8 @@
 				<target state="translated">Du kannst eine kleine Beschreibung für interne Nutzung hinzufügen</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.datetime">
-				<source>Newsletter start</source>
-				<target state="translated">Startdatum</target>
+				<source>Newsletter start (optional)</source>
+				<target state="translated">Startdatum (optional)</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.datetime.description">
 				<source>Don't send newsletter before this date (empty for sending as soon as possible)</source>
@@ -205,24 +213,32 @@
 				<target state="translated">E-Mail Betreff</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.subject.description">
-				<source>Choose an email subject for this newsletter.</source>
-				<target state="translated">Bitte Betreff für Newsletter eintragen.</target>
+				<source>Choose an email subject for this newsletter. It's possible to use variables like {user.email} or {user.firstName}</source>
+				<target state="translated">Bitte Betreff für Newsletter eintragen. Variablen können verwendet werden wie bsp {user.email} oder {user.firstName}</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.receiver">
-				<source>Choose a receiver group</source>
-				<target state="translated">Empfänger-Gruppe auswählen</target>
+				<source>Receiver</source>
+				<target state="translated">Empfänger</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.receiver.description">
 				<source>Please choose a frontend user group. Every user in this group will receive this newsletter.</source>
 				<target state="translated">Bitte eine Frontend-Benutzergruppe auswählen. Jeder Benutzer dieser Gruppe wird den Newsletter erhalten.</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.configuration">
+				<source>Sender</source>
+				<target state="translated">Absender</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.configuration.description">
+				<source>Please choose between your predefined sender settings</source>
+				<target state="translated">Bitte wähle einen von dir zuvor angelegten Senderdatensatz aus</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.origin">
 				<source>Where is the newsletter located?</source>
 				<target state="translated">Wo befindet sich der Newsletter?</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.origin.description">
-				<source>Please add the absolute URL (https://domain.org/newsletter/) or a page UID where your former created newsletter is located. Afterwards the newsletter will be parsed and prepared for sending.</source>
-				<target state="translated">Bitte tragen Sie die absolute URL (https://domain.org/newsletter/) oder eine Seiten UID ein zum von Ihnen zuvor erstellten Newsletter ein. Anschließend wird dieser von Luxletter gelesen und für den Versand vorbereitet.</target>
+				<source>Please add an absolute URL (https://domain.org/newsletter/) or a page UID where your former created newsletter is located. Afterwards the newsletter will be parsed and prepared for sending.</source>
+				<target state="translated">Bitte trage eine absolute URL (https://domain.org/newsletter/) oder eine Seiten-UID zu einem von dir zuvor erstellten Newsletter ein. Anschließend wird diese URL Luxletter gelesen und für den Versand vorbereitet.</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.testmail">
 				<source>Send a test mail to yourself</source>
@@ -246,7 +262,7 @@
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.message.testmailsent.addition">
 				<source>Your test newsletter was sent successfully</source>
-				<target state="translated">Newsletter erfolgreich abgesendet</target>
+				<target state="translated">Test-Newsletter erfolgreich abgesendet</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.message.notready">
 				<source>Newsletter is not ready yet</source>
@@ -259,6 +275,10 @@
 			<trans-unit id="module.newsletter.new.message.notready.origin">
 				<source>Please select an origin for your newsletter</source>
 				<target state="translated">Bitte wähle zuerst einen Ursprung für deinen Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.message.notready.mandatory">
+				<source>Please fill all mandatory fields</source>
+				<target state="translated">Bitte zuerst alle Pflichtfelder ausfüllen</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.wizarduserpreview.previewreceivers">
 				<source>Receivers preview</source>

@@ -4,10 +4,12 @@ namespace In2code\Luxletter\ViewHelpers\Mail;
 
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
+use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\MisconfigurationException;
-use In2code\Luxletter\Utility\ConfigurationUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Core\Site\Entity\Site;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -24,6 +26,7 @@ class GetTrackingPixelUrlViewHelper extends AbstractViewHelper
         parent::initializeArguments();
         $this->registerArgument('newsletter', Newsletter::class, 'Newsletter', false, null);
         $this->registerArgument('user', User::class, 'User', false, null);
+        $this->registerArgument('site', Site::class, 'Site object', true);
     }
 
     /**
@@ -34,11 +37,24 @@ class GetTrackingPixelUrlViewHelper extends AbstractViewHelper
      */
     public function render(): string
     {
-        $url = ConfigurationUtility::getDomain();
-        $url .= '/?type=1561894816';
+        $url = $this->getDomainPrefix();
+        $url .= '?type=1561894816';
         $url .= '&tx_luxletter_fe[user]=' . $this->getUserIdentifier();
         $url .= '&tx_luxletter_fe[newsletter]=' . $this->getNewsletterIdentifier();
         return $url;
+    }
+
+    /**
+     * @return string
+     * @throws MisconfigurationException
+     */
+    protected function getDomainPrefix(): string
+    {
+        /** @var Site $site */
+        $site = $this->arguments['site'];
+        /** @var SiteService $siteService */
+        $siteService = GeneralUtility::makeInstance(SiteService::class);
+        return $siteService->getDomainFromSite($site);
     }
 
     /**

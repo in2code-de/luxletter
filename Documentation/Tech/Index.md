@@ -13,15 +13,17 @@ plugin {
 		view {
 			templateRootPaths {
 				0 = EXT:luxletter/Resources/Private/Templates/
-				1 = EXT:sitepackage/Resources/Private/Templates/
+				1 = EXT:lux/Resources/Private/Templates/
+				2 = EXT:sitepackage/Resources/Private/Templates/
 			}
 			partialRootPaths {
 				0 = EXT:luxletter/Resources/Private/Partials/
-				1 = EXT:sitepackage/Resources/Private/Partials/
+				1 = EXT:lux/Resources/Private/Partials/
+				2 = EXT:sitepackage/Resources/Private/Partials/
 			}
 			layoutRootPaths {
 				0 = EXT:luxletter/Resources/Private/Layouts/
-				1 = EXT:sitepackage/Resources/Private/Layouts/
+				2 = EXT:sitepackage/Resources/Private/Layouts/
 			}
 		}
 	}

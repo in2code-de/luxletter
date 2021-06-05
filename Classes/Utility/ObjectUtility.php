@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Utility;
 
+use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Core\Configuration\ConfigurationManager as ConfigurationManagerCore;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
@@ -52,5 +53,14 @@ class ObjectUtility
     public static function getContentObject(): ContentObjectRenderer
     {
         return self::getObjectManager()->get(ContentObjectRenderer::class);
+    }
+
+    /**
+     * @return JsonResponse
+     * @throws Exception
+     */
+    public static function getJsonResponse(): JsonResponse
+    {
+        return self::getObjectManager()->get(JsonResponse::class);
     }
 }
