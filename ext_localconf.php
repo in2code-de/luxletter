@@ -10,13 +10,13 @@ call_user_func(
          * Include Frontend Plugins
          */
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-            'In2code.luxletter',
+            'Luxletter',
             'Fe',
             [
-                'Frontend' => 'unsubscribe,preview,trackingPixel'
+                \In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe,preview,trackingPixel'
             ],
             [
-                'Frontend' => 'unsubscribe,preview,trackingPixel'
+                \In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe,preview,trackingPixel'
             ]
         );
 
@@ -26,7 +26,7 @@ call_user_func(
         $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['luxletter'][] = 'In2code\Luxletter\ViewHelpers';
 
         /**
-         * Add an absRefPrefix for FluidStyledMailContent (could be overruled by site configuration)
+         * Add an absRefPrefix for FluidStyledMailContent to prefix images with absolute paths
          */
         if (\TYPO3\CMS\Core\Core\Environment::isCli() === false) {
             \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(

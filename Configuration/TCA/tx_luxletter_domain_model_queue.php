@@ -23,9 +23,6 @@ return [
         'iconfile' => 'EXT:luxletter/Resources/Public/Icons/' . Queue::TABLE_NAME . '.svg',
         'rootLevel' => -1
     ],
-    'interface' => [
-        'showRecordFieldList' => 'email,newsletter,user,datetime,sent',
-    ],
     'types' => [
         '1' => ['showitem' => 'email,newsletter,user,datetime,sent'],
     ],
@@ -77,14 +74,14 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 13,
-                'max' => 20,
                 'eval' => 'datetime',
                 'checkbox' => 0,
                 'default' => 0,
                 'range' => [
                     'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
                 ],
-                'readOnly' => true
+                'readOnly' => true,
+                'renderType' => 'inputDateTime'
             ]
         ],
         'sent' => [

@@ -1,4 +1,5 @@
 <?php
+use In2code\Luxletter\Tca\SiteSelection;
 use In2code\Luxletter\Domain\Model\Configuration;
 
 return [
@@ -20,9 +21,6 @@ return [
         ],
         'iconfile' => 'EXT:luxletter/Resources/Public/Icons/' . Configuration::TABLE_NAME . '.svg',
         'rootLevel' => -1
-    ],
-    'interface' => [
-        'showRecordFieldList' => 'title,from_email,from_name,reply_email,reply_name,site',
     ],
     'types' => [
         '1' => ['showitem' => 'title,from_email,from_name,reply_email,reply_name,site'],
@@ -90,7 +88,7 @@ return [
             'config' => [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
-                'itemsProcFunc' => \In2code\Luxletter\Tca\SiteSelection::class . '->getAll',
+                'itemsProcFunc' => SiteSelection::class . '->getAll',
                 'itemsProcConfig' => [
                     'table' => 'tt_content'
                 ],
