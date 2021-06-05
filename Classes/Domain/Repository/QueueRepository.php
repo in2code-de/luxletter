@@ -83,4 +83,17 @@ class QueueRepository extends AbstractRepository
             ->execute()
             ->fetchColumn() > 0;
     }
+
+    /**
+     * @return void
+     */
+    public function truncate(): void
+    {
+        $tables = [
+            Queue::TABLE_NAME
+        ];
+        foreach ($tables as $table) {
+            DatabaseUtility::getConnectionForTable($table)->truncate($table);
+        }
+    }
 }

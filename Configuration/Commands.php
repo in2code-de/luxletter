@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use In2code\Luxletter\Command\ClearCommand;
+use In2code\Luxletter\Command\ClearQueueCommand;
 use In2code\Luxletter\Command\QueueCommand;
 
 return [
@@ -11,6 +12,10 @@ return [
     ],
     'luxletter:clear' => [
         'class' => ClearCommand::class,
+        'schedulable' => false
+    ],
+    'luxletter:clearqueue' => [
+        'class' => ClearQueueCommand::class,
         'schedulable' => false
     ]
 ];
