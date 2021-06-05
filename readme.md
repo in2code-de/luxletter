@@ -19,7 +19,7 @@ it.
 ### The upside
 
 * A useful and nice **dashboard** shows you the relevant information in the backend
-* Modern newsletter extension for TYPO3 9
+* Modern newsletter extension for TYPO3 10
 * Tracking of clicks via **PSR-15 interface** in TYPO3
 * Sending mails in queue via **symfony command controller**
 * Records for **fe_groups** (and there related fe_users) are used to send mails to
@@ -27,6 +27,7 @@ it.
 * A **teaser content element** helps you to create newsletters out of default content elements in TYPO3
 * Every website can be used as prototype for your newsletter
 * A **third party mailserver** can be used for newsletters
+* Since 4.0 multiple sender configuration can be saved
 
 ### The downside
 
@@ -81,17 +82,16 @@ See the full [documentation](Documentation/Index.md) (installation, configuratio
 
 ## Technical requirements
 
-* TYPO3 9 or 10 LTS is the basic CMS for this newsletter tool.
+* TYPO3 10 LTS is the basic CMS for this newsletter tool.
 * EXT:lux is **not needed** to run luxletter but both extensions can work together to show more relevant information.
 * This extension needs to be **installed with composer** (classic installation could work but is not supported and tested).
-* fe_users records are used to send emails to while fe_groups is used to select a group of them
+* fe_users in fe_groups is used to send newsletter emails to.
 
 
 ## Sponsored features (please get in contact to us if you want to sponsor a new feature)
 
 * Import of fe_users from tt_address (to migrate easier from direct_mail to luxletter)
 * Editview of existing newsletters (reparse function?)
-* Move global newsletter configuration to records to use different settings per newsletter
 
 
 ## Installation with composer
@@ -105,13 +105,14 @@ composer require "in2code/luxletter"
 
 ### Upgrade to 4.x
 
-Multiple sender can now be defined in records, in addition it's not needed to define a domain in extension configuration
+Multiple senders can now be defined in records, in addition it's not needed to define a domain in extension configuration
 any more. We now look into site configuration. But that change needs you to adjust some stuff.
 
 Breaking changes in detail and what you have to do step by step after you have updated the extension:
 
 * Add one (ore more) record(s) with sender information on any sysfolder
 * Update your site configuration with an unsubscribe pid (so you could use different unsubscribe plugins now)
+* Take care that your base (Entry point) settings in site configuration is not just `/` but a full domain prefix like `https://www.domain.org/`
 * Create new newsletter records with the new sender configuration. **Note:** Old newsletters won't be queued any more because a sender configuration is missing
 * Update your HTML template files (compare your files with `EXT:luxletter/Resources/Private/Templates/Mail/NewsletterContainer.html`)
   * If you are using the viewhelper `luxletter:mail.getUnsubscribeUrl` now another argument must be passed: `site` - example: `{luxletter:mail.getUnsubscribeUrl(newsletter:newsletter,user:user,site:site)}`

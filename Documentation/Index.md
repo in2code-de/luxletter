@@ -1,6 +1,8 @@
 <img align="left" src="../Resources/Public/Icons/lux.svg" width="50" />
 
-# Luxletter - Email marketing in TYPO3. Send newsletters the easy way.
+# Luxletter - Email marketing in TYPO3
+
+Send newsletters the easy way
 
 ## Documentation start
 
