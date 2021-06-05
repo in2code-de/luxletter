@@ -16,7 +16,6 @@ use In2code\Luxletter\Exception\MissingRelationException;
 use In2code\Luxletter\Exception\UserValuesAreMissingException;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
-use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Object\Exception;
@@ -63,11 +62,11 @@ class FrontendController extends ActionController
             /** @var SiteService $siteService */
             $siteService = GeneralUtility::makeInstance(SiteService::class);
             /** @var ParseNewsletterUrlService $urlService */
-            $urlService = ObjectUtility::getObjectManager()->get(ParseNewsletterUrlService::class, $origin);
+            $urlService = GeneralUtility::makeInstance(ParseNewsletterUrlService::class, $origin);
             return $urlService->getParsedContent($siteService->getSite());
         } catch (\Exception $exception) {
-            return 'Origin ' . htmlspecialchars($origin) . ' could not be converted into a valid url!<br>'
-                . 'Message: ' . $exception->getMessage();
+            return 'Error: Origin ' . htmlspecialchars($origin) . ' could not be converted into a valid url!<br>'
+                . 'Reason: ' . $exception->getMessage() . ' (' . $exception->getCode() . ')';
         }
     }
 
