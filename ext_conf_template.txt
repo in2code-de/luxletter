@@ -1,8 +1,8 @@
-# cat=basic//200; type=boolean; label= Rewrite links in newsletter: All absolute links should be rewritten, so a click on a link can be tracked
+# cat=basic//200; type=boolean; label= Rewrite links in newsletter: Absolute links in your newsletters can be rewritten automatically, to track all link clicks. If you disable this feature, clicks are not tracked.
 rewriteLinksInNewsletter = 1
 
-# cat=basic//210; type=int+; label= Add typenum: If you just add a number in newletter backend module to describe on which pid the newsletter is located, this typenum will be added. Note: Typenum will not be added to real urls.
+# cat=basic//210; type=int+; label= Add typenum: Everytime you parse a html for a new newsletter, this type will be added (can be used in fluidStyledMailContent). This will work only for PID in origin, not for absolute URL.
 addTypeNumToNumberLocation = 1562349004
 
-# cat=basic//220; type=boolean; label= Show receiver action: show link to receiver view in newsletter module
+# cat=basic//220; type=boolean; label= Show receiver action: Show link to receiver view in newsletter module. This view is maybe disturbing if you don't use extension lux in addition.
 receiverAction = 1
