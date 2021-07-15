@@ -43,7 +43,7 @@ class SiteService
     public function getDomainFromSite(Site $site): string
     {
         $this->checkForValidSite($site);
-        return $site->getConfiguration()['base'];
+        return $this->getCurrentBaseDomain($site);
     }
 
     /**
@@ -86,12 +86,23 @@ class SiteService
      */
     protected function checkForValidSite(Site $site): void
     {
-        $base = $site->getConfiguration()['base'];
+        $base = $this->getCurrentBaseDomain(Site);
         if (StringUtility::startsWith($base, 'http') === false || StringUtility::endsWith($base, '/') === false) {
             throw new MisconfigurationException(
-                'Base settings in site configuration is not in format "https://domain.org/"',
+                'Base settings in site configuration is not in format "https://domain.org/", current base: ' . $base,
                 1622832844
             );
         }
+    }
+    
+    /**
+     * @param Site $site
+     * @return string
+     */
+    protected function getCurrentBaseDomain(Site $site): string
+    {
+        $base = (string)$site->getBase();
+        $base .= (substr($base, -1) === '/' ? '' : '/');
+        return $base;
     }
 }
