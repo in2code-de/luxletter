@@ -86,7 +86,7 @@ class SiteService
      */
     protected function checkForValidSite(Site $site): void
     {
-        $base = $this->getCurrentBaseDomain(Site);
+        $base = $this->getCurrentBaseDomain($site);
         if (StringUtility::startsWith($base, 'http') === false || StringUtility::endsWith($base, '/') === false) {
             throw new MisconfigurationException(
                 'Base settings in site configuration is not in format "https://domain.org/", current base: ' . $base,
