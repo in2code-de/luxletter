@@ -1,28 +1,32 @@
 plugin {
-    tx_luxletter_fe {
-        view {
-            templateRootPaths {
-                0 = EXT:luxletter/Resources/Private/Templates/
-            }
-            partialRootPaths {
-                0 = EXT:luxletter/Resources/Private/Partials/
-            }
-            layoutRootPaths {
-                0 = EXT:luxletter/Resources/Private/Layouts/
-            }
-        }
-        features.requireCHashArgumentForActionArguments = 0
+  tx_luxletter_fe {
+    view {
+      templateRootPaths {
+        0 = EXT:luxletter/Resources/Private/Templates/
+      }
 
-        settings {
-            # Example setting. Can be used in HTML for newsletter with {foo}
-#           foo = bar
-        }
-        variables {
-            # Example variable. Can be used HTML for newsletter with {subject}
-#           subject = TEXT
-#           subject.value = My own Newsletter
-        }
+      partialRootPaths {
+        0 = EXT:luxletter/Resources/Private/Partials/
+      }
+
+      layoutRootPaths {
+        0 = EXT:luxletter/Resources/Private/Layouts/
+      }
     }
+
+    features.requireCHashArgumentForActionArguments = 0
+
+    settings {
+      # Example setting. Can be used in HTML for newsletter with {foo}
+      # foo = bar
+    }
+
+    variables {
+      # Example variable. Can be used HTML for newsletter with {subject}
+      # subject = TEXT
+      # subject.value = My own Newsletter
+    }
+  }
 }
 
 # Copy plugin configuration to module configuration to just use one configuration for both places.

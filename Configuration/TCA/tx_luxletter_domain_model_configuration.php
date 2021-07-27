@@ -1,6 +1,6 @@
 <?php
-use In2code\Luxletter\Tca\SiteSelection;
 use In2code\Luxletter\Domain\Model\Configuration;
+use In2code\Luxletter\Tca\SiteSelection;
 
 return [
     'ctrl' => [

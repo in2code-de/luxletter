@@ -1,7 +1,7 @@
 <?php
+use In2code\Luxletter\Domain\Model\Log;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
-use In2code\Luxletter\Domain\Model\Log;
 
 return [
     'ctrl' => [

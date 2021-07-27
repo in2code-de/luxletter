@@ -1,23 +1,22 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Controller;
 
 use Doctrine\DBAL\DBALException;
 use In2code\Lux\Domain\Repository\VisitorRepository;
 use In2code\Luxletter\Domain\Factory\UserFactory;
+use In2code\Luxletter\Domain\Model\Configuration;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Newsletter;
-use In2code\Luxletter\Domain\Model\Configuration;
 use In2code\Luxletter\Domain\Model\User;
+use In2code\Luxletter\Domain\Repository\ConfigurationRepository;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
-use In2code\Luxletter\Domain\Repository\ConfigurationRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\ParseNewsletterService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
-use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
@@ -31,7 +30,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
-use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;

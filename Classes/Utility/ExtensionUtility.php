@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Utility;
 
 use TYPO3\CMS\Core\Package\Exception;
@@ -21,11 +21,10 @@ class ExtensionUtility
     {
         if ($minimumVersion === '') {
             return ExtensionManagementUtility::isLoaded('lux');
-        } else {
-            $versionNumberLux = VersionNumberUtility::convertVersionNumberToInteger(
-                ExtensionManagementUtility::getExtensionVersion('lux')
-            );
-            return $versionNumberLux >= VersionNumberUtility::convertVersionNumberToInteger($minimumVersion);
         }
+        $versionNumberLux = VersionNumberUtility::convertVersionNumberToInteger(
+            ExtensionManagementUtility::getExtensionVersion('lux')
+        );
+        return $versionNumberLux >= VersionNumberUtility::convertVersionNumberToInteger($minimumVersion);
     }
 }
