@@ -1,6 +1,7 @@
 <?php
 
 use In2code\Luxletter\Controller\NewsletterController;
+
 return [
     '/luxletter/wizardUserPreview' => [
         'path' => '/luxletter/wizardUserPreview',

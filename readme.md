@@ -125,6 +125,7 @@ Breaking changes in detail and what you have to do step by step after you have u
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 4.1.0      | 2021.07.27  | Feature    | Add automatic tests with github actions                                                                                                                                                    |
 | !!! 4.0.0  | 2021.06.10  | Feature    | Multiple sender configuration supported (see breaking changes above), Testmails can be send multiple times, TYPO3 9 support finally dropped                                                |
 | 3.1.4      | 2021.06.04  | Bugfix     | Allow rendering of widgets without EXT:lux                                                                                                                                                 |
 | 3.1.3      | 2021.04.29  | Task       | Pass arguments in signal as reference                                                                                                                                                      |
@@ -155,5 +156,5 @@ Breaking changes in detail and what you have to do step by step after you have u
 
 ## Need help with email-marketing or marketing automation?
 
-The company behind Lux, LuxLetter and LuxEnterprise - the complete marketing box for TYPO3 - is looking 
+The company behind Lux, LuxLetter and LuxEnterprise - the complete marketing box for TYPO3 - is looking
 forward to help you: https://www.in2code.de

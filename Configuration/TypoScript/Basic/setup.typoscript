@@ -1,1 +1,1 @@
-<INCLUDE_TYPOSCRIPT: source="DIR:EXT:luxletter/Configuration/TypoScript/Basic/Luxletter" extensions="typoscript">
+@import 'EXT:luxletter/Configuration/TypoScript/Basic/Luxletter/*.typoscript'

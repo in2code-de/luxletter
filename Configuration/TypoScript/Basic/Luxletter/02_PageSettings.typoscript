@@ -1,52 +1,52 @@
 # Newsletter preview
 luxletterPreviewNewsletter = PAGE
 luxletterPreviewNewsletter {
-    typeNum = 1560777975
-    config {
-        no_cache = 1
-        disableAllHeaderCode = 1
-        disablePrefixComment = 1
-        xhtml_cleaning = 0
-        admPanel = 0
-        debug = 0
-    }
+  typeNum = 1560777975
+  config {
+    no_cache = 1
+    disableAllHeaderCode = 1
+    disablePrefixComment = 1
+    xhtml_cleaning = 0
+    admPanel = 0
+    debug = 0
+  }
 
-    10 = USER
-    10 {
-        userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
-        extensionName = Luxletter
-        pluginName = Fe
-        vendorName = In2code
-        controller = Frontend
-        action = preview
-        switchableControllerActions.Frontend.1 = preview
-        features.requireCHashArgumentForActionArguments = 0
-    }
+  10 = USER
+  10 {
+    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+    extensionName = Luxletter
+    pluginName = Fe
+    vendorName = In2code
+    controller = Frontend
+    action = preview
+    switchableControllerActions.Frontend.1 = preview
+    features.requireCHashArgumentForActionArguments = 0
+  }
 }
 
 # Tracking pixel
 luxletterTrackingPixel = PAGE
 luxletterTrackingPixel {
-    typeNum = 1561894816
-    config {
-        additionalHeaders.10.header = Content-Type: image/gif
-        no_cache = 1
-        disableAllHeaderCode = 1
-        disablePrefixComment = 1
-        xhtml_cleaning = 0
-        admPanel = 0
-        debug = 0
-    }
+  typeNum = 1561894816
+  config {
+    additionalHeaders.10.header = Content-Type: image/gif
+    no_cache = 1
+    disableAllHeaderCode = 1
+    disablePrefixComment = 1
+    xhtml_cleaning = 0
+    admPanel = 0
+    debug = 0
+  }
 
-    10 = USER
-    10 {
-        userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
-        extensionName = Luxletter
-        pluginName = Fe
-        vendorName = In2code
-        controller = Frontend
-        action = trackingPixel
-        switchableControllerActions.Frontend.1 = trackingPixel
-        features.requireCHashArgumentForActionArguments = 0
-    }
+  10 = USER
+  10 {
+    userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
+    extensionName = Luxletter
+    pluginName = Fe
+    vendorName = In2code
+    controller = Frontend
+    action = trackingPixel
+    switchableControllerActions.Frontend.1 = trackingPixel
+    features.requireCHashArgumentForActionArguments = 0
+  }
 }

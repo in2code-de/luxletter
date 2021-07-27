@@ -1,22 +1,23 @@
 mod {
-	wizards {
-		newContentElement {
-			wizardItems {
-				luxletter {
-					header = Luxletter
-					elements {
-						teaser {
-							iconIdentifier = teaser
-							title = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser
-							description = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.description
-							tt_content_defValues {
-								CType = teaser
-							}
-						}
-					}
-					show = *
-				}
-			}
-		}
-	}
+  wizards {
+    newContentElement {
+      wizardItems {
+        luxletter {
+          header = Luxletter
+          elements {
+            teaser {
+              iconIdentifier = teaser
+              title = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser
+              description = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.description
+              tt_content_defValues {
+                CType = teaser
+              }
+            }
+          }
+
+          show = *
+        }
+      }
+    }
+  }
 }

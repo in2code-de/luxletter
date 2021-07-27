@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Service;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
@@ -28,9 +28,8 @@ class SiteService
             /** @var SiteFinder $siteFinder */
             $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
             return $siteFinder->getSiteByPageId($pageIdentifier);
-        } else {
-            throw new \LogicException('Not in frontend context? No page identifier given.', 1622813408);
         }
+        throw new \LogicException('Not in frontend context? No page identifier given.', 1622813408);
     }
 
     /**

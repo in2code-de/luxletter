@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\ViewHelpers\Backend;
 
 use In2code\Luxletter\Utility\FrontendUtility;

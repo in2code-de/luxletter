@@ -1,51 +1,67 @@
 # Fluid Styled Mail Content (needs fluid_styled_content loaded before) for rendering content elements for newsletters
 
 [getTSFE().type == 1562349004]
-    lib.contentElement {
-        templateRootPaths {
-            100 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Templates/
-        }
-        partialRootPaths {
-            100 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Partials/
-        }
-        layoutRootPaths {
-            100 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Layouts/
-        }
+lib {
+  contentElement {
+    templateRootPaths {
+      100 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Templates/
     }
 
-    // Use absolute URL for all kind of links within fluidStyledMailContent
-    // (absRefPrefix is also used for absolute images paths - see ext_localconf.php)
-    lib.parseFunc.tags.a.typolink.forceAbsoluteUrl = 1
-    lib.parseFunc.tags.link.typolink.forceAbsoluteUrl = 1
-    lib.parseFunc_RTE.tags.a.typolink.forceAbsoluteUrl = 1
-    lib.parseFunc_RTE.tags.link.typolink.forceAbsoluteUrl = 1
+    partialRootPaths {
+      100 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Partials/
+    }
+
+    layoutRootPaths {
+      100 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Layouts/
+    }
+  }
+
+  // Use absolute URL for all kind of links within fluidStyledMailContent
+  // (absRefPrefix is also used for absolute images paths - see ext_localconf.php)
+  parseFunc {
+    tags {
+      a.typolink.forceAbsoluteUrl = 1
+      link.typolink.forceAbsoluteUrl = 1
+    }
+  }
+  parseFunc_RTE {
+    tags {
+      a.typolink.forceAbsoluteUrl = 1
+      link.typolink.forceAbsoluteUrl = 1
+    }
+  }
+}
 [end]
 
 fluidStyledMailContent = PAGE
 fluidStyledMailContent {
-    typeNum = 1562349004
+  typeNum = 1562349004
 
-    config {
-        no_cache = 0
-        disableAllHeaderCode = 0
-        disablePrefixComment = 1
-        xhtml_cleaning = 0
-        admPanel = 0
-        debug = 0
-        linkVars =
-    }
+  config {
+    no_cache = 0
+    disableAllHeaderCode = 0
+    disablePrefixComment = 1
+    xhtml_cleaning = 0
+    admPanel = 0
+    debug = 0
+    linkVars =
+  }
 
-    # Add some css for frontend view
-    cssInline.10 = TEXT
-    cssInline.10.value (
+  # Add some css for frontend view
+  cssInline {
+    10 = TEXT
+    10.value (
         html {
             width: 1024px;
             margin: auto;
         }
     )
-    headerData.10 = FLUIDTEMPLATE
-    headerData.10.file = EXT:luxletter/Resources/Private/Partials/Mail/ZurbCss.html
+  }
+  headerData {
+    10 = FLUIDTEMPLATE
+    10.file = EXT:luxletter/Resources/Private/Partials/Mail/ZurbCss.html
+  }
 
-    # Add content
-    10 < styles.content.get
+  # Add content
+  10 < styles.content.get
 }

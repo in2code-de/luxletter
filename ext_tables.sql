@@ -105,7 +105,8 @@ CREATE TABLE tx_luxletter_domain_model_link (
 
 	PRIMARY KEY (uid),
 	KEY parent (pid),
-	KEY language (l10n_parent,sys_language_uid)
+	KEY language (l10n_parent,sys_language_uid),
+	INDEX hash (hash(8))
 );
 
 CREATE TABLE tx_luxletter_domain_model_configuration (

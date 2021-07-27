@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Model;
 
 use Doctrine\DBAL\DBALException;
@@ -62,7 +62,7 @@ class Newsletter extends AbstractEntity
     protected $bodytext = '';
 
     /**
-     * @var null|int
+     * @var int|null
      */
     protected $dispatchedProgress = null;
 
