@@ -74,20 +74,6 @@ call_user_func(
         );
 
         /**
-         * Add TypoScript Static Template
-         */
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
-            'luxletter',
-            'Configuration/TypoScript/Basic/',
-            'Basic TypoScript'
-        );
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
-            'luxletter',
-            'Configuration/TypoScript/FluidStyledMailContent/',
-            'FluidStyledMailContent'
-        );
-
-        /**
          * Add static page TSconfig
          */
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
