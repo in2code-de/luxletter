@@ -189,6 +189,7 @@ class ParseNewsletterUrlService
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      * @throws Exception
+     * @throws InvalidConfigurationTypeException
      */
     protected function getContentFromOrigin(User $user): string
     {
@@ -205,8 +206,9 @@ class ParseNewsletterUrlService
         }
         $string = $this->getBodyFromHtml($string);
         if ($this->isParsingActive()) {
+            /** @var ParseNewsletterService $parseService */
             $parseService = GeneralUtility::makeInstance(ParseNewsletterService::class);
-            $string = $parseService->parseMailText($string, ['user' => $user]);
+            $string = $parseService->parseBodytext($string, ['user' => $user]);
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__, [$string, $user, $this]);
         return $string;

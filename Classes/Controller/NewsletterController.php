@@ -27,9 +27,7 @@ use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -162,6 +160,7 @@ class NewsletterController extends ActionController
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      * @throws NoSuchArgumentException
+     * @throws SiteNotFoundException
      */
     public function initializeCreateAction(): void
     {
@@ -255,7 +254,6 @@ class NewsletterController extends ActionController
      * @param Filter $filter
      * @return void
      * @throws InvalidQueryException
-     * @throws DBALException
      * @throws Exception
      */
     public function receiverAction(Filter $filter): void
@@ -274,7 +272,6 @@ class NewsletterController extends ActionController
     /**
      * @param ServerRequestInterface $request
      * @return ResponseInterface
-     * @throws DBALException
      * @throws Exception
      */
     public function wizardUserPreviewAjax(ServerRequestInterface $request): ResponseInterface
@@ -298,14 +295,12 @@ class NewsletterController extends ActionController
      * @return ResponseInterface
      * @throws AuthenticationFailedException
      * @throws Exception
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
-     * @throws TransportExceptionInterface
+     * @throws SiteNotFoundException
      */
     public function testMailAjax(ServerRequestInterface $request): ResponseInterface
     {
@@ -328,7 +323,7 @@ class NewsletterController extends ActionController
         $user = $userFactory->getDummyUser();
         $mailService = ObjectUtility::getObjectManager()->get(
             SendMail::class,
-            $parseService->parseMailText(
+            $parseService->parseSubject(
                 $request->getQueryParams()['subject'],
                 ['user' => $user]
             ),
@@ -395,6 +390,7 @@ class NewsletterController extends ActionController
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      * @throws NoSuchArgumentException
+     * @throws SiteNotFoundException
      */
     protected function parseNewsletterToBodytext(): void
     {

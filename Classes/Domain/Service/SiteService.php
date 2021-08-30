@@ -42,7 +42,7 @@ class SiteService
     public function getDomainFromSite(Site $site): string
     {
         $this->checkForValidSite($site);
-        return $site->getConfiguration()['base'];
+        return (string)$site->getBase();
     }
 
     /**
@@ -85,7 +85,7 @@ class SiteService
      */
     protected function checkForValidSite(Site $site): void
     {
-        $base = $site->getConfiguration()['base'];
+        $base = (string)$site->getBase();
         if (StringUtility::startsWith($base, 'http') === false || StringUtility::endsWith($base, '/') === false) {
             throw new MisconfigurationException(
                 'Base settings in site configuration is not in format "https://domain.org/"',
