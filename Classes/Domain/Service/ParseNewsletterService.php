@@ -19,7 +19,37 @@ class ParseNewsletterService
     use SignalTrait;
 
     /**
+     * @param string $subject
+     * @param array $properties
+     * @return string
+     * @throws Exception
+     * @throws InvalidConfigurationTypeException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
+     */
+    public function parseSubject(string $subject, array $properties): string
+    {
+        $this->signalDispatch(__CLASS__, __FUNCTION__, [&$subject, $properties, $this]);
+        return $this->parseMailText($subject, $properties);
+    }
+
+    /**
      * @param string $bodytext
+     * @param array $properties
+     * @return string
+     * @throws Exception
+     * @throws InvalidConfigurationTypeException
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
+     */
+    public function parseBodytext(string $bodytext, array $properties): string
+    {
+        $this->signalDispatch(__CLASS__, __FUNCTION__, [&$bodytext, $properties, $this]);
+        return $this->parseMailText($bodytext, $properties);
+    }
+
+    /**
+     * @param string $text
      * @param array $properties
      * @return string
      * @throws InvalidConfigurationTypeException
@@ -27,7 +57,7 @@ class ParseNewsletterService
      * @throws InvalidSlotReturnException
      * @throws Exception
      */
-    public function parseMailText(string $bodytext, array $properties): string
+    protected function parseMailText(string $text, array $properties): string
     {
         $configuration = ConfigurationUtility::getExtensionSettings();
         /** @var StandaloneView $standaloneView */
@@ -35,8 +65,8 @@ class ParseNewsletterService
         $standaloneView->setTemplateRootPaths($configuration['view']['templateRootPaths']);
         $standaloneView->setLayoutRootPaths($configuration['view']['layoutRootPaths']);
         $standaloneView->setPartialRootPaths($configuration['view']['partialRootPaths']);
-        $standaloneView->setTemplateSource($bodytext);
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'BeforeAssignment', [&$string, $properties, $this]);
+        $standaloneView->setTemplateSource($text);
+        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'BeforeAssignment', [$properties, $this]);
         $standaloneView->assignMultiple($properties);
         $string = $standaloneView->render();
         $this->signalDispatch(__CLASS__, __FUNCTION__, [&$string, $properties, $this]);

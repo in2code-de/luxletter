@@ -17,6 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Object\Exception;
@@ -77,6 +78,7 @@ class ProgressQueue
      * @throws MisconfigurationException
      * @throws TransportExceptionInterface
      * @throws UnknownObjectException
+     * @throws SiteNotFoundException
      */
     public function progress(int $limit, int $newsletterIdentifier): int
     {
@@ -109,6 +111,7 @@ class ProgressQueue
      * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
      * @throws TransportExceptionInterface
+     * @throws SiteNotFoundException
      */
     protected function sendNewsletterToReceiverInQueue(Queue $queue): void
     {
@@ -133,10 +136,11 @@ class ProgressQueue
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws SiteNotFoundException
      */
     protected function getSubject(Queue $queue): string
     {
-        return $this->parseService->parseMailText(
+        return $this->parseService->parseSubject(
             $queue->getNewsletter()->getSubject(),
             [
                 'user' => $queue->getUser(),
@@ -158,10 +162,11 @@ class ProgressQueue
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
+     * @throws SiteNotFoundException
      */
     protected function getBodyText(Queue $queue): string
     {
-        $bodytext = $this->parseService->parseMailText(
+        $bodytext = $this->parseService->parseBodytext(
             $queue->getNewsletter()->getBodytext(),
             [
                 'user' => $queue->getUser(),

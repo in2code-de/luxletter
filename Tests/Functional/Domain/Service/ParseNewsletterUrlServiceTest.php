@@ -80,7 +80,7 @@ class ParseNewsletterUrlServiceTest extends FunctionalTestCase
 
         $this->parseNewsletterService = $this->prophesize(ParseNewsletterService::class);
         $this->parseNewsletterService
-            ->parseMailText(Argument::cetera())
+            ->parseSubject(Argument::cetera())
             ->shouldBeCalled()
             ->willReturn('<div>Hello</div>');
 
