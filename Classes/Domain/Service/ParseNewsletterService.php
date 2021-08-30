@@ -36,6 +36,7 @@ class ParseNewsletterService
         $standaloneView->setLayoutRootPaths($configuration['view']['layoutRootPaths']);
         $standaloneView->setPartialRootPaths($configuration['view']['partialRootPaths']);
         $standaloneView->setTemplateSource($bodytext);
+        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'BeforeAssignment', [&$string, $properties, $this]);
         $standaloneView->assignMultiple($properties);
         $string = $standaloneView->render();
         $this->signalDispatch(__CLASS__, __FUNCTION__, [&$string, $properties, $this]);
