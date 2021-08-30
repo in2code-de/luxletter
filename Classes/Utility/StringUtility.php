@@ -1,15 +1,15 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Utility;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
+use TYPO3\CMS\Extbase\Object\Exception;
 
 /**
  * Class StringUtility
  */
 class StringUtility
 {
-
     /**
      * @param string $value
      * @return bool
@@ -43,12 +43,16 @@ class StringUtility
 
     /**
      * @param array $arguments
+     * @param bool $useEncryptionKey can be disabled for testing
      * @return string
      * @throws MisconfigurationException
+     * @throws Exception
      */
-    public static function getHashFromArguments(array $arguments): string
+    public static function getHashFromArguments(array $arguments, bool $useEncryptionKey = true): string
     {
-        $arguments = array_merge($arguments, [ConfigurationUtility::getEncryptionKey()]);
+        if ($useEncryptionKey === true) {
+            $arguments = array_merge($arguments, [ConfigurationUtility::getEncryptionKey()]);
+        }
         return hash('sha256', implode('/', $arguments));
     }
 }

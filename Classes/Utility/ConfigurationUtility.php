@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Utility;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
@@ -49,9 +49,9 @@ class ConfigurationUtility
     public static function isRewriteLinksInNewsletterActivated(): bool
     {
         return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
-                'luxletter',
-                'rewriteLinksInNewsletter'
-            ) === '1';
+            'luxletter',
+            'rewriteLinksInNewsletter'
+        ) === '1';
     }
 
     /**

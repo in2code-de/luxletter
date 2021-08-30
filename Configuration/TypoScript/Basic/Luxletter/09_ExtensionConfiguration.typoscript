@@ -1,10 +1,10 @@
 module {
-    tx_luxletter {
-        view {
-            templateRootPaths {
-                0 = EXT:luxletter/Resources/Private/Templates/
-                1 = EXT:lux/Resources/Private/Templates/
-            }
-        }
+  tx_luxletter {
+    view {
+      templateRootPaths {
+        0 = EXT:luxletter/Resources/Private/Templates/
+        1 = EXT:lux/Resources/Private/Templates/
+      }
     }
+  }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use In2code\Luxletter\Middleware\LuxletterLink;
+
 return [
     'frontend' => [
         'luxletter-luxletterlink' => [

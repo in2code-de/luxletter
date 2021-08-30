@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Model;
 
 use In2code\Luxletter\Exception\UserValuesAreMissingException;
@@ -80,9 +80,8 @@ class User extends FrontendUser
     {
         if (is_a($this->crdate, \DateTime::class)) {
             return StringUtility::getHashFromArguments([$this->getUid(), $this->getCrdate()->format('U')]);
-        } else {
-            throw new UserValuesAreMissingException('fe_users.crdate is empty for uid=' . $this->getUid(), 1574764265);
         }
+        throw new UserValuesAreMissingException('fe_users.crdate is empty for uid=' . $this->getUid(), 1574764265);
     }
 
     /**
