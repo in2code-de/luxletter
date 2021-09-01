@@ -30,6 +30,7 @@ class ParseNewsletterService
     public function parseSubject(string $subject, array $properties): string
     {
         $this->signalDispatch(__CLASS__, __FUNCTION__, [&$subject, $properties, $this]);
+        $properties['type'] = 'subject';
         return $this->parseMailText($subject, $properties);
     }
 
@@ -45,6 +46,7 @@ class ParseNewsletterService
     public function parseBodytext(string $bodytext, array $properties): string
     {
         $this->signalDispatch(__CLASS__, __FUNCTION__, [&$bodytext, $properties, $this]);
+        $properties['type'] = 'bodytext';
         return $this->parseMailText($bodytext, $properties);
     }
 
@@ -66,7 +68,6 @@ class ParseNewsletterService
         $standaloneView->setLayoutRootPaths($configuration['view']['layoutRootPaths']);
         $standaloneView->setPartialRootPaths($configuration['view']['partialRootPaths']);
         $standaloneView->setTemplateSource($text);
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'BeforeAssignment', [$properties, $this]);
         $standaloneView->assignMultiple($properties);
         $string = $standaloneView->render();
         $this->signalDispatch(__CLASS__, __FUNCTION__, [&$string, $properties, $this]);
