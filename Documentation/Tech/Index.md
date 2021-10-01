@@ -4,9 +4,9 @@
 
 ## Change templates
 
-Change templates path in TypoScript setup via your sitepackage extension (e.g. EXT:sitepackage) - 
+Change templates path in TypoScript setup via your sitepackage extension (e.g. EXT:sitepackage) -
 `EXT:sitepackage/Configuration/TypoScript/setup.typoscript`:
- 
+
 ```
 plugin {
 	tx_luxletter_fe {
@@ -31,10 +31,13 @@ plugin {
 module.tx_luxletter < plugin.tx_luxletter_fe
 ```
 
-Next copy the template file NewsletterContainer.html to your sitepackage in 
+**Note:** If you change the path via TypoScript extension template, please take care that you are using the very first
+template at root (otherwise the paths could not be recognized by the backend module or CLI calls)
+
+Next copy the template file NewsletterContainer.html to your sitepackage in
 `EXT:sitepackage/Resources/Private/Templates/Mail/` and modyfiy it a bit with your wanted HTML.
 
-Now you can include the file with a ext_typoscript_setup.typoscript file 
+Now you can include the file with a ext_typoscript_setup.typoscript file
 (that is **important** to include the TypoScript after the TypoScript of luxletter):
 
 `@import 'EXT:sitepackage/Configuration/TypoScript/setup.typoscript'`
@@ -76,8 +79,8 @@ $queueService->addUserWithNewsletterToQueue(123, 234);
 
 ### Do I need to install lux?
 
-No, luxletter works without the extension lux but you can also install the free extension lux. 
-After that, you can also use the Receiver action in the backend module to see some usefull information about the 
+No, luxletter works without the extension lux but you can also install the free extension lux.
+After that, you can also use the Receiver action in the backend module to see some usefull information about the
 receiver activities.
 
 
