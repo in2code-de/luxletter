@@ -52,7 +52,6 @@ class GetTrackingPixelUrlViewHelper extends AbstractViewHelper
     {
         /** @var Site $site */
         $site = $this->arguments['site'];
-        /** @var SiteService $siteService */
         $siteService = GeneralUtility::makeInstance(SiteService::class);
         return $siteService->getDomainFromSite($site);
     }

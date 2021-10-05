@@ -32,7 +32,6 @@ class ClearCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var NewsletterRepository $newsletterRepository */
         $newsletterRepository = ObjectUtility::getObjectManager()->get(NewsletterRepository::class);
         $newsletterRepository->truncateAll();
         $output->writeln('Truncated all luxletter tables!');

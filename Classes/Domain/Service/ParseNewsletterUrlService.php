@@ -23,28 +23,38 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Class ParseNewsletterUrlService to fill a container html with a content from a http(s) page.
- * This is used for testmails and for storing a bodytext in a newsletter record
+ * This is used for testmails, preview and for storing a bodytext in a newsletter record.
+ * The final parse (when sending real newsletters) is done by ParseNewsletterService class.
  */
 class ParseNewsletterUrlService
 {
     use SignalTrait;
 
     /**
-     * Hold origin
+     * Hold origin (number as page identifier or absolute URL)
      *
      * @var string
      */
     protected $origin = '';
 
     /**
-     * Hold url from origin
+     * Hold url from origin (page identifier from origin parsed with URL or keep the absolute URL)
      *
      * @var string
      */
     protected $url = '';
 
     /**
-     * Decide if variables like {user.firstName} should be parsed with fluid or not
+     * Decide if variables like {user.firstName} should be parsed with fluid or not. For a preview we need to parse the
+     * variables, but for parsing it final to a newsletter record, we don't want to touch the variables (so it can
+     * be replaced later)
+     *
+     * Parse:
+     * - Preview of the newsletter
+     * - Send a test newsletter
+     *
+     * Don't parse:
+     * - When newsletter record is created in createAction in NewsletterController
      *
      * @var bool
      */
@@ -55,6 +65,7 @@ class ParseNewsletterUrlService
      * @param string $origin can be a page uid or a complete url
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws MisconfigurationException
      */
     public function __construct(string $origin)
     {
@@ -65,7 +76,6 @@ class ParseNewsletterUrlService
             if ($typenum > 0) {
                 $arguments = ['type' => $typenum];
             }
-            /** @var SiteService $siteService */
             $siteService = GeneralUtility::makeInstance(SiteService::class);
             $url = $siteService->getPageUrlFromParameter((int)$origin, $arguments);
         } elseif (StringUtility::isValidUrl($origin)) {
@@ -206,7 +216,6 @@ class ParseNewsletterUrlService
         }
         $string = $this->getBodyFromHtml($string);
         if ($this->isParsingActive()) {
-            /** @var ParseNewsletterService $parseService */
             $parseService = GeneralUtility::makeInstance(ParseNewsletterService::class);
             $string = $parseService->parseBodytext($string, ['user' => $user]);
         }

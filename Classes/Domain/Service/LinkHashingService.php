@@ -11,8 +11,6 @@ use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\Exception;
@@ -60,12 +58,11 @@ class LinkHashingService
      * @return string
      * @throws ArgumentMissingException
      * @throws Exception
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
+     * @throws SiteNotFoundException
      */
     public function hashLinks(string $content): string
     {
@@ -84,14 +81,13 @@ class LinkHashingService
      *
      * @param \DOMElement $aTag
      * @return void
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
      * @throws ArgumentMissingException
      * @throws Exception
+     * @throws SiteNotFoundException
      */
     protected function hashLink(\DOMElement $aTag): void
     {
@@ -99,7 +95,6 @@ class LinkHashingService
         $href = $this->convertToAbsoluteHref($href);
         if (StringUtility::isValidUrl($href)) {
             if ($aTag->getAttribute('data-luxletter-parselink') !== 'false') {
-                /** @var Link $link */
                 $link = ObjectUtility::getObjectManager()->get(Link::class)
                     ->setNewsletter($this->newsletter)
                     ->setUser($this->user)
@@ -125,7 +120,6 @@ class LinkHashingService
     {
         if (StringUtility::startsWith($href, '/')) {
             $href = ltrim($href, '/');
-            /** @var SiteService $siteService */
             $siteService = GeneralUtility::makeInstance(SiteService::class);
             $href = $siteService->getDomainFromSite(
                 $this->newsletter->getConfiguration()->getSiteConfiguration()

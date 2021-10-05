@@ -150,7 +150,6 @@ class Configuration extends AbstractEntity
     public function getSiteConfiguration(): Site
     {
         $identifier = $this->getSite();
-        /** @var SiteFinder $siteFinder */
         $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
         return $siteFinder->getSiteByIdentifier($identifier);
     }

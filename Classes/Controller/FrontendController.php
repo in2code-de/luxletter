@@ -59,9 +59,7 @@ class FrontendController extends ActionController
     public function previewAction(string $origin): string
     {
         try {
-            /** @var SiteService $siteService */
             $siteService = GeneralUtility::makeInstance(SiteService::class);
-            /** @var ParseNewsletterUrlService $urlService */
             $urlService = GeneralUtility::makeInstance(ParseNewsletterUrlService::class, $origin);
             return $urlService->getParsedContent($siteService->getSite());
         } catch (\Exception $exception) {
@@ -89,7 +87,7 @@ class FrontendController extends ActionController
 
     /**
      * @param User|null $user
-     * @param Newsletter $newsletter
+     * @param Newsletter|null $newsletter
      * @param string $hash
      * @return void
      */
@@ -142,6 +140,7 @@ class FrontendController extends ActionController
         if ($hash === '') {
             throw new ArgumentMissingException('Hash not given', 1562050533);
         }
+        /** @var Usergroup $usergroupToRemove */
         $usergroupToRemove = $this->usergroupRepository->findByUid((int)$this->settings['removeusergroup']);
         if ($user->getUsergroup()->contains($usergroupToRemove) === false) {
             throw new MissingRelationException('Usergroup not assigned to user', 1562066292);

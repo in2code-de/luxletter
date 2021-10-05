@@ -4,9 +4,6 @@ namespace In2code\Luxletter\Mail;
 
 use In2code\Luxletter\Domain\Model\Configuration;
 use In2code\Luxletter\Signal\SignalTrait;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
@@ -50,18 +47,14 @@ class SendMail
     /**
      * @param array $receiver ['a@mail.org' => 'Receivername']
      * @return bool the number of recipients who were accepted for delivery
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws TransportExceptionInterface
      * @throws Exception
      */
     public function sendNewsletter(array $receiver): bool
     {
         $send = true;
         $this->signalDispatch(__CLASS__, 'sendbeforeSend', [&$send, $receiver, $this]);
-        /** @var MailMessage $mailMessage */
         $mailMessage = GeneralUtility::makeInstance(MailMessage::class);
         $mailMessage
             ->setTo($receiver)

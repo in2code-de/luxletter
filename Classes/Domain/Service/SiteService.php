@@ -25,7 +25,6 @@ class SiteService
     {
         $pageIdentifier = FrontendUtility::getCurrentPageIdentifier();
         if ($pageIdentifier > 0) {
-            /** @var SiteFinder $siteFinder */
             $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
             return $siteFinder->getSiteByPageId($pageIdentifier);
         }
@@ -50,10 +49,10 @@ class SiteService
      * @param array $arguments
      * @return string
      * @throws MisconfigurationException
+     * @throws SiteNotFoundException
      */
     public function getPageUrlFromParameter(int $pageIdentifier, array $arguments = []): string
     {
-        /** @var Site $site */
         $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageIdentifier);
         $this->checkForValidSite($site);
         $uri = $site->getRouter()->generateUri($pageIdentifier, $arguments);
@@ -71,7 +70,6 @@ class SiteService
     public function getFrontendUrlFromParameter(array $arguments, Site $site): string
     {
         $this->checkForValidSite($site);
-        /** @var SiteService $siteService */
         $siteService = GeneralUtility::makeInstance(SiteService::class);
         $url = $siteService->getDomainFromSite($site);
         $url .= '?' . http_build_query($arguments);

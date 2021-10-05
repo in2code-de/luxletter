@@ -107,9 +107,7 @@ class GetUserImageUrlViewHelper extends AbstractViewHelper
      */
     protected function getUser(): User
     {
-        /** @var User $user */
-        $user = $this->arguments['user'];
-        return $user;
+        return $this->arguments['user'];
     }
 
     /**

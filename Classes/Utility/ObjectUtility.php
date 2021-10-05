@@ -15,15 +15,12 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
  */
 class ObjectUtility
 {
-
     /**
      * @return ObjectManager
      */
     public static function getObjectManager(): ObjectManager
     {
-        /** @var ObjectManager $objectManager */
-        $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
-        return $objectManager;
+        return GeneralUtility::makeInstance(ObjectManager::class);
     }
 
     /**

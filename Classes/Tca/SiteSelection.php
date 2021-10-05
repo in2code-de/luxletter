@@ -27,7 +27,6 @@ class SiteSelection
      */
     protected function getAllSites(): array
     {
-        /** @var SiteFinder $siteFinder */
         $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
         return $siteFinder->getAllSites();
     }

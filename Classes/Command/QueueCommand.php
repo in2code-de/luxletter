@@ -12,6 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Object\Exception;
@@ -59,10 +60,10 @@ class QueueCommand extends Command
      * @throws MisconfigurationException
      * @throws Exception
      * @throws TransportExceptionInterface
+     * @throws SiteNotFoundException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var ProgressQueue $progressQueue */
         $progressQueue = GeneralUtility::makeInstance(ProgressQueue::class, $output);
         $progressed = $progressQueue->progress(
             (int)$input->getArgument('amount'),

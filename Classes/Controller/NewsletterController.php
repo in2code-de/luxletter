@@ -5,10 +5,8 @@ namespace In2code\Luxletter\Controller;
 use Doctrine\DBAL\DBALException;
 use In2code\Lux\Domain\Repository\VisitorRepository;
 use In2code\Luxletter\Domain\Factory\UserFactory;
-use In2code\Luxletter\Domain\Model\Configuration;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Newsletter;
-use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\ConfigurationRepository;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
@@ -27,7 +25,9 @@ use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -160,7 +160,6 @@ class NewsletterController extends ActionController
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      * @throws NoSuchArgumentException
-     * @throws SiteNotFoundException
      */
     public function initializeCreateAction(): void
     {
@@ -255,6 +254,7 @@ class NewsletterController extends ActionController
      * @return void
      * @throws InvalidQueryException
      * @throws Exception
+     * @throws DBALException
      */
     public function receiverAction(Filter $filter): void
     {
@@ -273,6 +273,7 @@ class NewsletterController extends ActionController
      * @param ServerRequestInterface $request
      * @return ResponseInterface
      * @throws Exception
+     * @throws DBALException
      */
     public function wizardUserPreviewAjax(ServerRequestInterface $request): ResponseInterface
     {
@@ -300,25 +301,22 @@ class NewsletterController extends ActionController
      * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
-     * @throws SiteNotFoundException
+     * @throws TransportExceptionInterface
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public function testMailAjax(ServerRequestInterface $request): ResponseInterface
     {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
             throw new AuthenticationFailedException('You are not authenticated to send mails', 1560872725);
         }
-        /** @var ParseNewsletterUrlService $parseUrlService */
         $parseUrlService = ObjectUtility::getObjectManager()->get(
             ParseNewsletterUrlService::class,
             $request->getQueryParams()['origin']
         );
-        /** @var ParseNewsletterService $parseService */
         $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
-        /** @var ConfigurationRepository $configurationRepository */
         $configurationRepository = ObjectUtility::getObjectManager()->get(ConfigurationRepository::class);
-        /** @var Configuration $configuration */
         $configuration = $configurationRepository->findByUid($request->getQueryParams()['configuration']);
-        /** @var UserFactory $userFactory */
         $userFactory = ObjectUtility::getObjectManager()->get(UserFactory::class);
         $user = $userFactory->getDummyUser();
         $mailService = ObjectUtility::getObjectManager()->get(
@@ -348,7 +346,6 @@ class NewsletterController extends ActionController
         $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
         $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
         $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->receiverDetailFile));
-        /** @var User $user */
         $user = $userRepository->findByUid((int)$request->getQueryParams()['user']);
         $standaloneView->assignMultiple([
             'user' => $user,
@@ -390,15 +387,12 @@ class NewsletterController extends ActionController
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      * @throws NoSuchArgumentException
-     * @throws SiteNotFoundException
      */
     protected function parseNewsletterToBodytext(): void
     {
         $newsletter = (array)$this->request->getArgument('newsletter');
-        /** @var ParseNewsletterUrlService $parseService */
         $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterUrlService::class, $newsletter['origin']);
         $parseService->setParseVariables(false);
-        /** @var Configuration $configuration */
         $configuration = $this->configurationRepository->findByUid((int)$newsletter['configuration']);
         $newsletter['bodytext'] = $parseService->getParsedContent($configuration->getSiteConfiguration());
         $this->request->setArgument('newsletter', $newsletter);
