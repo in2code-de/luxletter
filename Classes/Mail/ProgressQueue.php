@@ -87,8 +87,8 @@ class ProgressQueue
             $progress = new ProgressBar($this->output, $queues->count());
             $progress->start();
             $this->signalDispatch(__CLASS__, __FUNCTION__, [$queues]);
+            /** @var Queue $queue */
             foreach ($queues as $queue) {
-                /** @var Queue $queue */
                 $this->sendNewsletterToReceiverInQueue($queue);
                 $this->markSent($queue);
                 $progress->advance();
@@ -116,7 +116,6 @@ class ProgressQueue
     protected function sendNewsletterToReceiverInQueue(Queue $queue): void
     {
         if ($queue->getUser() !== null) {
-            /** @var SendMail $sendMail */
             $sendMail = ObjectUtility::getObjectManager()->get(
                 SendMail::class,
                 $this->getSubject($queue),
@@ -155,8 +154,6 @@ class ProgressQueue
      * @return string
      * @throws ArgumentMissingException
      * @throws Exception
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
@@ -182,19 +179,17 @@ class ProgressQueue
      * @param Queue $queue
      * @param string $bodytext
      * @return string
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws ArgumentMissingException
      * @throws MisconfigurationException
      * @throws Exception
+     * @throws SiteNotFoundException
      */
     protected function hashLinksInBodytext(Queue $queue, string $bodytext): string
     {
         if (ConfigurationUtility::isRewriteLinksInNewsletterActivated()) {
-            /** @var LinkHashingService $linkHashing */
             $linkHashing = GeneralUtility::makeInstance(
                 LinkHashingService::class,
                 $queue->getNewsletter(),

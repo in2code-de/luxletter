@@ -22,7 +22,7 @@ newsletters.
 
 #### Page structure
 
-You could create two pages. The outer page should contain teaser elements with links to the 
+You could create two pages. The outer page should contain teaser elements with links to the
 full newsletter text elements on a subpage.
 
 Example pagetree:
@@ -77,11 +77,11 @@ See ViewHelper `luxletter:format.cropyBySelection` for more details and options.
 
 If you are not that well versed in newsletter technologies, you may wondering yourself how the HTML
 should be build that mails can be shown in a large bunch of email clients.
-Looking back in the past, the Microsoft guys for Outlook used the Internet Explorer engine to render mails. 
+Looking back in the past, the Microsoft guys for Outlook used the Internet Explorer engine to render mails.
 And if you think that was a bad idea, wait what they did some times later. Now (no joke) Microsoft Word
 is the rendering engine for Outlook.
 
-Long story short: Look at https://foundation.zurb.com/emails/email-templates.html for some responsive
+Long story short: Look at https://get.foundation/emails/docs/ for some responsive
 Email templates. Those templates are build with HTML from the 90ies.
 
 But if you are looking at the page that you build for your newsletter content, you will see some HTML5
@@ -110,7 +110,7 @@ routeEnhancers:
 #### Zurb foundation and Newsletter wrapping
 
 You can focus your website content on the introduction and the useful content itself. Luxletter uses a wrapping
-service to wrap your content with header and footer automaticly.
+service to wrap your content with header and footer automatically.
 Look at `EXT:luxletter/Resources/Private/Templates/Mail/NewsletterContainer.html` to see the HTML that
 is used for the wrapping of the header and footer.
 The variable `{content}` will be filled with your built content when creating newsletter records (see
@@ -151,16 +151,37 @@ module {
 }
 ```
 
-The existing template is using the **Zurb Foundation email template**
-(see https://foundation.zurb.com/emails/docs/css-guide.html for details)
+**Note:** If you change the path via TypoScript extension template, please take care that you are using the very first
+template on root (otherwise the paths could not be recognized by the backend module or CLI calls)
 
-**Note** There is also an unsubscribe link in the footer - look for 
+The existing template is using the **Zurb Foundation email template**
+(see https://get.foundation/emails/docs/ for details)
+
+**Note** There is also an unsubscribe link in the footer - look for
 `<f:link.external uri="{luxletter:mail.getUnsubscribeUrl(newsletter:newsletter,user:user,site:site)}" additionalAttributes="{data-luxletter-parselink:'false'}">Unsubscribe now</f:link.external>`
 
 **Note** Normally links in luxletter should be rewritten, so clicks can be tracked. But in some
 cases you don't want to rewrite all links. Some should not be rewritten. Just add an attribute
 `data-luxletter-parselink="false"` to the link.
 
+
+#### Inline CSS
+
+Because some webmail clients are removing style-tags, we offer a possibility to render css inline in the html-tags.
+You can define local CSS files in this way (higher numbers are overwriting lower numbers):
+
+```
+plugin {
+  tx_luxletter_fe {
+    settings {
+      addInlineCss {
+        0 = EXT:luxletter/Resources/Private/Css/ZurbFoundation.css
+        1 = EXT:luxletter/Resources/Private/Css/Luxletter.css
+      }
+    }
+  }
+}
+```
 
 ### Creating newsletters in the backend module
 
@@ -174,7 +195,7 @@ can only add new records.
 
 | Field                   | Description                                                                             |
 | ----------------------- | --------------------------------------------------------------------------------------- |
-| #                       | Newsletter number                                                                       |   
+| #                       | Newsletter number                                                                       |
 | Title                   | Newsletter title                                                                        |
 | Description             | Newsletter description                                                                  |
 | Sending time            | Time when the newsletter can be send                                                    |
@@ -193,25 +214,25 @@ Clicking on `Add new newsletter` starts a process where you can create new newsl
 
 | Field                   | Description                                                                             |
 | ----------------------- | --------------------------------------------------------------------------------------- |
-| Newsletter title        | Add a useful title to your newsletter                                                   | 
-| Newsletter start        | If you select a start time (optional), newsletters will not be send before this time    | 
-| Description             | Add a useful title to your newsletter                                                   | 
+| Newsletter title        | Add a useful title to your newsletter                                                   |
+| Newsletter start        | If you select a start time (optional), newsletters will not be send before this time    |
+| Description             | Add a useful title to your newsletter                                                   |
 
 <img src="../Images/documentation_newnewsletter_step2.png" width="800" alt="create new newsletter - step 2" />
 
 | Field                   | Description                                                                             |
 | ----------------------- | --------------------------------------------------------------------------------------- |
-| Sender                  | Choose a sender record                                                                  | 
-| Receiver                | Choose a receiver group (frontenduser groups that marked as luxletter groups)           | 
-| Mail subject            | Mail subject (also variables are allowed like {user.lastName}                           | 
-| Newsletter location     | Choose where your HTML for the newsletter is located. An absolute URL like https://domain.org/newsletter.html is possible. If you add a number (PID), the page will be parsed (typenum is automaticly added) | 
+| Sender                  | Choose a sender record                                                                  |
+| Receiver                | Choose a receiver group (frontenduser groups that marked as luxletter groups)           |
+| Mail subject            | Mail subject (also variables are allowed like {user.lastName}                           |
+| Newsletter location     | Choose where your HTML for the newsletter is located. An absolute URL like https://domain.org/newsletter.html is possible. If you add a number (PID), the page will be parsed (typenum is automaticly added) |
 
 <img src="../Images/documentation_newnewsletter_step3.png" width="800" alt="create new newsletter - step 3" />
 
 | Field                   | Description                                                                                      |
 | ----------------------- | ------------------------------------------------------------------------------------------------ |
-| Test email address      | Send a quick testmail to an email (variables in the newsletter will be filled with dummy values) | 
-| Receivers preview       | Add small preview of your receivers will help you to be sure you haven chosen the correct group  | 
-| Newsletter preview      | You will see a newsletter preview (variables will be filled with dummy values)                   | 
+| Test email address      | Send a quick testmail to an email (variables in the newsletter will be filled with dummy values) |
+| Receivers preview       | Add small preview of your receivers will help you to be sure you haven chosen the correct group  |
+| Newsletter preview      | You will see a newsletter preview (variables will be filled with dummy values)                   |
 
 As soon as you save the newsletter, it will be parsed and after that it's ready for the dispatch.

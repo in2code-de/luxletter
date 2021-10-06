@@ -100,7 +100,6 @@ class Link extends AbstractEntity
     public function getUriFromHash(): string
     {
         $site = $this->getNewsletter()->getConfiguration()->getSiteConfiguration();
-        /** @var SiteService $siteService */
         $siteService = GeneralUtility::makeInstance(SiteService::class);
         return $siteService->getFrontendUrlFromParameter(['luxletterlink' => $this->getHash()], $site);
     }

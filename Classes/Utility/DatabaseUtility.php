@@ -19,7 +19,6 @@ class DatabaseUtility
      */
     public static function getQueryBuilderForTable(string $tableName, bool $removeRestrictions = false): QueryBuilder
     {
-        /** @var QueryBuilder $queryBuilder */
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($tableName);
         if ($removeRestrictions === true) {
             $queryBuilder->getRestrictions()->removeAll();

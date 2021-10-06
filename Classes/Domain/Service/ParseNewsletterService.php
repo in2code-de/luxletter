@@ -62,7 +62,6 @@ class ParseNewsletterService
     protected function parseMailText(string $text, array $properties): string
     {
         $configuration = ConfigurationUtility::getExtensionSettings();
-        /** @var StandaloneView $standaloneView */
         $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
         $standaloneView->setTemplateRootPaths($configuration['view']['templateRootPaths']);
         $standaloneView->setLayoutRootPaths($configuration['view']['layoutRootPaths']);

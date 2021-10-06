@@ -32,7 +32,6 @@ class ClearQueueCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        /** @var QueueRepository $queueRepository */
         $queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
         $queueRepository->truncate();
         $output->writeln('Truncated queue table!');

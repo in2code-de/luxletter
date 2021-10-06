@@ -32,7 +32,7 @@ module.tx_luxletter < plugin.tx_luxletter_fe
 ```
 
 **Note:** If you change the path via TypoScript extension template, please take care that you are using the very first
-template at root (otherwise the paths could not be recognized by the backend module or CLI calls)
+template on root (otherwise the paths could not be recognized by the backend module or CLI calls)
 
 Next copy the template file NewsletterContainer.html to your sitepackage in
 `EXT:sitepackage/Resources/Private/Templates/Mail/` and modyfiy it a bit with your wanted HTML.
@@ -79,14 +79,16 @@ $queueService->addUserWithNewsletterToQueue(123, 234);
 
 ### Do I need to install lux?
 
-No, luxletter works without the extension lux but you can also install the free extension lux.
+No, luxletter works without the extension [Lux](https://www.in2code.de/produkte/lux-typo3-marketing-automation/) but
+you can additionally add the free extension lux.
 After that, you can also use the Receiver action in the backend module to see some usefull information about the
 receiver activities.
 
 
 ### What is lux?
 
-Lux is a free marketing automation tool as a TYPO3 extension and a perfect fit for luxletter.
+[Lux](https://www.in2code.de/produkte/lux-typo3-marketing-automation/) is a free marketing automation tool
+as a TYPO3 extension and a perfect fit for luxletter.
 
 
 ### Can I use a third party mailserver in luxletter?
@@ -109,13 +111,16 @@ No, not at the moment. We focused on fe_users.
 
 At the moment there is no bounce mail handling integrated.
 
+
 ### Scheduler task is failing while sending a newsletter
 
 Look at the sys log to see which problem caused this issue. E.g. if fe_users.crdate is empty, etc...
 
+
 ### Mail sending is too slow
 
 Check how many mails can be sent per hour. Ask your hoster. Modify the queue settings.
+
 
 ### Mail could not be parsed in preview when adding an origin
 
@@ -157,6 +162,16 @@ routeEnhancers:
 #### 2. TypoScript for Fluid Styled Mail Content is missing
 
 Just add the TypoScript for Fluid Styled Mail Content in static template
+
+
+#### 3. The target URL can not be parsed by your webserver
+
+For some reasons your infrastructure does not allow your server to build request to it's own websites (htpasswd cover,
+no ssl certificate, application login would be needed, etc...).
+
+Tip: You could test the server requests by yourself with a curl command on the server bash like
+`curl -I https://domain.org/2022-01/newsletter.html`
+what should result in a status code 200.
 
 
 ### Images are not loaded in my Newsletter Mail
