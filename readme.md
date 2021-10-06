@@ -103,6 +103,12 @@ composer require "in2code/luxletter"
 
 ## Breaking changes !!!
 
+### Upgrade to 5.x
+
+This is only a small breaking change. CSS files are included via TypoScript now. So we removed the partial ZurbCss.html
+and put all css now to EXT:luxletter/Resources/Private/Css/.
+Todo: Remove the partial call in NewsletterContainer.html template file.
+
 ### Upgrade to 4.x
 
 Multiple senders can now be defined in records, in addition it's not needed to define a domain in extension configuration
@@ -125,6 +131,7 @@ Breaking changes in detail and what you have to do step by step after you have u
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| !!! 5.0.0  | 2021.10.06  | Feature    | Adding css inline in html-tags now (see TypoScript setup how to include your css files)                                                                                                    |
 | 4.3.0      | 2021.10.01  | Feature    | Improve signals in ParseNewsletterUriService class, small cleanup                                                                                                                          |
 | 4.2.0      | 2021.08.30  | Feature    | Add some more signals, make ParseNewsletterService more extendable, use better method to get base from site configuration, add .gitattributes file                                         |
 | 4.1.1      | 2021.08.12  | Bugfix     | Don's throw an error if dashboard is not available                                                                                                                                         |
