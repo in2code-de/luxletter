@@ -11,6 +11,8 @@ use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use In2code\Luxletter\Utility\TemplateUtility;
+use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -61,14 +63,26 @@ class ParseNewsletterUrlService
     protected $parseVariables = true;
 
     /**
+     * Extension configuration from TypoScript
+     *
+     * @var array
+     */
+    protected $configuration = [];
+
+    /**
      * ParseNewsletterUrlService constructor.
      * @param string $origin can be a page uid or a complete url
+     * @throws Exception
+     * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
+     * @throws SiteNotFoundException
      */
     public function __construct(string $origin)
     {
+        $this->configuration = ConfigurationUtility::getExtensionSettings();
+
         $url = '';
         if (MathUtility::canBeInterpretedAsInteger($origin)) {
             $arguments = [];
@@ -105,7 +119,28 @@ class ParseNewsletterUrlService
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'BeforeParsing', [$user, $this]);
         $content = $this->getNewsletterContainerAndContent($this->getContentFromOrigin($user), $site, $user);
+        $content = $this->addInlineCss($content);
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'AfterParsing', [$content, $this]);
+        return $content;
+    }
+
+    /**
+     * @param string $content
+     * @return string
+     */
+    protected function addInlineCss(string $content): string
+    {
+        if (!empty($this->configuration['settings']['addInlineCss'])) {
+            $cssToInline = GeneralUtility::makeInstance(CssToInlineStyles::class);
+            $files = $this->configuration['settings']['addInlineCss'];
+            $files = array_reverse($files);
+            foreach ($files as $path) {
+                $file = GeneralUtility::getFileAbsFileName($path);
+                if (file_exists($file)) {
+                    $content = $cssToInline->convert($content, file_get_contents($file));
+                }
+            }
+        }
         return $content;
     }
 
@@ -123,25 +158,24 @@ class ParseNewsletterUrlService
     {
         $templateName = 'Mail/NewsletterContainer.html';
         if ($this->isParsingActive()) {
-            $configuration = ConfigurationUtility::getExtensionSettings();
             $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-            $standaloneView->setTemplateRootPaths($configuration['view']['templateRootPaths']);
-            $standaloneView->setLayoutRootPaths($configuration['view']['layoutRootPaths']);
-            $standaloneView->setPartialRootPaths($configuration['view']['partialRootPaths']);
+            $standaloneView->setTemplateRootPaths($this->configuration['view']['templateRootPaths']);
+            $standaloneView->setLayoutRootPaths($this->configuration['view']['layoutRootPaths']);
+            $standaloneView->setPartialRootPaths($this->configuration['view']['partialRootPaths']);
             $standaloneView->setTemplate($templateName);
-            $standaloneView->assignMultiple($this->getContentObjectVariables($configuration ?? []));
+            $standaloneView->assignMultiple($this->getContentObjectVariables());
             $standaloneView->assignMultiple(
                 [
                     'content' => $content,
                     'user' => $user,
                     'site' => $site,
-                    'settings' => $configuration['settings'] ?? []
+                    'settings' => (array)$this->configuration['settings']
                 ]
             );
             $this->signalDispatch(
                 __CLASS__,
                 __FUNCTION__ . 'PostParsing',
-                [$standaloneView, $content, $configuration, $user, $this]
+                [$standaloneView, $content, $this->configuration, $user, $this]
             );
             $html = $standaloneView->render();
         } else {
@@ -165,14 +199,13 @@ class ParseNewsletterUrlService
      *          }
      *      }
      *
-     * @param array $configuration TypoScript configuration array
      * @return array the variables to be assigned
      * @throws Exception
      */
-    protected function getContentObjectVariables(array $configuration): array
+    protected function getContentObjectVariables(): array
     {
         $tsService = GeneralUtility::makeInstance(TypoScriptService::class);
-        $tsConfiguration = $tsService->convertPlainArrayToTypoScriptArray($configuration);
+        $tsConfiguration = $tsService->convertPlainArrayToTypoScriptArray((array)$this->configuration);
 
         $variables = [];
         $variablesToProcess = (array)($tsConfiguration['variables.'] ?? []);

@@ -1,0 +1,57 @@
+/**
+ * Individual CSS which overwrites Zurb Foundation CSS
+ */
+
+body,
+html,
+.body {
+    background: #f3f3f3 !important;
+}
+
+.container.header {
+    background: #f3f3f3;
+}
+
+.body-drip {
+    border-top: 8px solid #a5c85a;
+}
+
+img:not(.small) {
+    height: auto;
+    max-height: 100%;
+    width: 100%;
+    max-width: 100%;
+}
+img.small {
+    width: 24px;
+}
+img.small.small50 {
+    width: 50px;
+}
+.float-right {
+    float: right;
+}
+table.button.success table td {
+    color: #fefefe;
+    background: #a5c85a;
+    border: 2px solid white;
+}
+table.button.success:hover table td {
+    background: #799933;
+}
+table.button.success table td a {
+    color: white;
+}
+
+a {
+    color: #a5c85a;
+}
+a:hover {
+    color: #799933;
+}
+a:active {
+    color: #799933;
+}
+a:visited {
+    color: #799933;
+}

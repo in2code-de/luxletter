@@ -32,7 +32,7 @@ module.tx_luxletter < plugin.tx_luxletter_fe
 ```
 
 **Note:** If you change the path via TypoScript extension template, please take care that you are using the very first
-template at root (otherwise the paths could not be recognized by the backend module or CLI calls)
+template on root (otherwise the paths could not be recognized by the backend module or CLI calls)
 
 Next copy the template file NewsletterContainer.html to your sitepackage in
 `EXT:sitepackage/Resources/Private/Templates/Mail/` and modyfiy it a bit with your wanted HTML.
