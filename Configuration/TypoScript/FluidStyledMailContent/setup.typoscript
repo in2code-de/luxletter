@@ -57,10 +57,6 @@ fluidStyledMailContent {
         }
     )
   }
-  headerData {
-    10 = FLUIDTEMPLATE
-    10.file = EXT:luxletter/Resources/Private/Partials/Mail/ZurbCss.html
-  }
 
   # Add content
   10 < styles.content.get
