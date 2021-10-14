@@ -162,12 +162,13 @@ routeEnhancers:
 #### 2. TypoScript for Fluid Styled Mail Content is missing
 
 Just add the TypoScript for Fluid Styled Mail Content in static template
+(but don't forget to add it at the root template)
 
 
 #### 3. The target URL can not be parsed by your webserver
 
 For some reasons your infrastructure does not allow your server to build request to it's own websites (htpasswd cover,
-no ssl certificate, application login would be needed, etc...).
+no ssl certificate, page to parse is a "backend user section" application login would be needed, etc...).
 
 Tip: You could test the server requests by yourself with a curl command on the server bash like
 `curl -I https://domain.org/2022-01/newsletter.html`

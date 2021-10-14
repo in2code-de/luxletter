@@ -12,8 +12,8 @@ Extension luxletter should be installed via composer
 composer require "in2code/luxletter"
 ```
 
-Note: Installation without composer could work but is not supported. 
-TYPO3 10.4 is required. The free extension lux can be also installed for more analysis but is not 
+Note: Installation without composer could work but is not supported.
+TYPO3 10.4 is required. The free extension lux can be also installed for more analysis but is not
 neccessary.
 
 
@@ -30,8 +30,7 @@ neccessary.
 
 ### Site configuration
 
-You can define one unsubscribe pid per site configuration. This is only relevant if you are using the unsubscribe
-plugin of luxletter.
+You must define one unsubscribe pid per site configuration. This is relevant the unsubscribe plugin of luxletter.
 
 **Attention** Be aware to use a full domain name in base (Entry point) settings of your site configuration. Good: `https://www.domain.org/` - Bad: `/`
 
@@ -39,6 +38,8 @@ plugin of luxletter.
 
 
 ### Sender configuration
+
+A sender configuration can be added via list module in every folder page in backend.
 
 | Field          | Description                                                                                                                                                                                 |
 | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -61,6 +62,8 @@ Basicly there are two different TypoScripts that should be included in static te
 * In addition `FluidStyledMailContent` static template can also be added for rendering content in an email way (with html from the hell for outlook & co.)
 
 <img src="../Images/documentation_installation_statictyposcript.png" width="800" alt="add static typoscript" />
+
+*Important* Please do not include those templates in an extension template deep in your website but on the root template. Otherwise the backend module can't read the TypoScript.
 
 #### Basic
 
@@ -94,8 +97,8 @@ Don't forget to add the page identifier to the main extension settings (see abov
 * You should select a usergroup that should be removed from the current visiting frontenduser.
 * In addition you can add a message that should appear if a user just unsubscribed.
 
-**Note** Unsubscribing is only possible if a hash is added to the link call. 
-See `{luxletter:mail.getUnsubscribeUrl(newsletter:newsletter,user:user,site:site)}` in the newsletter layout 
+**Note** Unsubscribing is only possible if a hash is added to the link call.
+See `{luxletter:mail.getUnsubscribeUrl(newsletter:newsletter,user:user,site:site)}` in the newsletter layout
 on EXT:lux/Resources/Private/Templates/Mail/NewsletterContainer.html
 
 
@@ -111,7 +114,7 @@ Open a group and check `Is newsletter receiver group` for groups that should get
 
 ### Connect a mailserver
 
-If you don't set a mail configuration for luxletter, 
+If you don't set a mail configuration for luxletter,
 the default mail configuration from TYPO3 will be used when sending newsletters.
 
 Nevertheless it's highly recommended to set a different mailserver for your newsletter configuration to prevent
