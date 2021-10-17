@@ -9,7 +9,6 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Object\Exception;
 
 /**
  * Class ConfigurationUtility
@@ -21,7 +20,6 @@ class ConfigurationUtility
      *
      * @return array
      * @throws InvalidConfigurationTypeException
-     * @throws Exception
      */
     public static function getExtensionSettings(): array
     {
@@ -81,7 +79,6 @@ class ConfigurationUtility
     /**
      * @return string
      * @throws MisconfigurationException
-     * @throws Exception
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function getEncryptionKey(): string
