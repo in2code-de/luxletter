@@ -6,152 +6,195 @@
  * General backend classes
  */
 a {
-  color: $colorAlternative;
-  cursor: pointer;
+    color: $colorAlternative;
+    cursor: pointer;
 }
 
 hr {
-  border-style: dashed;
-  border-color: $colorGrey;
-  border-bottom: 0;
-  border-left: 0;
-  border-right: 0;
-  margin: 40px 0;
+    border-style: dashed;
+    border-color: $colorGrey;
+    border-bottom: 0;
+    border-left: 0;
+    border-right: 0;
+    margin: 40px 0;
 }
 
 label {
-  font-weight: normal;
+    font-weight: normal;
 }
 
 .color-lux {
-  color: $colorMain;
+    color: $colorMain;
 }
+
 .color-grey {
-  color: $colorGrey;
+    color: $colorGrey;
+}
+
+.lux-backend {
+    --bs-primary-rgb: 165, 231, 255;
+
+    .table > :not(caption) > * > * {
+        background: transparent;
+    }
+
+    // Make round images from landscape and portrait images
+    .img-circle {
+        object-fit: cover;
+        border-radius: 50%;
+        width: 150px;
+        height: 150px;
+    }
+
+    .img-medium {
+        width: 100px;
+        height: 100px;
+    }
+
+    .img-small {
+        width: 50px;
+        height: 50px;
+    }
 }
 
 /**
  * Bootstrap
  */
 .row {
-  @media screen and (min-width: 992px) {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    flex-wrap: wrap;
-  }
-}
-.row > [class*='col-'] {
-  @media screen and (min-width: 992px) {
-    display: flex;
-    flex-direction: column;
-  }
+    @media screen and (min-width: 992px) {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        flex-wrap: wrap;
+    }
 }
 
-.panel,
+.row > [class*='col-'] {
+    @media screen and (min-width: 992px) {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.row + .row:not(.lux-trigger) {
+    margin-top: .5rem;
+}
+
+.luxletter-dashboard {
+    .panel,
+    .panel-body {
+        height: 100%;
+    }
+}
+
 .panel-body {
-  height: 100%;
+    overflow: hidden;
 }
 
 .bg-primary {
-  background-color: $colorSoft;
+    background-color: $colorSoft;
+
+    li {
+        color: white;
+    }
 }
 
 .badge-primary {
-  background-color: $colorMain;
+    background-color: $colorMain;
 }
 
 .alert-lux {
-  background-color: $colorMain;
+    background-color: $colorMain;
 }
 
 .input-lg {
-  line-height: 1.3 !important;
+    line-height: 1.3 !important;
 }
 
 .progress {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .progress-bar {
-  background-color: $colorMain;
+    background-color: $colorMain;
 }
 
 /**
  * Button classes
  */
 .btn-lg-extra {
-  padding: 30px 60px;
-  font-size: 25px;
-  line-height: 2;
-  border-radius: 5px;
+    padding: 30px 60px;
+    font-size: 25px;
+    line-height: 2;
+    border-radius: 5px;
 }
 
 .btn-primary {
-  background-color: $colorMain;
-  border-color: $colorMain;
-  color: $white;
-  &:hover {
-    background-color: $colorAlternative;
-    border-color: $colorAlternative;
-  }
+    background-color: $colorMain;
+    border-color: $colorMain;
+    color: $white;
+
+    &:hover {
+        background-color: $colorAlternative;
+        border-color: $colorAlternative;
+    }
 }
 
 .btn-primary-extra {
-  appearance: none;
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  left: 50%;
-  top: 50%;
-  margin-top: -100px;
-  margin-left: -200px;
-  position: fixed;
-  line-height: 1.6;
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    left: 50%;
+    top: 50%;
+    margin-top: -100px;
+    margin-left: -200px;
+    position: fixed;
+    line-height: 1.6;
 
-  > span {
-    display: block;
-    font-size: 16px;
-  }
+    > span {
+        display: block;
+        font-size: 16px;
+    }
 }
 
 .btn-add-lg {
-  display: block;
-  width: 100%;
-  padding: 5px;
-  font-weight: bold;
-  font-size: 20px;
+    display: block;
+    width: 100%;
+    padding: 5px;
+    font-weight: bold;
+    font-size: 20px;
 }
 
 /**
  * Form classes
  */
 .lb-lg {
-  font-size: 20px;
+    font-size: 20px;
 }
 
 .help-block {
-  margin-top: 15px;
-  margin-left: 15px;
+    margin-top: 15px;
+    margin-left: 15px;
 
-  &__code {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
+    &__code {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
 
-    > li {
-      margin: 5px 0;
+        > li {
+            margin: 5px 0;
 
-      > span {
-        font-style: italic;
-        background: #ddd;
-        display: inline-block;
-        padding: 2px 10px;
-        margin-right: 10px;
-        font-weight: bold;
-      }
+            > span {
+                font-style: italic;
+                background: #ddd;
+                display: inline-block;
+                padding: 2px 10px;
+                margin-right: 10px;
+                font-weight: bold;
+            }
+        }
     }
-  }
 }
 
 /**
@@ -159,81 +202,82 @@ label {
  */
 .table-hover > tbody > tr:hover,
 .table-hover > tbody > tr.lux-action-detail {
-  background-color: $colorMain;
+    background-color: $colorMain;
 
-  > td {
-    color: $white;
-  }
+    > td {
+        color: $white;
+    }
 }
 
 .table-pointer > tbody > tr {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 .lux-textarea {
-  width: 100%;
-  padding: 10px;
+    width: 100%;
+    padding: 10px;
 
-  &__default {
-    color: $colorGrey;
-  }
+    &__default {
+        color: $colorGrey;
+    }
 }
 
 /**
  * Luxletter
  */
 .luxletter-mailprefiew--image {
-  width: 32px;
-  height: 32px;
-  border-radius: 16px;
-  display: inline-block;
-  overflow: hidden;
-  margin-right: 20px;
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    display: inline-block;
+    overflow: hidden;
+    margin-right: 20px;
 }
 
 .luxletter-iframepreview {
-  width: 100%;
-  border: none;
-  height: 800px;
+    width: 100%;
+    border: none;
+    height: 800px;
 }
 
 .luxletter-messages {
-  padding: 15px 0;
-  list-style-type: none;
-  > li {
-    margin: 5px 30px;
-    font-size: 16px;
-  }
+    padding: 15px 0;
+    list-style-type: none;
+
+    > li {
+        margin: 5px 30px;
+        font-size: 16px;
+    }
 }
 
 /**
  * Dashboard
  */
 .luxletter-panel-body-text {
-  font-size: 2.5vw;
-  display: inline-block;
-  width: 100%;
-  text-align: center;
-  color: $colorMain;
-  line-height: 85%;
+    font-size: 2.5vw;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    color: $colorMain;
+    line-height: 85%;
 
-  &--addition {
-    font-size: 1vw;
-    color: $colorGreyDark;
-    display: block;
-  }
-
-  &__larger {
-    font-size: 4vw;
-
-    .luxletter-panel-body-text--addition {
-      font-size: 1.5vw;
+    &--addition {
+        font-size: 1vw;
+        color: $colorGreyDark;
+        display: block;
     }
-  }
+
+    &__larger {
+        font-size: 4vw;
+
+        .luxletter-panel-body-text--addition {
+            font-size: 1.5vw;
+        }
+    }
 }
 
 .vcenter {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
