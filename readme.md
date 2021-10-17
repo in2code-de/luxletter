@@ -19,7 +19,7 @@ it.
 ### The upside
 
 * A useful and nice **dashboard** shows you the relevant information in the backend
-* Modern newsletter extension for TYPO3 10
+* Modern newsletter extension for TYPO3 10 or 11
 * Tracking of clicks via **PSR-15 interface** in TYPO3
 * Sending mails in queue via **symfony command controller**
 * Records for **fe_groups** (and there related fe_users) are used to send mails to
@@ -82,7 +82,7 @@ See the full [documentation](Documentation/Index.md) (installation, configuratio
 
 ## Technical requirements
 
-* TYPO3 10 LTS is the basic CMS for this newsletter tool.
+* TYPO3 10 or 11 LTS is the basic CMS for this newsletter tool.
 * EXT:lux is **not needed** to run luxletter but both extensions can work together to show more relevant information.
 * This extension needs to be **installed with composer** (classic installation could work but is not supported and tested).
 * fe_users in fe_groups is used to send newsletter emails to.
@@ -131,6 +131,7 @@ Breaking changes in detail and what you have to do step by step after you have u
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 6.0.0      | 2021.10.17  | Task       | Support TYPO3 11 (and also 10)                                                                                                                                                             |
 | 5.0.1      | 2021.10.10  | Bugfix     | Don't include removed ZerbCss.html any more in version 5                                                                                                                                   |
 | !!! 5.0.0  | 2021.10.06  | Feature    | Adding css inline in html-tags now (see TypoScript setup how to include your css files)                                                                                                    |
 | 4.3.0      | 2021.10.01  | Feature    | Improve signals in ParseNewsletterUriService class, small cleanup                                                                                                                          |

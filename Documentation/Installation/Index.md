@@ -12,9 +12,9 @@ Extension luxletter should be installed via composer
 composer require "in2code/luxletter"
 ```
 
-Note: Installation without composer could work but is not supported.
-TYPO3 10.4 is required. The free extension lux can be also installed for more analysis but is not
-neccessary.
+**Note:** TYPO3 in composer mode is needed
+
+TYPO3 10.4 or 11.5 is required. The free extension lux can be also installed for more analysis but is not eccessary.
 
 
 ### Basic settings in extension configuration
