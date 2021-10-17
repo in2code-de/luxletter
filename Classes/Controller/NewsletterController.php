@@ -32,6 +32,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentNameException;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbaseObject;
@@ -227,6 +228,7 @@ class NewsletterController extends ActionController
      *
      * @return void
      * @throws NoSuchArgumentException
+     * @throws InvalidArgumentNameException
      */
     public function initializeReceiverAction(): void
     {
@@ -238,6 +240,9 @@ class NewsletterController extends ActionController
         } else {
             $filter = (array)$this->request->getArgument('filter');
             BackendUserUtility::saveValueToSession('filter', $filter);
+        }
+        if (isset($filter['usergroup']['__identity']) && $filter['usergroup']['__identity'] === '0') {
+            unset($filter['usergroup']);
         }
         $this->request->setArgument('filter', $filter);
     }
@@ -374,6 +379,7 @@ class NewsletterController extends ActionController
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      * @throws NoSuchArgumentException
+     * @throws InvalidArgumentNameException
      */
     protected function parseNewsletterToBodytext(): void
     {
