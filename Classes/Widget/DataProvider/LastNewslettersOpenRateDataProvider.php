@@ -6,7 +6,7 @@ use Doctrine\DBAL\DBALException;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Utility\LocalizationUtility;
-use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Dashboard\WidgetApi;
 use TYPO3\CMS\Dashboard\Widgets\ChartDataProviderInterface;
 use TYPO3\CMS\Extbase\Object\Exception;
@@ -58,7 +58,7 @@ class LastNewslettersOpenRateDataProvider implements ChartDataProviderInterface
      */
     protected function getData(): array
     {
-        $newsletterRepository = ObjectUtility::getObjectManager()->get(NewsletterRepository::class);
+        $newsletterRepository = GeneralUtility::makeInstance(NewsletterRepository::class);
         $newsletters = $newsletterRepository->findAll()->getQuery()->setLimit(10)->execute();
         $data = [
             'amounts' => [],

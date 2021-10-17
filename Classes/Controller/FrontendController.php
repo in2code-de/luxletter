@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace In2code\Luxletter\Controller;
 
+use Exception;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Model\Usergroup;
@@ -12,13 +13,14 @@ use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
 use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
+use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Exception\MissingRelationException;
 use In2code\Luxletter\Exception\UserValuesAreMissingException;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Object\Exception;
+use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbaseObject;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
 /**
@@ -42,6 +44,23 @@ class FrontendController extends ActionController
     protected $logService = null;
 
     /**
+     * Constructor
+     *
+     * @param UserRepository $userRepository
+     * @param UsergroupRepository $usergroupRepository
+     * @param LogService $logService
+     */
+    public function __construct(
+        UserRepository $userRepository,
+        UsergroupRepository $usergroupRepository,
+        LogService $logService
+    ) {
+        $this->userRepository = $userRepository;
+        $this->usergroupRepository = $usergroupRepository;
+        $this->logService = $logService;
+    }
+
+    /**
      * @return void
      * @throws AuthenticationFailedException
      */
@@ -62,7 +81,7 @@ class FrontendController extends ActionController
             $siteService = GeneralUtility::makeInstance(SiteService::class);
             $urlService = GeneralUtility::makeInstance(ParseNewsletterUrlService::class, $origin);
             return $urlService->getParsedContent($siteService->getSite());
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return 'Error: Origin ' . htmlspecialchars($origin) . ' could not be converted into a valid url!<br>'
                 . 'Reason: ' . $exception->getMessage() . ' (' . $exception->getCode() . ')';
         }
@@ -75,7 +94,7 @@ class FrontendController extends ActionController
      * @param User|null $user
      * @return string
      * @throws IllegalObjectTypeException
-     * @throws Exception
+     * @throws ExceptionExtbaseObject
      */
     public function trackingPixelAction(Newsletter $newsletter = null, User $user = null): string
     {
@@ -109,7 +128,7 @@ class FrontendController extends ActionController
             if ($newsletter !== null) {
                 $this->logService->logUnsubscribe($newsletter, $user);
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             $languageKey = 'fe.unsubscribe.message.' . $exception->getCode();
             $message = LocalizationUtility::translate($languageKey);
             $this->addFlashMessage(($languageKey !== $message) ? $message : $exception->getMessage());
@@ -123,8 +142,10 @@ class FrontendController extends ActionController
      * @return void
      * @throws ArgumentMissingException
      * @throws AuthenticationFailedException
+     * @throws ExceptionExtbaseObject
      * @throws MissingRelationException
      * @throws UserValuesAreMissingException
+     * @throws MisconfigurationException
      */
     protected function checkArgumentsForUnsubscribeAction(
         User $user = null,
@@ -148,32 +169,5 @@ class FrontendController extends ActionController
         if ($user->getUnsubscribeHash() !== $hash) {
             throw new AuthenticationFailedException('Given hash is incorrect', 1562069583);
         }
-    }
-
-    /**
-     * @param UserRepository $userRepository
-     * @return void
-     */
-    public function injectUserRepository(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
-
-    /**
-     * @param UsergroupRepository $usergroupRepository
-     * @return void
-     */
-    public function injectUsergroupRepository(UsergroupRepository $usergroupRepository)
-    {
-        $this->usergroupRepository = $usergroupRepository;
-    }
-
-    /**
-     * @param LogService $logService
-     * @return void
-     */
-    public function injectLogService(LogService $logService)
-    {
-        $this->logService = $logService;
     }
 }

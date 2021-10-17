@@ -1,40 +1,67 @@
-<f:form name="filter" class="form" action="receiver" object="{filter}">
-	<div class="row">
-		<div class="col-md-6">
-			<div class="input-group form-group">
-				<f:form.textfield
-						property="searchterm"
-						id="searchterm"
-						class="form-control"
-						placeholder="{f:translate(key:'LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiver.filter.searchterm')}" />
-				<label class="input-group-addon fa fa-search" for="searchterm"></label>
-			</div>
-		</div>
-		<div class="col-md-6">
-			<div class="input-group form-group">
-				<f:form.select
-						property="usergroup"
-						id="usergroup"
-						class="form-control"
-						prependOptionLabel="{f:translate(key:'LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiver.filter.usergroup')}"
-						prependOptionValue="0"
-						value="{filter.usergroup}"
-						options="{luxletter:usergroup.getReceiverGroups()}" />
-				<label class="input-group-addon fa fa-user" for="usergroup"></label>
-			</div>
-		</div>
-	</div>
-	<div class="form-group" style="overflow: hidden;">
-		<div class="input-group pull-right">
-			<f:if condition="{filter.set}">
-				<f:link.action class="btn btn-default" style="margin-right: 10px" action="receiver" arguments="{filter:'{reset:1}'}">
-					<f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.list.filter.reset">Reset</f:translate>
-				</f:link.action>
-			</f:if>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">Filter</h3>
+    </div>
+    <div class="panel-body">
+        <f:form name="filter" class="form" action="receiver" object="{filter}">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="input-group form-group">
+                        <f:form.textfield
+                            property="searchterm"
+                            id="searchterm"
+                            class="form-control"
+                            placeholder="{f:translate(key:'LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiver.filter.searchterm')}"/>
+                        <luxletter:condition.isTypo3Eleven>
+                            <f:then>
+                                <label class="btn btn-default" for="searchterm">
+                                    <span class="fa fa-search"></span>
+                                </label>
+                            </f:then>
+                            <f:else>
+                                <label class="input-group-addon fa fa-search" for="searchterm"></label>
+                            </f:else>
+                        </luxletter:condition.isTypo3Eleven>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="input-group form-group">
+                        <f:form.select
+                            property="usergroup"
+                            id="usergroup"
+                            class="form-control form-select"
+                            prependOptionLabel="{f:translate(key:'LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiver.filter.usergroup')}"
+                            prependOptionValue="0"
+                            value="{filter.usergroup}"
+                            options="{luxletter:usergroup.getReceiverGroups()}"/>
+                        <luxletter:condition.isTypo3Eleven>
+                            <f:then>
+                                <label class="btn btn-default" for="usergroup">
+                                    <span class="fa fa-user"></span>
+                                </label>
+                            </f:then>
+                            <f:else>
+                                <label class="input-group-addon fa fa-user" for="usergroup"></label>
+                            </f:else>
+                        </luxletter:condition.isTypo3Eleven>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" style="overflow: hidden; margin-top: 20px;">
+                <div class="input-group pull-right" style="width: auto;">
+                    <f:if condition="{filter.set}">
+                        <f:link.action class="btn btn-default" style="margin-right: 10px" action="receiver" arguments="{filter:'{reset:1}'}">
+                            <f:translate key="LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.list.filter.reset">
+                                Reset
+                            </f:translate>
+                        </f:link.action>
+                    </f:if>
 
-			<f:form.submit
-					class="btn btn-primary"
-					value="{f:translate(key:'LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.list.filter.submit')}" />
-		</div>
-	</div>
-</f:form>
+                    <f:form.submit
+                        class="btn btn-primary"
+                        value="{f:translate(key:'LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.list.filter.submit')}"/>
+                </div>
+            </div>
+        </f:form>
+    </div>
+</div>

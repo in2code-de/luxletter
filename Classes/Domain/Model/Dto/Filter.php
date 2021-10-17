@@ -9,7 +9,6 @@ use In2code\Luxletter\Domain\Model\Usergroup;
  */
 class Filter
 {
-
     /**
      * @var string
      */
@@ -21,7 +20,7 @@ class Filter
     protected $usergroup = null;
 
     /**
-     * This is just a dummy property, that helps to recognize if a filter is set and save this to the session
+     * This is just a dummy property, that helps to recognize if a filter is set and helps to save this to the session
      *
      * @var bool
      */
@@ -36,7 +35,7 @@ class Filter
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getSearchterms(): array
     {
@@ -62,7 +61,7 @@ class Filter
     }
 
     /**
-     * @param Usergroup $usergroup
+     * @param Usergroup|null $usergroup
      * @return Filter
      */
     public function setUsergroup(?Usergroup $usergroup): self

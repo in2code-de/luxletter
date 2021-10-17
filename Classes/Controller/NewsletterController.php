@@ -2,7 +2,11 @@
 declare(strict_types = 1);
 namespace In2code\Luxletter\Controller;
 
+use DateTime;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
+use Doctrine\DBAL\Exception as ExceptionDbal;
+use Exception;
 use In2code\Lux\Domain\Repository\VisitorRepository;
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
@@ -25,16 +29,13 @@ use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentNameException;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
-use TYPO3\CMS\Extbase\Object\Exception;
+use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbaseObject;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
@@ -81,33 +82,28 @@ class NewsletterController extends ActionController
 
     /**
      * NewsletterController constructor.
-     * @param NewsletterRepository|null $newsletterRepository
-     * @param UserRepository|null $userRepository
-     * @param LogRepository|null $logRepository
-     * @param ConfigurationRepository|null $configurationRepository
-     * @throws Exception
+     * @param NewsletterRepository $newsletterRepository
+     * @param UserRepository $userRepository
+     * @param LogRepository $logRepository
+     * @param ConfigurationRepository $configurationRepository
      */
     public function __construct(
-        NewsletterRepository $newsletterRepository = null,
-        UserRepository $userRepository = null,
-        LogRepository $logRepository = null,
-        ConfigurationRepository $configurationRepository = null
+        NewsletterRepository $newsletterRepository,
+        UserRepository $userRepository,
+        LogRepository $logRepository,
+        ConfigurationRepository $configurationRepository
     ) {
-        $this->newsletterRepository = $newsletterRepository ?: ObjectUtility::getObjectManager()->get(
-            NewsletterRepository::class
-        );
-        $this->userRepository = $userRepository ?: ObjectUtility::getObjectManager()->get(
-            UserRepository::class
-        );
-        $this->logRepository = $logRepository ?: ObjectUtility::getObjectManager()->get(LogRepository::class);
-        $this->configurationRepository = $configurationRepository ?: ObjectUtility::getObjectManager()->get(
-            ConfigurationRepository::class
-        );
+        $this->newsletterRepository = $newsletterRepository;
+        $this->userRepository = $userRepository;
+        $this->logRepository = $logRepository;
+        $this->configurationRepository = $configurationRepository;
     }
 
     /**
      * @return void
      * @throws DBALException
+     * @throws ExceptionDbalDriver
+     * @throws ExceptionDbal
      */
     public function dashboardAction(): void
     {
@@ -152,8 +148,7 @@ class NewsletterController extends ActionController
 
     /**
      * @return void
-     * @throws Exception
-     * @throws InvalidArgumentNameException
+     * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
@@ -170,7 +165,7 @@ class NewsletterController extends ActionController
     /**
      * @param Newsletter $newsletter
      * @return void
-     * @throws Exception
+     * @throws ExceptionExtbaseObject
      * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
@@ -180,7 +175,7 @@ class NewsletterController extends ActionController
     {
         $this->newsletterRepository->add($newsletter);
         $this->newsletterRepository->persistAll();
-        $queueService = ObjectUtility::getObjectManager()->get(QueueService::class);
+        $queueService = GeneralUtility::makeInstance(QueueService::class);
         $queueService->addMailReceiversToQueue($newsletter);
         $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.create.message'));
         $this->redirect('list');
@@ -232,8 +227,8 @@ class NewsletterController extends ActionController
      * Always pass a filter to receiverAction. If filter is given, save in session.
      *
      * @return void
-     * @throws InvalidArgumentNameException
      * @throws NoSuchArgumentException
+     * @throws InvalidArgumentNameException
      */
     public function initializeReceiverAction(): void
     {
@@ -246,6 +241,9 @@ class NewsletterController extends ActionController
             $filter = (array)$this->request->getArgument('filter');
             BackendUserUtility::saveValueToSession('filter', $filter);
         }
+        if (isset($filter['usergroup']['__identity']) && $filter['usergroup']['__identity'] === '0') {
+            unset($filter['usergroup']);
+        }
         $this->request->setArgument('filter', $filter);
     }
 
@@ -253,12 +251,12 @@ class NewsletterController extends ActionController
      * @param Filter $filter
      * @return void
      * @throws InvalidQueryException
-     * @throws Exception
+     * @throws ExceptionExtbaseObject
      * @throws DBALException
      */
     public function receiverAction(Filter $filter): void
     {
-        $receiverAnalysisService = ObjectUtility::getObjectManager()->get(ReceiverAnalysisService::class);
+        $receiverAnalysisService = GeneralUtility::makeInstance(ReceiverAnalysisService::class);
         $users = $this->userRepository->getUsersByFilter($filter);
         $this->view->assignMultiple(
             [
@@ -272,13 +270,13 @@ class NewsletterController extends ActionController
     /**
      * @param ServerRequestInterface $request
      * @return ResponseInterface
-     * @throws Exception
      * @throws DBALException
+     * @throws ExceptionDbalDriver
      */
     public function wizardUserPreviewAjax(ServerRequestInterface $request): ResponseInterface
     {
-        $userRepository = ObjectUtility::getObjectManager()->get(UserRepository::class);
-        $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
+        $userRepository = GeneralUtility::makeInstance(UserRepository::class);
+        $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
         $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->wizardUserPreviewFile));
         $standaloneView->assignMultiple([
             'userPreview' => $userRepository->getUsersFromGroup((int)$request->getQueryParams()['usergroup'], 3),
@@ -295,31 +293,28 @@ class NewsletterController extends ActionController
      * @param ServerRequestInterface $request
      * @return ResponseInterface
      * @throws AuthenticationFailedException
-     * @throws Exception
+     * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
-     * @throws TransportExceptionInterface
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public function testMailAjax(ServerRequestInterface $request): ResponseInterface
     {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
             throw new AuthenticationFailedException('You are not authenticated to send mails', 1560872725);
         }
-        $parseUrlService = ObjectUtility::getObjectManager()->get(
+        $parseUrlService = GeneralUtility::makeInstance(
             ParseNewsletterUrlService::class,
             $request->getQueryParams()['origin']
         );
-        $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
-        $configurationRepository = ObjectUtility::getObjectManager()->get(ConfigurationRepository::class);
+        $parseService = GeneralUtility::makeInstance(ParseNewsletterService::class);
+        $configurationRepository = GeneralUtility::makeInstance(ConfigurationRepository::class);
         $configuration = $configurationRepository->findByUid($request->getQueryParams()['configuration']);
-        $userFactory = ObjectUtility::getObjectManager()->get(UserFactory::class);
+        $userFactory = GeneralUtility::makeInstance(UserFactory::class);
         $user = $userFactory->getDummyUser();
-        $mailService = ObjectUtility::getObjectManager()->get(
+        $mailService = GeneralUtility::makeInstance(
             SendMail::class,
             $parseService->parseSubject(
                 $request->getQueryParams()['subject'],
@@ -337,14 +332,13 @@ class NewsletterController extends ActionController
     /**
      * @param ServerRequestInterface $request
      * @return ResponseInterface
-     * @throws Exception
      */
     public function receiverDetailAjax(ServerRequestInterface $request): ResponseInterface
     {
-        $userRepository = ObjectUtility::getObjectManager()->get(UserRepository::class);
-        $visitorRepository = ObjectUtility::getObjectManager()->get(VisitorRepository::class);
-        $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
-        $standaloneView = ObjectUtility::getObjectManager()->get(StandaloneView::class);
+        $userRepository = GeneralUtility::makeInstance(UserRepository::class);
+        $visitorRepository = GeneralUtility::makeInstance(VisitorRepository::class);
+        $logRepository = GeneralUtility::makeInstance(LogRepository::class);
+        $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
         $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->receiverDetailFile));
         $user = $userRepository->findByUid((int)$request->getQueryParams()['user']);
         $standaloneView->assignMultiple([
@@ -361,17 +355,16 @@ class NewsletterController extends ActionController
 
     /**
      * @return void
-     * @throws InvalidArgumentNameException
      * @throws NoSuchArgumentException
-     * @throws \Exception
+     * @throws Exception
      */
     protected function setDatetimeObjectInNewsletterRequest(): void
     {
         $newsletter = (array)$this->request->getArgument('newsletter');
         if (!empty($newsletter['datetime'])) {
-            $datetime = \DateTime::createFromFormat('H:i d-m-Y', $newsletter['datetime']);
+            $datetime = DateTime::createFromFormat('H:i d-m-Y', $newsletter['datetime']);
         } else {
-            $datetime = new \DateTime();
+            $datetime = new DateTime();
         }
         $newsletter['datetime'] = $datetime;
         $this->request->setArgument('newsletter', $newsletter);
@@ -379,19 +372,19 @@ class NewsletterController extends ActionController
 
     /**
      * @return void
-     * @throws Exception
-     * @throws InvalidArgumentNameException
+     * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      * @throws NoSuchArgumentException
+     * @throws InvalidArgumentNameException
      */
     protected function parseNewsletterToBodytext(): void
     {
         $newsletter = (array)$this->request->getArgument('newsletter');
-        $parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterUrlService::class, $newsletter['origin']);
+        $parseService = GeneralUtility::makeInstance(ParseNewsletterUrlService::class, $newsletter['origin']);
         $parseService->setParseVariables(false);
         $configuration = $this->configurationRepository->findByUid((int)$newsletter['configuration']);
         $newsletter['bodytext'] = $parseService->getParsedContent($configuration->getSiteConfiguration());

@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Service;
 
+use DOMDocument;
+use DOMXpath;
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Exception\InvalidUrlException;
@@ -12,6 +14,8 @@ use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use In2code\Luxletter\Utility\TemplateUtility;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
@@ -78,6 +82,8 @@ class ParseNewsletterUrlService
      * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
      * @throws SiteNotFoundException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public function __construct(string $origin)
     {
@@ -162,6 +168,7 @@ class ParseNewsletterUrlService
             $standaloneView->setTemplateRootPaths($this->configuration['view']['templateRootPaths']);
             $standaloneView->setLayoutRootPaths($this->configuration['view']['layoutRootPaths']);
             $standaloneView->setPartialRootPaths($this->configuration['view']['partialRootPaths']);
+            /** @noinspection PhpInternalEntityUsedInspection */
             $standaloneView->setTemplate($templateName);
             $standaloneView->assignMultiple($this->getContentObjectVariables());
             $standaloneView->assignMultiple(
@@ -200,12 +207,11 @@ class ParseNewsletterUrlService
      *      }
      *
      * @return array the variables to be assigned
-     * @throws Exception
      */
     protected function getContentObjectVariables(): array
     {
         $tsService = GeneralUtility::makeInstance(TypoScriptService::class);
-        $tsConfiguration = $tsService->convertPlainArrayToTypoScriptArray((array)$this->configuration);
+        $tsConfiguration = $tsService->convertPlainArrayToTypoScriptArray($this->configuration);
 
         $variables = [];
         $variablesToProcess = (array)($tsConfiguration['variables.'] ?? []);
@@ -263,11 +269,11 @@ class ParseNewsletterUrlService
     protected function getBodyFromHtml(string $string): string
     {
         try {
-            $document = new \DOMDocument;
+            $document = new DOMDocument;
             libxml_use_internal_errors(true);
             @$document->loadHtml($string);
             libxml_use_internal_errors(false);
-            $xpath = new \DOMXpath($document);
+            $xpath = new DOMXpath($document);
             $result = '';
             foreach ($xpath->evaluate('//body/node()') as $node) {
                 $result .= $document->saveHtml($node);

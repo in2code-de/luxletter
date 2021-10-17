@@ -11,10 +11,8 @@ use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
-use In2code\Luxletter\Utility\ObjectUtility;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
@@ -51,14 +49,12 @@ class ProgressQueue
 
     /**
      * ProgressQueue constructor.
-     * @noinspection PhpUnhandledExceptionInspection
      * @param OutputInterface $output
-     * @throws Exception
      */
     public function __construct(OutputInterface $output)
     {
-        $this->queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
-        $this->parseService = ObjectUtility::getObjectManager()->get(ParseNewsletterService::class);
+        $this->queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
+        $this->parseService = GeneralUtility::makeInstance(ParseNewsletterService::class);
         $this->output = $output;
     }
 
@@ -76,7 +72,6 @@ class ProgressQueue
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
-     * @throws TransportExceptionInterface
      * @throws UnknownObjectException
      * @throws SiteNotFoundException
      */
@@ -110,20 +105,19 @@ class ProgressQueue
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
-     * @throws TransportExceptionInterface
      * @throws SiteNotFoundException
      */
     protected function sendNewsletterToReceiverInQueue(Queue $queue): void
     {
         if ($queue->getUser() !== null) {
-            $sendMail = ObjectUtility::getObjectManager()->get(
+            $sendMail = GeneralUtility::makeInstance(
                 SendMail::class,
                 $this->getSubject($queue),
                 $this->getBodyText($queue),
                 $queue->getNewsletter()->getConfiguration()
             );
             $sendMail->sendNewsletter([$queue->getEmail() => $queue->getUser()->getReadableName()]);
-            $logService = ObjectUtility::getObjectManager()->get(LogService::class);
+            $logService = GeneralUtility::makeInstance(LogService::class);
             $logService->logNewsletterDispatch($queue->getNewsletter(), $queue->getUser());
         }
     }
@@ -154,6 +148,8 @@ class ProgressQueue
      * @return string
      * @throws ArgumentMissingException
      * @throws Exception
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
@@ -171,20 +167,21 @@ class ProgressQueue
                 'site' => $queue->getNewsletter()->getConfiguration()->getSiteConfiguration()
             ]
         );
-        $bodytext = $this->hashLinksInBodytext($queue, $bodytext);
-        return $bodytext;
+        return $this->hashLinksInBodytext($queue, $bodytext);
     }
 
     /**
      * @param Queue $queue
      * @param string $bodytext
      * @return string
+     * @throws ArgumentMissingException
+     * @throws Exception
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws ArgumentMissingException
      * @throws MisconfigurationException
-     * @throws Exception
      * @throws SiteNotFoundException
      */
     protected function hashLinksInBodytext(Queue $queue, string $bodytext): string

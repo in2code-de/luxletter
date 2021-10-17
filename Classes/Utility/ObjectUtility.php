@@ -6,8 +6,6 @@ use TYPO3\CMS\Core\Configuration\ConfigurationManager as ConfigurationManagerCor
 use TYPO3\CMS\Core\Http\JsonResponse;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
-use TYPO3\CMS\Extbase\Object\Exception;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
@@ -16,48 +14,36 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 class ObjectUtility
 {
     /**
-     * @return ObjectManager
-     */
-    public static function getObjectManager(): ObjectManager
-    {
-        return GeneralUtility::makeInstance(ObjectManager::class);
-    }
-
-    /**
      * @return ConfigurationManager
-     * @throws Exception
      * @codeCoverageIgnore
      */
     public static function getConfigurationManager(): ConfigurationManager
     {
-        return self::getObjectManager()->get(ConfigurationManager::class);
+        return GeneralUtility::makeInstance(ConfigurationManager::class);
     }
 
     /**
      * @return ConfigurationManagerCore
-     * @throws Exception
      */
     public static function getConfigurationManagerCore(): ConfigurationManagerCore
     {
-        return self::getObjectManager()->get(ConfigurationManagerCore::class);
+        return GeneralUtility::makeInstance(ConfigurationManagerCore::class);
     }
 
     /**
      * @return ContentObjectRenderer
-     * @throws Exception
      * @codeCoverageIgnore
      */
     public static function getContentObject(): ContentObjectRenderer
     {
-        return self::getObjectManager()->get(ContentObjectRenderer::class);
+        return GeneralUtility::makeInstance(ContentObjectRenderer::class);
     }
 
     /**
      * @return JsonResponse
-     * @throws Exception
      */
     public static function getJsonResponse(): JsonResponse
     {
-        return self::getObjectManager()->get(JsonResponse::class);
+        return GeneralUtility::makeInstance(JsonResponse::class);
     }
 }

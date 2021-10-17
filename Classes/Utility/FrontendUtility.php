@@ -10,7 +10,6 @@ use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
  */
 class FrontendUtility
 {
-
     /**
      * Get current scheme, domain and path of the current installation
      *

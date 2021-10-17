@@ -11,7 +11,6 @@ use TYPO3\CMS\Core\Utility\VersionNumberUtility;
  */
 class ExtensionUtility
 {
-
     /**
      * @param string $minimumVersion if set check for minimum version like "5.0.0"
      * @return bool

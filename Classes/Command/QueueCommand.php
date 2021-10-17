@@ -9,7 +9,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
@@ -59,7 +58,6 @@ class QueueCommand extends Command
      * @throws ArgumentMissingException
      * @throws MisconfigurationException
      * @throws Exception
-     * @throws TransportExceptionInterface
      * @throws SiteNotFoundException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int

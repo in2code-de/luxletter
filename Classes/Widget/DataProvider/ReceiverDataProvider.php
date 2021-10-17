@@ -4,9 +4,8 @@ namespace In2code\Luxletter\Widget\DataProvider;
 
 use Doctrine\DBAL\DBALException;
 use In2code\Luxletter\Domain\Repository\LogRepository;
-use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Dashboard\Widgets\NumberWithIconDataProviderInterface;
-use TYPO3\CMS\Extbase\Object\Exception;
 
 /**
  * Class ReceiverDataProvider
@@ -17,11 +16,10 @@ class ReceiverDataProvider implements NumberWithIconDataProviderInterface
     /**
      * @return int
      * @throws DBALException
-     * @throws Exception
      */
     public function getNumber(): int
     {
-        $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
+        $logRepository = GeneralUtility::makeInstance(LogRepository::class);
         return $logRepository->getNumberOfReceivers();
     }
 }

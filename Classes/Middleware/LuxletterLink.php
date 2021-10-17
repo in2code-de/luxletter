@@ -8,7 +8,6 @@ use In2code\Luxletter\Domain\Repository\LinkRepository;
 use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ExtensionUtility;
-use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -42,13 +41,13 @@ class LuxletterLink implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if ($this->isLuxletterLink()) {
-            $linkRepository = ObjectUtility::getObjectManager()->get(LinkRepository::class);
+            $linkRepository = GeneralUtility::makeInstance(LinkRepository::class);
             /** @var Link $link */
             $link = $linkRepository->findOneByHash($this->getHash());
             $this->signalDispatch(__CLASS__, __FUNCTION__, [$link, $request, $handler]);
             if ($link !== null) {
                 $this->luxIdentification($link);
-                $logService = ObjectUtility::getObjectManager()->get(LogService::class);
+                $logService = GeneralUtility::makeInstance(LogService::class);
                 $logService->logLinkOpening($link);
                 return new RedirectResponse($link->getTarget(), 302);
             }

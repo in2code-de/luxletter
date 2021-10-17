@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 namespace In2code\Luxletter\Signal;
 
-use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\SignalSlot\Dispatcher;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
@@ -30,7 +30,7 @@ trait SignalTrait
     protected function signalDispatch(string $signalClassName, string $signalName, array $arguments): array
     {
         if ($this->isSignalEnabled()) {
-            $signalSlotDispatcher = ObjectUtility::getObjectManager()->get(Dispatcher::class);
+            $signalSlotDispatcher = GeneralUtility::makeInstance(Dispatcher::class);
             return $signalSlotDispatcher->dispatch($signalClassName, $signalName, $arguments);
         }
         return [];
@@ -49,7 +49,7 @@ trait SignalTrait
      *
      * @return void
      */
-    protected function disableSignals()
+    protected function disableSignals(): void
     {
         $this->signalEnabled = false;
     }

@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Repository;
 
+use Doctrine\DBAL\Driver\Exception;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\Queue;
 use In2code\Luxletter\Domain\Model\User;
@@ -76,6 +77,7 @@ class QueueRepository extends AbstractRepository
      * @param User $user
      * @param Newsletter $newsletter
      * @return bool
+     * @throws Exception
      */
     public function isUserAndNewsletterAlreadyAddedToQueue(User $user, Newsletter $newsletter): bool
     {
@@ -86,7 +88,7 @@ class QueueRepository extends AbstractRepository
             ->where('newsletter=' . $newsletter->getUid() . ' and user=' . $user->getUid())
             ->setMaxResults(1)
             ->execute()
-            ->fetchColumn() > 0;
+            ->fetchOne() > 0;
     }
 
     /**

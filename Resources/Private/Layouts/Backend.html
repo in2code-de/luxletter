@@ -1,47 +1,54 @@
 <f:Be.Container
-		includeRequireJsModules="{0:'TYPO3/CMS/Luxletter/Luxletter/Module.min',1:'TYPO3/CMS/Luxletter/Luxletter/Diagram.min'}"
-		includeCssFiles="{0:'{f:uri.resource(path:\'Css/Modules.min.css\')}'}"
-		pageTitle="luxletter">
+        includeRequireJsModules="{0:'TYPO3/CMS/Luxletter/Luxletter/Module.min',1:'TYPO3/CMS/Luxletter/Luxletter/Diagram.min'}"
+        includeCssFiles="{0:'{f:uri.resource(path:\'Css/Modules.min.css\')}'}"
+        pageTitle="luxletter">
 
-	<div class="module">
-		<div class="module-docheader">
-			<div class="typo3-docheader-functions">
-				<div class="module-docheader-bar module-docheader-bar-navigation">
-					<div class="module-docheader-bar-column-left">
-						<div class="btn-group" role="group">
-							<img src="{f:uri.resource(path:'Icons/lux.svg',extensionName:'luxletter')}" height="30" style="float:left;" />
+    <div class="module">
+        <div class="module-docheader">
+            <div class="typo3-docheader-functions">
+                <div class="module-docheader-bar module-docheader-bar-navigation">
+                    <div class="module-docheader-bar-column-left">
+                        <div class="btn-group" role="group">
+                            <img src="{f:uri.resource(path:'Icons/lux.svg',extensionName:'luxletter')}" height="30" style="float:left;" />
 
-							<f:link.action action="dashboard" controller="Newsletter" class="btn{luxletter:backend.getClassNameOnAction(actionName:'dashboard')}">
-								<f:translate key="layout.backend.link.actiondashboard">Dashboard</f:translate>
-							</f:link.action>
-							<f:link.action action="list" controller="Newsletter" class="btn{luxletter:backend.getClassNameOnAction(actionName:'list')}">
-								<f:translate key="layout.backend.link.actionnewsletter">Newsletter</f:translate>
-							</f:link.action>
+                            <f:link.action action="dashboard" controller="Newsletter" class="btn{luxletter:backend.getClassNameOnAction(actionName:'dashboard',emptyClassName:' btn-primary')}">
+                                <f:translate key="layout.backend.link.actiondashboard">Dashboard</f:translate>
+                            </f:link.action>
+                            <f:link.action action="list" controller="Newsletter" class="btn{luxletter:backend.getClassNameOnAction(actionName:'list')}">
+                                <f:translate key="layout.backend.link.actionnewsletter">Newsletter</f:translate>
+                            </f:link.action>
 
-							<luxletter:condition.isReceiverActionEnabled>
-								<f:link.action action="receiver" controller="Newsletter" class="btn{luxletter:backend.getClassNameOnAction(actionName:'receiver')}">
-									<f:translate key="layout.backend.link.actionreceiver">Receiver</f:translate>
-								</f:link.action>
-							</luxletter:condition.isReceiverActionEnabled>
-						</div>
-						<span style="margin-left:10px;">Luxletter</span>
-					</div>
-					<div class="module-docheader-bar-column-right">
-						<f:be.pagePath />
-					</div>
-				</div>
-			</div>
-			<div class="module-docheader-bar module-docheader-bar-buttons">
-				<div class="module-docheader-bar-column-left">
-					&nbsp;
-				</div>
-				<div class="module-docheader-bar-column-right">
-					<f:be.buttons.shortcut />
-				</div>
-			</div>
-		</div>
-		<div class="lux-backend module-body">
-			<f:render section="content" />
-		</div>
-	</div>
+                            <luxletter:condition.isReceiverActionEnabled>
+                                <f:link.action action="receiver" controller="Newsletter" class="btn{luxletter:backend.getClassNameOnAction(actionName:'receiver')}">
+                                    <f:translate key="layout.backend.link.actionreceiver">Receiver</f:translate>
+                                </f:link.action>
+                            </luxletter:condition.isReceiverActionEnabled>
+                        </div>
+                        <span style="margin-left:10px;">Luxletter</span>
+                    </div>
+                    <div class="module-docheader-bar-column-right">
+                        <luxletter:condition.isLuxenterpriseExtensionActivated>
+                            <f:else>
+                                <a href="https://www.in2code.de/produkte/lux-typo3-marketing-automation/" class="lux_poweredby" style="color:black; font-weight: bold;">
+                                    <img src="{f:uri.resource(path:'Icons/star.svg',extensionName:'luxletter')}" alt="Lux enterprise" width="20" height="20" style="vertical-align:middle;" />
+                                    Go enterprise
+                                </a>
+                            </f:else>
+                        </luxletter:condition.isLuxenterpriseExtensionActivated>
+                    </div>
+                </div>
+            </div>
+            <div class="module-docheader-bar module-docheader-bar-buttons">
+                <div class="module-docheader-bar-column-left">
+                    &nbsp;
+                </div>
+                <div class="module-docheader-bar-column-right">
+                    <f:be.buttons.shortcut />
+                </div>
+            </div>
+        </div>
+        <div class="lux-backend module-body">
+            <f:render section="content" />
+        </div>
+    </div>
 </f:Be.Container>

@@ -6,8 +6,6 @@ use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\MisconfigurationException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
@@ -24,15 +22,13 @@ class GetTrackingPixelUrlViewHelper extends AbstractViewHelper
     public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerArgument('newsletter', Newsletter::class, 'Newsletter', false, null);
-        $this->registerArgument('user', User::class, 'User', false, null);
+        $this->registerArgument('newsletter', Newsletter::class, 'Newsletter', false);
+        $this->registerArgument('user', User::class, 'User', false);
         $this->registerArgument('site', Site::class, 'Site object', true);
     }
 
     /**
      * @return string
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws MisconfigurationException
      */
     public function render(): string
