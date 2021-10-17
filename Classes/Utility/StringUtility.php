@@ -14,7 +14,7 @@ class StringUtility
      * @param string $value
      * @return bool
      */
-    public static function isValidUrl($value): bool
+    public static function isValidUrl(string $value): bool
     {
         return filter_var($value, FILTER_VALIDATE_URL) !== false;
     }

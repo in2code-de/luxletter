@@ -4,8 +4,7 @@ namespace In2code\Luxletter\ViewHelpers\Queue;
 
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
-use In2code\Luxletter\Utility\ObjectUtility;
-use TYPO3\CMS\Extbase\Object\Exception;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -25,11 +24,10 @@ class GetNumberOfReceiversFromQueueViewHelper extends AbstractViewHelper
 
     /**
      * @return int
-     * @throws Exception
      */
     public function render(): int
     {
-        $userRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
+        $userRepository = GeneralUtility::makeInstance(QueueRepository::class);
         return (int)$userRepository->findAllByNewsletter($this->arguments['newsletter'])->count();
     }
 }

@@ -2,6 +2,8 @@
 declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Service;
 
+use DOMDocument;
+use DOMElement;
 use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
@@ -9,7 +11,6 @@ use In2code\Luxletter\Domain\Repository\LinkRepository;
 use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Signal\SignalTrait;
-use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -44,13 +45,12 @@ class LinkHashingService
      * LinkHashingService constructor.
      * @param Newsletter $newsletter
      * @param User $user
-     * @throws Exception
      */
     public function __construct(Newsletter $newsletter, User $user)
     {
         $this->newsletter = $newsletter;
         $this->user = $user;
-        $this->linkRepository = ObjectUtility::getObjectManager()->get(LinkRepository::class);
+        $this->linkRepository = GeneralUtility::makeInstance(LinkRepository::class);
     }
 
     /**
@@ -66,7 +66,7 @@ class LinkHashingService
      */
     public function hashLinks(string $content): string
     {
-        $dom = new \DOMDocument;
+        $dom = new DOMDocument;
         @$dom->loadHTML($content);
         $links = $dom->getElementsByTagName('a');
         foreach ($links as $link) {
@@ -79,7 +79,7 @@ class LinkHashingService
     /**
      * Try to hash absolute urls but no a-tags with data-luxletter-parselink="false"
      *
-     * @param \DOMElement $aTag
+     * @param DOMElement $aTag
      * @return void
      * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
@@ -89,13 +89,13 @@ class LinkHashingService
      * @throws Exception
      * @throws SiteNotFoundException
      */
-    protected function hashLink(\DOMElement $aTag): void
+    protected function hashLink(DOMElement $aTag): void
     {
         $href = $aTag->getAttribute('href');
         $href = $this->convertToAbsoluteHref($href);
         if (StringUtility::isValidUrl($href)) {
             if ($aTag->getAttribute('data-luxletter-parselink') !== 'false') {
-                $link = ObjectUtility::getObjectManager()->get(Link::class)
+                $link = GeneralUtility::makeInstance(Link::class)
                     ->setNewsletter($this->newsletter)
                     ->setUser($this->user)
                     ->setTarget($href);

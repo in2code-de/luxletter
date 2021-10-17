@@ -29,6 +29,6 @@ class PercentViewHelper extends AbstractViewHelper
     {
         $value = $this->arguments['number'] * 100;
         $value = number_format($value, $this->arguments['decimals'], $this->arguments['decPoint'], '.');
-        return (string)$value . $this->arguments['postfix'];
+        return $value . $this->arguments['postfix'];
     }
 }

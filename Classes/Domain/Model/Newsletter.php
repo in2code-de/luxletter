@@ -2,10 +2,12 @@
 declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Model;
 
+use DateTime;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
-use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\Exception;
 
@@ -32,7 +34,7 @@ class Newsletter extends AbstractEntity
     protected $disabled = false;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     protected $datetime = null;
 
@@ -42,12 +44,12 @@ class Newsletter extends AbstractEntity
     protected $subject = '';
 
     /**
-     * @var \In2code\Luxletter\Domain\Model\Usergroup
+     * @var Usergroup
      */
     protected $receiver = null;
 
     /**
-     * @var \In2code\Luxletter\Domain\Model\Configuration
+     * @var Configuration
      */
     protected $configuration = null;
 
@@ -149,18 +151,18 @@ class Newsletter extends AbstractEntity
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime|null
      */
-    public function getDatetime(): ?\DateTime
+    public function getDatetime(): ?DateTime
     {
         return $this->datetime;
     }
 
     /**
-     * @param \DateTime $datetime
+     * @param DateTime $datetime
      * @return Newsletter
      */
-    public function setDatetime(\DateTime $datetime): Newsletter
+    public function setDatetime(DateTime $datetime): Newsletter
     {
         $this->datetime = $datetime;
         return $this;
@@ -260,12 +262,11 @@ class Newsletter extends AbstractEntity
      * Checks the queue progress of this newsletter. 100 means 100% are sent.
      *
      * @return int
-     * @throws Exception
      */
     public function getDispatchProgress(): int
     {
         if ($this->dispatchedProgress === null) {
-            $queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
+            $queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
             $dispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, true)->count();
             $notDispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, false)->count();
             $overall = $dispatched + $notDispatched;
@@ -280,12 +281,11 @@ class Newsletter extends AbstractEntity
 
     /**
      * @return int
-     * @throws Exception
      */
     public function getQueues(): int
     {
         if ($this->queues === 0) {
-            $queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
+            $queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
             $queues = $queueRepository->findAllByNewsletter($this)->count();
             $this->queues = $queues;
         }
@@ -295,12 +295,12 @@ class Newsletter extends AbstractEntity
     /**
      * @return int
      * @throws DBALException
-     * @throws Exception
+     * @throws ExceptionDbalDriver
      */
     public function getOpeners(): int
     {
         if ($this->openers === 0) {
-            $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
+            $logRepository = GeneralUtility::makeInstance(LogRepository::class);
             $openers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_NEWSLETTEROPENING));
             $this->openers = $openers;
         }
@@ -310,12 +310,12 @@ class Newsletter extends AbstractEntity
     /**
      * @return int
      * @throws DBALException
-     * @throws Exception
+     * @throws ExceptionDbalDriver
      */
     public function getClickers(): int
     {
         if ($this->clickers === 0) {
-            $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
+            $logRepository = GeneralUtility::makeInstance(LogRepository::class);
             $clickers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_LINKOPENING));
             $this->clickers = $clickers;
         }
@@ -325,12 +325,12 @@ class Newsletter extends AbstractEntity
     /**
      * @return int
      * @throws DBALException
-     * @throws Exception
+     * @throws ExceptionDbalDriver
      */
     public function getUnsubscribers(): int
     {
         if ($this->unsubscribers === 0) {
-            $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
+            $logRepository = GeneralUtility::makeInstance(LogRepository::class);
             $unsubscribers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_UNSUBSCRIBE));
             $this->unsubscribers = $unsubscribers;
         }
@@ -356,6 +356,7 @@ class Newsletter extends AbstractEntity
      * @return float
      * @throws DBALException
      * @throws Exception
+     * @throws ExceptionDbalDriver
      */
     public function getClickRate(): float
     {
@@ -371,6 +372,7 @@ class Newsletter extends AbstractEntity
      * @return float
      * @throws DBALException
      * @throws Exception
+     * @throws ExceptionDbalDriver
      */
     public function getUnsubscribeRate(): float
     {

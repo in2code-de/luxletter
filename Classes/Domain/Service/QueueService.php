@@ -10,7 +10,7 @@ use In2code\Luxletter\Domain\Repository\QueueRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Exception\RecordInDatabaseNotFoundException;
 use In2code\Luxletter\Signal\SignalTrait;
-use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
@@ -35,13 +35,15 @@ class QueueService
     protected $newsletterRepository = null;
 
     /**
-     * QueueService constructor.
-     * @throws Exception
+     * Constructor
+     *
+     * @param UserRepository $userRepository
+     * @param NewsletterRepository $newsletterRepository
      */
-    public function __construct()
+    public function __construct(UserRepository $userRepository, NewsletterRepository $newsletterRepository)
     {
-        $this->userRepository = ObjectUtility::getObjectManager()->get(UserRepository::class);
-        $this->newsletterRepository = ObjectUtility::getObjectManager()->get(NewsletterRepository::class);
+        $this->userRepository = $userRepository;
+        $this->newsletterRepository = $newsletterRepository;
     }
 
     /**
@@ -74,7 +76,8 @@ class QueueService
      * @throws Exception
      * @throws IllegalObjectTypeException
      *
-     * @api
+     * @api (can be used from third party extensions)
+     * @noinspection PhpUnused
      */
     public function addUserWithLatestNewsletterToQueue(int $userIdentifier): void
     {
@@ -106,7 +109,8 @@ class QueueService
      * @throws InvalidSlotReturnException
      * @throws RecordInDatabaseNotFoundException
      *
-     * @api
+     * @api (can be used from third party extensions)
+     * @noinspection PhpUnused
      */
     public function addUserWithNewsletterToQueue(int $userIdentifier, int $newsletterIdentifier): void
     {
@@ -144,10 +148,10 @@ class QueueService
      */
     protected function addUserToQueue(Newsletter $newsletter, User $user): void
     {
-        $queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
+        $queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
         if ($user->isValidEmail()
             && $queueRepository->isUserAndNewsletterAlreadyAddedToQueue($user, $newsletter) === false) {
-            $queue = ObjectUtility::getObjectManager()->get(Queue::class);
+            $queue = GeneralUtility::makeInstance(Queue::class);
             $queue
                 ->setEmail($user->getEmail())
                 ->setUser($user)

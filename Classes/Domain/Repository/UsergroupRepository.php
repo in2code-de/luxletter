@@ -10,7 +10,6 @@ use In2code\Luxletter\Utility\DatabaseUtility;
  */
 class UsergroupRepository extends AbstractRepository
 {
-
     /**
      * @return array
      */

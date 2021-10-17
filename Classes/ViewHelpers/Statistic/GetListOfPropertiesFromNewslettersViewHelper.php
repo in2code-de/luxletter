@@ -15,7 +15,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class GetListOfPropertiesFromNewslettersViewHelper extends AbstractViewHelper
 {
-
     /**
      * @return void
      */
@@ -23,7 +22,7 @@ class GetListOfPropertiesFromNewslettersViewHelper extends AbstractViewHelper
     {
         parent::initializeArguments();
         $this->registerArgument('newsletters', QueryResultInterface::class, 'Newsletter', true);
-        $this->registerArgument('property', 'string', 'Any concatinated property from a newsletter', true);
+        $this->registerArgument('property', 'string', 'Any concatenated property from a newsletter', true);
         $this->registerArgument('limit', 'int', 'Show X values', false, 6);
     }
 

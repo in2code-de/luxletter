@@ -9,7 +9,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility as LocalizationUtilityExtbase;
  */
 class LocalizationUtility
 {
-
     /**
      * @param string $key
      * @param string $extensionName

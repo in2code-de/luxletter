@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Model;
 
+use DateTime;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
@@ -17,12 +18,12 @@ class Log extends AbstractEntity
     const STATUS_UNSUBSCRIBE = 400;
 
     /**
-     * @var \In2code\Luxletter\Domain\Model\Newsletter
+     * @var Newsletter
      */
     protected $newsletter = null;
 
     /**
-     * @var \In2code\Luxletter\Domain\Model\User
+     * @var User
      */
     protected $user = null;
 
@@ -37,12 +38,12 @@ class Log extends AbstractEntity
     protected $properties = '';
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     protected $crdate = null;
 
     /**
-     * @return Newsletter
+     * @return Newsletter|null
      */
     public function getNewsletter(): ?Newsletter
     {
@@ -60,7 +61,7 @@ class Log extends AbstractEntity
     }
 
     /**
-     * @return User
+     * @return User|null
      */
     public function getUser(): ?User
     {
@@ -118,18 +119,18 @@ class Log extends AbstractEntity
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime|null
      */
-    public function getCrdate(): \DateTime
+    public function getCrdate(): ?DateTime
     {
         return $this->crdate;
     }
 
     /**
-     * @param \DateTime $crdate
+     * @param DateTime $crdate
      * @return Log
      */
-    public function setCrdate(\DateTime $crdate): self
+    public function setCrdate(DateTime $crdate): self
     {
         $this->crdate = $crdate;
         return $this;

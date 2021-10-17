@@ -5,6 +5,7 @@ namespace In2code\Luxletter\Domain\Service;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\FrontendUtility;
 use In2code\Luxletter\Utility\StringUtility;
+use LogicException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
@@ -28,7 +29,7 @@ class SiteService
             $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
             return $siteFinder->getSiteByPageId($pageIdentifier);
         }
-        throw new \LogicException('Not in frontend context? No page identifier given.', 1622813408);
+        throw new LogicException('Not in frontend context? No page identifier given.', 1622813408);
     }
 
     /**

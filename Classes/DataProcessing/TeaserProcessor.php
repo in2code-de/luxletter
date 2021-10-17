@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace In2code\Luxletter\DataProcessing;
 
+use Doctrine\DBAL\Driver\Exception;
 use In2code\Luxletter\Utility\DatabaseUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Core\Service\FlexFormService;
@@ -23,6 +24,7 @@ class TeaserProcessor implements DataProcessorInterface
      * @param array $processorConfiguration The configuration of this processor
      * @param array $processedData Key/value store of processed data (e.g. to be passed to a Fluid View)
      * @return array the processed data as key/value store
+     * @throws Exception
      */
     public function process(
         ContentObjectRenderer $cObj,
@@ -51,7 +53,7 @@ class TeaserProcessor implements DataProcessorInterface
     protected function getFlexFormConfiguration(array $processedData)
     {
         if (!empty($processedData['data']['pi_flexform'])) {
-            $ffService = ObjectUtility::getObjectManager()->get(FlexFormService::class);
+            $ffService = GeneralUtility::makeInstance(FlexFormService::class);
             return $ffService->convertFlexFormContentToArray($processedData['data']['pi_flexform']);
         }
         return [];
@@ -75,6 +77,7 @@ class TeaserProcessor implements DataProcessorInterface
     /**
      * @param int $identifier
      * @return array
+     * @throws Exception
      */
     protected function getDataFromTeaserElement(int $identifier): array
     {
@@ -84,7 +87,7 @@ class TeaserProcessor implements DataProcessorInterface
             ->from('tt_content')
             ->where('uid=' . (int)$identifier)
             ->execute()
-            ->fetchAll();
+            ->fetchAllAssociative();
         if (!empty($rows[0])) {
             return $rows[0];
         }

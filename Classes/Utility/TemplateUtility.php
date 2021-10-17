@@ -4,20 +4,21 @@ namespace In2code\Luxletter\Utility;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
+use TYPO3\CMS\Extbase\Object\Exception;
 
 /**
  * Class TemplateUtility
  */
 class TemplateUtility
 {
-
     /**
-     * Because templateRootPaths can be extend from third party extensions, it's not sure which file will be used in
+     * Because templateRootPaths can be extended from third party extensions, it's not sure which file will be used in
      * the end. This function detects the relevant file and give it back (e.g. for own parsing)
      *
      * @param string $templateName e.g. "Mail/NewsletterContainer.html"
      * @return string
      * @throws InvalidConfigurationTypeException
+     * @throws Exception
      */
     public static function getExistingFilePathOfTemplateFileByName(string $templateName): string
     {

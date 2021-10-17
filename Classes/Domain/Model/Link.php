@@ -8,6 +8,7 @@ use In2code\Luxletter\Utility\StringUtility;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Object\Exception;
 
 /**
  * Class Link
@@ -17,12 +18,12 @@ class Link extends AbstractEntity
     const TABLE_NAME = 'tx_luxletter_domain_model_link';
 
     /**
-     * @var \In2code\Luxletter\Domain\Model\Newsletter
+     * @var Newsletter
      */
     protected $newsletter = null;
 
     /**
-     * @var \In2code\Luxletter\Domain\Model\User
+     * @var User
      */
     protected $user = null;
 
@@ -114,7 +115,9 @@ class Link extends AbstractEntity
 
     /**
      * @param string $target
-     * @return Link
+     * @return $this
+     * @throws Exception
+     * @throws MisconfigurationException
      */
     public function setTarget(string $target): self
     {
@@ -126,6 +129,8 @@ class Link extends AbstractEntity
     /**
      * @param string $target
      * @return void
+     * @throws Exception
+     * @throws MisconfigurationException
      */
     private function setHashFromTarget(string $target): void
     {
@@ -137,6 +142,8 @@ class Link extends AbstractEntity
     /**
      * @param string $target
      * @return string
+     * @throws MisconfigurationException
+     * @throws Exception
      */
     private function getHashFromTarget(string $target): string
     {

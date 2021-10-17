@@ -5,7 +5,6 @@ use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Service\ParseNewsletterService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
-use In2code\Luxletter\Utility\ObjectUtility;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -58,8 +57,7 @@ class ParseNewsletterUrlServiceTest extends FunctionalTestCase
 
     protected function setUp()
     {
-        parent::setUp();
-        $this->subject = ObjectUtility::getObjectManager()->get(ParseNewsletterUrlService::class, 'http://example.com/');
+        $this->subject = GeneralUtility::makeInstance(ParseNewsletterUrlService::class, 'http://example.com/');
 
         /** @var Dispatcher|ObjectProphecy $dispatcher */
         $dispatcher = $this->prophesize(Dispatcher::class);
@@ -149,7 +147,6 @@ class ParseNewsletterUrlServiceTest extends FunctionalTestCase
             $this->configurationManager,
             $this->standaloneView
         );
-        parent::tearDown();
     }
 
     /**
