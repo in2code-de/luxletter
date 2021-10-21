@@ -45,6 +45,7 @@ class UserFactory
         foreach (self::$dummyProperties as $key => $value) {
             ObjectAccess::setProperty($user, $key, $value);
         }
+        ObjectAccess::setProperty($user, 'crdate', new \DateTime());
         $this->signalDispatch(__CLASS__, __FUNCTION__, [$user]);
         return $user;
     }
