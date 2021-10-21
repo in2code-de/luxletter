@@ -13,7 +13,6 @@ use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use In2code\Luxletter\Utility\TemplateUtility;
-use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
@@ -125,28 +124,7 @@ class ParseNewsletterUrlService
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'BeforeParsing', [$user, $this]);
         $content = $this->getNewsletterContainerAndContent($this->getContentFromOrigin($user), $site, $user);
-        $content = $this->addInlineCss($content);
         $this->signalDispatch(__CLASS__, __FUNCTION__ . 'AfterParsing', [$content, $this]);
-        return $content;
-    }
-
-    /**
-     * @param string $content
-     * @return string
-     */
-    protected function addInlineCss(string $content): string
-    {
-        if (!empty($this->configuration['settings']['addInlineCss'])) {
-            $cssToInline = GeneralUtility::makeInstance(CssToInlineStyles::class);
-            $files = $this->configuration['settings']['addInlineCss'];
-            $files = array_reverse($files);
-            foreach ($files as $path) {
-                $file = GeneralUtility::getFileAbsFileName($path);
-                if (file_exists($file)) {
-                    $content = $cssToInline->convert($content, file_get_contents($file));
-                }
-            }
-        }
         return $content;
     }
 
@@ -185,6 +163,8 @@ class ParseNewsletterUrlService
                 [$standaloneView, $content, $this->configuration, $user, $this]
             );
             $html = $standaloneView->render();
+            $cssInlineService = GeneralUtility::makeInstance(CssInlineService::class);
+            $html = $cssInlineService->addInlineCss($html);
         } else {
             $container = file_get_contents(TemplateUtility::getExistingFilePathOfTemplateFileByName($templateName));
             $html = str_replace('{content}', $content, $container);

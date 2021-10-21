@@ -4,6 +4,7 @@ namespace In2code\Luxletter\Mail;
 
 use In2code\Luxletter\Domain\Model\Queue;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
+use In2code\Luxletter\Domain\Service\CssInlineService;
 use In2code\Luxletter\Domain\Service\LinkHashingService;
 use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterService;
@@ -33,14 +34,19 @@ class ProgressQueue
     use SignalTrait;
 
     /**
-     * @var QueueRepository
+     * @var QueueRepository|null
      */
     protected $queueRepository = null;
 
     /**
-     * @var ParseNewsletterService
+     * @var ParseNewsletterService|null
      */
     protected $parseService = null;
+
+    /**
+     * @var CssInlineService|null
+     */
+    protected $cssInlineService = null;
 
     /**
      * @var OutputInterface
@@ -55,6 +61,7 @@ class ProgressQueue
     {
         $this->queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
         $this->parseService = GeneralUtility::makeInstance(ParseNewsletterService::class);
+        $this->cssInlineService = GeneralUtility::makeInstance(CssInlineService::class);
         $this->output = $output;
     }
 
@@ -167,7 +174,9 @@ class ProgressQueue
                 'site' => $queue->getNewsletter()->getConfiguration()->getSiteConfiguration()
             ]
         );
-        return $this->hashLinksInBodytext($queue, $bodytext);
+        $bodytext = $this->hashLinksInBodytext($queue, $bodytext);
+        $bodytext = $this->cssInlineService->addInlineCss($bodytext);
+        return $bodytext;
     }
 
     /**
