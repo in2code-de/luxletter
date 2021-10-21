@@ -131,6 +131,7 @@ Breaking changes in detail and what you have to do step by step after you have u
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 6.0.1      | 2021.10.21  | Bugfix     | Reanimate unsubscribe link, year and tracking pixel                                                                                                                                        |
 | 6.0.0      | 2021.10.17  | Task       | Support TYPO3 11 (and also 10)                                                                                                                                                             |
 | 5.0.1      | 2021.10.10  | Bugfix     | Don't include removed ZerbCss.html any more in version 5                                                                                                                                   |
 | !!! 5.0.0  | 2021.10.06  | Feature    | Adding css inline in html-tags now (see TypoScript setup how to include your css files)                                                                                                    |
