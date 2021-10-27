@@ -179,7 +179,7 @@
 				<source>Where is the newsletter located?</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.origin.description">
-				<source>Please add an absolute URL (https://domain.org/newsletter/) or a page UID where your former created newsletter is located. Afterwards the newsletter will be parsed and prepared for sending.</source>
+				<source>Please add the page ID to any TYPO3 page as a newsletter source (the "type" parameter is automatically added here). Alternatively, you can also enter an absolute URL here. Luxletter then reads this URL and prepares it for dispatch.</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.testmail">
 				<source>Send a test mail to yourself</source>
