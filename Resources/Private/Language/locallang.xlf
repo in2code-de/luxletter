@@ -299,6 +299,9 @@
 			<trans-unit id="date">
 				<source>%Y-%m-%d, %H:%M</source>
 			</trans-unit>
+			<trans-unit id="deleteconfirm">
+				<source>Are you sure to delete this record?</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
