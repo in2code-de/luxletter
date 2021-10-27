@@ -15,6 +15,7 @@ use In2code\Luxletter\Domain\Repository\ConfigurationRepository;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
+use In2code\Luxletter\Domain\Service\LayoutService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterService;
 use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
@@ -61,42 +62,49 @@ class NewsletterController extends ActionController
     protected $receiverDetailFile = 'EXT:luxletter/Resources/Private/Templates/Newsletter/ReceiverDetail.html';
 
     /**
-     * @var NewsletterRepository
+     * @var NewsletterRepository|null
      */
     protected $newsletterRepository = null;
 
     /**
-     * @var UserRepository
+     * @var UserRepository|null
      */
     protected $userRepository = null;
 
     /**
-     * @var LogRepository
+     * @var LogRepository|null
      */
     protected $logRepository = null;
 
     /**
-     * @var ConfigurationRepository
+     * @var ConfigurationRepository|null
      */
     protected $configurationRepository = null;
 
     /**
-     * NewsletterController constructor.
+     * @var LayoutService|null
+     */
+    protected $layoutService = null;
+
+    /**
      * @param NewsletterRepository $newsletterRepository
      * @param UserRepository $userRepository
      * @param LogRepository $logRepository
      * @param ConfigurationRepository $configurationRepository
+     * @param LayoutService $layoutService
      */
     public function __construct(
         NewsletterRepository $newsletterRepository,
         UserRepository $userRepository,
         LogRepository $logRepository,
-        ConfigurationRepository $configurationRepository
+        ConfigurationRepository $configurationRepository,
+        LayoutService $layoutService
     ) {
         $this->newsletterRepository = $newsletterRepository;
         $this->userRepository = $userRepository;
         $this->logRepository = $logRepository;
         $this->configurationRepository = $configurationRepository;
+        $this->layoutService = $layoutService;
     }
 
     /**
@@ -138,11 +146,13 @@ class NewsletterController extends ActionController
 
     /**
      * @return void
+     * @throws InvalidConfigurationTypeException
      */
     public function newAction(): void
     {
         $this->view->assignMultiple([
-            'configurations' => $this->configurationRepository->findAll()
+            'configurations' => $this->configurationRepository->findAll(),
+            'layouts' => $this->layoutService->getLayouts()
         ]);
     }
 

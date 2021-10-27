@@ -12,6 +12,7 @@ CREATE TABLE tx_luxletter_domain_model_newsletter (
 	subject varchar(255) DEFAULT '' NOT NULL,
 	receiver int(11) DEFAULT '0' NOT NULL,
 	configuration int(11) DEFAULT '0' NOT NULL,
+	layout varchar(255) DEFAULT '' NOT NULL,
 	origin varchar(255) DEFAULT '' NOT NULL,
 	bodytext mediumtext NOT NULL,
 	disabled tinyint(4) unsigned DEFAULT '0' NOT NULL,

@@ -175,6 +175,12 @@
 			<trans-unit id="module.newsletter.new.field.configuration.description">
 				<source>Please choose between your predefined sender settings</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.layout">
+				<source>Layout</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.layout.description">
+				<source>Please select a newsletter container layout</source>
+			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.origin">
 				<source>Where is the newsletter located?</source>
 			</trans-unit>
