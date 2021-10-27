@@ -1,0 +1,59 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:n="http://typo3.org/ns/GeorgRinger/News/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+<f:layout name="Mail" />
+
+
+<f:section name="Content">
+<f:if condition="{news}">
+    <f:then>
+        <f:for each="{news}" as="newsItem" iteration="iterator">
+            <tr>
+                <td class="float-center" valign="top" colspan="2">
+                    <h3>
+                        <b>
+                            {newsItem.title}
+                        </b>
+                    </h3>
+                </td>
+            </tr>
+            <tr>
+                <td valign="top" width="80%">
+                    {newsItem.teaser}
+                </td>
+                <td valign="top" width="20%">
+                    <f:alias map="{mediaElement: newsItem.mediaPreviews.0}">
+                        <f:if condition="{mediaElement.originalResource.type} == 2">
+                            <n:link newsItem="{newsItem}" settings="{settings}" title="{newsItem.title}" class="btn btn-primary">
+                                <f:image
+                                    image="{mediaElement}"
+                                    title="{mediaElement.originalResource.title}"
+                                    alt="{mediaElement.originalResource.alternative}"
+                                    maxWidth="300"
+                                    style="width:100%;height:100%;"/>
+                            </n:link>
+                        </f:if>
+                    </f:alias>
+                </td>
+            </tr>
+            <tr>
+                <td align="right" colspan="2" style="text-align: right;">
+                    <n:link newsItem="{newsItem}" settings="{settings}" title="{newsItem.title}" class="btn btn-primary">
+                        <f:translate key="more-link"/>
+                    </n:link>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <p>&nbsp;</p>
+                </td>
+            </tr>
+        </f:for>
+    </f:then>
+    <f:else>
+        <div class="no-news-found">
+            <f:translate key="list_nonewsfound" />
+        </div>
+    </f:else>
+</f:if>
+</f:section>

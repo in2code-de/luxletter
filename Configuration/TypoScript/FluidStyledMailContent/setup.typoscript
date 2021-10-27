@@ -31,6 +31,18 @@ lib {
     }
   }
 }
+
+// Settings for EXT:news
+plugin.tx_news {
+  view {
+    templateRootPaths {
+      10 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Templates/
+    }
+    layoutRootPaths {
+      10 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Layouts/
+    }
+  }
+}
 [end]
 
 fluidStyledMailContent = PAGE
