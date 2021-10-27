@@ -121,8 +121,8 @@
 			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_link">
-				<source>Log</source>
-				<target state="translated">Log</target>
+				<source>Link</source>
+				<target state="translated">Link</target>
 			</trans-unit>
 			<trans-unit id="tx_luxletter_domain_model_link.newsletter">
 				<source>Newsletter</source>
