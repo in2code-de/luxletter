@@ -362,7 +362,7 @@ class NewsletterController extends ActionController
     {
         $newsletter = (array)$this->request->getArgument('newsletter');
         if (!empty($newsletter['datetime'])) {
-            $datetime = DateTime::createFromFormat('H:i d-m-Y', $newsletter['datetime']);
+            $datetime = new DateTime($newsletter['datetime']);
         } else {
             $datetime = new DateTime();
         }
