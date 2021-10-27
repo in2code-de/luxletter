@@ -88,7 +88,7 @@
 										</f:else>
 									</f:if>
 
-									<f:link.action action="delete" class="btn btn-danger" arguments="{newsletter:newsletter}">
+									<f:link.action action="delete" class="btn btn-danger" arguments="{newsletter:newsletter}" additionalAttributes="{data-luxletter-confirm:'{f:translate(key:\'deleteconfirm\')}'}">
 										<f:translate key="module.newsletter.list.delete">delete</f:translate>
 									</f:link.action>
 								</td>

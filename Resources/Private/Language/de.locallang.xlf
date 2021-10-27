@@ -237,8 +237,8 @@
 				<target state="translated">Wo befindet sich der Newsletter?</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.origin.description">
-				<source>Please add an absolute URL (https://domain.org/newsletter/) or a page UID where your former created newsletter is located. Afterwards the newsletter will be parsed and prepared for sending.</source>
-				<target state="translated">Bitte trage eine absolute URL (https://domain.org/newsletter/) oder eine Seiten-UID zu einem von dir zuvor erstellten Newsletter ein. Anschließend wird diese URL Luxletter gelesen und für den Versand vorbereitet.</target>
+				<source>Please add the page ID to any TYPO3 page as a newsletter source (the "type" parameter is automatically added here). Alternatively, you can also enter an absolute URL here. Luxletter then reads this URL and prepares it for dispatch.</source>
+				<target state="translated">Bitte füge die Page ID einer beliebigen TYPO3 Seite als Newsletter-Quelle hinzu ("type" Paramter wird hier automatisch hinzugefügt). Alternativ kannst du auch eine absolute URL eintragen. Im Anschluss wird diese URL von Luxletter gelesen und für den Versand vorbereitet.</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.testmail">
 				<source>Send a test mail to yourself</source>
@@ -395,6 +395,10 @@
 			<trans-unit id="date">
 				<source>%Y-%m-%d, %H:%M</source>
 				<target state="translated">%e. %B %Y, %H:%M Uhr</target>
+			</trans-unit>
+			<trans-unit id="deleteconfirm">
+				<source>Are you sure to delete this record?</source>
+				<target state="translated">Wollen Sie diesen Datensatz wirklich löschen?</target>
 			</trans-unit>
 		</body>
 	</file>

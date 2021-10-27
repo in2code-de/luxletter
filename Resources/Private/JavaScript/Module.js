@@ -37,6 +37,7 @@ define(['jquery'], function($) {
 			testMailListener();
 			userDetailMockListener();
 			userDetailListener();
+			addConfirmListeners();
 		};
 
 		/**
@@ -180,6 +181,21 @@ define(['jquery'], function($) {
 					ajaxConnection(TYPO3.settings.ajaxUrls['/luxletter/receiverdetail'], {
 						user: userIdentifier,
 					}, 'userDetailListenerCallback');
+				});
+			}
+		};
+
+		/**
+		 * @returns {void}
+		 */
+		var addConfirmListeners = function() {
+			var elements = document.querySelectorAll('[data-luxletter-confirm]');
+			for (var i = 0; i < elements.length; i++) {
+				elements[i].addEventListener('click', function(event) {
+					var message = event.currentTarget.getAttribute('data-luxletter-confirm');
+					if (confirm(message) === false) {
+						event.preventDefault();
+					}
 				});
 			}
 		};
