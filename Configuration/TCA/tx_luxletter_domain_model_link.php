@@ -21,7 +21,8 @@ return [
             'endtime' => 'endtime',
         ],
         'iconfile' => 'EXT:luxletter/Resources/Public/Icons/' . Link::TABLE_NAME . '.svg',
-        'rootLevel' => -1
+        'rootLevel' => -1,
+        'hideTable' => 1
     ],
     'types' => [
         '1' => ['showitem' => 'newsletter,user,hash,target'],
