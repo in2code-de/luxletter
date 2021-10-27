@@ -1,1 +1,8 @@
-<f:render partial="NotYetSupported" arguments="{_all}"/>
+<f:if condition="{data.list_type} == 'news_pi1'">
+    <f:then>
+        <f:cObject typoscriptObjectPath="tt_content.list.20.{data.list_type}" data="{data}" table="tt_content" />
+    </f:then>
+    <f:else>
+        <f:render partial="NotYetSupported" arguments="{_all}"/>
+    </f:else>
+</f:if>
