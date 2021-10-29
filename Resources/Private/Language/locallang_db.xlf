@@ -53,6 +53,9 @@
 			<trans-unit id="tx_luxletter_domain_model_newsletter.origin">
 				<source>Origin</source>
 			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.layout">
+				<source>Container template file</source>
+			</trans-unit>
 			<trans-unit id="tx_luxletter_domain_model_newsletter.bodytext">
 				<source>Bodytext</source>
 			</trans-unit>
@@ -220,6 +223,10 @@
 			</trans-unit>
 			<trans-unit id="module.dashboard.widget.lastnewslettersclickrate.label">
 				<source>Clicker</source>
+			</trans-unit>
+
+			<trans-unit id="newsletter.layouts.1">
+				<source>Default layout</source>
 			</trans-unit>
 
 			<trans-unit id="pleasechoose">

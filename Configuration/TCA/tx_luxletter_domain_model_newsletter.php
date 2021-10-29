@@ -25,7 +25,9 @@ return [
         'hideTable' => 1
     ],
     'types' => [
-        '1' => ['showitem' => 'disabled,title,description,datetime,subject,receiver,configuration,origin,bodytext'],
+        '1' => [
+            'showitem' => 'disabled,title,description,datetime,subject,receiver,configuration,layout,origin,bodytext'
+        ],
     ],
     'columns' => [
         'disabled' => [
@@ -33,6 +35,7 @@ return [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
             'config' => [
                 'type' => 'check',
+                'default' => 0
             ],
         ],
         'title' => [
@@ -41,7 +44,8 @@ return [
                 . Newsletter::TABLE_NAME . '.title',
             'config' => [
                 'type' => 'input',
-                'readOnly' => true
+                'readOnly' => true,
+                'default' => ''
             ]
         ],
         'description' => [
@@ -52,7 +56,8 @@ return [
                 'type' => 'text',
                 'cols' => 500,
                 'rows' => 3,
-                'readOnly' => true
+                'readOnly' => true,
+                'default' => ''
             ]
         ],
         'datetime' => [
@@ -78,7 +83,8 @@ return [
                 . Newsletter::TABLE_NAME . '.subject',
             'config' => [
                 'type' => 'input',
-                'readOnly' => true
+                'readOnly' => true,
+                'default' => ''
             ]
         ],
         'receiver' => [
@@ -119,7 +125,18 @@ return [
                 . Newsletter::TABLE_NAME . '.origin',
             'config' => [
                 'type' => 'input',
-                'readOnly' => true
+                'readOnly' => true,
+                'default' => ''
+            ]
+        ],
+        'layout' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
+                . Newsletter::TABLE_NAME . '.layout',
+            'config' => [
+                'type' => 'input',
+                'readOnly' => true,
+                'default' => ''
             ]
         ],
         'bodytext' => [
@@ -130,7 +147,8 @@ return [
                 'type' => 'text',
                 'cols' => 800,
                 'rows' => 3,
-                'readOnly' => true
+                'readOnly' => true,
+                'default' => ''
             ]
         ]
     ]

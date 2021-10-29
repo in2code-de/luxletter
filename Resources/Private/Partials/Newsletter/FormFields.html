@@ -112,18 +112,17 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="subject" class="lb-lg">
-                    <f:translate key="module.newsletter.new.field.subject">Subject</f:translate>*
+                <label for="layout" class="lb-lg">
+                    <f:translate key="module.newsletter.new.field.layout">Layout</f:translate>
                 </label>
-                <f:form.textfield
-                    class="form-control input-lg"
-                    property="subject"
-                    id="subject"
-                    placeholder="Your new newsletter for product A (2020/01)"
-                    data="{luxletter-mandatory:'1',luxletter-testmail:'subject'}"
-                    required="required"/>
+                <f:form.select
+                    id="layout"
+                    class="form-control form-select input-lg"
+                    options="{layouts}"
+                    data="{luxletter-wizardpreviewevent:'layout'}"
+                    property="layout" />
                 <span class="help-block">
-                    <f:translate key="module.newsletter.new.field.subject.description">Email subject</f:translate>
+                    <f:translate key="module.newsletter.new.field.layout.description">Choose a template file</f:translate>
                 </span>
             </div>
         </div>
@@ -141,6 +140,27 @@
                     required="required"/>
                 <span class="help-block">
                     <f:translate key="module.newsletter.new.field.origin.description">PID or absolute URL</f:translate>
+                </span>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="form-group">
+                <label for="subject" class="lb-lg">
+                    <f:translate key="module.newsletter.new.field.subject">Subject</f:translate>*
+                </label>
+                <f:form.textfield
+                    class="form-control input-lg"
+                    property="subject"
+                    id="subject"
+                    placeholder="Your new newsletter for product A (2020/01)"
+                    data="{luxletter-mandatory:'1',luxletter-testmail:'subject'}"
+                    required="required"/>
+                <span class="help-block">
+                    <f:translate key="module.newsletter.new.field.subject.description">Email subject</f:translate>
                 </span>
             </div>
         </div>

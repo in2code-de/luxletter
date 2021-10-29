@@ -9,7 +9,6 @@ use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Object\Exception;
 
 /**
  * Class User
@@ -57,6 +56,13 @@ class Newsletter extends AbstractEntity
      * @var string
      */
     protected $origin = '';
+
+    /**
+     * Contains container filename
+     *
+     * @var string
+     */
+    protected $layout = '';
 
     /**
      * @var string
@@ -243,6 +249,24 @@ class Newsletter extends AbstractEntity
     /**
      * @return string
      */
+    public function getLayout(): string
+    {
+        return $this->layout;
+    }
+
+    /**
+     * @param string $layout
+     * @return Newsletter
+     */
+    public function setLayout(string $layout): Newsletter
+    {
+        $this->layout = $layout;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getBodytext(): string
     {
         return $this->bodytext;
@@ -340,7 +364,6 @@ class Newsletter extends AbstractEntity
     /**
      * @return float
      * @throws DBALException
-     * @throws Exception
      */
     public function getOpenRate(): float
     {
@@ -355,7 +378,6 @@ class Newsletter extends AbstractEntity
     /**
      * @return float
      * @throws DBALException
-     * @throws Exception
      * @throws ExceptionDbalDriver
      */
     public function getClickRate(): float
@@ -371,7 +393,6 @@ class Newsletter extends AbstractEntity
     /**
      * @return float
      * @throws DBALException
-     * @throws Exception
      * @throws ExceptionDbalDriver
      */
     public function getUnsubscribeRate(): float
