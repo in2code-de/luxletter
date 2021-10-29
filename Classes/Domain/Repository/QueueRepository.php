@@ -30,6 +30,7 @@ class QueueRepository extends AbstractRepository
             $query->equals('sent', false),
             $query->equals('newsletter.disabled', false),
             $query->greaterThan('newsletter.configuration', 0),
+            $query->logicalNot($query->equals('newsletter.layout', '')),
             $query->equals('user.deleted', false),
             $query->equals('user.disable', false)
         ];
