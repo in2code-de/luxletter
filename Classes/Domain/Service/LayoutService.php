@@ -1,13 +1,15 @@
 <?php
 
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace In2code\Luxletter\Domain\Service;
 
+use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Exception\UnvalidFilenameException;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 
 /**
@@ -42,12 +44,31 @@ class LayoutService
     }
 
     /**
+     * @param string $layout
+     * @return string Relative path and filename like "EXT:sitepackage/../MailContainer.html"
+     * @throws InvalidConfigurationTypeException
+     * @throws UnvalidFilenameException
+     * @throws MisconfigurationException
+     */
+    public function getPathAndFilenameFromLayout(string $layout): string
+    {
+        $this->checkForValidFilename($layout);
+        if (is_file(GeneralUtility::getFileAbsFileName($this->getLayoutPath() . $layout)) === false) {
+            throw new MisconfigurationException(
+                'Could not read template file with given path and filename',
+                1635495052
+            );
+        }
+        return $this->getLayoutPath() . $layout;
+    }
+
+    /**
      * @param string $filename
      * @return void
      * @throws UnvalidFilenameException
      * @throws InvalidConfigurationTypeException
      */
-    public function checkForValidFilename(string $filename): void
+    protected function checkForValidFilename(string $filename): void
     {
         $containers = $this->getLayoutConfiguration();
         foreach ($containers as $container) {
@@ -93,5 +114,23 @@ class LayoutService
             return $configuration['settings']['containerHtml']['options'];
         }
         return [];
+    }
+
+    /**
+     * @return string
+     * @throws InvalidConfigurationTypeException
+     * @throws MisconfigurationException
+     */
+    protected function getLayoutPath(): string
+    {
+        $configuration = ConfigurationUtility::getExtensionSettings();
+        if (!empty($configuration['settings']['containerHtml']['path'])) {
+            $path = $configuration['settings']['containerHtml']['path'];
+            if (StringUtility::endsWith($path, '/') === false) {
+                $path .= '/';
+            }
+            return $path;
+        }
+        throw new MisconfigurationException('No template path given in settings.containerHtml.path', 1635494884);
     }
 }
