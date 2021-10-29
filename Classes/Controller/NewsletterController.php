@@ -396,7 +396,11 @@ class NewsletterController extends ActionController
     protected function parseNewsletterToBodytext(): void
     {
         $newsletter = (array)$this->request->getArgument('newsletter');
-        $parseService = GeneralUtility::makeInstance(ParseNewsletterUrlService::class, $newsletter['origin']);
+        $parseService = GeneralUtility::makeInstance(
+            ParseNewsletterUrlService::class,
+            $newsletter['origin'],
+            $newsletter['layout']
+        );
         $parseService->setParseVariables(false);
         $configuration = $this->configurationRepository->findByUid((int)$newsletter['configuration']);
         $newsletter['bodytext'] = $parseService->getParsedContent($configuration->getSiteConfiguration());
