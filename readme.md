@@ -121,7 +121,7 @@ plugin {
             label = LLL:EXT:yoursitepackage/Resources/Private/Language/locallang_db.xlf:newsletter.layouts.1
             fileName = MyContainer1.html
           }
-          1 {
+          2 {
             label = My Layout 2
             fileName = MyContainer2.html
           }
