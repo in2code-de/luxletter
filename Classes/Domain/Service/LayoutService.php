@@ -63,6 +63,11 @@ class LayoutService
     }
 
     /**
+     * Check if given filename
+     * - Has no slashes (to prevent ../../anything.html)
+     * - Ends with a ".html"
+     * - And is allowed by TypoScript configuration
+     *
      * @param string $filename
      * @return void
      * @throws UnvalidFilenameException
@@ -70,6 +75,18 @@ class LayoutService
      */
     protected function checkForValidFilename(string $filename): void
     {
+        if (stristr($filename, '/') !== false) {
+            throw new UnvalidFilenameException(
+                'Given filename (' . htmlspecialchars($filename) . ') contains invalid characters',
+                1635497109
+            );
+        }
+        if (StringUtility::endsWith($filename, '.html') === false) {
+            throw new UnvalidFilenameException(
+                'Given filename (' . htmlspecialchars($filename) . ') must end with .html',
+                1635497158
+            );
+        }
         $containers = $this->getLayoutConfiguration();
         foreach ($containers as $container) {
             if ($filename === $container['fileName']) {
