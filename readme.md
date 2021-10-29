@@ -103,11 +103,44 @@ composer require "in2code/luxletter"
 
 ## Breaking changes !!!
 
+### Upgrade to 8.x
+
+Container HTML template is now configured differently to allow a selection from editors.
+While it was before 8.0 used from `templateRootPath/Mail/NewsletterContainer.html`, we can now configure a path with
+more than one container template via TypoScript:
+
+```
+plugin {
+  tx_luxletter_fe {
+    settings {
+      # Define container.html files
+      containerHtml {
+        path = EXT:yoursitepackage/Resources/Private/Templates/Mail/
+        options {
+          1 {
+            label = LLL:EXT:yoursitepackage/Resources/Private/Language/locallang_db.xlf:newsletter.layouts.1
+            fileName = MyContainer1.html
+          }
+          1 {
+            label = My Layout 2
+            fileName = MyContainer2.html
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+**Note:** Already existing newsletters without new layout property will not be send any more!
+
+
 ### Upgrade to 5.x
 
 This is only a small breaking change. CSS files are included via TypoScript now. So we removed the partial ZurbCss.html
 and put all css now to EXT:luxletter/Resources/Private/Css/.
 Todo: Remove the partial call in NewsletterContainer.html template file.
+
 
 ### Upgrade to 4.x
 
@@ -131,6 +164,7 @@ Breaking changes in detail and what you have to do step by step after you have u
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| !!! 8.0.0  | 2021.10.29  | Feature    | Different newsletter layouts can now be selected from the editor                                                                                                                           |
 | 7.1.0      | 2021.10.27  | Task       | Fix date converting problem when adding newsletters with a date, add confirm message when deleting newsletters, update source description                                                  |
 | 7.0.0      | 2021.10.27  | Feature    | Add a fluidStyleMailContent template for EXT:news listview, hide unwanted tables in backend list view, fix label                                                                           |
 | 6.0.1      | 2021.10.21  | Bugfix     | Reanimate unsubscribe link, year and tracking pixel                                                                                                                                        |
