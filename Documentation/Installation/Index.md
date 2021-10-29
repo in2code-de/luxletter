@@ -63,7 +63,7 @@ Basicly there are two different TypoScripts that should be included in static te
 
 <img src="../Images/documentation_installation_statictyposcript.png" width="800" alt="add static typoscript" />
 
-*Important* Please do not include those templates in an extension template deep in your website but on the root template. Otherwise the backend module can't read the TypoScript.
+**Important** Please do not include those templates in an extension template deep in your website but on the root template. Otherwise the backend module can't read the TypoScript.
 
 #### Basic
 

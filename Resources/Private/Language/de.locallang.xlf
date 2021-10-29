@@ -232,6 +232,14 @@
 				<source>Please choose between your predefined sender settings</source>
 				<target state="translated">Bitte wähle einen von dir zuvor angelegten Senderdatensatz aus</target>
 			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.layout">
+				<source>Layout</source>
+				<target state="translated">Layout</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.layout.description">
+				<source>Please select a newsletter container layout</source>
+				<target state="translated">Bitte ein Newsletter Container Layout auswählen</target>
+			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.origin">
 				<source>Where is the newsletter located?</source>
 				<target state="translated">Wo befindet sich der Newsletter?</target>

@@ -4,6 +4,7 @@ namespace In2code\Luxletter\Utility;
 
 use TYPO3\CMS\Core\Configuration\ConfigurationManager as ConfigurationManagerCore;
 use TYPO3\CMS\Core\Http\JsonResponse;
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManager;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
@@ -45,5 +46,14 @@ class ObjectUtility
     public static function getJsonResponse(): JsonResponse
     {
         return GeneralUtility::makeInstance(JsonResponse::class);
+    }
+
+    /**
+     * @return LanguageService|null
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public static function getLanguageService(): ?LanguageService
+    {
+        return $GLOBALS['LANG'];
     }
 }

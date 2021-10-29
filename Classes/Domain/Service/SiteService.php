@@ -33,6 +33,16 @@ class SiteService
     }
 
     /**
+     * @return Site
+     */
+    public function getFirstSite(): Site
+    {
+        $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
+        $sites = $siteFinder->getAllSites();
+        return current($sites);
+    }
+
+    /**
      * Get a domain from a site configuration that can be used to prefix (e.g.) links or assets in newsletter bodytext
      *
      * @param Site $site

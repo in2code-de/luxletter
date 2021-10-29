@@ -69,6 +69,10 @@
 				<source>Origin</source>
 				<target state="translated">Text-Ursprung</target>
 			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.layout">
+				<source>Container template file</source>
+				<target state="translated">Container Template Datei</target>
+			</trans-unit>
 			<trans-unit id="tx_luxletter_domain_model_newsletter.bodytext">
 				<source>Bodytext</source>
 				<target state="translated">E-Mail Inhalt</target>
@@ -290,6 +294,11 @@
 			<trans-unit id="module.dashboard.widget.lastnewslettersclickrate.label">
 				<source>Clicker</source>
 				<target state="translated">Klicker</target>
+			</trans-unit>
+
+			<trans-unit id="newsletter.layouts.1">
+				<source>Default layout</source>
+				<target state="translated">Standard Layout</target>
 			</trans-unit>
 
 			<trans-unit id="pleasechoose">

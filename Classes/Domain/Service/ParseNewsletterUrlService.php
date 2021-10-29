@@ -8,11 +8,11 @@ use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
+use In2code\Luxletter\Exception\UnvalidFilenameException;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
-use In2code\Luxletter\Utility\TemplateUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
@@ -50,6 +50,11 @@ class ParseNewsletterUrlService
     protected $url = '';
 
     /**
+     * @var string Path to container html template like "EXT:sitepackage/../MailContainer.html"
+     */
+    protected $containerTemplate = '';
+
+    /**
      * Decide if variables like {user.firstName} should be parsed with fluid or not. For a preview we need to parse the
      * variables, but for parsing it final to a newsletter record, we don't want to touch the variables (so it can
      * be replaced later)
@@ -75,6 +80,7 @@ class ParseNewsletterUrlService
     /**
      * ParseNewsletterUrlService constructor.
      * @param string $origin can be a page uid or a complete url
+     * @param string $layout Container html template filename
      * @throws Exception
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
@@ -83,10 +89,12 @@ class ParseNewsletterUrlService
      * @throws SiteNotFoundException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws UnvalidFilenameException
      */
-    public function __construct(string $origin)
+    public function __construct(string $origin, string $layout)
     {
         $this->configuration = ConfigurationUtility::getExtensionSettings();
+        $this->setContainerTemplateFromLayout($layout);
 
         $url = '';
         if (MathUtility::canBeInterpretedAsInteger($origin)) {
@@ -140,14 +148,11 @@ class ParseNewsletterUrlService
      */
     protected function getNewsletterContainerAndContent(string $content, Site $site, User $user): string
     {
-        $templateName = 'Mail/NewsletterContainer.html';
         if ($this->isParsingActive()) {
             $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-            $standaloneView->setTemplateRootPaths($this->configuration['view']['templateRootPaths']);
             $standaloneView->setLayoutRootPaths($this->configuration['view']['layoutRootPaths']);
             $standaloneView->setPartialRootPaths($this->configuration['view']['partialRootPaths']);
-            /** @noinspection PhpInternalEntityUsedInspection */
-            $standaloneView->setTemplate($templateName);
+            $standaloneView->setTemplatePathAndFilename($this->getContainerTemplate());
             $standaloneView->assignMultiple($this->getContentObjectVariables());
             $standaloneView->assignMultiple(
                 [
@@ -166,7 +171,7 @@ class ParseNewsletterUrlService
             $cssInlineService = GeneralUtility::makeInstance(CssInlineService::class);
             $html = $cssInlineService->addInlineCss($html);
         } else {
-            $container = file_get_contents(TemplateUtility::getExistingFilePathOfTemplateFileByName($templateName));
+            $container = file_get_contents($this->getContainerTemplate(true));
             $html = str_replace('{content}', $content, $container);
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__, [&$html, &$content, $user, $this]);
@@ -315,6 +320,43 @@ class ParseNewsletterUrlService
     public function setUrl(string $url): self
     {
         $this->url = $url;
+        return $this;
+    }
+
+    /**
+     * @param bool $absolute
+     * @return string
+     */
+    public function getContainerTemplate(bool $absolute = false): string
+    {
+        $containerTemplate = $this->containerTemplate;
+        if ($absolute === true) {
+            $containerTemplate = GeneralUtility::getFileAbsFileName($containerTemplate);
+        }
+        return $containerTemplate;
+    }
+
+    /**
+     * @param string $containerTemplate
+     * @return ParseNewsletterUrlService
+     */
+    public function setContainerTemplate(string $containerTemplate): ParseNewsletterUrlService
+    {
+        $this->containerTemplate = $containerTemplate;
+        return $this;
+    }
+
+    /**
+     * @param string $layout Filename of a layout template file
+     * @return $this
+     * @throws InvalidConfigurationTypeException
+     * @throws UnvalidFilenameException
+     * @throws MisconfigurationException
+     */
+    public function setContainerTemplateFromLayout(string $layout): self
+    {
+        $layoutService = GeneralUtility::makeInstance(LayoutService::class);
+        $this->containerTemplate = $layoutService->getPathAndFilenameFromLayout($layout);
         return $this;
     }
 }
