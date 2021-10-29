@@ -224,8 +224,9 @@ Clicking on `Add new newsletter` starts a process where you can create new newsl
 | ----------------------- | --------------------------------------------------------------------------------------- |
 | Sender                  | Choose a sender record                                                                  |
 | Receiver                | Choose a receiver group (frontenduser groups that marked as luxletter groups)           |
-| Mail subject            | Mail subject (also variables are allowed like {user.lastName}                           |
+| Layout                  | Choose a given layout (can be defined via TypoScript)                                   |
 | Newsletter location     | Choose where your HTML for the newsletter is located. An absolute URL like https://domain.org/newsletter.html is possible. If you add a number (PID), the page will be parsed (typenum is automaticly added) |
+| Mail subject            | Mail subject (also variables are allowed like {user.lastName}                           |
 
 <img src="../Images/documentation_newnewsletter_step3.png" width="800" alt="create new newsletter - step 3" />
 

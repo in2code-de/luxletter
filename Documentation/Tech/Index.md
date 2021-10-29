@@ -9,24 +9,47 @@ Change templates path in TypoScript setup via your sitepackage extension (e.g. E
 
 ```
 plugin {
-	tx_luxletter_fe {
-		view {
-			templateRootPaths {
-				0 = EXT:luxletter/Resources/Private/Templates/
-				1 = EXT:lux/Resources/Private/Templates/
-				2 = EXT:sitepackage/Resources/Private/Templates/
-			}
-			partialRootPaths {
-				0 = EXT:luxletter/Resources/Private/Partials/
-				1 = EXT:lux/Resources/Private/Partials/
-				2 = EXT:sitepackage/Resources/Private/Partials/
-			}
-			layoutRootPaths {
-				0 = EXT:luxletter/Resources/Private/Layouts/
-				2 = EXT:sitepackage/Resources/Private/Layouts/
-			}
-		}
-	}
+    tx_luxletter_fe {
+        view {
+            templateRootPaths {
+                0 = EXT:luxletter/Resources/Private/Templates/
+                1 = EXT:lux/Resources/Private/Templates/
+                2 = EXT:sitepackage/Resources/Private/Templates/
+            }
+            partialRootPaths {
+                0 = EXT:luxletter/Resources/Private/Partials/
+                1 = EXT:lux/Resources/Private/Partials/
+                2 = EXT:sitepackage/Resources/Private/Partials/
+            }
+            layoutRootPaths {
+                0 = EXT:luxletter/Resources/Private/Layouts/
+                2 = EXT:sitepackage/Resources/Private/Layouts/
+            }
+        }
+
+        settings {
+            addInlineCss {
+                0 = EXT:luxletter/Resources/Private/Css/ZurbFoundation.css
+                1 = EXT:luxletter/Resources/Private/Css/Luxletter.css
+                2 = EXT:sitepackage/Resources/Private/Css/Luxletter.css
+            }
+
+            # Define container.html files
+            containerHtml {
+                path = EXT:sitepackage/Resources/Private/Templates/Mail/
+                options {
+                    1 {
+                        label = Layout 1
+                        fileName = NewsletterContainer1.html
+                    }
+                    2 {
+                        label = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:newsletter.layouts.1
+                        fileName = NewsletterContainer2.html
+                    }
+                }
+            }
+        }
+    }
 }
 module.tx_luxletter < plugin.tx_luxletter_fe
 ```
@@ -50,7 +73,7 @@ Now you can include the file with a ext_typoscript_setup.typoscript file
 There are some possibilities to extend luxletter.
 All HTML-Templates (and Partials and Layouts) can be overwritten by your extension in the way how templates can
 be overruled in TYPO3. This fits the own content element `Teaser` and the rendering for the FluidStyledMailContent
-elements as well as the templates for the backend modules of luxletter and the `NewsletterContainer.html`.
+elements as well as the templates for the backend modules of luxletter.
 
 If you want to manipulate the PHP, there are a lot of signals added to the extension itself. Just search for
 `signalDispatch`. You will find a lot of methods where you can stop mail sending, manipulate values, etc...
@@ -63,13 +86,13 @@ get the latest or a defined newsletter, there are 2 API functions in luxletter, 
 
 ```
 # Add fe_users.uid=123 to the queue and send him the latest newsletter
-$queueService = $this->objectManager->get(\In2code\Luxletter\Domain\Service\QueueService::class);
+$queueService = GeneralUtility::makeInstance(\In2code\Luxletter\Domain\Service\QueueService::class);
 $queueService->addUserWithLatestNewsletterToQueue(123);
 ```
 
 ```
 # Add fe_users.uid=123 to the queue and send him newsletter with uid 234
-$queueService = $this->objectManager->get(\In2code\Luxletter\Domain\Service\QueueService::class);
+$queueService = GeneralUtility::makeInstance(\In2code\Luxletter\Domain\Service\QueueService::class);
 $queueService->addUserWithNewsletterToQueue(123, 234);
 ```
 
