@@ -165,6 +165,7 @@ class NewsletterController extends ActionController
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      * @throws NoSuchArgumentException
+     * @throws InvalidArgumentNameException
      */
     public function initializeCreateAction(): void
     {
@@ -317,7 +318,8 @@ class NewsletterController extends ActionController
         }
         $parseUrlService = GeneralUtility::makeInstance(
             ParseNewsletterUrlService::class,
-            $request->getQueryParams()['origin']
+            $request->getQueryParams()['origin'],
+            $request->getQueryParams()['layout']
         );
         $parseService = GeneralUtility::makeInstance(ParseNewsletterService::class);
         $configurationRepository = GeneralUtility::makeInstance(ConfigurationRepository::class);

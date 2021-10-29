@@ -164,12 +164,14 @@ define(['jquery'], function($) {
 					var email = document.querySelector('[data-luxletter-testmail="email"]').value;
 					var subject = document.querySelector('[data-luxletter-testmail="subject"]').value;
 					var configuration = document.querySelector('[data-luxletter-testmail="configuration"]').value;
-					if (origin && email && subject) {
+					var layout = document.querySelector('[data-luxletter-wizardpreviewevent="layout"]').value;
+					if (origin && email && subject && layout) {
 						ajaxConnection(TYPO3.settings.ajaxUrls['/luxletter/testMail'], {
 							origin: origin,
 							email: email,
 							subject: subject,
-							configuration: configuration
+							configuration: configuration,
+							layout: layout
 						}, 'testMailListenerCallback');
 					}
 				});
