@@ -30,10 +30,6 @@ plugin {
             label = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:newsletter.layouts.1
             fileName = NewsletterContainer.html
           }
-          2 {
-            label = C2
-            fileName = NewsletterContainer2.html
-          }
         }
       }
     }
