@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Service;
 
+use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\Queue;
 use In2code\Luxletter\Domain\Model\User;
@@ -50,13 +51,14 @@ class QueueService
      * Add mail receivers to the queue based on a given newsletter with a relation to a frontenduser group
      *
      * @param Newsletter $newsletter
-     * @return void
+     * @return int
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws Exception
      * @throws IllegalObjectTypeException
+     * @throws ExceptionDbalDriver
      */
-    public function addMailReceiversToQueue(Newsletter $newsletter): void
+    public function addMailReceiversToQueue(Newsletter $newsletter): int
     {
         $users = $this->userRepository->getUsersFromGroup($newsletter->getReceiver()->getUid());
         $this->signalDispatch(__CLASS__, __FUNCTION__, [$users, $newsletter]);
@@ -64,6 +66,7 @@ class QueueService
         foreach ($users as $user) {
             $this->addUserToQueue($newsletter, $user);
         }
+        return $users->count();
     }
 
     /**
@@ -75,6 +78,7 @@ class QueueService
      * @throws RecordInDatabaseNotFoundException
      * @throws Exception
      * @throws IllegalObjectTypeException
+     * @throws ExceptionDbalDriver
      *
      * @api (can be used from third party extensions)
      * @noinspection PhpUnused
@@ -108,6 +112,7 @@ class QueueService
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws RecordInDatabaseNotFoundException
+     * @throws ExceptionDbalDriver
      *
      * @api (can be used from third party extensions)
      * @noinspection PhpUnused
@@ -145,6 +150,7 @@ class QueueService
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws IllegalObjectTypeException
+     * @throws ExceptionDbalDriver
      */
     protected function addUserToQueue(Newsletter $newsletter, User $user): void
     {
@@ -159,6 +165,7 @@ class QueueService
                 ->setDatetime($newsletter->getDatetime());
             $this->signalDispatch(__CLASS__, __FUNCTION__, [$queue, $user, $newsletter]);
             $queueRepository->add($queue);
+            $queueRepository->persistAll();
         }
     }
 }
