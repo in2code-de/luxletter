@@ -237,3 +237,20 @@ Clicking on `Add new newsletter` starts a process where you can create new newsl
 | Newsletter preview      | You will see a newsletter preview (variables will be filled with dummy values)                   |
 
 As soon as you save the newsletter, it will be parsed and after that it's ready for the dispatch.
+
+
+### Creating newsletters from CLI or scheduler task
+
+If you want to frequently create new newsletters from console or with a scheduler task, even this is possible.
+A use case could be to weekly render a page with changing content (e.g. a news list view) and send it automatically.
+
+#### CLI command
+
+```
+# Parameters are: Title, subject, fe_groups.uid, configuration uid, source to parse (pid or absolute URL), Layout template file, description (optional), date (optional)
+./vendor/bin/typo3 luxletter:createnewsletterfromorigin "Automatic NL" "Newsletter 2020" 1 1 16 "NewsletterContainer.html" "Optional description here" "2021-10-31T11:00"
+```
+
+#### From scheduler
+
+<img src="../Images/documentation_scheduler_createnewsletter.png" width="800" alt="create new newsletter from scheduler task" />
