@@ -10,11 +10,6 @@ services:
   In2code\Luxletter\Domain\Service\QueueService:
     public: true
 
-  In2code\Luxletter\Command\QueueCommand:
-    tags:
-      - name: 'console.command'
-        command: 'luxletter:queue'
-
   In2code\Luxletter\Command\ClearCommand:
     tags:
       - name: 'console.command'
@@ -24,3 +19,13 @@ services:
     tags:
       - name: 'console.command'
         command: 'luxletter:clearqueue'
+
+  In2code\Luxletter\Command\CreateNewsletterFromOriginCommand:
+    tags:
+      - name: 'console.command'
+        command: 'luxletter:createnewsletterfromorigin'
+
+  In2code\Luxletter\Command\QueueCommand:
+    tags:
+      - name: 'console.command'
+        command: 'luxletter:queue'

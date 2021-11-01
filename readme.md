@@ -121,7 +121,7 @@ plugin {
             label = LLL:EXT:yoursitepackage/Resources/Private/Language/locallang_db.xlf:newsletter.layouts.1
             fileName = MyContainer1.html
           }
-          1 {
+          2 {
             label = My Layout 2
             fileName = MyContainer2.html
           }
@@ -164,6 +164,7 @@ Breaking changes in detail and what you have to do step by step after you have u
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 9.0.0      | 2021.11.01  | Feature    | Create newsletters from CLI or scheduler task now (if needed to automaticly create frequently newsletters - e.g. every week)                                                               |
 | !!! 8.0.0  | 2021.10.29  | Feature    | Different newsletter layouts can now be selected from the editor                                                                                                                           |
 | 7.1.0      | 2021.10.27  | Task       | Fix date converting problem when adding newsletters with a date, add confirm message when deleting newsletters, update source description                                                  |
 | 7.0.0      | 2021.10.27  | Feature    | Add a fluidStyleMailContent template for EXT:news listview, hide unwanted tables in backend list view, fix label                                                                           |

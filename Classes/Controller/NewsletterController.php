@@ -181,6 +181,7 @@ class NewsletterController extends ActionController
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws StopActionException
+     * @throws ExceptionDbalDriver
      */
     public function createAction(Newsletter $newsletter): void
     {
