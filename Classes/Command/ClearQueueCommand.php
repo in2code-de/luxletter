@@ -33,6 +33,6 @@ class ClearQueueCommand extends Command
         $queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
         $queueRepository->truncate();
         $output->writeln('Truncated queue table!');
-        return self::SUCCESS;
+        return 0;
     }
 }

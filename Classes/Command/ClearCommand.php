@@ -33,6 +33,6 @@ class ClearCommand extends Command
         $newsletterRepository = GeneralUtility::makeInstance(NewsletterRepository::class);
         $newsletterRepository->truncateAll();
         $output->writeln('Truncated all luxletter tables!');
-        return self::SUCCESS;
+        return 0;
     }
 }
