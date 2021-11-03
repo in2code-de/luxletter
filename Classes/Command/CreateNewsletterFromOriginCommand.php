@@ -76,6 +76,6 @@ class CreateNewsletterFromOriginCommand extends Command
         $queueService = GeneralUtility::makeInstance(QueueService::class);
         $queuedAmount = $queueService->addMailReceiversToQueue($newsletter);
         $output->writeln('Added ' . $queuedAmount . ' queue records');
-        return self::SUCCESS;
+        return 0;
     }
 }

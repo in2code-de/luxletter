@@ -72,6 +72,6 @@ class QueueCommand extends Command
         } else {
             $output->writeln('No mails in queue found');
         }
-        return self::SUCCESS;
+        return 0;
     }
 }
