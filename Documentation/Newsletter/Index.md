@@ -112,11 +112,11 @@ routeEnhancers:
 You can focus your website content on the introduction and the useful content itself. Luxletter uses a wrapping
 service to wrap your content with header and footer automatically.
 Look at `EXT:luxletter/Resources/Private/Templates/Mail/NewsletterContainer.html` to see the HTML that
-is used for the wrapping of the header and footer.
-The variable `{content}` will be filled with your built content when creating newsletter records (see
+is used for the wrapping of the header and footer (see below how to add more container templates).
+The variable `{content}` will be filled with the built content when creating newsletter records (see
 next chapter).
 
-Of course you can overwrite this template file in your extension in the known way like in other extension.
+Of course you can overwrite template files in your extension:
 
 ```
 plugin {
@@ -132,23 +132,32 @@ plugin {
                 2 = EXT:yoursitepackage/Resources/Private/Layouts/Extensions/Luxletter/
             }
         }
-    }
-}
-module {
-    tx_luxletter {
-        view {
-            templateRootPaths {
-                2 = EXT:yoursitepackage/Resources/Private/Templates/Extensions/Luxletter/
+
+        settings {
+            addInlineCss {
+                0 = EXT:luxletter/Resources/Private/Css/ZurbFoundation.css
+                1 = EXT:luxletter/Resources/Private/Css/Luxletter.css
+                2 = EXT:sitepackage/Resources/Private/Css/Luxletter.css
             }
-            partialRootPaths {
-                2 = EXT:yoursitepackage/Resources/Private/Partials/Extensions/Luxletter/
-            }
-            layoutRootPaths {
-                2 = EXT:yoursitepackage/Resources/Private/Layouts/Extensions/Luxletter/
+
+            # Define container.html files
+            containerHtml {
+                path = EXT:sitepackage/Resources/Private/Templates/Mail/
+                options {
+                    1 {
+                        label = Layout 1
+                        fileName = NewsletterContainer1.html
+                    }
+                    2 {
+                        label = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:newsletter.layouts.1
+                        fileName = NewsletterContainer2.html
+                    }
+                }
             }
         }
     }
 }
+module.tx_luxletter.view < plugin.tx_luxletter_fe.view
 ```
 
 **Note:** If you change the path via TypoScript extension template, please take care that you are using the very first

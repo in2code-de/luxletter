@@ -164,6 +164,7 @@ Breaking changes in detail and what you have to do step by step after you have u
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 9.0.1      | 2021.11.03  | Bugfix     | Mainly a documentation update, also added a _blank to "go enterprise" link                                                                                                                 |
 | 9.0.0      | 2021.11.01  | Feature    | Create newsletters from CLI or scheduler task now (if needed to automaticly create frequently newsletters - e.g. every week)                                                               |
 | !!! 8.0.0  | 2021.10.29  | Feature    | Different newsletter layouts can now be selected from the editor                                                                                                                           |
 | 7.1.0      | 2021.10.27  | Task       | Fix date converting problem when adding newsletters with a date, add confirm message when deleting newsletters, update source description                                                  |
