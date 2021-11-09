@@ -164,6 +164,7 @@ Breaking changes in detail and what you have to do step by step after you have u
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 9.0.3      | 2021.11.09  | Bugfix     | Use absolute URL for news list view                                                                                                                                                        |
 | 9.0.2      | 2021.11.03  | Bugfix     | Fix command return values for TYPO3 10                                                                                                                                                     |
 | 9.0.1      | 2021.11.03  | Bugfix     | Mainly a documentation update, also added a _blank to "go enterprise" link                                                                                                                 |
 | 9.0.0      | 2021.11.01  | Feature    | Create newsletters from CLI or scheduler task now (if needed to automaticly create frequently newsletters - e.g. every week)                                                               |
