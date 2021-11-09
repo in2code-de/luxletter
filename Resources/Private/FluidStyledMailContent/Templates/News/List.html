@@ -24,7 +24,7 @@
                 <td valign="top" width="20%">
                     <f:alias map="{mediaElement: newsItem.mediaPreviews.0}">
                         <f:if condition="{mediaElement.originalResource.type} == 2">
-                            <n:link newsItem="{newsItem}" settings="{settings}" title="{newsItem.title}" class="btn btn-primary">
+                            <n:link newsItem="{newsItem}" settings="{settings}" title="{newsItem.title}" class="btn btn-primary" configuration="{forceAbsoluteUrl:1}">
                                 <f:image
                                     image="{mediaElement}"
                                     title="{mediaElement.originalResource.title}"
@@ -38,7 +38,7 @@
             </tr>
             <tr>
                 <td align="right" colspan="2" style="text-align: right;">
-                    <n:link newsItem="{newsItem}" settings="{settings}" title="{newsItem.title}" class="btn btn-primary">
+                    <n:link newsItem="{newsItem}" settings="{settings}" title="{newsItem.title}" class="btn btn-primary" configuration="{forceAbsoluteUrl:1}">
                         <f:translate key="more-link"/>
                     </n:link>
                 </td>
