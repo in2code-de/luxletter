@@ -4,6 +4,7 @@ namespace In2code\Luxletter\Domain\Service;
 
 use DOMDocument;
 use DOMXpath;
+use Exception;
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Exception\InvalidUrlException;
@@ -21,14 +22,14 @@ use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Object\Exception;
+use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbaseObject;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Class ParseNewsletterUrlService to fill a container html with a content from a http(s) page.
- * This is used for testmails, preview and for storing a bodytext in a newsletter record.
+ * This is used for test mails, preview and for storing a bodytext in a newsletter record.
  * The final parse (when sending real newsletters) is done by ParseNewsletterService class.
  */
 class ParseNewsletterUrlService
@@ -81,7 +82,7 @@ class ParseNewsletterUrlService
      * ParseNewsletterUrlService constructor.
      * @param string $origin can be a page uid or a complete url
      * @param string $layout Container html template filename
-     * @throws Exception
+     * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
@@ -117,7 +118,7 @@ class ParseNewsletterUrlService
      * @param Site $site
      * @param User|null $user
      * @return string
-     * @throws Exception
+     * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
@@ -141,7 +142,7 @@ class ParseNewsletterUrlService
      * @param Site $site
      * @param User $user
      * @return string
-     * @throws Exception
+     * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
@@ -222,7 +223,7 @@ class ParseNewsletterUrlService
      * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
-     * @throws Exception
+     * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException
      */
     protected function getContentFromOrigin(User $user): string
@@ -266,7 +267,7 @@ class ParseNewsletterUrlService
             if (!empty($result)) {
                 return $result;
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
         }
         return $string;
     }

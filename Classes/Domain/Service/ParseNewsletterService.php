@@ -12,7 +12,8 @@ use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
- * Class ParseNewsletterService to fill out variables for newsletter subject or bodytext
+ * Class ParseNewsletterService
+ * to fill out variables for newsletter subject or bodytext when a newsletter is final send
  */
 class ParseNewsletterService
 {
@@ -37,11 +38,11 @@ class ParseNewsletterService
     /**
      * @param string $bodytext
      * @param array $properties
-     * @return string
-     * @throws Exception
+     * @return string @throws Exception
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws Exception
      */
     public function parseBodytext(string $bodytext, array $properties): string
     {
