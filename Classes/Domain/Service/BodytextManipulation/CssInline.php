@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace In2code\Luxletter\Domain\Service;
+namespace In2code\Luxletter\Domain\Service\BodytextManipulation;
 
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
@@ -8,9 +8,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 
 /**
- * CssInlineService
+ * CssInline
  */
-class CssInlineService
+class CssInline
 {
     /**
      * @param string $content

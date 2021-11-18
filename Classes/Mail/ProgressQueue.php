@@ -4,8 +4,8 @@ namespace In2code\Luxletter\Mail;
 
 use In2code\Luxletter\Domain\Model\Queue;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
-use In2code\Luxletter\Domain\Service\CssInlineService;
-use In2code\Luxletter\Domain\Service\LinkHashingService;
+use In2code\Luxletter\Domain\Service\BodytextManipulation\CssInline;
+use In2code\Luxletter\Domain\Service\BodytextManipulation\LinkHashing;
 use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Domain\Service\Parsing\Newsletter;
 use In2code\Luxletter\Exception\ArgumentMissingException;
@@ -44,9 +44,9 @@ class ProgressQueue
     protected $parseService = null;
 
     /**
-     * @var CssInlineService|null
+     * @var CssInline|null
      */
-    protected $cssInlineService = null;
+    protected $cssInline = null;
 
     /**
      * @var OutputInterface
@@ -61,7 +61,7 @@ class ProgressQueue
     {
         $this->queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
         $this->parseService = GeneralUtility::makeInstance(Newsletter::class);
-        $this->cssInlineService = GeneralUtility::makeInstance(CssInlineService::class);
+        $this->cssInline = GeneralUtility::makeInstance(CssInline::class);
         $this->output = $output;
     }
 
@@ -175,7 +175,7 @@ class ProgressQueue
             ]
         );
         $bodytext = $this->hashLinksInBodytext($queue, $bodytext);
-        $bodytext = $this->cssInlineService->addInlineCss($bodytext);
+        $bodytext = $this->cssInline->addInlineCss($bodytext);
         return $bodytext;
     }
 
@@ -197,7 +197,7 @@ class ProgressQueue
     {
         if (ConfigurationUtility::isRewriteLinksInNewsletterActivated()) {
             $linkHashing = GeneralUtility::makeInstance(
-                LinkHashingService::class,
+                LinkHashing::class,
                 $queue->getNewsletter(),
                 $queue->getUser()
             );

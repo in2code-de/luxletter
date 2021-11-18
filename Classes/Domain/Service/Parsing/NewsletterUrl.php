@@ -7,7 +7,7 @@ use DOMXpath;
 use Exception;
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\User;
-use In2code\Luxletter\Domain\Service\CssInlineService;
+use In2code\Luxletter\Domain\Service\BodytextManipulation\CssInline;
 use In2code\Luxletter\Domain\Service\LayoutService;
 use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\InvalidUrlException;
@@ -172,8 +172,9 @@ class NewsletterUrl
                 [$standaloneView, $content, $this->configuration, $user, $this]
             );
             $html = $standaloneView->render();
-            $cssInlineService = GeneralUtility::makeInstance(CssInlineService::class);
-            $html = $cssInlineService->addInlineCss($html);
+
+            $cssInline = GeneralUtility::makeInstance(CssInline::class);
+            $html = $cssInline->addInlineCss($html);
         } else {
             $container = file_get_contents($this->getContainerTemplate(true));
             $html = str_replace('{content}', $content, $container);

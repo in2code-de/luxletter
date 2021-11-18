@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace In2code\Luxletter\Domain\Service;
+namespace In2code\Luxletter\Domain\Service\BodytextManipulation;
 
 use DOMDocument;
 use DOMElement;
@@ -8,6 +8,7 @@ use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LinkRepository;
+use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Signal\SignalTrait;
@@ -20,9 +21,9 @@ use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
- * Class LinkHashingService to rewrite links in newsletter to be able to track link clicks
+ * Class LinkHashing to rewrite links in newsletter to be able to track link clicks
  */
-class LinkHashingService
+class LinkHashing
 {
     use SignalTrait;
 
@@ -42,7 +43,7 @@ class LinkHashingService
     protected $linkRepository = null;
 
     /**
-     * LinkHashingService constructor.
+     * LinkHashing constructor.
      * @param Newsletter $newsletter
      * @param User $user
      */
