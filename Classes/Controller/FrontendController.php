@@ -9,7 +9,7 @@ use In2code\Luxletter\Domain\Model\Usergroup;
 use In2code\Luxletter\Domain\Repository\UsergroupRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\LogService;
-use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
+use In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl;
 use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
@@ -80,7 +80,7 @@ class FrontendController extends ActionController
     {
         try {
             $siteService = GeneralUtility::makeInstance(SiteService::class);
-            $urlService = GeneralUtility::makeInstance(ParseNewsletterUrlService::class, $origin, $layout);
+            $urlService = GeneralUtility::makeInstance(NewsletterUrl::class, $origin, $layout);
             return $urlService->getParsedContent($siteService->getSite());
         } catch (Exception $exception) {
             return 'Error: Origin ' . htmlspecialchars($origin) . ' could not be converted into a valid url!<br>'

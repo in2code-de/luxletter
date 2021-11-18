@@ -16,8 +16,8 @@ use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\LayoutService;
-use In2code\Luxletter\Domain\Service\ParseNewsletterService;
-use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
+use In2code\Luxletter\Domain\Service\Parsing\Newsletter as NewsletterParsing;
+use In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
@@ -318,11 +318,11 @@ class NewsletterController extends ActionController
             throw new AuthenticationFailedException('You are not authenticated to send mails', 1560872725);
         }
         $parseUrlService = GeneralUtility::makeInstance(
-            ParseNewsletterUrlService::class,
+            NewsletterUrl::class,
             $request->getQueryParams()['origin'],
             $request->getQueryParams()['layout']
         );
-        $parseService = GeneralUtility::makeInstance(ParseNewsletterService::class);
+        $parseService = GeneralUtility::makeInstance(NewsletterParsing::class);
         $configurationRepository = GeneralUtility::makeInstance(ConfigurationRepository::class);
         $configuration = $configurationRepository->findByUid($request->getQueryParams()['configuration']);
         $userFactory = GeneralUtility::makeInstance(UserFactory::class);
@@ -398,7 +398,7 @@ class NewsletterController extends ActionController
     {
         $newsletter = (array)$this->request->getArgument('newsletter');
         $parseService = GeneralUtility::makeInstance(
-            ParseNewsletterUrlService::class,
+            NewsletterUrl::class,
             $newsletter['origin'],
             $newsletter['layout']
         );

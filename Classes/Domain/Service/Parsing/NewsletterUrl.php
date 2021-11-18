@@ -1,12 +1,15 @@
 <?php
 declare(strict_types = 1);
-namespace In2code\Luxletter\Domain\Service;
+namespace In2code\Luxletter\Domain\Service\Parsing;
 
 use DOMDocument;
 use DOMXpath;
 use Exception;
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\User;
+use In2code\Luxletter\Domain\Service\CssInlineService;
+use In2code\Luxletter\Domain\Service\LayoutService;
+use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Exception\UnvalidFilenameException;
@@ -28,11 +31,11 @@ use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
- * Class ParseNewsletterUrlService to fill a container html with a content from a http(s) page.
+ * Class NewsletterUrl to fill a container html with a content from a http(s) page.
  * This is used for test mails, preview and for storing a bodytext in a newsletter record.
- * The final parse (when sending real newsletters) is done by ParseNewsletterService class.
+ * The final parse (when sending real newsletters) is done by Parsing\Newsletter class.
  */
-class ParseNewsletterUrlService
+class NewsletterUrl
 {
     use SignalTrait;
 
@@ -79,7 +82,7 @@ class ParseNewsletterUrlService
     protected $configuration = [];
 
     /**
-     * ParseNewsletterUrlService constructor.
+     * NewsletterUrl constructor.
      * @param string $origin can be a page uid or a complete url
      * @param string $layout Container html template filename
      * @throws ExceptionExtbaseObject
@@ -241,7 +244,7 @@ class ParseNewsletterUrlService
         }
         $string = $this->getBodyFromHtml($string);
         if ($this->isParsingActive()) {
-            $parseService = GeneralUtility::makeInstance(ParseNewsletterService::class);
+            $parseService = GeneralUtility::makeInstance(Newsletter::class);
             $string = $parseService->parseBodytext($string, ['user' => $user]);
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__, [$string, $user, $this]);
@@ -282,7 +285,7 @@ class ParseNewsletterUrlService
 
     /**
      * @param bool $parseVariables
-     * @return ParseNewsletterUrlService
+     * @return NewsletterUrl
      */
     public function setParseVariables(bool $parseVariables): self
     {
@@ -316,7 +319,7 @@ class ParseNewsletterUrlService
 
     /**
      * @param string $url
-     * @return ParseNewsletterUrlService
+     * @return NewsletterUrl
      */
     public function setUrl(string $url): self
     {
@@ -339,9 +342,9 @@ class ParseNewsletterUrlService
 
     /**
      * @param string $containerTemplate
-     * @return ParseNewsletterUrlService
+     * @return NewsletterUrl
      */
-    public function setContainerTemplate(string $containerTemplate): ParseNewsletterUrlService
+    public function setContainerTemplate(string $containerTemplate): self
     {
         $this->containerTemplate = $containerTemplate;
         return $this;

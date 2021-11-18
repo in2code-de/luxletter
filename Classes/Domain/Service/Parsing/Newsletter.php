@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace In2code\Luxletter\Domain\Service;
+namespace In2code\Luxletter\Domain\Service\Parsing;
 
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
@@ -12,10 +12,10 @@ use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
- * Class ParseNewsletterService
+ * Class Newsletter
  * to fill out variables for newsletter subject or bodytext when a newsletter is final send
  */
-class ParseNewsletterService
+class Newsletter
 {
     use SignalTrait;
 

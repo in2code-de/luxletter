@@ -9,7 +9,7 @@ use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Repository\ConfigurationRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\UsergroupRepository;
-use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
+use In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
@@ -57,7 +57,7 @@ class NewsletterFactory
         string $description = '',
         string $date = ''
     ): Newsletter {
-        $parseService = GeneralUtility::makeInstance(ParseNewsletterUrlService::class, $origin, $layout);
+        $parseService = GeneralUtility::makeInstance(NewsletterUrl::class, $origin, $layout);
         $parseService->setParseVariables(false);
 
         $usergroupRepository = GeneralUtility::makeInstance(UsergroupRepository::class);
