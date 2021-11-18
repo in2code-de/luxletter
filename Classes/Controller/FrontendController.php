@@ -80,7 +80,7 @@ class FrontendController extends ActionController
     {
         try {
             $siteService = GeneralUtility::makeInstance(SiteService::class);
-            $urlService = GeneralUtility::makeInstance(NewsletterUrl::class, $origin, $layout);
+            $urlService = GeneralUtility::makeInstance(NewsletterUrl::class, $origin, $layout)->setModePreview();
             return $urlService->getParsedContent($siteService->getSite());
         } catch (Exception $exception) {
             return 'Error: Origin ' . htmlspecialchars($origin) . ' could not be converted into a valid url!<br>'

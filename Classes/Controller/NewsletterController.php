@@ -112,6 +112,7 @@ class NewsletterController extends ActionController
      * @throws DBALException
      * @throws ExceptionDbalDriver
      * @throws ExceptionDbal
+     * @noinspection PhpUnused
      */
     public function dashboardAction(): void
     {
@@ -147,6 +148,7 @@ class NewsletterController extends ActionController
     /**
      * @return void
      * @throws InvalidConfigurationTypeException
+     * @noinspection PhpUnused
      */
     public function newAction(): void
     {
@@ -166,6 +168,7 @@ class NewsletterController extends ActionController
      * @throws MisconfigurationException
      * @throws NoSuchArgumentException
      * @throws InvalidArgumentNameException
+     * @noinspection PhpUnused
      */
     public function initializeCreateAction(): void
     {
@@ -213,6 +216,7 @@ class NewsletterController extends ActionController
      * @throws IllegalObjectTypeException
      * @throws StopActionException
      * @throws UnknownObjectException
+     * @noinspection PhpUnused
      */
     public function enableAction(Newsletter $newsletter): void
     {
@@ -262,9 +266,10 @@ class NewsletterController extends ActionController
     /**
      * @param Filter $filter
      * @return void
-     * @throws InvalidQueryException
-     * @throws ExceptionExtbaseObject
      * @throws DBALException
+     * @throws ExceptionDbalDriver
+     * @throws InvalidQueryException
+     * @noinspection PhpUnused
      */
     public function receiverAction(Filter $filter): void
     {
@@ -284,6 +289,7 @@ class NewsletterController extends ActionController
      * @return ResponseInterface
      * @throws DBALException
      * @throws ExceptionDbalDriver
+     * @noinspection PhpUnused
      */
     public function wizardUserPreviewAjax(ServerRequestInterface $request): ResponseInterface
     {
@@ -311,6 +317,7 @@ class NewsletterController extends ActionController
      * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
+     * @noinspection PhpUnused
      */
     public function testMailAjax(ServerRequestInterface $request): ResponseInterface
     {
@@ -321,7 +328,7 @@ class NewsletterController extends ActionController
             NewsletterUrl::class,
             $request->getQueryParams()['origin'],
             $request->getQueryParams()['layout']
-        );
+        )->setModeTestmail();
         $parseService = GeneralUtility::makeInstance(NewsletterParsing::class);
         $configurationRepository = GeneralUtility::makeInstance(ConfigurationRepository::class);
         $configuration = $configurationRepository->findByUid($request->getQueryParams()['configuration']);
@@ -345,6 +352,7 @@ class NewsletterController extends ActionController
     /**
      * @param ServerRequestInterface $request
      * @return ResponseInterface
+     * @noinspection PhpUnused
      */
     public function receiverDetailAjax(ServerRequestInterface $request): ResponseInterface
     {
@@ -402,7 +410,6 @@ class NewsletterController extends ActionController
             $newsletter['origin'],
             $newsletter['layout']
         );
-        $parseService->setParseVariables(false);
         $configuration = $this->configurationRepository->findByUid((int)$newsletter['configuration']);
         $newsletter['bodytext'] = $parseService->getParsedContent($configuration->getSiteConfiguration());
         $this->request->setArgument('newsletter', $newsletter);

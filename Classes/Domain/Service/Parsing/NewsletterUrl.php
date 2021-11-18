@@ -33,11 +33,24 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 /**
  * Class NewsletterUrl to fill a container html with a content from a http(s) page.
  * This is used for test mails, preview and for storing a bodytext in a newsletter record.
- * The final parse (when sending real newsletters) is done by Parsing\Newsletter class.
+ * The final parse (when generating newsletters records) is done by Parsing\Newsletter class.
  */
 class NewsletterUrl
 {
     use SignalTrait;
+
+    const MODE_NEWSLETTER = 'newsletter';
+    const MODE_TESTMAIL = 'testmail';
+    const MODE_PREVIEW = 'preview';
+
+    /**
+     * "newsletter" for the final parsing of the newsletter (via backend module, via command)
+     * "testmail" for the tes mail from backend module
+     * "preview" for mail preview in backend module
+     *
+     * @var string
+     */
+    protected $mode = self::MODE_NEWSLETTER;
 
     /**
      * Hold origin (number as page identifier or absolute URL)
@@ -57,22 +70,6 @@ class NewsletterUrl
      * @var string Path to container html template like "EXT:sitepackage/../MailContainer.html"
      */
     protected $containerTemplate = '';
-
-    /**
-     * Decide if variables like {user.firstName} should be parsed with fluid or not. For a preview we need to parse the
-     * variables, but for parsing it final to a newsletter record, we don't want to touch the variables (so it can
-     * be replaced later)
-     *
-     * Parse:
-     * - Preview of the newsletter
-     * - Send a test newsletter
-     *
-     * Don't parse:
-     * - When newsletter record is created in createAction in NewsletterController
-     *
-     * @var bool
-     */
-    protected $parseVariables = true;
 
     /**
      * Extension configuration from TypoScript
@@ -152,7 +149,7 @@ class NewsletterUrl
      */
     protected function getNewsletterContainerAndContent(string $content, Site $site, User $user): string
     {
-        if ($this->isParsingActive()) {
+        if ($this->mode === self::MODE_PREVIEW || $this->mode === self::MODE_TESTMAIL) {
             $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
             $standaloneView->setLayoutRootPaths($this->configuration['view']['layoutRootPaths']);
             $standaloneView->setPartialRootPaths($this->configuration['view']['partialRootPaths']);
@@ -175,10 +172,12 @@ class NewsletterUrl
 
             $cssInline = GeneralUtility::makeInstance(CssInline::class);
             $html = $cssInline->addInlineCss($html);
-        } else {
+
+        } elseif ($this->mode === self::MODE_NEWSLETTER) {
             $container = file_get_contents($this->getContainerTemplate(true));
             $html = str_replace('{content}', $content, $container);
         }
+
         $this->signalDispatch(__CLASS__, __FUNCTION__, [&$html, &$content, $user, $this]);
         return $html;
     }
@@ -244,7 +243,7 @@ class NewsletterUrl
             );
         }
         $string = $this->getBodyFromHtml($string);
-        if ($this->isParsingActive()) {
+        if ($this->mode === self::MODE_PREVIEW || $this->mode === self::MODE_TESTMAIL) {
             $parseService = GeneralUtility::makeInstance(Newsletter::class);
             $string = $parseService->parseBodytext($string, ['user' => $user]);
         }
@@ -274,24 +273,6 @@ class NewsletterUrl
         } catch (Exception $exception) {
         }
         return $string;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isParsingActive(): bool
-    {
-        return $this->parseVariables;
-    }
-
-    /**
-     * @param bool $parseVariables
-     * @return NewsletterUrl
-     */
-    public function setParseVariables(bool $parseVariables): self
-    {
-        $this->parseVariables = $parseVariables;
-        return $this;
     }
 
     /**
@@ -362,6 +343,24 @@ class NewsletterUrl
     {
         $layoutService = GeneralUtility::makeInstance(LayoutService::class);
         $this->containerTemplate = $layoutService->getPathAndFilenameFromLayout($layout);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setModeTestmail(): self
+    {
+        $this->mode = self::MODE_TESTMAIL;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setModePreview(): self
+    {
+        $this->mode = self::MODE_PREVIEW;
         return $this;
     }
 }

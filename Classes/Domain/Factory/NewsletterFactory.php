@@ -58,7 +58,6 @@ class NewsletterFactory
         string $date = ''
     ): Newsletter {
         $parseService = GeneralUtility::makeInstance(NewsletterUrl::class, $origin, $layout);
-        $parseService->setParseVariables(false);
 
         $usergroupRepository = GeneralUtility::makeInstance(UsergroupRepository::class);
         $configurationRepository = GeneralUtility::makeInstance(ConfigurationRepository::class);
