@@ -3,15 +3,15 @@ namespace In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service;
 
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
-use In2code\Luxletter\Domain\Service\LinkHashingService;
+use In2code\Luxletter\Domain\Service\BodytextManipulation\LinkHashing;
 
 /**
- * Class RedirectUriServiceFixture
+ * Class LinkHashingFixture
  */
-class LinkHashingServiceFixture extends LinkHashingService
+class LinkHashingFixture extends LinkHashing
 {
     /**
-     * LinkHashingServiceFixture constructor.
+     * LinkHashingFixture constructor.
      * @param Newsletter $newsletter
      * @param User $user
      */

@@ -3,7 +3,6 @@ declare(strict_types = 1);
 namespace In2code\Luxletter\Utility;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
-use TYPO3\CMS\Extbase\Object\Exception;
 
 /**
  * Class StringUtility
@@ -11,6 +10,19 @@ use TYPO3\CMS\Extbase\Object\Exception;
 class StringUtility
 {
     /**
+     * @param string $value
+     * @return bool
+     */
+    public static function isAbsoluteImageUrl(string $value): bool
+    {
+        $imageExtensions = ['png', 'jpg', 'jpeg', 'gif', 'tif', 'tiff', 'webp', 'svg'];
+        return self::isValidUrl($value)
+            && in_array(FileUtility::getExtensionFromPathAndFilename($value), $imageExtensions);
+    }
+
+    /**
+     * Checks for a valid and absolute URL (e.g. "https://domain.org" or "ssh://something")
+     *
      * @param string $value
      * @return bool
      */
@@ -46,7 +58,6 @@ class StringUtility
      * @param bool $useEncryptionKey can be disabled for testing
      * @return string
      * @throws MisconfigurationException
-     * @throws Exception
      */
     public static function getHashFromArguments(array $arguments, bool $useEncryptionKey = true): string
     {

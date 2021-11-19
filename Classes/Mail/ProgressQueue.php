@@ -4,10 +4,10 @@ namespace In2code\Luxletter\Mail;
 
 use In2code\Luxletter\Domain\Model\Queue;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
-use In2code\Luxletter\Domain\Service\CssInlineService;
-use In2code\Luxletter\Domain\Service\LinkHashingService;
+use In2code\Luxletter\Domain\Service\BodytextManipulation\CssInline;
+use In2code\Luxletter\Domain\Service\BodytextManipulation\LinkHashing;
 use In2code\Luxletter\Domain\Service\LogService;
-use In2code\Luxletter\Domain\Service\ParseNewsletterService;
+use In2code\Luxletter\Domain\Service\Parsing\Newsletter;
 use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Signal\SignalTrait;
@@ -39,14 +39,14 @@ class ProgressQueue
     protected $queueRepository = null;
 
     /**
-     * @var ParseNewsletterService|null
+     * @var Newsletter|null
      */
     protected $parseService = null;
 
     /**
-     * @var CssInlineService|null
+     * @var CssInline|null
      */
-    protected $cssInlineService = null;
+    protected $cssInline = null;
 
     /**
      * @var OutputInterface
@@ -60,8 +60,8 @@ class ProgressQueue
     public function __construct(OutputInterface $output)
     {
         $this->queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
-        $this->parseService = GeneralUtility::makeInstance(ParseNewsletterService::class);
-        $this->cssInlineService = GeneralUtility::makeInstance(CssInlineService::class);
+        $this->parseService = GeneralUtility::makeInstance(Newsletter::class);
+        $this->cssInline = GeneralUtility::makeInstance(CssInline::class);
         $this->output = $output;
     }
 
@@ -79,8 +79,8 @@ class ProgressQueue
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
-     * @throws UnknownObjectException
      * @throws SiteNotFoundException
+     * @throws UnknownObjectException
      */
     public function progress(int $limit, int $newsletterIdentifier): int
     {
@@ -175,7 +175,7 @@ class ProgressQueue
             ]
         );
         $bodytext = $this->hashLinksInBodytext($queue, $bodytext);
-        $bodytext = $this->cssInlineService->addInlineCss($bodytext);
+        $bodytext = $this->cssInline->addInlineCss($bodytext);
         return $bodytext;
     }
 
@@ -197,7 +197,7 @@ class ProgressQueue
     {
         if (ConfigurationUtility::isRewriteLinksInNewsletterActivated()) {
             $linkHashing = GeneralUtility::makeInstance(
-                LinkHashingService::class,
+                LinkHashing::class,
                 $queue->getNewsletter(),
                 $queue->getUser()
             );
@@ -211,7 +211,6 @@ class ProgressQueue
      * @return void
      * @throws IllegalObjectTypeException
      * @throws UnknownObjectException
-     * @throws Exception
      */
     protected function markSent(Queue $queue)
     {

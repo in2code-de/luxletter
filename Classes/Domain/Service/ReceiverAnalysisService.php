@@ -3,10 +3,10 @@ declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Service;
 
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
@@ -14,7 +14,6 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  */
 class ReceiverAnalysisService
 {
-
     /**
      * Returns activities per user like:
      *  [
@@ -30,7 +29,7 @@ class ReceiverAnalysisService
      * @param QueryResultInterface $users
      * @return array
      * @throws DBALException
-     * @throws Exception
+     * @throws ExceptionDbalDriver
      */
     public function getActivitiesStatistic(QueryResultInterface $users): array
     {

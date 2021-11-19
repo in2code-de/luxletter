@@ -1,11 +1,17 @@
 <?php
 declare(strict_types = 1);
-namespace In2code\Luxletter\Domain\Service;
+namespace In2code\Luxletter\Domain\Service\Parsing;
 
 use DOMDocument;
 use DOMXpath;
+use Exception;
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\User;
+use In2code\Luxletter\Domain\Service\BodytextManipulation\CssInline;
+use In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding\Preparation;
+use In2code\Luxletter\Domain\Service\LayoutService;
+use In2code\Luxletter\Domain\Service\SiteService;
+use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Exception\UnvalidFilenameException;
@@ -21,19 +27,32 @@ use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Object\Exception;
+use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbaseObject;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
- * Class ParseNewsletterUrlService to fill a container html with a content from a http(s) page.
- * This is used for testmails, preview and for storing a bodytext in a newsletter record.
- * The final parse (when sending real newsletters) is done by ParseNewsletterService class.
+ * Class NewsletterUrl to fill a container html with a content from a http(s) page.
+ * This is used for test mails, preview and for storing a bodytext in a newsletter record.
+ * The final parse (when generating newsletters records) is done by Parsing\Newsletter class.
  */
-class ParseNewsletterUrlService
+class NewsletterUrl
 {
     use SignalTrait;
+
+    const MODE_NEWSLETTER = 'newsletter';
+    const MODE_TESTMAIL = 'testmail';
+    const MODE_PREVIEW = 'preview';
+
+    /**
+     * "newsletter" for the final parsing of the newsletter (via backend module, via command)
+     * "testmail" for the tes mail from backend module
+     * "preview" for mail preview in backend module
+     *
+     * @var string
+     */
+    protected $mode = self::MODE_NEWSLETTER;
 
     /**
      * Hold origin (number as page identifier or absolute URL)
@@ -55,22 +74,6 @@ class ParseNewsletterUrlService
     protected $containerTemplate = '';
 
     /**
-     * Decide if variables like {user.firstName} should be parsed with fluid or not. For a preview we need to parse the
-     * variables, but for parsing it final to a newsletter record, we don't want to touch the variables (so it can
-     * be replaced later)
-     *
-     * Parse:
-     * - Preview of the newsletter
-     * - Send a test newsletter
-     *
-     * Don't parse:
-     * - When newsletter record is created in createAction in NewsletterController
-     *
-     * @var bool
-     */
-    protected $parseVariables = true;
-
-    /**
      * Extension configuration from TypoScript
      *
      * @var array
@@ -78,10 +81,10 @@ class ParseNewsletterUrlService
     protected $configuration = [];
 
     /**
-     * ParseNewsletterUrlService constructor.
+     * NewsletterUrl constructor.
      * @param string $origin can be a page uid or a complete url
      * @param string $layout Container html template filename
-     * @throws Exception
+     * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
@@ -117,7 +120,10 @@ class ParseNewsletterUrlService
      * @param Site $site
      * @param User|null $user
      * @return string
-     * @throws Exception
+     * @throws ApiConnectionException
+     * @throws ExceptionExtbaseObject
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
@@ -141,14 +147,19 @@ class ParseNewsletterUrlService
      * @param Site $site
      * @param User $user
      * @return string
-     * @throws Exception
+     * @throws ApiConnectionException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws MisconfigurationException
      */
     protected function getNewsletterContainerAndContent(string $content, Site $site, User $user): string
     {
-        if ($this->isParsingActive()) {
+        $html = '';
+
+        if ($this->mode === self::MODE_PREVIEW || $this->mode === self::MODE_TESTMAIL) {
             $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
             $standaloneView->setLayoutRootPaths($this->configuration['view']['layoutRootPaths']);
             $standaloneView->setPartialRootPaths($this->configuration['view']['partialRootPaths']);
@@ -168,12 +179,13 @@ class ParseNewsletterUrlService
                 [$standaloneView, $content, $this->configuration, $user, $this]
             );
             $html = $standaloneView->render();
-            $cssInlineService = GeneralUtility::makeInstance(CssInlineService::class);
-            $html = $cssInlineService->addInlineCss($html);
-        } else {
+        } elseif ($this->mode === self::MODE_NEWSLETTER) {
             $container = file_get_contents($this->getContainerTemplate(true));
             $html = str_replace('{content}', $content, $container);
         }
+
+        $html = $this->bodytextManipulation($html);
+
         $this->signalDispatch(__CLASS__, __FUNCTION__, [&$html, &$content, $user, $this]);
         return $html;
     }
@@ -222,7 +234,7 @@ class ParseNewsletterUrlService
      * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
-     * @throws Exception
+     * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException
      */
     protected function getContentFromOrigin(User $user): string
@@ -239,12 +251,36 @@ class ParseNewsletterUrlService
             );
         }
         $string = $this->getBodyFromHtml($string);
-        if ($this->isParsingActive()) {
-            $parseService = GeneralUtility::makeInstance(ParseNewsletterService::class);
+        if ($this->mode === self::MODE_PREVIEW || $this->mode === self::MODE_TESTMAIL) {
+            $parseService = GeneralUtility::makeInstance(Newsletter::class);
             $string = $parseService->parseBodytext($string, ['user' => $user]);
         }
         $this->signalDispatch(__CLASS__, __FUNCTION__, [$string, $user, $this]);
         return $string;
+    }
+
+    /**
+     * Manipulate newsletter bodytext for different modes
+     *
+     * @param string $html
+     * @return string
+     * @throws ApiConnectionException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws InvalidConfigurationTypeException
+     * @throws MisconfigurationException
+     */
+    protected function bodytextManipulation(string $html): string
+    {
+        if ($this->mode === self::MODE_PREVIEW || $this->mode === self::MODE_TESTMAIL) {
+            $cssInline = GeneralUtility::makeInstance(CssInline::class);
+            $html = $cssInline->addInlineCss($html);
+        }
+        if ($this->mode === self::MODE_NEWSLETTER || $this->mode === self::MODE_TESTMAIL) {
+            $preparation = GeneralUtility::makeInstance(Preparation::class);
+            $preparation->storeImages($html);
+        }
+        return $html;
     }
 
     /**
@@ -266,27 +302,9 @@ class ParseNewsletterUrlService
             if (!empty($result)) {
                 return $result;
             }
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
         }
         return $string;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isParsingActive(): bool
-    {
-        return $this->parseVariables;
-    }
-
-    /**
-     * @param bool $parseVariables
-     * @return ParseNewsletterUrlService
-     */
-    public function setParseVariables(bool $parseVariables): self
-    {
-        $this->parseVariables = $parseVariables;
-        return $this;
     }
 
     /**
@@ -315,7 +333,7 @@ class ParseNewsletterUrlService
 
     /**
      * @param string $url
-     * @return ParseNewsletterUrlService
+     * @return NewsletterUrl
      */
     public function setUrl(string $url): self
     {
@@ -337,16 +355,6 @@ class ParseNewsletterUrlService
     }
 
     /**
-     * @param string $containerTemplate
-     * @return ParseNewsletterUrlService
-     */
-    public function setContainerTemplate(string $containerTemplate): ParseNewsletterUrlService
-    {
-        $this->containerTemplate = $containerTemplate;
-        return $this;
-    }
-
-    /**
      * @param string $layout Filename of a layout template file
      * @return $this
      * @throws InvalidConfigurationTypeException
@@ -357,6 +365,24 @@ class ParseNewsletterUrlService
     {
         $layoutService = GeneralUtility::makeInstance(LayoutService::class);
         $this->containerTemplate = $layoutService->getPathAndFilenameFromLayout($layout);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setModeTestmail(): self
+    {
+        $this->mode = self::MODE_TESTMAIL;
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setModePreview(): self
+    {
+        $this->mode = self::MODE_PREVIEW;
         return $this;
     }
 }

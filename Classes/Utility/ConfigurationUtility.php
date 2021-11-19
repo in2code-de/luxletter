@@ -56,6 +56,19 @@ class ConfigurationUtility
     }
 
     /**
+     * @return bool
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    public static function isImageEmbeddingActivated(): bool
+    {
+        return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
+            'luxletter',
+            'embedImagesInNewsletter'
+        ) === '1';
+    }
+
+    /**
      * @return int
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException

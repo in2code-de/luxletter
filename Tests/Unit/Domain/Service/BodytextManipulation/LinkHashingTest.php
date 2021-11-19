@@ -1,20 +1,20 @@
 <?php
-namespace In2code\Luxletter\Tests\Unit\Domain\Service;
+namespace In2code\Luxletter\Tests\Unit\Domain\Service\BodytextManipulation;
 
 use In2code\Luxletter\Domain\Model\Configuration;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
-use In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service\LinkHashingServiceFixture;
+use In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service\LinkHashingFixture;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 
 /**
  * Class FileUtilityTest
- * @coversDefaultClass \In2code\Luxletter\Domain\Service\LinkHashingService
+ * @coversDefaultClass \In2code\Luxletter\Domain\Service\BodytextManipulation\LinkHashing
  */
-class LinkHashingServiceTest extends UnitTestCase
+class LinkHashingTest extends UnitTestCase
 {
     /**
-     * @var \In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service\LinkHashingServiceFixture
+     * @var \In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service\LinkHashingFixture
      */
     protected $generalValidatorMock;
 
@@ -27,7 +27,7 @@ class LinkHashingServiceTest extends UnitTestCase
         $newsletter = new Newsletter();
         $newsletter->setConfiguration($configuration);
         $this->generalValidatorMock = $this->getAccessibleMock(
-            LinkHashingServiceFixture::class,
+            LinkHashingFixture::class,
             ['dummy'],
             [
                 $newsletter,

@@ -3,8 +3,8 @@ namespace In2code\Luxletter\Tests\Functional\Domain\Service;
 
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\User;
-use In2code\Luxletter\Domain\Service\ParseNewsletterService;
-use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
+use In2code\Luxletter\Domain\Service\Parsing\Newsletter;
+use In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl;
 use Nimut\TestingFramework\TestCase\FunctionalTestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -20,13 +20,13 @@ use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
- * Class ParseNewsletterUrlServiceTest
- * @coversDefaultClass \In2code\Luxletter\Domain\Service\ParseNewsletterUrlService
+ * Class NewsletterUrlTest
+ * @coversDefaultClass \In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl
  */
-class ParseNewsletterUrlServiceTest extends FunctionalTestCase
+class NewsletterUrlTest extends FunctionalTestCase
 {
     /**
-     * @var ParseNewsletterUrlService
+     * @var NewsletterUrl
      */
     protected $subject;
 
@@ -46,7 +46,7 @@ class ParseNewsletterUrlServiceTest extends FunctionalTestCase
     protected $userFactory;
 
     /**
-     * @var ParseNewsletterService|ObjectProphecy
+     * @var Newsletter|ObjectProphecy
      */
     protected $parseNewsletterService;
 
@@ -57,7 +57,7 @@ class ParseNewsletterUrlServiceTest extends FunctionalTestCase
 
     protected function setUp()
     {
-        $this->subject = GeneralUtility::makeInstance(ParseNewsletterUrlService::class, 'http://example.com/');
+        $this->subject = GeneralUtility::makeInstance(NewsletterUrl::class, 'http://example.com/');
 
         /** @var Dispatcher|ObjectProphecy $dispatcher */
         $dispatcher = $this->prophesize(Dispatcher::class);
@@ -76,7 +76,7 @@ class ParseNewsletterUrlServiceTest extends FunctionalTestCase
             ->shouldBeCalled()
             ->willReturn($user);
 
-        $this->parseNewsletterService = $this->prophesize(ParseNewsletterService::class);
+        $this->parseNewsletterService = $this->prophesize(Newsletter::class);
         $this->parseNewsletterService
             ->parseSubject(Argument::cetera())
             ->shouldBeCalled()
@@ -115,7 +115,7 @@ class ParseNewsletterUrlServiceTest extends FunctionalTestCase
             ->shouldBeCalled()
             ->willReturn($this->userFactory->reveal());
         $this->objectManager
-            ->get(ParseNewsletterService::class)
+            ->get(Newsletter::class)
             ->shouldBeCalled()
             ->willReturn($this->parseNewsletterService->reveal());
         $this->objectManager

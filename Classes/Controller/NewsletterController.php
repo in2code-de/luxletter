@@ -16,10 +16,11 @@ use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\LayoutService;
-use In2code\Luxletter\Domain\Service\ParseNewsletterService;
-use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
+use In2code\Luxletter\Domain\Service\Parsing\Newsletter as NewsletterParsing;
+use In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
+use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
@@ -30,6 +31,8 @@ use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -112,6 +115,7 @@ class NewsletterController extends ActionController
      * @throws DBALException
      * @throws ExceptionDbalDriver
      * @throws ExceptionDbal
+     * @noinspection PhpUnused
      */
     public function dashboardAction(): void
     {
@@ -147,6 +151,7 @@ class NewsletterController extends ActionController
     /**
      * @return void
      * @throws InvalidConfigurationTypeException
+     * @noinspection PhpUnused
      */
     public function newAction(): void
     {
@@ -166,6 +171,7 @@ class NewsletterController extends ActionController
      * @throws MisconfigurationException
      * @throws NoSuchArgumentException
      * @throws InvalidArgumentNameException
+     * @noinspection PhpUnused
      */
     public function initializeCreateAction(): void
     {
@@ -213,6 +219,7 @@ class NewsletterController extends ActionController
      * @throws IllegalObjectTypeException
      * @throws StopActionException
      * @throws UnknownObjectException
+     * @noinspection PhpUnused
      */
     public function enableAction(Newsletter $newsletter): void
     {
@@ -262,9 +269,10 @@ class NewsletterController extends ActionController
     /**
      * @param Filter $filter
      * @return void
-     * @throws InvalidQueryException
-     * @throws ExceptionExtbaseObject
      * @throws DBALException
+     * @throws ExceptionDbalDriver
+     * @throws InvalidQueryException
+     * @noinspection PhpUnused
      */
     public function receiverAction(Filter $filter): void
     {
@@ -284,6 +292,7 @@ class NewsletterController extends ActionController
      * @return ResponseInterface
      * @throws DBALException
      * @throws ExceptionDbalDriver
+     * @noinspection PhpUnused
      */
     public function wizardUserPreviewAjax(ServerRequestInterface $request): ResponseInterface
     {
@@ -311,6 +320,10 @@ class NewsletterController extends ActionController
      * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
+     * @throws ApiConnectionException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @noinspection PhpUnused
      */
     public function testMailAjax(ServerRequestInterface $request): ResponseInterface
     {
@@ -318,11 +331,11 @@ class NewsletterController extends ActionController
             throw new AuthenticationFailedException('You are not authenticated to send mails', 1560872725);
         }
         $parseUrlService = GeneralUtility::makeInstance(
-            ParseNewsletterUrlService::class,
+            NewsletterUrl::class,
             $request->getQueryParams()['origin'],
             $request->getQueryParams()['layout']
-        );
-        $parseService = GeneralUtility::makeInstance(ParseNewsletterService::class);
+        )->setModeTestmail();
+        $parseService = GeneralUtility::makeInstance(NewsletterParsing::class);
         $configurationRepository = GeneralUtility::makeInstance(ConfigurationRepository::class);
         $configuration = $configurationRepository->findByUid($request->getQueryParams()['configuration']);
         $userFactory = GeneralUtility::makeInstance(UserFactory::class);
@@ -345,6 +358,7 @@ class NewsletterController extends ActionController
     /**
      * @param ServerRequestInterface $request
      * @return ResponseInterface
+     * @noinspection PhpUnused
      */
     public function receiverDetailAjax(ServerRequestInterface $request): ResponseInterface
     {
@@ -398,11 +412,10 @@ class NewsletterController extends ActionController
     {
         $newsletter = (array)$this->request->getArgument('newsletter');
         $parseService = GeneralUtility::makeInstance(
-            ParseNewsletterUrlService::class,
+            NewsletterUrl::class,
             $newsletter['origin'],
             $newsletter['layout']
         );
-        $parseService->setParseVariables(false);
         $configuration = $this->configurationRepository->findByUid((int)$newsletter['configuration']);
         $newsletter['bodytext'] = $parseService->getParsedContent($configuration->getSiteConfiguration());
         $this->request->setArgument('newsletter', $newsletter);
