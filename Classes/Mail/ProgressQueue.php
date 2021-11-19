@@ -8,6 +8,7 @@ use In2code\Luxletter\Domain\Service\BodytextManipulation\CssInline;
 use In2code\Luxletter\Domain\Service\BodytextManipulation\LinkHashing;
 use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Domain\Service\Parsing\Newsletter;
+use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Signal\SignalTrait;
@@ -81,6 +82,7 @@ class ProgressQueue
      * @throws MisconfigurationException
      * @throws UnknownObjectException
      * @throws SiteNotFoundException
+     * @throws ApiConnectionException
      */
     public function progress(int $limit, int $newsletterIdentifier): int
     {
@@ -113,6 +115,7 @@ class ProgressQueue
      * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
      * @throws SiteNotFoundException
+     * @throws ApiConnectionException
      */
     protected function sendNewsletterToReceiverInQueue(Queue $queue): void
     {
@@ -211,7 +214,6 @@ class ProgressQueue
      * @return void
      * @throws IllegalObjectTypeException
      * @throws UnknownObjectException
-     * @throws Exception
      */
     protected function markSent(Queue $queue)
     {

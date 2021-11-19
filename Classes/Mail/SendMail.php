@@ -3,14 +3,18 @@ declare(strict_types = 1);
 namespace In2code\Luxletter\Mail;
 
 use In2code\Luxletter\Domain\Model\Configuration;
+use In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding;
+use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Signal\SignalTrait;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * Class SendMail
+ * is used for testmails and for final newsletter mails
  */
 class SendMail
 {
@@ -47,9 +51,11 @@ class SendMail
     /**
      * @param array $receiver ['a@mail.org' => 'Receivername']
      * @return bool the number of recipients who were accepted for delivery
+     * @throws ApiConnectionException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws Exception
      */
     public function sendNewsletter(array $receiver): bool
     {
@@ -61,11 +67,34 @@ class SendMail
             ->setFrom([$this->configuration->getFromEmail() => $this->configuration->getFromName()])
             ->setReplyTo([$this->configuration->getReplyEmail() => $this->configuration->getReplyName()])
             ->setSubject($this->subject)
-            ->html($this->bodytext);
+            ->html($this->getBodytext($mailMessage));
         $this->signalDispatch(__CLASS__, 'sendmailMessage', [$mailMessage, &$send, $receiver, $this]);
         if ($send === true) {
             return $mailMessage->send();
         }
         return false;
+    }
+
+    /**
+     * Get the bodytext (with or without embedded images)
+     *
+     * @param MailMessage $mailMessage
+     * @return string
+     * @throws ApiConnectionException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    protected function getBodytext(MailMessage $mailMessage): string
+    {
+        $imageEmbedding = GeneralUtility::makeInstance(ImageEmbedding::class);
+        $imageEmbedding->setBodytext($this->bodytext);
+        if ($imageEmbedding->isActive()) {
+            $images = $imageEmbedding->getImages();
+            foreach ($images as $name => $content) {
+                $mailMessage->embed($content, $name);
+            }
+            return $imageEmbedding->getRewrittenContent();
+        }
+        return $this->bodytext;
     }
 }

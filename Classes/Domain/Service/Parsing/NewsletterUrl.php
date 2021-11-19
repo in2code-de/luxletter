@@ -172,7 +172,6 @@ class NewsletterUrl
 
             $cssInline = GeneralUtility::makeInstance(CssInline::class);
             $html = $cssInline->addInlineCss($html);
-
         } elseif ($this->mode === self::MODE_NEWSLETTER) {
             $container = file_get_contents($this->getContainerTemplate(true));
             $html = str_replace('{content}', $content, $container);
