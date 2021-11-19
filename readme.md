@@ -164,6 +164,7 @@ Breaking changes in detail and what you have to do step by step after you have u
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 10.0.ß     | 2021.11.19  | Feature    | Enable automatic embedding of images into newsletter mails                                                                                                                                 |
 | 9.0.4      | 2021.11.09  | Bugfix     | doctrine/dbal >= 2.11.0 is supported since luxletter supports TYPO3 11 - updated requirements in composer.json file                                                                        |
 | 9.0.3      | 2021.11.09  | Bugfix     | Use absolute URL for news list view                                                                                                                                                        |
 | 9.0.2      | 2021.11.03  | Bugfix     | Fix command return values for TYPO3 10                                                                                                                                                     |
