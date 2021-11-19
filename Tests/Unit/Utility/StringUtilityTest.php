@@ -17,6 +17,25 @@ class StringUtilityTest extends UnitTestCase
      * @SuppressWarnings(PHPMD.Superglobals)
      * @covers ::getFilenameFromPathAndFilename
      */
+    public function testIsAbsoluteImageUrl(): void
+    {
+        $this->assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.png'));
+        $this->assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.jpeg'));
+        $this->assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.gif'));
+        $this->assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.jpg'));
+        $this->assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.webp'));
+        $this->assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.svg'));
+        $this->assertFalse(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.svg/path'));
+        $this->assertFalse(StringUtility::isAbsoluteImageUrl('https://www.in2code.de'));
+        $this->assertFalse(StringUtility::isAbsoluteImageUrl('http://in2code.de/fileadmin/whitepaper.pdf'));
+        $this->assertFalse(StringUtility::isAbsoluteImageUrl('/folder/page.jpg'));
+    }
+
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @covers ::getFilenameFromPathAndFilename
+     */
     public function testIsValidUrl(): void
     {
         $this->assertTrue(StringUtility::isValidUrl('https://www.in2code.de'));

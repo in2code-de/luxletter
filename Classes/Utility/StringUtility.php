@@ -10,7 +10,18 @@ use In2code\Luxletter\Exception\MisconfigurationException;
 class StringUtility
 {
     /**
-     * Checks for a valid URL (e.g. "https://domain.org" or "ssh://something")
+     * @param string $value
+     * @return bool
+     */
+    public static function isAbsoluteImageUrl(string $value): bool
+    {
+        $imageExtensions = ['png', 'jpg', 'jpeg', 'gif', 'tif', 'tiff', 'webp', 'svg'];
+        return self::isValidUrl($value)
+            && in_array(FileUtility::getExtensionFromPathAndFilename($value), $imageExtensions);
+    }
+
+    /**
+     * Checks for a valid and absolute URL (e.g. "https://domain.org" or "ssh://something")
      *
      * @param string $value
      * @return bool

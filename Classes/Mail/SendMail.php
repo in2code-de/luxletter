@@ -3,8 +3,8 @@ declare(strict_types = 1);
 namespace In2code\Luxletter\Mail;
 
 use In2code\Luxletter\Domain\Model\Configuration;
-use In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding;
-use In2code\Luxletter\Exception\ApiConnectionException;
+use In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding\Execution;
+use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Signal\SignalTrait;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
@@ -51,11 +51,11 @@ class SendMail
     /**
      * @param array $receiver ['a@mail.org' => 'Receivername']
      * @return bool the number of recipients who were accepted for delivery
-     * @throws ApiConnectionException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws MisconfigurationException
      */
     public function sendNewsletter(array $receiver): bool
     {
@@ -80,18 +80,18 @@ class SendMail
      *
      * @param MailMessage $mailMessage
      * @return string
-     * @throws ApiConnectionException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws MisconfigurationException
      */
     protected function getBodytext(MailMessage $mailMessage): string
     {
-        $imageEmbedding = GeneralUtility::makeInstance(ImageEmbedding::class);
-        $imageEmbedding->setBodytext($this->bodytext);
+        $imageEmbedding = GeneralUtility::makeInstance(Execution::class);
         if ($imageEmbedding->isActive()) {
+            $imageEmbedding->setBodytext($this->bodytext);
             $images = $imageEmbedding->getImages();
-            foreach ($images as $name => $content) {
-                $mailMessage->embed($content, $name);
+            foreach ($images as $name => $pathAndFilename) {
+                $mailMessage->embedFromPath($pathAndFilename, $name);
             }
             return $imageEmbedding->getRewrittenContent();
         }

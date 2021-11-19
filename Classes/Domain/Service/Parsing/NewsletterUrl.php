@@ -8,8 +8,10 @@ use Exception;
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Service\BodytextManipulation\CssInline;
+use In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding\Preparation;
 use In2code\Luxletter\Domain\Service\LayoutService;
 use In2code\Luxletter\Domain\Service\SiteService;
+use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Exception\UnvalidFilenameException;
@@ -118,7 +120,10 @@ class NewsletterUrl
      * @param Site $site
      * @param User|null $user
      * @return string
+     * @throws ApiConnectionException
      * @throws ExceptionExtbaseObject
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
@@ -142,13 +147,18 @@ class NewsletterUrl
      * @param Site $site
      * @param User $user
      * @return string
-     * @throws ExceptionExtbaseObject
+     * @throws ApiConnectionException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws MisconfigurationException
      */
     protected function getNewsletterContainerAndContent(string $content, Site $site, User $user): string
     {
+        $html = '';
+
         if ($this->mode === self::MODE_PREVIEW || $this->mode === self::MODE_TESTMAIL) {
             $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
             $standaloneView->setLayoutRootPaths($this->configuration['view']['layoutRootPaths']);
@@ -169,13 +179,12 @@ class NewsletterUrl
                 [$standaloneView, $content, $this->configuration, $user, $this]
             );
             $html = $standaloneView->render();
-
-            $cssInline = GeneralUtility::makeInstance(CssInline::class);
-            $html = $cssInline->addInlineCss($html);
         } elseif ($this->mode === self::MODE_NEWSLETTER) {
             $container = file_get_contents($this->getContainerTemplate(true));
             $html = str_replace('{content}', $content, $container);
         }
+
+        $html = $this->bodytextManipulation($html);
 
         $this->signalDispatch(__CLASS__, __FUNCTION__, [&$html, &$content, $user, $this]);
         return $html;
@@ -251,6 +260,30 @@ class NewsletterUrl
     }
 
     /**
+     * Manipulate newsletter bodytext for different modes
+     *
+     * @param string $html
+     * @return string
+     * @throws ApiConnectionException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws InvalidConfigurationTypeException
+     * @throws MisconfigurationException
+     */
+    protected function bodytextManipulation(string $html): string
+    {
+        if ($this->mode === self::MODE_PREVIEW || $this->mode === self::MODE_TESTMAIL) {
+            $cssInline = GeneralUtility::makeInstance(CssInline::class);
+            $html = $cssInline->addInlineCss($html);
+        }
+        if ($this->mode === self::MODE_NEWSLETTER || $this->mode === self::MODE_TESTMAIL) {
+            $preparation = GeneralUtility::makeInstance(Preparation::class);
+            $preparation->storeImages($html);
+        }
+        return $html;
+    }
+
+    /**
      * @param string $string
      * @return string
      */
@@ -319,16 +352,6 @@ class NewsletterUrl
             $containerTemplate = GeneralUtility::getFileAbsFileName($containerTemplate);
         }
         return $containerTemplate;
-    }
-
-    /**
-     * @param string $containerTemplate
-     * @return NewsletterUrl
-     */
-    public function setContainerTemplate(string $containerTemplate): self
-    {
-        $this->containerTemplate = $containerTemplate;
-        return $this;
     }
 
     /**
