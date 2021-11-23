@@ -60,13 +60,13 @@ template on root (otherwise the paths could not be recognized by the backend mod
 Next copy the template file NewsletterContainer.html to your sitepackage in
 `EXT:sitepackage/Resources/Private/Templates/Mail/` and modify it a bit with your wanted HTML.
 
-Now you can include the file with a ext_typoscript_setup.typoscript file
+Now you can include the file with a **ext_typoscript_setup.typoscript** file
 (that is **important** to include the TypoScript after the TypoScript of luxletter):
 
 `@import 'EXT:sitepackage/Configuration/TypoScript/setup.typoscript'`
 
-**Note:** The ordering of the TypoScript is the key to change the template files
-**Note:** You can check this in the TypoScript Object Browser
+**Note:** The ordering of the TypoScript is the key solution to change the template files - check this in the TypoScript Object Browser
+
 **Note:** If your TypoScript is still overruled by the default TS, ensure that luxletter is loaded before your sitepackage (via ext_emconf.php depends settings in your sitepackage)
 
 ## Extending luxletter

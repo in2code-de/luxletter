@@ -25,19 +25,6 @@ class FileUtility
     }
 
     /**
-     * @param string $pathAndFilename like "/var/www/file.pdf"
-     * @return string "file"
-     */
-    public static function getFilenameFromPathAndFilename(string $pathAndFilename): string
-    {
-        $parts = pathinfo($pathAndFilename);
-        if (isset($parts['basename'])) {
-            return $parts['basename'];
-        }
-        return '';
-    }
-
-    /**
      * @param string $path absolute path
      * @return void
      */

@@ -31,7 +31,9 @@ CREATE TABLE tx_luxletter_domain_model_newsletter (
 
 	PRIMARY KEY (uid),
 	KEY parent (pid),
-	KEY language (l10n_parent,sys_language_uid)
+	KEY language (l10n_parent,sys_language_uid),
+	KEY receiver (receiver),
+	KEY configuration (configuration)
 );
 
 CREATE TABLE tx_luxletter_domain_model_queue (
@@ -58,7 +60,9 @@ CREATE TABLE tx_luxletter_domain_model_queue (
 
 	PRIMARY KEY (uid),
 	KEY parent (pid),
-	KEY language (l10n_parent,sys_language_uid)
+	KEY language (l10n_parent,sys_language_uid),
+	KEY newsletter (newsletter),
+	KEY user (user)
 );
 
 CREATE TABLE tx_luxletter_domain_model_log (
@@ -82,7 +86,9 @@ CREATE TABLE tx_luxletter_domain_model_log (
 
 	PRIMARY KEY (uid),
 	KEY parent (pid),
-	KEY language (l10n_parent,sys_language_uid)
+	KEY language (l10n_parent,sys_language_uid),
+	KEY newsletter (newsletter),
+	KEY user (user)
 );
 
 CREATE TABLE tx_luxletter_domain_model_link (
@@ -107,7 +113,9 @@ CREATE TABLE tx_luxletter_domain_model_link (
 	PRIMARY KEY (uid),
 	KEY parent (pid),
 	KEY language (l10n_parent,sys_language_uid),
-	INDEX hash (hash(8))
+	KEY hash (hash(8)),
+	KEY newsletter (newsletter),
+	KEY user (user)
 );
 
 CREATE TABLE tx_luxletter_domain_model_configuration (

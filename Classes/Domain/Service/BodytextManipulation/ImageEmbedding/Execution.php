@@ -5,7 +5,6 @@ namespace In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding;
 use DOMDocument;
 use DOMElement;
 use In2code\Luxletter\Exception\MisconfigurationException;
-use In2code\Luxletter\Utility\FileUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use TYPO3\CMS\Core\SingletonInterface;
 use UnexpectedValueException;
@@ -39,12 +38,13 @@ class Execution extends AbstractEmbedding implements SingletonInterface
     }
 
     /**
-     * Get bodytext of a mail and rewrite src to (e.g.) "cig:image-0"
+     * Get bodytext of a mail and rewrite src to (e.g.) "cig:name_1"
      *
      * Example return value:
      *  [
-     *      'imagehash1' => '/var/www/imagehash1.jpg',
-     *      'imagehash2' => '/var/www/imagehash2.jpg',
+     *      'name_1' => '/var/www/imagehash1.jpg',
+     *      'name_2' => '/var/www/imagehash2.jpg',
+     *      'name_3' => '/var/www/imagehash1.jpg',
      *  ]
      *
      * @return array
@@ -57,12 +57,14 @@ class Execution extends AbstractEmbedding implements SingletonInterface
         $images = [];
         $imageTags = $this->dom->getElementsByTagName('img');
         /** @var DOMElement $imageTag */
+        $iterator = 1;
         foreach ($imageTags as $imageTag) {
             $src = $imageTag->getAttribute('src');
             if (StringUtility::isAbsoluteImageUrl($src)) {
                 $pathAndFilename = $this->getNewImagePathAndFilename($src);
                 if (file_exists($pathAndFilename)) {
-                    $images[FileUtility::getFilenameFromPathAndFilename($pathAndFilename)] = $pathAndFilename;
+                    $images['name_' . $iterator] = $pathAndFilename;
+                    $iterator++;
                 }
             }
         }
@@ -70,7 +72,7 @@ class Execution extends AbstractEmbedding implements SingletonInterface
     }
 
     /**
-     * Rewrite src to "cid:imagehash1"
+     * Rewrite src to "cid:name_1"
      *
      * @return string
      * @throws MisconfigurationException
@@ -81,12 +83,14 @@ class Execution extends AbstractEmbedding implements SingletonInterface
 
         $imageTags = $this->dom->getElementsByTagName('img');
         /** @var DOMElement $imageTag */
+        $iterator = 1;
         foreach ($imageTags as $imageTag) {
             $src = $imageTag->getAttribute('src');
             if (StringUtility::isAbsoluteImageUrl($src)) {
                 $pathAndFilename = $this->getNewImagePathAndFilename($src);
                 if (file_exists($pathAndFilename)) {
-                    $imageTag->setAttribute('src', 'cid:' . FileUtility::getFilenameFromPathAndFilename($pathAndFilename));
+                    $imageTag->setAttribute('src', 'cid:name_' . $iterator);
+                    $iterator++;
                 }
             }
         }
