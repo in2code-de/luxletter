@@ -86,7 +86,8 @@ class Execution extends AbstractEmbedding implements SingletonInterface
             if (StringUtility::isAbsoluteImageUrl($src)) {
                 $pathAndFilename = $this->getNewImagePathAndFilename($src);
                 if (file_exists($pathAndFilename)) {
-                    $imageTag->setAttribute('src', 'cid:' . FileUtility::getFilenameFromPathAndFilename($pathAndFilename));
+                    $hash = FileUtility::getFilenameFromPathAndFilename($pathAndFilename);
+                    $imageTag->setAttribute('src', 'cid:' . $hash);
                 }
             }
         }

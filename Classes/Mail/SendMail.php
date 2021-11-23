@@ -90,8 +90,8 @@ class SendMail
         if ($imageEmbedding->isActive()) {
             $imageEmbedding->setBodytext($this->bodytext);
             $images = $imageEmbedding->getImages();
-            foreach ($images as $name => $pathAndFilename) {
-                $mailMessage->embedFromPath($pathAndFilename, $name);
+            foreach ($images as $hash => $pathAndFilename) {
+                $mailMessage->embedFromPath($pathAndFilename, $hash);
             }
             return $imageEmbedding->getRewrittenContent();
         }
