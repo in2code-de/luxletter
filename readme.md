@@ -164,6 +164,7 @@ Breaking changes in detail and what you have to do step by step after you have u
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 10.2.0     | 2021.12.08  | Bugfix     | Allow embedding of more then only 9 images, add automatic tests for Execution class                                                                                                        |
 | 10.1.0     | 2021.11.23  | Feature    | Add mysql table indices for a better performance, show dummy images in news list if there are now news, allow multiple embedding of the the same image now                                 |
 | 10.0.0     | 2021.11.19  | Feature    | Enable automatic embedding of images into newsletter mails                                                                                                                                 |
 | 9.0.4      | 2021.11.09  | Bugfix     | doctrine/dbal >= 2.11.0 is supported since luxletter supports TYPO3 11 - updated requirements in composer.json file                                                                        |
