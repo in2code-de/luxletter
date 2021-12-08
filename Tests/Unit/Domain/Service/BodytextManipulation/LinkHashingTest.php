@@ -4,7 +4,7 @@ namespace In2code\Luxletter\Tests\Unit\Domain\Service\BodytextManipulation;
 use In2code\Luxletter\Domain\Model\Configuration;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
-use In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service\LinkHashingFixture;
+use In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service\BodytextManipulation\LinkHashingFixture;
 use Nimut\TestingFramework\TestCase\UnitTestCase;
 
 /**
@@ -14,7 +14,7 @@ use Nimut\TestingFramework\TestCase\UnitTestCase;
 class LinkHashingTest extends UnitTestCase
 {
     /**
-     * @var \In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service\LinkHashingFixture
+     * @var LinkHashingFixture
      */
     protected $generalValidatorMock;
 

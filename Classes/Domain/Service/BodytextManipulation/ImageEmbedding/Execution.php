@@ -42,9 +42,9 @@ class Execution extends AbstractEmbedding implements SingletonInterface
      *
      * Example return value:
      *  [
-     *      'name_1' => '/var/www/imagehash1.jpg',
-     *      'name_2' => '/var/www/imagehash2.jpg',
-     *      'name_3' => '/var/www/imagehash1.jpg',
+     *      'name_00000001' => '/var/www/imagehash1.jpg',
+     *      'name_00000002' => '/var/www/imagehash2.jpg',
+     *      'name_00000003' => '/var/www/imagehash1.jpg',
      *  ]
      *
      * @return array
@@ -63,7 +63,7 @@ class Execution extends AbstractEmbedding implements SingletonInterface
             if (StringUtility::isAbsoluteImageUrl($src)) {
                 $pathAndFilename = $this->getNewImagePathAndFilename($src);
                 if (file_exists($pathAndFilename)) {
-                    $images['name_' . $iterator] = $pathAndFilename;
+                    $images[$this->getEmbedNameFromIterator($iterator)] = $pathAndFilename;
                     $iterator++;
                 }
             }
@@ -72,7 +72,7 @@ class Execution extends AbstractEmbedding implements SingletonInterface
     }
 
     /**
-     * Rewrite src to "cid:name_1"
+     * Rewrite src to "cid:name_00000001"
      *
      * @return string
      * @throws MisconfigurationException
@@ -89,12 +89,21 @@ class Execution extends AbstractEmbedding implements SingletonInterface
             if (StringUtility::isAbsoluteImageUrl($src)) {
                 $pathAndFilename = $this->getNewImagePathAndFilename($src);
                 if (file_exists($pathAndFilename)) {
-                    $imageTag->setAttribute('src', 'cid:name_' . $iterator);
+                    $imageTag->setAttribute('src', 'cid:' . $this->getEmbedNameFromIterator($iterator));
                     $iterator++;
                 }
             }
         }
         return $this->dom->saveHTML();
+    }
+
+    /**
+     * @param int $iterator
+     * @return string "name_00000012"
+     */
+    protected function getEmbedNameFromIterator(int $iterator): string
+    {
+        return 'name_' . str_pad((string)$iterator, 8, '0', STR_PAD_LEFT);
     }
 
     /**
