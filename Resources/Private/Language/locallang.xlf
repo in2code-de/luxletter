@@ -254,7 +254,7 @@
 				<source>Not yet identified</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.receiverdetail.notidentified.text">
-				<source>This newsletter receiver is not yet identified in lux</source>
+				<source>This newsletter receiver is not yet identified in LUX</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.receiverdetail.activities.title">
 				<source>Activities</source>
