@@ -7,6 +7,13 @@
 				<source>Is newsletter receiver group?</source>
 			</trans-unit>
 
+			<trans-unit id="pages.doktype_luxletter">
+				<source>Newsletter</source>
+			</trans-unit>
+			<trans-unit id="pages.luxletter_subject">
+				<source>Mail subject</source>
+			</trans-unit>
+
 			<trans-unit id="ctype.teaser">
 				<source>Teaser element</source>
 			</trans-unit>

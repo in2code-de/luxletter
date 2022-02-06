@@ -1,7 +1,3 @@
-CREATE TABLE fe_groups (
-	luxletter_receiver tinyint(4) unsigned DEFAULT '0' NOT NULL
-);
-
 CREATE TABLE tx_luxletter_domain_model_newsletter (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
@@ -141,4 +137,12 @@ CREATE TABLE tx_luxletter_domain_model_configuration (
 	PRIMARY KEY (uid),
 	KEY parent (pid),
 	KEY language (l10n_parent,sys_language_uid)
+);
+
+CREATE TABLE fe_groups (
+	luxletter_receiver tinyint(4) unsigned DEFAULT '0' NOT NULL
+);
+
+CREATE TABLE pages (
+	luxletter_subject text NOT NULL,
 );

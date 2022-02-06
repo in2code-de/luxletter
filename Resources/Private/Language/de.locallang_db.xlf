@@ -8,6 +8,15 @@
 				<target state="translated">Ist eine Newsletter Empfänger Gruppe?</target>
 			</trans-unit>
 
+			<trans-unit id="pages.doktype_luxletter">
+				<source>Newsletter</source>
+				<target state="translated">Newsletter</target>
+			</trans-unit>
+			<trans-unit id="pages.luxletter_subject">
+				<source>Mail subject</source>
+				<target state="translated">Betreffzeile der E-Mail</target>
+			</trans-unit>
+
 			<trans-unit id="ctype.teaser">
 				<source>Teaser element</source>
 				<target state="translated">Teaser Element</target>
