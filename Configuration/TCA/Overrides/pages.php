@@ -44,27 +44,28 @@ call_user_func(
                     ]
                 ]
             );
-        }
 
-        $columns = [
-            'luxletter_subject' => [
-                'exclude' => true,
-                'label' => $llPath . 'pages.luxletter_subject',
-                'displayCond' => 'FIELD:doktype:=:' . $doktype,
-                'config' => [
-                    'type' => 'input',
-                    'placeholder' => 'Your new newsletter for product A (2022/01)',
-                    'description' => $llPath . 'module.newsletter.new.field.subject.description',
-                    'default' => '',
+            $columns = [
+                'luxletter_subject' => [
+                    'exclude' => true,
+                    'label' => $llPath . 'pages.luxletter_subject',
+                    'displayCond' => 'FIELD:doktype:=:' . $doktype,
+                    'config' => [
+                        'type' => 'input',
+                        'placeholder' => 'Your new newsletter for product A (2022/01)',
+                        'description' => $llPath . 'module.newsletter.new.field.subject.description',
+                        'default' => '',
+                        'eval' => 'trim,required',
+                    ]
                 ]
-            ]
-        ];
-        ExtensionManagementUtility::addTCAcolumns('pages', $columns);
-        ExtensionManagementUtility::addToAllTCAtypes(
-            'pages',
-            '--div--;Luxletter,luxletter_subject',
-            '',
-            'after:rowDescription'
-        );
+            ];
+            ExtensionManagementUtility::addTCAcolumns('pages', $columns);
+            ExtensionManagementUtility::addToAllTCAtypes(
+                'pages',
+                '--div--;Luxletter,luxletter_subject',
+                '',
+                'after:rowDescription'
+            );
+        }
     }
 );

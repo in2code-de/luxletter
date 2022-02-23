@@ -10,15 +10,18 @@ use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Service\BodytextManipulation\CssInline;
 use In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding\Preparation;
 use In2code\Luxletter\Domain\Service\LayoutService;
+use In2code\Luxletter\Domain\Service\RequestService;
 use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
+use In2code\Luxletter\Exception\RequestException;
 use In2code\Luxletter\Exception\UnvalidFilenameException;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
+use Throwable;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
@@ -94,17 +97,17 @@ class NewsletterUrl
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws UnvalidFilenameException
      */
-    public function __construct(string $origin, string $layout)
+    public function __construct(string $origin, string $layout, int $language)
     {
         $this->configuration = ConfigurationUtility::getExtensionSettings();
         $this->setContainerTemplateFromLayout($layout);
 
         $url = '';
         if (MathUtility::canBeInterpretedAsInteger($origin)) {
-            $arguments = [];
+            $arguments = ['_language' => $language];
             $typenum = ConfigurationUtility::getTypeNumToNumberLocation();
             if ($typenum > 0) {
-                $arguments = ['type' => $typenum];
+                $arguments += ['type' => $typenum];
             }
             $siteService = GeneralUtility::makeInstance(SiteService::class);
             $url = $siteService->getPageUrlFromParameter((int)$origin, $arguments);
@@ -129,6 +132,7 @@ class NewsletterUrl
      * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
+     * @throws RequestException
      */
     public function getParsedContent(Site $site, User $user = null): string
     {
@@ -236,14 +240,17 @@ class NewsletterUrl
      * @throws MisconfigurationException
      * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException
+     * @throws RequestException
      */
     protected function getContentFromOrigin(User $user): string
     {
         if ($this->url === '') {
             throw new InvalidUrlException('Given URL was invalid and was not parsed', 1560709687);
         }
-        $string = GeneralUtility::getUrl($this->url);
-        if ($string === false) {
+        $requestService = GeneralUtility::makeInstance(RequestService::class);
+        try {
+            $string = $requestService->getContentFromUrl($this->url);
+        } catch (Throwable $exception) {
             throw new MisconfigurationException(
                 'Given URL could not be parsed and accessed (Tried to read url: ' . $this->url
                 . '). Typenum definition in site-configuration not set? Fluid Styled Mail Content TypoScript added?',
