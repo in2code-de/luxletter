@@ -28,6 +28,7 @@ use In2code\Luxletter\Exception\RequestException;
 use In2code\Luxletter\Mail\TestMail;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\BackendUserUtility;
+use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
@@ -207,6 +208,15 @@ class NewsletterController extends ActionController
         foreach ($languages as $language) {
             $newsletterLanguage = clone $newsletter;
             $this->setBodytextInNewsletter($newsletterLanguage, $language);
+            $newsletterLanguage->setLanguage($language);
+            if (ConfigurationUtility::isMultiLanguageModeActivated()) {
+                $newsletterLanguage->setSubject(
+                    $this->pageRepository->getSubjectFromPageIdentifier(
+                        (int)$newsletterLanguage->getOrigin(),
+                        $language
+                    )
+                );
+            }
             $this->newsletterRepository->add($newsletterLanguage);
             $this->newsletterRepository->persistAll();
             $queueService = GeneralUtility::makeInstance(QueueService::class);
@@ -366,8 +376,10 @@ class NewsletterController extends ActionController
      * @param ServerRequestInterface $request
      * @return ResponseInterface
      * @throws AuthenticationFailedException
+     * @throws ExceptionDbalDriver
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws MisconfigurationException
      * @noinspection PhpUnused
      */
     public function previewSourcesAjax(ServerRequestInterface $request): ResponseInterface

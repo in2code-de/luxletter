@@ -40,7 +40,10 @@
 						<tr>
 							<th>#</th>
 							<th><f:translate key="module.newsletter.list.tableheader.title">title</f:translate></th>
-							<th><f:translate key="module.newsletter.list.tableheader.description">description</f:translate></th>
+							<th><f:translate key="module.newsletter.list.tableheader.subject">subject</f:translate></th>
+                            <luxletter:condition.isMultiLanguageModeActivated>
+							    <th><f:translate key="module.newsletter.list.tableheader.language">language</f:translate></th>
+                            </luxletter:condition.isMultiLanguageModeActivated>
 							<th><f:translate key="module.newsletter.list.tableheader.datetime">datetime</f:translate></th>
 							<th><f:translate key="module.newsletter.list.tableheader.progress">progress</f:translate></th>
 							<th><f:translate key="module.newsletter.list.tableheader.receiver">receiver</f:translate></th>
@@ -50,7 +53,9 @@
 						<tbody>
 						<f:for each="{newsletters}" as="newsletter" iteration="iteration">
 							<tr>
-								<td>{iteration.cycle}.</td>
+								<td>
+									<span title="UID{newsletter.uid}">{iteration.cycle}.</span>
+								</td>
 								<td>
 									<f:if condition="{newsletter.enabled}">
 										<f:then>
@@ -61,10 +66,19 @@
 										</f:else>
 									</f:if>
 
-									<span title="UID{newsletter.uid}">{newsletter.title}</span>
+									<span title="{newsletter.description}">{newsletter.title}</span>
 								</td>
-								<td><span title="{newsletter.description}"><f:format.crop maxCharacters="200" append=" ...">{newsletter.description}</f:format.crop></span></td>
-								<td>{f:format.date(date:newsletter.datetime,format:'{f:translate(key:\'date\')}')}</td>
+								<td>
+									<span title="{newsletter.subject}">{newsletter.subjectParsedWithDummyUser}</span>
+								</td>
+                                <luxletter:condition.isMultiLanguageModeActivated>
+                                    <td>
+                                        {newsletter.languageLabel}
+                                    </td>
+                                </luxletter:condition.isMultiLanguageModeActivated>
+								<td>
+									{f:format.date(date:newsletter.datetime,format:'{f:translate(key:\'date\')}')}
+								</td>
 								<td>
 									<div class="progress">
 										<div class="progress-bar" role="progressbar" title="{newsletter.dispatchProgress} %" style="width: {newsletter.dispatchProgress}%" aria-valuenow="{newsletter.dispatchProgress}" aria-valuemin="0" aria-valuemax="100"></div>

@@ -66,6 +66,9 @@
 			<trans-unit id="tx_luxletter_domain_model_newsletter.bodytext">
 				<source>Bodytext</source>
 			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.language">
+				<source>Language</source>
+			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_queue">
 				<source>Mail queue</source>

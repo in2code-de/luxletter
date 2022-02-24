@@ -5,10 +5,18 @@ namespace In2code\Luxletter\Domain\Model;
 use DateTime;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
+use In2code\Luxletter\Domain\Factory\UserFactory;
+use In2code\Luxletter\Domain\Repository\LanguageRepository;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
+use In2code\Luxletter\Domain\Service\Parsing\Newsletter as NewsletterParsing;
+use In2code\Luxletter\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbaseObject;
+use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
+use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * Class User
@@ -93,6 +101,11 @@ class Newsletter extends AbstractEntity
      * @var int
      */
     protected $unsubscribers = 0;
+
+    /**
+     * @var int
+     */
+    protected $language = 0;
 
     /**
      * @return string
@@ -180,6 +193,21 @@ class Newsletter extends AbstractEntity
     public function getSubject(): string
     {
         return $this->subject;
+    }
+
+    /**
+     * @return string
+     * @throws InvalidConfigurationTypeException
+     * @throws ExceptionExtbaseObject
+     * @throws InvalidSlotException
+     * @throws InvalidSlotReturnException
+     */
+    public function getSubjectParsedWithDummyUser(): string
+    {
+        $userFactory = GeneralUtility::makeInstance(UserFactory::class);
+        $user = $userFactory->getDummyUser();
+        $newsletterParsing = GeneralUtility::makeInstance(NewsletterParsing::class);
+        return $newsletterParsing->parseSubject($this->getSubject(), ['user' => $user]);
     }
 
     /**
@@ -279,6 +307,38 @@ class Newsletter extends AbstractEntity
     public function setBodytext(string $bodytext): Newsletter
     {
         $this->bodytext = $bodytext;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLanguage(): int
+    {
+        return $this->language;
+    }
+
+    /**
+     * @return string
+     * @throws ExceptionDbalDriver
+     */
+    public function getLanguageLabel(): string
+    {
+        $language = $this->getLanguage();
+        if ($language > 0) {
+            $languageRepository = GeneralUtility::makeInstance(LanguageRepository::class);
+            return $languageRepository->getTitleFromIdentifier($language);
+        }
+        return LocalizationUtility::translateByKey('defaultLanguage');
+    }
+
+    /**
+     * @param int $language
+     * @return Newsletter
+     */
+    public function setLanguage(int $language): Newsletter
+    {
+        $this->language = $language;
         return $this;
     }
 

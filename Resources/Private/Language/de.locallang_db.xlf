@@ -86,6 +86,10 @@
 				<source>Bodytext</source>
 				<target state="translated">E-Mail Inhalt</target>
 			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.language">
+				<source>Language</source>
+				<target state="translated">Sprache</target>
+			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_queue">
 				<source>Mail queue</source>

@@ -96,6 +96,12 @@
 			<trans-unit id="module.newsletter.list.tableheader.title">
 				<source>Title</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.list.tableheader.subject">
+				<source>Email Subject</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.tableheader.language">
+				<source>Language</source>
+			</trans-unit>
 			<trans-unit id="module.newsletter.list.tableheader.description">
 				<source>Description</source>
 			</trans-unit>
@@ -307,6 +313,9 @@
 			</trans-unit>
 			<trans-unit id="deleteconfirm">
 				<source>Are you sure to delete this record?</source>
+			</trans-unit>
+			<trans-unit id="defaultLanguage">
+				<source>Default</source>
 			</trans-unit>
 		</body>
 	</file>
