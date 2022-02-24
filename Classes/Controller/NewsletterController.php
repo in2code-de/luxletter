@@ -17,6 +17,7 @@ use In2code\Luxletter\Domain\Repository\PageRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\LayoutService;
 use In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl;
+use In2code\Luxletter\Domain\Service\PreviewUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
 use In2code\Luxletter\Exception\ApiConnectionException;
@@ -358,6 +359,26 @@ class NewsletterController extends ActionController
         );
         $response = ObjectUtility::getJsonResponse();
         $response->getBody()->write(json_encode(['status' => $status]));
+        return $response;
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     * @throws AuthenticationFailedException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @noinspection PhpUnused
+     */
+    public function previewSourcesAjax(ServerRequestInterface $request): ResponseInterface
+    {
+        if (BackendUserUtility::isBackendUserAuthenticated() === false) {
+            throw new AuthenticationFailedException('You are not authenticated to send mails', 1645707268);
+        }
+        $previewUrlService = GeneralUtility::makeInstance(PreviewUrlService::class);
+        $response = ObjectUtility::getJsonResponse();
+        $content = $previewUrlService->get($request->getQueryParams()['origin'], $request->getQueryParams()['layout']);
+        $response->getBody()->write(json_encode($content));
         return $response;
     }
 
