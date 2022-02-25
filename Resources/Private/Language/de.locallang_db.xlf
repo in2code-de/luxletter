@@ -7,6 +7,10 @@
 				<source>Is newsletter receiver group?</source>
 				<target state="translated">Ist eine Newsletter Empfänger Gruppe?</target>
 			</trans-unit>
+			<trans-unit id="fe_groups.luxletter_language">
+				<source>Preferred language for newsletters</source>
+				<target state="translated">Bevorzugte Sprache für Newsletter</target>
+			</trans-unit>
 
 			<trans-unit id="pages.doktype_luxletter">
 				<source>Newsletter</source>

@@ -29,6 +29,11 @@ class User extends FrontendUser
     protected $crdate = null;
 
     /**
+     * @var int
+     */
+    protected $luxletterLanguage = 0;
+
+    /**
      * Try to get a readable name in format "lastname, firstname" (if possible)
      *
      * @param string $splitCharacter
@@ -72,6 +77,24 @@ class User extends FrontendUser
     public function setCrdate(DateTime $crdate): self
     {
         $this->crdate = $crdate;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLuxletterLanguage(): int
+    {
+        return $this->luxletterLanguage;
+    }
+
+    /**
+     * @param int $luxletterLanguage
+     * @return User
+     */
+    public function setLuxletterLanguage(int $luxletterLanguage): User
+    {
+        $this->luxletterLanguage = $luxletterLanguage;
         return $this;
     }
 

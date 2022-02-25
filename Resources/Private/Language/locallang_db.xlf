@@ -6,6 +6,9 @@
 			<trans-unit id="fe_groups.luxletter_receiver">
 				<source>Is newsletter receiver group?</source>
 			</trans-unit>
+			<trans-unit id="fe_groups.luxletter_language">
+				<source>Preferred language for newsletters</source>
+			</trans-unit>
 
 			<trans-unit id="pages.doktype_luxletter">
 				<source>Newsletter</source>

@@ -3,15 +3,18 @@ declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Factory;
 
 use DateTime;
-use Exception;
 use In2code\Luxletter\Domain\Model\Configuration;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Repository\ConfigurationRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\UsergroupRepository;
 use In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl;
+use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
+use In2code\Luxletter\Exception\RequestException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
@@ -33,6 +36,7 @@ class NewsletterFactory
      * @param int $usergroupIdentifier
      * @param int $configurationIdentifier
      * @param string $origin
+     * @param int $language
      * @param string $layout
      * @param string $description
      * @param string $date Date format could be "2022-01-23T00:00"
@@ -45,7 +49,10 @@ class NewsletterFactory
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      * @throws SiteNotFoundException
-     * @throws Exception
+     * @throws ApiConnectionException
+     * @throws RequestException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public function get(
         string $title,
@@ -53,11 +60,14 @@ class NewsletterFactory
         int $usergroupIdentifier,
         int $configurationIdentifier,
         string $origin,
+        int $language,
         string $layout,
         string $description = '',
         string $date = ''
     ): Newsletter {
-        $parseService = GeneralUtility::makeInstance(NewsletterUrl::class, $origin, $layout);
+        // Subject must be parsed
+        die(__CLASS__ . ':' . __LINE__);
+        $parseService = GeneralUtility::makeInstance(NewsletterUrl::class, $origin, $layout, $language);
 
         $usergroupRepository = GeneralUtility::makeInstance(UsergroupRepository::class);
         $configurationRepository = GeneralUtility::makeInstance(ConfigurationRepository::class);

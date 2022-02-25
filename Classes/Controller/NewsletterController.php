@@ -220,7 +220,7 @@ class NewsletterController extends ActionController
             $this->newsletterRepository->add($newsletterLanguage);
             $this->newsletterRepository->persistAll();
             $queueService = GeneralUtility::makeInstance(QueueService::class);
-            $queueService->addMailReceiversToQueue($newsletterLanguage);
+            $queueService->addMailReceiversToQueue($newsletterLanguage, $language);
         }
         $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.create.message'));
         $this->redirect('list');
@@ -327,7 +327,7 @@ class NewsletterController extends ActionController
         $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
         $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->wizardUserPreviewFile));
         $standaloneView->assignMultiple([
-            'userPreview' => $userRepository->getUsersFromGroup((int)$request->getQueryParams()['usergroup'], 3),
+            'userPreview' => $userRepository->getUsersFromGroup((int)$request->getQueryParams()['usergroup'], -1, 3),
             'userAmount' => $userRepository->getUserAmountFromGroup((int)$request->getQueryParams()['usergroup']),
         ]);
         $response = ObjectUtility::getJsonResponse();

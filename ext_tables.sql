@@ -140,6 +140,10 @@ CREATE TABLE tx_luxletter_domain_model_configuration (
 	KEY language (l10n_parent,sys_language_uid)
 );
 
+CREATE TABLE fe_users (
+	luxletter_language int(11) DEFAULT '0' NOT NULL,
+);
+
 CREATE TABLE fe_groups (
 	luxletter_receiver tinyint(4) unsigned DEFAULT '0' NOT NULL
 );

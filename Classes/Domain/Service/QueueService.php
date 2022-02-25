@@ -51,16 +51,17 @@ class QueueService
      * Add mail receivers to the queue based on a given newsletter with a relation to a frontenduser group
      *
      * @param Newsletter $newsletter
+     * @param int $language
      * @return int
+     * @throws Exception
+     * @throws ExceptionDbalDriver
+     * @throws IllegalObjectTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
-     * @throws Exception
-     * @throws IllegalObjectTypeException
-     * @throws ExceptionDbalDriver
      */
-    public function addMailReceiversToQueue(Newsletter $newsletter): int
+    public function addMailReceiversToQueue(Newsletter $newsletter, int $language): int
     {
-        $users = $this->userRepository->getUsersFromGroup($newsletter->getReceiver()->getUid());
+        $users = $this->userRepository->getUsersFromGroup($newsletter->getReceiver()->getUid(), $language);
         $this->signalDispatch(__CLASS__, __FUNCTION__, [$users, $newsletter]);
         /** @var User $user */
         foreach ($users as $user) {
