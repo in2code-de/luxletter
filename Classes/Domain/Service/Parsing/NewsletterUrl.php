@@ -15,7 +15,7 @@ use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
-use In2code\Luxletter\Exception\RequestException;
+use In2code\Luxletter\Exception\RecordInDatabaseNotFoundException;
 use In2code\Luxletter\Exception\UnvalidFilenameException;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
@@ -72,6 +72,11 @@ class NewsletterUrl
     protected $url = '';
 
     /**
+     * @var int
+     */
+    protected $language = 0;
+
+    /**
      * @var string Path to container html template like "EXT:sitepackage/../MailContainer.html"
      */
     protected $containerTemplate = '';
@@ -87,6 +92,7 @@ class NewsletterUrl
      * NewsletterUrl constructor.
      * @param string $origin can be a page uid or a complete url
      * @param string $layout Container html template filename
+     * @param int $language
      * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
@@ -96,9 +102,12 @@ class NewsletterUrl
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws UnvalidFilenameException
+     * @throws RecordInDatabaseNotFoundException
      */
     public function __construct(string $origin, string $layout, int $language)
     {
+        $this->setOrigin($origin);
+        $this->setLanguage($language);
         $this->configuration = ConfigurationUtility::getExtensionSettings();
         $this->setContainerTemplateFromLayout($layout);
 
@@ -114,9 +123,9 @@ class NewsletterUrl
         } elseif (StringUtility::isValidUrl($origin)) {
             $url = $origin;
         }
-        $this->signalDispatch(__CLASS__, 'constructor', [$url, $origin, $this]);
-        $this->setOrigin($origin);
         $this->setUrl($url);
+
+        $this->signalDispatch(__CLASS__, 'constructor', [$this]);
     }
 
     /**
@@ -132,7 +141,6 @@ class NewsletterUrl
      * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
-     * @throws RequestException
      */
     public function getParsedContent(Site $site, User $user = null): string
     {
@@ -240,7 +248,6 @@ class NewsletterUrl
      * @throws MisconfigurationException
      * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException
-     * @throws RequestException
      */
     protected function getContentFromOrigin(User $user): string
     {
@@ -349,6 +356,24 @@ class NewsletterUrl
     }
 
     /**
+     * @return int
+     */
+    public function getLanguage(): int
+    {
+        return $this->language;
+    }
+
+    /**
+     * @param int $language
+     * @return NewsletterUrl
+     */
+    public function setLanguage(int $language): self
+    {
+        $this->language = $language;
+        return $this;
+    }
+
+    /**
      * @param bool $absolute
      * @return string
      */
@@ -367,11 +392,12 @@ class NewsletterUrl
      * @throws InvalidConfigurationTypeException
      * @throws UnvalidFilenameException
      * @throws MisconfigurationException
+     * @throws RecordInDatabaseNotFoundException
      */
     public function setContainerTemplateFromLayout(string $layout): self
     {
         $layoutService = GeneralUtility::makeInstance(LayoutService::class);
-        $this->containerTemplate = $layoutService->getPathAndFilenameFromLayout($layout);
+        $this->containerTemplate = $layoutService->getPathAndFilenameFromLayout($layout, $this->getLanguage());
         return $this;
     }
 

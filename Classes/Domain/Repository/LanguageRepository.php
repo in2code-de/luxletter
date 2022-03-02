@@ -27,4 +27,20 @@ class LanguageRepository
             ->execute()
             ->fetchOne();
     }
+
+    /**
+     * @param int $languageIdentifier
+     * @return string
+     * @throws ExceptionDbalDriver
+     */
+    public function getIsocodeFromIdentifier(int $languageIdentifier): string
+    {
+        $queryBuilder = DatabaseUtility::getQueryBuilderForTable(self::TABLE_NAME);
+        return $queryBuilder
+            ->select('language_isocode')
+            ->from(self::TABLE_NAME)
+            ->where('uid=' . (int)$languageIdentifier)
+            ->execute()
+            ->fetchOne();
+    }
 }

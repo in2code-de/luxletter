@@ -3,6 +3,7 @@ declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Factory;
 
 use DateTime;
+use Exception;
 use In2code\Luxletter\Domain\Model\Configuration;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Repository\ConfigurationRepository;
@@ -53,6 +54,7 @@ class NewsletterFactory
      * @throws RequestException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws Exception
      */
     public function get(
         string $title,
@@ -65,9 +67,7 @@ class NewsletterFactory
         string $description = '',
         string $date = ''
     ): Newsletter {
-        // Subject must be parsed
-        die(__CLASS__ . ':' . __LINE__);
-        $parseService = GeneralUtility::makeInstance(NewsletterUrl::class, $origin, $layout, $language);
+        // Todo: Subject must be parsed
 
         $usergroupRepository = GeneralUtility::makeInstance(UsergroupRepository::class);
         $configurationRepository = GeneralUtility::makeInstance(ConfigurationRepository::class);
@@ -83,8 +83,17 @@ class NewsletterFactory
             ->setReceiver($usergroupRepository->findByUid($usergroupIdentifier))
             ->setConfiguration($configuration)
             ->setOrigin($origin)
-            ->setLayout($layout)
-            ->setBodytext($parseService->getParsedContent($configuration->getSiteConfiguration()));
+            ->setLanguage($language)
+            ->setLayout($layout);
+
+        $parseService = GeneralUtility::makeInstance(
+            NewsletterUrl::class,
+            $origin,
+            $newsletter->getLayout(),
+            $language
+        );
+        $newsletter->setBodytext($parseService->getParsedContent($configuration->getSiteConfiguration()));
+
         $dateTime = new DateTime();
         if ($date !== '') {
             $dateTime = new DateTime($date);

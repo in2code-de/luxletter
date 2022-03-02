@@ -159,14 +159,14 @@ define(['jquery'], function($) {
           event.preventDefault();
           var origin = document.querySelector('[data-luxletter-wizardpreviewevent="newsletter"]').value;
           var email = document.querySelector('[data-luxletter-testmail="email"]').value;
-          var subject = document.querySelector('[data-luxletter-testmail="subject"]').value;
+          var subjectField = document.querySelector('[data-luxletter-testmail="subject"]');
           var configuration = document.querySelector('[data-luxletter-testmail="configuration"]').value;
           var layout = document.querySelector('[data-luxletter-wizardpreviewevent="layout"]').value;
-          if (origin && email && subject && layout) {
+          if (origin && email && layout) {
             ajaxConnection(TYPO3.settings.ajaxUrls['/luxletter/testMail'], {
               origin: origin,
               email: email,
-              subject: subject,
+              subject: subjectField !== null ? subjectField.value : '',
               configuration: configuration,
               layout: layout
             }, 'testMailListenerCallback');
