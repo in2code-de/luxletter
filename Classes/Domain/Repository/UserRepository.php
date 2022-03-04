@@ -25,13 +25,18 @@ class UserRepository extends AbstractRepository
 
     /**
      * @param int $groupIdentifier
+     * @param int $language -1 = all, otherwise only the users with the specific language are selected
      * @param int $limit
      * @return QueryResultInterface
      */
-    public function getUsersFromGroup(int $groupIdentifier, int $limit = 0): QueryResultInterface
+    public function getUsersFromGroup(int $groupIdentifier, int $language, int $limit = 0): QueryResultInterface
     {
         $query = $this->createQuery();
-        $query->matching($query->equals('usergroup.uid', $groupIdentifier));
+        $and = [$query->equals('usergroup.uid', $groupIdentifier)];
+        if ($language !== -1) {
+            $and[] = $query->equals('luxletterLanguage', $language);
+        }
+        $query->matching($query->logicalAnd($and));
         if ($limit > 0) {
             $query->setLimit($limit);
         }

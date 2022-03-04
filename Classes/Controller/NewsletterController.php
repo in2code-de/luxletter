@@ -8,31 +8,34 @@ use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use Doctrine\DBAL\Exception as ExceptionDbal;
 use Exception;
 use In2code\Lux\Domain\Repository\VisitorRepository;
-use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Repository\ConfigurationRepository;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
+use In2code\Luxletter\Domain\Repository\PageRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\LayoutService;
-use In2code\Luxletter\Domain\Service\Parsing\Newsletter as NewsletterParsing;
 use In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl;
+use In2code\Luxletter\Domain\Service\PreviewUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
 use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
-use In2code\Luxletter\Mail\SendMail;
+use In2code\Luxletter\Exception\RequestException;
+use In2code\Luxletter\Mail\TestMail;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\BackendUserUtility;
+use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
@@ -85,6 +88,11 @@ class NewsletterController extends ActionController
     protected $configurationRepository = null;
 
     /**
+     * @var PageRepository|null
+     */
+    protected $pageRepository = null;
+
+    /**
      * @var LayoutService|null
      */
     protected $layoutService = null;
@@ -94,6 +102,7 @@ class NewsletterController extends ActionController
      * @param UserRepository $userRepository
      * @param LogRepository $logRepository
      * @param ConfigurationRepository $configurationRepository
+     * @param PageRepository $pageRepository
      * @param LayoutService $layoutService
      */
     public function __construct(
@@ -101,12 +110,14 @@ class NewsletterController extends ActionController
         UserRepository $userRepository,
         LogRepository $logRepository,
         ConfigurationRepository $configurationRepository,
+        PageRepository $pageRepository,
         LayoutService $layoutService
     ) {
         $this->newsletterRepository = $newsletterRepository;
         $this->userRepository = $userRepository;
         $this->logRepository = $logRepository;
         $this->configurationRepository = $configurationRepository;
+        $this->pageRepository = $pageRepository;
         $this->layoutService = $layoutService;
     }
 
@@ -144,57 +155,73 @@ class NewsletterController extends ActionController
     {
         $this->view->assignMultiple([
             'newsletters' => $this->newsletterRepository->findAll(),
-            'configurations' => $this->configurationRepository->findAll()
+            'configurations' => $this->configurationRepository->findAll(),
         ]);
     }
 
     /**
      * @return void
      * @throws InvalidConfigurationTypeException
+     * @throws ExceptionDbalDriver
      * @noinspection PhpUnused
      */
     public function newAction(): void
     {
         $this->view->assignMultiple([
             'configurations' => $this->configurationRepository->findAll(),
-            'layouts' => $this->layoutService->getLayouts()
+            'layouts' => $this->layoutService->getLayouts(),
+            'newsletterpages' => $this->pageRepository->findAllNewsletterPages(),
         ]);
     }
 
     /**
      * @return void
-     * @throws ExceptionExtbaseObject
-     * @throws InvalidConfigurationTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
-     * @throws InvalidUrlException
-     * @throws MisconfigurationException
      * @throws NoSuchArgumentException
-     * @throws InvalidArgumentNameException
      * @noinspection PhpUnused
      */
     public function initializeCreateAction(): void
     {
         $this->setDatetimeObjectInNewsletterRequest();
-        $this->parseNewsletterToBodytext();
     }
 
     /**
      * @param Newsletter $newsletter
      * @return void
+     * @throws ApiConnectionException
+     * @throws ExceptionDbalDriver
      * @throws ExceptionExtbaseObject
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
+     * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
+     * @throws InvalidUrlException
+     * @throws MisconfigurationException
+     * @throws RequestException
+     * @throws SiteNotFoundException
      * @throws StopActionException
-     * @throws ExceptionDbalDriver
      */
     public function createAction(Newsletter $newsletter): void
     {
-        $this->newsletterRepository->add($newsletter);
-        $this->newsletterRepository->persistAll();
-        $queueService = GeneralUtility::makeInstance(QueueService::class);
-        $queueService->addMailReceiversToQueue($newsletter);
+        $languages = $this->pageRepository->getLanguagesFromOrigin($newsletter->getOrigin());
+        foreach ($languages as $language) {
+            $newsletterLanguage = clone $newsletter;
+            $this->setBodytextInNewsletter($newsletterLanguage, $language);
+            $newsletterLanguage->setLanguage($language);
+            if (ConfigurationUtility::isMultiLanguageModeActivated()) {
+                $newsletterLanguage->setSubject(
+                    $this->pageRepository->getSubjectFromPageIdentifier(
+                        (int)$newsletterLanguage->getOrigin(),
+                        $language
+                    )
+                );
+            }
+            $this->newsletterRepository->add($newsletterLanguage);
+            $this->newsletterRepository->persistAll();
+            $queueService = GeneralUtility::makeInstance(QueueService::class);
+            $queueService->addMailReceiversToQueue($newsletterLanguage, $language);
+        }
         $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.create.message'));
         $this->redirect('list');
     }
@@ -282,7 +309,7 @@ class NewsletterController extends ActionController
             [
                 'filter' => $filter,
                 'users' => $users,
-                'activities' => $receiverAnalysisService->getActivitiesStatistic($users)
+                'activities' => $receiverAnalysisService->getActivitiesStatistic($users),
             ]
         );
     }
@@ -300,8 +327,8 @@ class NewsletterController extends ActionController
         $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
         $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->wizardUserPreviewFile));
         $standaloneView->assignMultiple([
-            'userPreview' => $userRepository->getUsersFromGroup((int)$request->getQueryParams()['usergroup'], 3),
-            'userAmount' => $userRepository->getUserAmountFromGroup((int)$request->getQueryParams()['usergroup'])
+            'userPreview' => $userRepository->getUsersFromGroup((int)$request->getQueryParams()['usergroup'], -1, 3),
+            'userAmount' => $userRepository->getUserAmountFromGroup((int)$request->getQueryParams()['usergroup']),
         ]);
         $response = ObjectUtility::getJsonResponse();
         $response->getBody()->write(json_encode(
@@ -313,16 +340,18 @@ class NewsletterController extends ActionController
     /**
      * @param ServerRequestInterface $request
      * @return ResponseInterface
+     * @throws ApiConnectionException
      * @throws AuthenticationFailedException
+     * @throws ExceptionDbalDriver
      * @throws ExceptionExtbaseObject
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
-     * @throws ApiConnectionException
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws RequestException
      * @noinspection PhpUnused
      */
     public function testMailAjax(ServerRequestInterface $request): ResponseInterface
@@ -330,28 +359,38 @@ class NewsletterController extends ActionController
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
             throw new AuthenticationFailedException('You are not authenticated to send mails', 1560872725);
         }
-        $parseUrlService = GeneralUtility::makeInstance(
-            NewsletterUrl::class,
+        $testMail = GeneralUtility::makeInstance(TestMail::class);
+        $status = $testMail->preflight(
             $request->getQueryParams()['origin'],
-            $request->getQueryParams()['layout']
-        )->setModeTestmail();
-        $parseService = GeneralUtility::makeInstance(NewsletterParsing::class);
-        $configurationRepository = GeneralUtility::makeInstance(ConfigurationRepository::class);
-        $configuration = $configurationRepository->findByUid($request->getQueryParams()['configuration']);
-        $userFactory = GeneralUtility::makeInstance(UserFactory::class);
-        $user = $userFactory->getDummyUser();
-        $mailService = GeneralUtility::makeInstance(
-            SendMail::class,
-            $parseService->parseSubject(
-                $request->getQueryParams()['subject'],
-                ['user' => $user]
-            ),
-            $parseUrlService->getParsedContent($configuration->getSiteConfiguration()),
-            $configuration
+            $request->getQueryParams()['layout'],
+            (int)$request->getQueryParams()['configuration'],
+            $request->getQueryParams()['subject'],
+            $request->getQueryParams()['email']
         );
-        $status = $mailService->sendNewsletter([$request->getQueryParams()['email'] => $user->getReadableName()]);
         $response = ObjectUtility::getJsonResponse();
         $response->getBody()->write(json_encode(['status' => $status]));
+        return $response;
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     * @throws AuthenticationFailedException
+     * @throws ExceptionDbalDriver
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws MisconfigurationException
+     * @noinspection PhpUnused
+     */
+    public function previewSourcesAjax(ServerRequestInterface $request): ResponseInterface
+    {
+        if (BackendUserUtility::isBackendUserAuthenticated() === false) {
+            throw new AuthenticationFailedException('You are not authenticated to send mails', 1645707268);
+        }
+        $previewUrlService = GeneralUtility::makeInstance(PreviewUrlService::class);
+        $response = ObjectUtility::getJsonResponse();
+        $content = $previewUrlService->get($request->getQueryParams()['origin'], $request->getQueryParams()['layout']);
+        $response->getBody()->write(json_encode($content));
         return $response;
     }
 
@@ -371,7 +410,7 @@ class NewsletterController extends ActionController
         $standaloneView->assignMultiple([
             'user' => $user,
             'visitor' => $visitorRepository->findOneByFrontenduser($user),
-            'logs' => $logRepository->findByUser($user)
+            'logs' => $logRepository->findByUser($user),
         ]);
         $response = ObjectUtility::getJsonResponse();
         $response->getBody()->write(json_encode(
@@ -398,26 +437,30 @@ class NewsletterController extends ActionController
     }
 
     /**
+     * @param Newsletter $newsletter
+     * @param int $language
      * @return void
+     * @throws ApiConnectionException
      * @throws ExceptionExtbaseObject
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
      * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
-     * @throws NoSuchArgumentException
-     * @throws InvalidArgumentNameException
+     * @throws RequestException
+     * @throws SiteNotFoundException
      */
-    protected function parseNewsletterToBodytext(): void
+    protected function setBodytextInNewsletter(Newsletter $newsletter, int $language): void
     {
-        $newsletter = (array)$this->request->getArgument('newsletter');
         $parseService = GeneralUtility::makeInstance(
             NewsletterUrl::class,
-            $newsletter['origin'],
-            $newsletter['layout']
+            $newsletter->getOrigin(),
+            $newsletter->getLayout(),
+            $language
         );
-        $configuration = $this->configurationRepository->findByUid((int)$newsletter['configuration']);
-        $newsletter['bodytext'] = $parseService->getParsedContent($configuration->getSiteConfiguration());
-        $this->request->setArgument('newsletter', $newsletter);
+        $bodytext = $parseService->getParsedContent($newsletter->getConfiguration()->getSiteConfiguration());
+        $newsletter->setBodytext($bodytext);
     }
 }

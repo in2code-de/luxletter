@@ -47,6 +47,19 @@ class ConfigurationUtility
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      */
+    public static function isMultiLanguageModeActivated(): bool
+    {
+        return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
+            'luxletter',
+            'multiLanguageMode'
+        ) === '1';
+    }
+
+    /**
+     * @return bool
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
     public static function isRewriteLinksInNewsletterActivated(): bool
     {
         return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(

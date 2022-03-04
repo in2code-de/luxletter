@@ -25,6 +25,16 @@ class FileUtility
     }
 
     /**
+     * @param string $filename "/var/www/filename.html"
+     * @param string $isocode "en"
+     * @return string "/var/www/filename_en.html"
+     */
+    public static function addLanguageIsocodeToFilename(string $filename, string $isocode): string
+    {
+        return preg_replace('~\.(\w{3}|\w{4})$~', '_' . $isocode . '.$1', $filename);
+    }
+
+    /**
      * @param string $path absolute path
      * @return void
      */

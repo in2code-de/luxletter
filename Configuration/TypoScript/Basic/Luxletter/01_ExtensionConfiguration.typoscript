@@ -28,6 +28,7 @@ plugin {
         options {
           1 {
             label = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:newsletter.layouts.1
+            # NewsletterContainer_de.html, NewsletterContainer_fr.html will be loaded automatically for those languages
             fileName = NewsletterContainer.html
           }
         }

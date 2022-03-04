@@ -32,11 +32,12 @@ class CreateNewsletterFromOriginCommand extends Command
     {
         $this->setDescription('Create a newsletter from CLI or Scheduler');
         $this->addArgument('title', InputArgument::REQUIRED, 'Newsletter title');
-        $this->addArgument('subject', InputArgument::REQUIRED, 'Newsletter subject');
         $this->addArgument('usergroup', InputArgument::REQUIRED, 'fe_groups.uid as receiver group');
         $this->addArgument('configuration', InputArgument::REQUIRED, 'Sender configuration uid');
         $this->addArgument('origin', InputArgument::REQUIRED, 'Page identifier or absolute URL');
+        $this->addArgument('language', InputArgument::OPTIONAL, 'Language for newsletter', 0);
         $this->addArgument('layout', InputArgument::OPTIONAL, 'Layout template name', 'NewsletterContainer.html');
+        $this->addArgument('subject', InputArgument::OPTIONAL, 'Newsletter subject', '');
         $this->addArgument('description', InputArgument::OPTIONAL, 'Newsletter description', '');
         $this->addArgument('date', InputArgument::OPTIONAL, 'Newsletter date in format "Y-m-d\TH:i"', '');
     }
@@ -63,18 +64,19 @@ class CreateNewsletterFromOriginCommand extends Command
         $newsletterFactory = GeneralUtility::makeInstance(NewsletterFactory::class);
         $newsletter = $newsletterFactory->get(
             $input->getArgument('title'),
-            $input->getArgument('subject'),
             (int)$input->getArgument('usergroup'),
             (int)$input->getArgument('configuration'),
             $input->getArgument('origin'),
+            (int)$input->getArgument('language'),
             $input->getArgument('layout'),
             $input->getArgument('description'),
-            $input->getArgument('date')
+            $input->getArgument('date'),
+            $input->getArgument('subject')
         );
         $output->writeln('Newsletter with uid ' . $newsletter->getUid() . ' created');
 
         $queueService = GeneralUtility::makeInstance(QueueService::class);
-        $queuedAmount = $queueService->addMailReceiversToQueue($newsletter);
+        $queuedAmount = $queueService->addMailReceiversToQueue($newsletter, (int)$input->getArgument('language'));
         $output->writeln('Added ' . $queuedAmount . ' queue records');
         return 0;
     }
