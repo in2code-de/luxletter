@@ -151,14 +151,15 @@ plugin {
                 path = EXT:sitepackage/Resources/Private/Templates/Mail/
                 options {
                     1 {
+                        # "NewsletterContainer" means:
+                        # "NewsletterContainer.html" in default language or
+                        # "NewsletterContainer_de.html" in german language and so on...
+                        fileName = NewsletterContainer
                         label = Layout 1
-                        # NewsletterContainer1_de.html, NewsletterContainer1_fr.html, etc... will be loaded automatically
-                        fileName = NewsletterContainer1.html
                     }
                     2 {
+                        fileName = NewsletterContainer2
                         label = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:newsletter.layouts.1
-                        # NewsletterContainer2_de.html, NewsletterContainer2_fr.html, etc... will be loaded automatically
-                        fileName = NewsletterContainer2.html
                     }
                 }
             }
@@ -266,7 +267,7 @@ A use case could be to weekly render a page with changing content (e.g. a news l
 
 ```
 # Parameters are: Title, fe_groups.uid, configuration uid, source to parse (pid or absolute URL), language uid (optional), Layout template file (optional), subject (optional), description (optional), date (optional)
-./vendor/bin/typo3 luxletter:createnewsletterfromorigin "Automatic NL" 1 1 16 0 "NewsletterContainer.html" "Newsletter {f:format.date(date:'now',format:'Y')}" "Optional description here" "2021-10-31T11:00"
+./vendor/bin/typo3 luxletter:createnewsletterfromorigin "Automatic NL" 1 1 16 0 "NewsletterContainer" "Newsletter {f:format.date(date:'now',format:'Y-m')}" "Optional description here" "2021-10-31T11:00"
 ```
 
 #### From scheduler

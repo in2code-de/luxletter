@@ -9,7 +9,6 @@ use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Exception\RecordInDatabaseNotFoundException;
 use In2code\Luxletter\Exception\UnvalidFilenameException;
 use In2code\Luxletter\Utility\ConfigurationUtility;
-use In2code\Luxletter\Utility\FileUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use Throwable;
@@ -79,14 +78,14 @@ class LayoutService
      */
     protected function getPathAndFilenameFromLayoutForDefaultLanguage(string $layout): string
     {
-        $absolutePath = GeneralUtility::getFileAbsFileName($this->getLayoutPath() . $layout);
-        if (is_file($absolutePath) === false) {
+        $filename = $this->getLayoutPath() . $layout . '.html';
+        if (is_file(GeneralUtility::getFileAbsFileName($filename)) === false) {
             throw new MisconfigurationException(
                 'Could not read template file with given path and filename',
                 1635495052
             );
         }
-        return $this->getLayoutPath() . $layout;
+        return $filename;
     }
 
     /**
@@ -108,10 +107,9 @@ class LayoutService
                 1646250413
             );
         }
-        $absolutePath = GeneralUtility::getFileAbsFileName($this->getLayoutPath() . $layout);
-        $absolutePath = FileUtility::addLanguageIsocodeToFilename($absolutePath, $isocode);
-        if (is_file($absolutePath)) {
-            return FileUtility::addLanguageIsocodeToFilename($this->getLayoutPath() . $layout, $isocode);
+        $filename = $this->getLayoutPath() . $layout . '_' . $isocode . '.html';
+        if (is_file(GeneralUtility::getFileAbsFileName($filename))) {
+            return $filename;
         }
         return '';
     }
@@ -119,7 +117,7 @@ class LayoutService
     /**
      * Check if given filename
      * - Has no slashes (to prevent ../../anything.html)
-     * - Ends with a ".html"
+     * - Ends not with a ".html"
      * - And is allowed by TypoScript configuration
      *
      * @param string $filename
@@ -135,10 +133,10 @@ class LayoutService
                 1635497109
             );
         }
-        if (StringUtility::endsWith($filename, '.html') === false) {
+        if (StringUtility::endsWith($filename, '.html') === true) {
             throw new UnvalidFilenameException(
-                'Given filename (' . htmlspecialchars($filename) . ') must end with .html',
-                1635497158
+                'Given filename (' . htmlspecialchars($filename) . ') must NOT end with .html',
+                1646381056
             );
         }
         $containers = $this->getLayoutConfiguration();
@@ -162,13 +160,15 @@ class LayoutService
      *                  path = EXT:luxletter/Resources/Private/Templates/Mail/
      *                  options {
      *                      1 {
+     *                          # "NewsletterContainer" means:
+     *                          # "NewsletterContainer.html" in default language or
+     *                          # "NewsletterContainer_de.html" in german language and so on...
+     *                          fileName = NewsletterContainer
      *                          label = LLL:EXT:path/locallang_db.xlf:newsletter.layouts.1
-     *                          # NewsletterContainer_de.html, NewsletterContainer_fr.html will be loaded automatically
-     *                          fileName = NewsletterContainer.html
      *                      }
      *                      2 {
+     *                          fileName = NewsletterContainer2
      *                          label = C2
-     *                          fileName = NewsletterContainer2.html
      *                      }
      *                  }
      *              }

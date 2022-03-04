@@ -91,7 +91,7 @@ class NewsletterUrl
     /**
      * NewsletterUrl constructor.
      * @param string $origin can be a page uid or a complete url
-     * @param string $layout Container html template filename
+     * @param string $layout Container html template filename like "NewsletterContainer"
      * @param int $language
      * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException

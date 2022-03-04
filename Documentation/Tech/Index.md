@@ -39,12 +39,15 @@ plugin {
                 path = EXT:sitepackage/Resources/Private/Templates/Mail/
                 options {
                     1 {
+                        # "NewsletterContainer" means:
+                        # "NewsletterContainer.html" in default language or
+                        # "NewsletterContainer_de.html" in german language and so on...
+                        fileName = NewsletterContainer
                         label = Layout 1
-                        fileName = NewsletterContainer1.html
                     }
                     2 {
+                        fileName = NewsletterContainer2
                         label = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:newsletter.layouts.1
-                        fileName = NewsletterContainer2.html
                     }
                 }
             }

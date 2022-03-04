@@ -61,13 +61,17 @@
 
 ### Upgrade to 11.x
 
+* Definition of Container filenames in TypoScript has changed a bit - default layout name is `NewsletterContainer`
+  * Because we now support multilanguage configuration, it's now possible to add layout files per language.
+  * Now we don't need to add `.html` to the definition
+  * Todo: Remove the extension in TypoScript setup: `plugin.tx_luxletter_fe.settings.containerHtml.options.1.fileName=NewsletterContainer.html` => `plugin.tx_luxletter_fe.settings.containerHtml.options.1.fileName=NewsletterContainer`
 * Command `luxletter:createnewsletterfromorigin`
-  ** has a new parameter "language" now
-  ** has a different ordering of parameters now
-  ** Todo: If you are using this command, update your scheduler task or CLI command (see documentation)
+  * has a new parameter "language" now
+  * has a different ordering of parameters now
+  * Todo: If you are using this command, update your scheduler task or CLI command (see documentation)
 * Signal `\In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl::constructor`
-  ** has only one parameter now: NewsletterUrl object (with getter and setter for uri, origin and language)
-  ** Todo: If you are using this signal, adjust your slot
+  * has only one parameter now: NewsletterUrl object (with getter and setter for uri, origin and language)
+  * Todo: If you are using this signal, adjust your slot
 
 
 ### Upgrade to 8.x

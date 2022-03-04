@@ -27,9 +27,11 @@ plugin {
         path = EXT:luxletter/Resources/Private/Templates/Mail/
         options {
           1 {
+            # "NewsletterContainer" means:
+            # "NewsletterContainer.html" in default language or
+            # "NewsletterContainer_de.html" in german language and so on...
+            fileName = NewsletterContainer
             label = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:newsletter.layouts.1
-            # NewsletterContainer_de.html, NewsletterContainer_fr.html will be loaded automatically for those languages
-            fileName = NewsletterContainer.html
           }
         }
       }

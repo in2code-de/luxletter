@@ -36,7 +36,7 @@ class CreateNewsletterFromOriginCommand extends Command
         $this->addArgument('configuration', InputArgument::REQUIRED, 'Sender configuration uid');
         $this->addArgument('origin', InputArgument::REQUIRED, 'Page identifier or absolute URL');
         $this->addArgument('language', InputArgument::OPTIONAL, 'Language for newsletter', 0);
-        $this->addArgument('layout', InputArgument::OPTIONAL, 'Layout template name', 'NewsletterContainer.html');
+        $this->addArgument('layout', InputArgument::OPTIONAL, 'Layout template name', 'NewsletterContainer');
         $this->addArgument('subject', InputArgument::OPTIONAL, 'Newsletter subject', '');
         $this->addArgument('description', InputArgument::OPTIONAL, 'Newsletter description', '');
         $this->addArgument('date', InputArgument::OPTIONAL, 'Newsletter date in format "Y-m-d\TH:i"', '');
