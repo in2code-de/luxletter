@@ -27,6 +27,8 @@ call_user_func(
             ]
         ];
         ExtensionManagementUtility::addTCAcolumns('fe_users', $columns);
-        ExtensionManagementUtility::addToAllTCAtypes('fe_users', 'luxletter_language', '', 'after:image');
+        if (\In2code\Luxletter\Utility\ConfigurationUtility::isMultiLanguageModeActivated()) {
+            ExtensionManagementUtility::addToAllTCAtypes('fe_users', 'luxletter_language', '', 'after:image');
+        }
     }
 );
