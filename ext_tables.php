@@ -37,6 +37,16 @@ call_user_func(
             \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
             ['source' => 'EXT:luxletter/Resources/Public/Icons/widget_newsletter.svg']
         );
+        $iconRegistry->registerIcon(
+            'apps-pagetree-luxletter',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:luxletter/Resources/Public/Icons/luxletter_doktype.svg']
+        );
+        $iconRegistry->registerIcon(
+            'apps-pagetree-luxletter-contentFromPid',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:luxletter/Resources/Public/Icons/luxletter_doktype.svg']
+        );
 
         /**
          * Include Modules
@@ -79,5 +89,20 @@ call_user_func(
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
             '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:luxletter/Configuration/PageTSConfig/ContentElements.typoscript">'
         );
+
+        /**
+         * Add new page doktype
+         */
+        if (\In2code\Luxletter\Utility\ConfigurationUtility::isMultiLanguageModeActivated()) {
+            $doktype = \In2code\Luxletter\Domain\Repository\PageRepository::DOKTYPE_LUXLETTER;
+            $GLOBALS['PAGES_TYPES'][$doktype] = [
+                'type' => 'web',
+                'allowedTables' => '*',
+            ];
+            // Allow backend users to drag and drop the new page type:
+            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig(
+                'options.pageTree.doktypesToShowInNewPageDragArea := addToList(' . $doktype . ')'
+            );
+        }
     }
 );

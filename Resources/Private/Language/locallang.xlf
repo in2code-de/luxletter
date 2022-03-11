@@ -96,6 +96,12 @@
 			<trans-unit id="module.newsletter.list.tableheader.title">
 				<source>Title</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.list.tableheader.subject">
+				<source>Email Subject</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.tableheader.language">
+				<source>Language</source>
+			</trans-unit>
 			<trans-unit id="module.newsletter.list.tableheader.description">
 				<source>Description</source>
 			</trans-unit>
@@ -254,7 +260,7 @@
 				<source>Not yet identified</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.receiverdetail.notidentified.text">
-				<source>This newsletter receiver is not yet identified in lux</source>
+				<source>This newsletter receiver is not yet identified in LUX</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.receiverdetail.activities.title">
 				<source>Activities</source>
@@ -307,6 +313,9 @@
 			</trans-unit>
 			<trans-unit id="deleteconfirm">
 				<source>Are you sure to delete this record?</source>
+			</trans-unit>
+			<trans-unit id="defaultLanguage">
+				<source>Default</source>
 			</trans-unit>
 		</body>
 	</file>

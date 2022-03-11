@@ -62,15 +62,17 @@ class Newsletter
      */
     protected function parseMailText(string $text, array $properties): string
     {
-        $configuration = ConfigurationUtility::getExtensionSettings();
-        $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-        $standaloneView->setTemplateRootPaths($configuration['view']['templateRootPaths']);
-        $standaloneView->setLayoutRootPaths($configuration['view']['layoutRootPaths']);
-        $standaloneView->setPartialRootPaths($configuration['view']['partialRootPaths']);
-        $standaloneView->setTemplateSource($text);
-        $standaloneView->assignMultiple($properties);
-        $string = $standaloneView->render();
-        $this->signalDispatch(__CLASS__, __FUNCTION__, [&$string, $properties, $this]);
-        return $string;
+        if (!empty($text)) {
+            $configuration = ConfigurationUtility::getExtensionSettings();
+            $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
+            $standaloneView->setTemplateRootPaths($configuration['view']['templateRootPaths']);
+            $standaloneView->setLayoutRootPaths($configuration['view']['layoutRootPaths']);
+            $standaloneView->setPartialRootPaths($configuration['view']['partialRootPaths']);
+            $standaloneView->setTemplateSource($text);
+            $standaloneView->assignMultiple($properties);
+            $text = $standaloneView->render();
+            $this->signalDispatch(__CLASS__, __FUNCTION__, [&$string, $properties, $this]);
+        }
+        return $text;
     }
 }

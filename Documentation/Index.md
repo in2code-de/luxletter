@@ -21,3 +21,7 @@ Send newsletters the easy way
 ### Tech corner and FAQ
 
 [Tech corner and FAQ](Tech/Index.md)
+
+### Changelog and breaking changes
+
+[Changelog and breaking changes](Changelog/Index.md)

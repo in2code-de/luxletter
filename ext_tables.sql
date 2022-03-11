@@ -1,7 +1,3 @@
-CREATE TABLE fe_groups (
-	luxletter_receiver tinyint(4) unsigned DEFAULT '0' NOT NULL
-);
-
 CREATE TABLE tx_luxletter_domain_model_newsletter (
 	uid int(11) NOT NULL auto_increment,
 	pid int(11) DEFAULT '0' NOT NULL,
@@ -16,6 +12,7 @@ CREATE TABLE tx_luxletter_domain_model_newsletter (
 	origin varchar(255) DEFAULT '' NOT NULL,
 	bodytext mediumtext NOT NULL,
 	disabled tinyint(4) unsigned DEFAULT '0' NOT NULL,
+	language int(11) DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -141,4 +138,16 @@ CREATE TABLE tx_luxletter_domain_model_configuration (
 	PRIMARY KEY (uid),
 	KEY parent (pid),
 	KEY language (l10n_parent,sys_language_uid)
+);
+
+CREATE TABLE fe_users (
+	luxletter_language int(11) DEFAULT '0' NOT NULL,
+);
+
+CREATE TABLE fe_groups (
+	luxletter_receiver tinyint(4) unsigned DEFAULT '0' NOT NULL
+);
+
+CREATE TABLE pages (
+	luxletter_subject text NOT NULL,
 );

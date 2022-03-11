@@ -35,7 +35,11 @@ class GetListOfPropertiesFromNewslettersViewHelper extends AbstractViewHelper
         $values = [];
         foreach ($this->arguments['newsletters'] as $newsletter) {
             /** @var Newsletter $newsletter */
-            $values[] = str_replace(',', '', ObjectAccess::getProperty($newsletter, $this->arguments['property']));
+            $values[] = str_replace(
+                ',',
+                '',
+                (string)ObjectAccess::getProperty($newsletter, $this->arguments['property'])
+            );
         }
         return implode(',', $values);
     }

@@ -7,9 +7,10 @@ use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Exception\UserValuesAreMissingException;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
+use Throwable;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\Exception as ExceptionExbaseObject;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -31,23 +32,28 @@ class GetUnsubscribeUrlViewHelper extends AbstractViewHelper
 
     /**
      * @return string
-     * @throws UserValuesAreMissingException
      * @throws MisconfigurationException
-     * @throws SiteNotFoundException
      */
     public function render(): string
     {
         $siteService = GeneralUtility::makeInstance(SiteService::class);
-        return $siteService->getPageUrlFromParameter(
-            $this->getPidUnsubscribe(),
-            [
-                'tx_luxletter_fe' => [
-                    'user' => $this->getUserIdentifier(),
-                    'newsletter' => $this->getNewsletterIdentifier(),
-                    'hash' => $this->getHash()
+        try {
+            return $siteService->getPageUrlFromParameter(
+                $this->getPidUnsubscribe(),
+                [
+                    'tx_luxletter_fe' => [
+                        'user' => $this->getUserIdentifier(),
+                        'newsletter' => $this->getNewsletterIdentifier(),
+                        'hash' => $this->getHash()
+                    ]
                 ]
-            ]
-        );
+            );
+        } catch (Throwable $exception) {
+            throw new MisconfigurationException(
+                'Could not build a valid URL to unsubscribe page with PID "' . $this->getPidUnsubscribe() . '"',
+                1646380245
+            );
+        }
     }
 
     /**
@@ -95,7 +101,9 @@ class GetUnsubscribeUrlViewHelper extends AbstractViewHelper
 
     /**
      * @return string
+     * @throws MisconfigurationException
      * @throws UserValuesAreMissingException
+     * @throws ExceptionExbaseObject
      */
     protected function getHash(): string
     {

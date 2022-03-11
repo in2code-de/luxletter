@@ -79,7 +79,7 @@ class GetUserImageUrlViewHelper extends AbstractViewHelper
         if (empty($url) && $this->getUser()->getEmail() !== '') {
             $gravatarUrl = 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($this->getUser()->getEmail())))
                 . '?d=' . urlencode($this->getDefaultUrl($url)) . '&s=' . $this->arguments['size'];
-            $header = GeneralUtility::getUrl($gravatarUrl);
+            $header = GeneralUtility::getUrl($gravatarUrl, 2);
             if (!empty($header)) {
                 $url = $gravatarUrl;
             }

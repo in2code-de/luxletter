@@ -127,6 +127,14 @@
 				<source>Title</source>
 				<target state="translated">Bezeichnung</target>
 			</trans-unit>
+			<trans-unit id="module.newsletter.list.tableheader.subject">
+				<source>Email Subject</source>
+				<target state="translated">Mail Betreff</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.tableheader.language">
+				<source>Language</source>
+				<target state="translated">Sprache</target>
+			</trans-unit>
 			<trans-unit id="module.newsletter.list.tableheader.description">
 				<source>Description</source>
 				<target state="translated">Beschreibung</target>
@@ -336,8 +344,8 @@
 				<target state="translated">Noch nicht identifiziert</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.receiverdetail.notidentified.text">
-				<source>This newsletter receiver is not yet identified in lux</source>
-				<target state="translated">Dieser Newsletter Empfänger ist noch nicht identifiziert in lux</target>
+				<source>This newsletter receiver is not yet identified in LUX</source>
+				<target state="translated">Dieser Newsletter Empfänger ist noch nicht identifiziert in LUX</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.receiverdetail.activities.title">
 				<source>Activities</source>
@@ -407,6 +415,10 @@
 			<trans-unit id="deleteconfirm">
 				<source>Are you sure to delete this record?</source>
 				<target state="translated">Wollen Sie diesen Datensatz wirklich löschen?</target>
+			</trans-unit>
+			<trans-unit id="defaultLanguage">
+				<source>Default</source>
+				<target state="translated">Standard</target>
 			</trans-unit>
 		</body>
 	</file>

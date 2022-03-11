@@ -74,13 +74,15 @@ class FrontendController extends ActionController
     /**
      * @param string $origin URL or page identifier
      * @param string $layout Container HTML template filename
+     * @param int $language
      * @return string
      */
-    public function previewAction(string $origin, string $layout): string
+    public function previewAction(string $origin, string $layout, int $language = 0): string
     {
         try {
             $siteService = GeneralUtility::makeInstance(SiteService::class);
-            $urlService = GeneralUtility::makeInstance(NewsletterUrl::class, $origin, $layout)->setModePreview();
+            $urlService = GeneralUtility::makeInstance(NewsletterUrl::class, $origin, $layout, $language)
+                ->setModePreview();
             return $urlService->getParsedContent($siteService->getSite());
         } catch (Exception $exception) {
             return 'Error: Origin ' . htmlspecialchars($origin) . ' could not be converted into a valid url!<br>'

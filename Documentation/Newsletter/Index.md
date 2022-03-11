@@ -29,6 +29,12 @@ Example pagetree:
 
 <img src="../Images/documentation_newsletter_pagetree.png" width="200" alt="example pagetree" />
 
+Or with multilanguage feature:
+
+<img src="../Images/documentation_newsletter_pagetree_multilanguage.png" width="200" alt="example pagetree" />
+
+**Note:** Don't forget to set a subject in pages settings per language
+
 Example teaser page content:
 
 <img src="../Images/documentation_newsletter_teasercontent.png" width="800" alt="teaser content page" />
@@ -145,12 +151,15 @@ plugin {
                 path = EXT:sitepackage/Resources/Private/Templates/Mail/
                 options {
                     1 {
+                        # "NewsletterContainer" means:
+                        # "NewsletterContainer.html" in default language or
+                        # "NewsletterContainer_de.html" in german language and so on...
+                        fileName = NewsletterContainer
                         label = Layout 1
-                        fileName = NewsletterContainer1.html
                     }
                     2 {
+                        fileName = NewsletterContainer2
                         label = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:newsletter.layouts.1
-                        fileName = NewsletterContainer2.html
                     }
                 }
             }
@@ -229,13 +238,14 @@ Clicking on `Add new newsletter` starts a process where you can create new newsl
 
 <img src="../Images/documentation_newnewsletter_step2.png" width="800" alt="create new newsletter - step 2" />
 
-| Field                   | Description                                                                             |
-| ----------------------- | --------------------------------------------------------------------------------------- |
-| Sender                  | Choose a sender record                                                                  |
-| Receiver                | Choose a receiver group (frontenduser groups that marked as luxletter groups)           |
-| Layout                  | Choose a given layout (can be defined via TypoScript)                                   |
-| Newsletter location     | Choose where your HTML for the newsletter is located. An absolute URL like https://domain.org/newsletter.html is possible. If you add a number (PID), the page will be parsed (typenum is automaticly added) |
-| Mail subject            | Mail subject (also variables are allowed like {user.lastName}                           |
+| Field                                       | Description                                                                             |
+| ------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Sender                                      | Choose a sender record                                                                  |
+| Receiver                                    | Choose a receiver group (frontenduser groups that marked as luxletter groups)           |
+| Layout                                      | Choose a given layout (can be defined via TypoScript)                                   |
+| Newsletter location                         | Choose where your HTML for the newsletter is located. An absolute URL like https://domain.org/newsletter.html is possible. If you add a number (PID), the page will be parsed (typenum is automaticly added) |
+| Newsletter location (multilanguage mode)    | In multilanguage mode this field is rendered as select box. Now you can only select internal pages with doktype newsletter                                                                                   |
+| Mail subject                                | Mail subject (also variables and viewhelpers are allowed like {user.lastName}). **Note:** This field is not rendered in multilanguage mode (subject is set in pages settings)                                |
 
 <img src="../Images/documentation_newnewsletter_step3.png" width="800" alt="create new newsletter - step 3" />
 
@@ -256,8 +266,8 @@ A use case could be to weekly render a page with changing content (e.g. a news l
 #### CLI command
 
 ```
-# Parameters are: Title, subject, fe_groups.uid, configuration uid, source to parse (pid or absolute URL), Layout template file, description (optional), date (optional)
-./vendor/bin/typo3 luxletter:createnewsletterfromorigin "Automatic NL" "Newsletter 2020" 1 1 16 "NewsletterContainer.html" "Optional description here" "2021-10-31T11:00"
+# Parameters are: Title, fe_groups.uid, configuration uid, source to parse (pid or absolute URL), language uid (optional), Layout template file (optional), subject (optional), description (optional), date (optional)
+./vendor/bin/typo3 luxletter:createnewsletterfromorigin "Automatic NL" 1 1 16 0 "NewsletterContainer" "Newsletter {f:format.date(date:'now',format:'Y-m')}" "Optional description here" "2021-10-31T11:00"
 ```
 
 #### From scheduler

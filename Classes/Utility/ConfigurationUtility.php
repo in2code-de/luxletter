@@ -6,6 +6,7 @@ use In2code\Luxletter\Exception\MisconfigurationException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
@@ -40,6 +41,19 @@ class ConfigurationUtility
         $uri = parse_url(GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'), PHP_URL_SCHEME);
         $uri .= '://' . GeneralUtility::getIndpEnv('HTTP_HOST') . '/';
         return $uri;
+    }
+
+    /**
+     * @return bool
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    public static function isMultiLanguageModeActivated(): bool
+    {
+        return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
+            'luxletter',
+            'multiLanguageMode'
+        ) === '1';
     }
 
     /**
@@ -87,6 +101,41 @@ class ConfigurationUtility
     public static function isReceiverActionActivated(): bool
     {
         return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'receiverAction') === '1';
+    }
+
+    /**
+     * @return bool
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    public static function isContextFitting(): bool
+    {
+        if (self::isLimitToContextActivated() === false) {
+            return true;
+        }
+        $allowedContext = self::getLimitToContext();
+        $currentApplicationContext = Environment::getContext()->__toString();
+        return stristr($currentApplicationContext, $allowedContext) !== false;
+    }
+
+    /**
+     * @return bool
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    protected static function isLimitToContextActivated(): bool
+    {
+        return self::getLimitToContext() !== '';
+    }
+
+    /**
+     * @return string
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    protected static function getLimitToContext(): string
+    {
+        return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'limitToContext');
     }
 
     /**

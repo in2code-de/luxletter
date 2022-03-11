@@ -52,7 +52,7 @@ class SiteService
     public function getDomainFromSite(Site $site): string
     {
         $this->checkForValidSite($site);
-        return (string)$site->getBase();
+        return $this->getCurrentBaseDomain($site);
     }
 
     /**
@@ -94,12 +94,25 @@ class SiteService
      */
     protected function checkForValidSite(Site $site): void
     {
-        $base = (string)$site->getBase();
+        $base = $this->getCurrentBaseDomain($site);
         if (StringUtility::startsWith($base, 'http') === false || StringUtility::endsWith($base, '/') === false) {
             throw new MisconfigurationException(
                 'Base settings in site configuration is not in format "https://domain.org/"',
                 1622832844
             );
         }
+    }
+
+    /**
+     * Get current base domain with a trailing slash
+     *
+     * @param Site $site
+     * @return string
+     */
+    protected function getCurrentBaseDomain(Site $site): string
+    {
+        $base = (string)$site->getBase();
+        $base .= (substr($base, -1) === '/' ? '' : '/');
+        return $base;
     }
 }

@@ -10,15 +10,18 @@ use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Service\BodytextManipulation\CssInline;
 use In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding\Preparation;
 use In2code\Luxletter\Domain\Service\LayoutService;
+use In2code\Luxletter\Domain\Service\RequestService;
 use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
+use In2code\Luxletter\Exception\RecordInDatabaseNotFoundException;
 use In2code\Luxletter\Exception\UnvalidFilenameException;
 use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
+use Throwable;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
@@ -69,6 +72,11 @@ class NewsletterUrl
     protected $url = '';
 
     /**
+     * @var int
+     */
+    protected $language = 0;
+
+    /**
      * @var string Path to container html template like "EXT:sitepackage/../MailContainer.html"
      */
     protected $containerTemplate = '';
@@ -83,7 +91,8 @@ class NewsletterUrl
     /**
      * NewsletterUrl constructor.
      * @param string $origin can be a page uid or a complete url
-     * @param string $layout Container html template filename
+     * @param string $layout Container html template filename like "NewsletterContainer"
+     * @param int $language
      * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException
      * @throws InvalidSlotException
@@ -93,27 +102,30 @@ class NewsletterUrl
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws UnvalidFilenameException
+     * @throws RecordInDatabaseNotFoundException
      */
-    public function __construct(string $origin, string $layout)
+    public function __construct(string $origin, string $layout, int $language)
     {
+        $this->setOrigin($origin);
+        $this->setLanguage($language);
         $this->configuration = ConfigurationUtility::getExtensionSettings();
         $this->setContainerTemplateFromLayout($layout);
 
         $url = '';
         if (MathUtility::canBeInterpretedAsInteger($origin)) {
-            $arguments = [];
+            $arguments = ['_language' => $language];
             $typenum = ConfigurationUtility::getTypeNumToNumberLocation();
             if ($typenum > 0) {
-                $arguments = ['type' => $typenum];
+                $arguments += ['type' => $typenum];
             }
             $siteService = GeneralUtility::makeInstance(SiteService::class);
             $url = $siteService->getPageUrlFromParameter((int)$origin, $arguments);
         } elseif (StringUtility::isValidUrl($origin)) {
             $url = $origin;
         }
-        $this->signalDispatch(__CLASS__, 'constructor', [$url, $origin, $this]);
-        $this->setOrigin($origin);
         $this->setUrl($url);
+
+        $this->signalDispatch(__CLASS__, 'constructor', [$this]);
     }
 
     /**
@@ -242,8 +254,10 @@ class NewsletterUrl
         if ($this->url === '') {
             throw new InvalidUrlException('Given URL was invalid and was not parsed', 1560709687);
         }
-        $string = GeneralUtility::getUrl($this->url);
-        if ($string === false) {
+        $requestService = GeneralUtility::makeInstance(RequestService::class);
+        try {
+            $string = $requestService->getContentFromUrl($this->url);
+        } catch (Throwable $exception) {
             throw new MisconfigurationException(
                 'Given URL could not be parsed and accessed (Tried to read url: ' . $this->url
                 . '). Typenum definition in site-configuration not set? Fluid Styled Mail Content TypoScript added?',
@@ -342,6 +356,24 @@ class NewsletterUrl
     }
 
     /**
+     * @return int
+     */
+    public function getLanguage(): int
+    {
+        return $this->language;
+    }
+
+    /**
+     * @param int $language
+     * @return NewsletterUrl
+     */
+    public function setLanguage(int $language): self
+    {
+        $this->language = $language;
+        return $this;
+    }
+
+    /**
      * @param bool $absolute
      * @return string
      */
@@ -360,11 +392,12 @@ class NewsletterUrl
      * @throws InvalidConfigurationTypeException
      * @throws UnvalidFilenameException
      * @throws MisconfigurationException
+     * @throws RecordInDatabaseNotFoundException
      */
     public function setContainerTemplateFromLayout(string $layout): self
     {
         $layoutService = GeneralUtility::makeInstance(LayoutService::class);
-        $this->containerTemplate = $layoutService->getPathAndFilenameFromLayout($layout);
+        $this->containerTemplate = $layoutService->getPathAndFilenameFromLayout($layout, $this->getLanguage());
         return $this;
     }
 

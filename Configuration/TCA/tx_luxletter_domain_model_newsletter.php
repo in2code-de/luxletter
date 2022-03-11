@@ -26,7 +26,8 @@ return [
     ],
     'types' => [
         '1' => [
-            'showitem' => 'disabled,title,description,datetime,subject,receiver,configuration,layout,origin,bodytext'
+            'showitem' => 'disabled,title,description,datetime,subject,receiver,configuration,layout,' .
+                'origin,bodytext,language'
         ],
     ],
     'columns' => [
@@ -149,6 +150,24 @@ return [
                 'rows' => 3,
                 'readOnly' => true,
                 'default' => ''
+            ]
+        ],
+        'language' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
+                . Newsletter::TABLE_NAME . '.language',
+            'config' => [
+                'type' => 'select',
+                'special' => 'languages',
+                'items' => [
+                    [
+                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
+                        -1,
+                        'flags-multiple'
+                    ],
+                ],
+                'renderType' => 'selectSingle',
+                'default' => 0
             ]
         ]
     ]

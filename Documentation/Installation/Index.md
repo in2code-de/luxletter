@@ -21,10 +21,12 @@ TYPO3 10.4 or 11.5 is required. The free extension lux can be also installed for
 
 | Field                         | Default value                 | Description                                                                                                                                                                                 |
 | ----------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Multilanguage mode            | 0                             | This mode allows to parse pages with all localized versions. No external sources can be parsed in multilanguage mode - only internal pages.                                                 |
 | Rewrite links in newsletter   | 1                             | Rewrite links in newsletter: Absolute links in your newsletters can be rewritten automatically, to track all link clicks. If you disable this feature, clicks are not tracked.              |
 | Embed images                  | 0                             | Images with absolute url can automatically be embedded into newsletter mails. File will be stored temporary under `uploads/tx_luxletter/` when newsletters are generated. Attention: This will slow down the sending process (about 10s per email). |
 | Add typenum                   | 1562349004                    | Add typenum: Everytime you parse a html for a new newsletter, this type will be added (can be used in fluidStyledMailContent). This will work only for PID in origin, not for absolute URL. |
 | Show receiver action          | 1                             | Show receiver action: Show link to receiver view in newsletter module. This view is maybe disturbing if you don't use extension lux in addition.                                            |
+| limitToContext                |                               | Limit mails in context: If you run testinstances beside production, you can limit mail sending to a defined context (empty = no limit). Example "Production" or "Development/Docker".       |
 
 <img src="../Images/documentation_installation_settings.png" width="800" alt="extension settings" />
 
@@ -111,6 +113,12 @@ And luxletter allows you to send newsletters to frontendusers of defined groups.
 Open a group and check `Is newsletter receiver group` for groups that should get newsletters in future.
 
 <img src="../Images/documentation_installation_fegroups.png" width="800" alt="fe_groups records" />
+
+
+### Define fe_users.luxletter_language (only for multilanguage mode)
+
+If luxletter runs in multilanguage mode, you can define which fe_user record prefers which language. Just open
+such a record and select a specific value for field `luxletter_language`.
 
 
 ### Connect a mailserver
