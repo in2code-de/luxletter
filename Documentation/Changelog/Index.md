@@ -9,7 +9,7 @@
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| !!! 11.0.0 | 2022.??.??  | Feature    | Multilanguage mode added for luxletter                                                                                                                                                     |
+| !!! 11.0.0 | 2022.03.11  | Feature    | Multilanguage mode added for luxletter, Improve exception message for invalid unsubscribe pid, Limit mail sending to given TYPO3 context                                                   |
 | 10.2.1     | 2022.01.04  | Bugfix     | Fix newsletter statistics with a comma in the name                                                                                                                                         |
 | 10.2.0     | 2021.12.08  | Bugfix     | Allow embedding of more then only 9 images, add automatic tests for Execution class                                                                                                        |
 | 10.1.0     | 2021.11.23  | Feature    | Add mysql table indices for a better performance, show dummy images in news list if there are now news, allow multiple embedding of the the same image now                                 |
@@ -62,7 +62,7 @@
 ### Upgrade to 11.x
 
 * Definition of Container filenames in TypoScript has changed a bit - default layout name is `NewsletterContainer`
-  * Because we now support multilanguage configuration, it's now possible to add layout files per language.
+  * Because we now support multilanguage configuration, it's possible to add layout files per language.
   * Now we don't need to add `.html` to the definition
   * Todo: Remove the extension in TypoScript setup: `plugin.tx_luxletter_fe.settings.containerHtml.options.1.fileName=NewsletterContainer.html` => `plugin.tx_luxletter_fe.settings.containerHtml.options.1.fileName=NewsletterContainer`
 * Command `luxletter:createnewsletterfromorigin`
