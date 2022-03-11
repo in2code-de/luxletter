@@ -26,6 +26,7 @@ TYPO3 10.4 or 11.5 is required. The free extension lux can be also installed for
 | Embed images                  | 0                             | Images with absolute url can automatically be embedded into newsletter mails. File will be stored temporary under `uploads/tx_luxletter/` when newsletters are generated. Attention: This will slow down the sending process (about 10s per email). |
 | Add typenum                   | 1562349004                    | Add typenum: Everytime you parse a html for a new newsletter, this type will be added (can be used in fluidStyledMailContent). This will work only for PID in origin, not for absolute URL. |
 | Show receiver action          | 1                             | Show receiver action: Show link to receiver view in newsletter module. This view is maybe disturbing if you don't use extension lux in addition.                                            |
+| limitToContext                |                               | Limit mails in context: If you run testinstances beside production, you can limit mail sending to a defined context (empty = no limit). Example "Production" or "Development/Docker".       |
 
 <img src="../Images/documentation_installation_settings.png" width="800" alt="extension settings" />
 

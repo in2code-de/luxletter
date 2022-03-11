@@ -5,6 +5,7 @@ namespace In2code\Luxletter\Command;
 use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Mail\ProgressQueue;
+use In2code\Luxletter\Utility\ConfigurationUtility;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -62,6 +63,11 @@ class QueueCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        if (ConfigurationUtility::isContextFitting() === false) {
+            $output->writeln('Wrong context for sending mails');
+            return 1;
+        }
+
         $progressQueue = GeneralUtility::makeInstance(ProgressQueue::class, $output);
         $progressed = $progressQueue->progress(
             (int)$input->getArgument('amount'),

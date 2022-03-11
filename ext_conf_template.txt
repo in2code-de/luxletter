@@ -12,3 +12,6 @@ addTypeNumToNumberLocation = 1562349004
 
 # cat=basic//240; type=boolean; label= Show receiver action: Show link to receiver view in newsletter module. This view is maybe disturbing if you don't use extension lux in addition.
 receiverAction = 1
+
+# cat=basic//250; type=text; label= Limit mails in context: If you run testinstances beside production, you can limit mail sending to a defined context (empty = no limit). Example "Production" or "Development/Docker".
+limitToContext =
