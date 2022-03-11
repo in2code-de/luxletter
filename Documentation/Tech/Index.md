@@ -131,7 +131,7 @@ of mail clientes.
 
 ### Can I use tt_address for my receivers?
 
-No, not at the moment. We focused on fe_users.
+No, not at the moment. We focused on fe_users - a technique nearby the core.
 
 
 ### What about bounce mail handling?
@@ -146,7 +146,8 @@ Look at the sys log to see which problem caused this issue. E.g. if fe_users.crd
 
 ### Mail sending is too slow
 
-Check how many mails can be sent per hour. Ask your hoster. Modify the queue settings.
+Check how many mails can be sent per hour. Ask your hoster. Modify the queue settings. Embedding images can slow down
+the mail performance.
 
 
 ### Mail could not be parsed in preview when adding an origin
@@ -206,3 +207,20 @@ what should result in a status code 200.
 
 If you are using `fluidStyledMailContent` luxletter will set `config.absRefPrefix` to the configured
 domain automaticly. If you are using your own rendering typenum, you have to set absRefPrefix manually.
+
+
+### Embedding images or not?
+
+Embedding images can be activated in the main extension configuration. All images are recognized automatically and will
+be embedded.
+
+#### The upside
+
+Embedding images allows you to send newsletters from a secured instance (e.g. an Intranet). In addition most mail
+clients will show the images without asking the using. On top processed images may not exists any more on the server
+when temp images are deleted - but this would have no negative effect im images are embedded.
+
+#### The downside
+
+Embedding will slow down the mail sending process. The mail itself is - of course - a lot of bigger then sending mails
+without images.
