@@ -9,6 +9,7 @@
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 11.0.1     | 2022.04.02  | Bugfix     | Fix wrong sql structure definition                                                                                                                                                         |
 | !!! 11.0.0 | 2022.03.11  | Feature    | Multilanguage mode added for luxletter, Improve exception message for invalid unsubscribe pid, Limit mail sending to given TYPO3 context                                                   |
 | 10.2.1     | 2022.01.04  | Bugfix     | Fix newsletter statistics with a comma in the name                                                                                                                                         |
 | 10.2.0     | 2021.12.08  | Bugfix     | Allow embedding of more then only 9 images, add automatic tests for Execution class                                                                                                        |
