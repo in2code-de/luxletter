@@ -10,7 +10,7 @@ CREATE TABLE tx_luxletter_domain_model_newsletter (
 	configuration int(11) DEFAULT '0' NOT NULL,
 	layout varchar(255) DEFAULT '' NOT NULL,
 	origin varchar(255) DEFAULT '' NOT NULL,
-	bodytext mediumtext NOT NULL,
+	bodytext mediumtext,
 	disabled tinyint(4) unsigned DEFAULT '0' NOT NULL,
 	language int(11) DEFAULT '0' NOT NULL,
 
@@ -70,7 +70,7 @@ CREATE TABLE tx_luxletter_domain_model_log (
 	user int(11) DEFAULT '0' NOT NULL,
 
 	status tinyint(4) unsigned DEFAULT '0' NOT NULL,
-	properties text NOT NULL,
+	properties text,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
@@ -149,5 +149,5 @@ CREATE TABLE fe_groups (
 );
 
 CREATE TABLE pages (
-	luxletter_subject text NOT NULL,
+	luxletter_subject text,
 );
