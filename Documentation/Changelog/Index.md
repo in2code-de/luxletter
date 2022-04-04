@@ -9,6 +9,7 @@
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 11.1.0     | 2022.04.04  | Task       | Add limit for receiver list, add limits for activities and logs, harden template paths, removed unneeded CSS                                                                               |
 | 11.0.2     | 2022.04.04  | Bugfix     | Clean internal SVG files from id and class attributes                                                                                                                                      |
 | 11.0.1     | 2022.04.02  | Bugfix     | Fix wrong sql structure definition                                                                                                                                                         |
 | !!! 11.0.0 | 2022.03.11  | Feature    | Multilanguage mode added for luxletter, Improve exception message for invalid unsubscribe pid, Limit mail sending to given TYPO3 context                                                   |
