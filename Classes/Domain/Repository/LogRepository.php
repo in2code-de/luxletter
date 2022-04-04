@@ -230,6 +230,7 @@ class LogRepository extends AbstractRepository
     {
         $query = $this->createQuery();
         $query->matching($query->equals('user', $user));
+        $query->setLimit(100);
         return $query->execute();
     }
 }
