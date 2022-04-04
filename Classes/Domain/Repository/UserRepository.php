@@ -104,5 +104,7 @@ class UserRepository extends AbstractRepository
         }
         $constraint = $query->logicalAnd($and);
         $query->matching($constraint);
+
+        $query->setLimit(1000);
     }
 }
