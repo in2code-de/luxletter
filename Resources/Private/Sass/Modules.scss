@@ -37,24 +37,6 @@ label {
     .table > :not(caption) > * > * {
         background: transparent;
     }
-
-    // Make round images from landscape and portrait images
-    .img-circle {
-        object-fit: cover;
-        border-radius: 50%;
-        width: 150px;
-        height: 150px;
-    }
-
-    .img-medium {
-        width: 100px;
-        height: 100px;
-    }
-
-    .img-small {
-        width: 50px;
-        height: 50px;
-    }
 }
 
 /**
