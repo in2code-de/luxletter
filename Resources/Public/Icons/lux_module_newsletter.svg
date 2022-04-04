@@ -1,7 +1,7 @@
 <svg id="luxletter_Newsletter" data-name="luxletter_Newsletter" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70.87 70.87">
     <path d="M0 0h70.87v70.87H0z" fill="#4de7ff"/>
-    <path id="svg_2" data-name="svg 2" class="cls-2" d="M35.24 43.44l-6.92-6.07L8.5 54.35a4.07 4.07 0 0 0 2.77 1.09h48A4 4 0 0 0 62 54.35l-19.8-17z" fill="#ffffff"/>
-    <path id="svg_3" data-name="svg 3" class="cls-2" d="M62.22 16.52a4 4 0 0 0-2.76-1.09H11.51a4 4 0 0 0-2.76 1.09l26.73 22.92z" fill="#ffffff"/>
-    <path id="svg_4" data-name="svg 4" class="cls-2" d="M7.43 18.94v33.24l19.34-16.43L7.43 18.94z" fill="#ffffff"/>
-    <path id="svg_5" data-name="svg 5" class="cls-2" d="M44.1 35.75l19.34 16.43V18.93L44.1 35.75z" fill="#ffffff"/>
+    <path d="M35.24 43.44l-6.92-6.07L8.5 54.35a4.07 4.07 0 0 0 2.77 1.09h48A4 4 0 0 0 62 54.35l-19.8-17z" fill="#ffffff"/>
+    <path d="M62.22 16.52a4 4 0 0 0-2.76-1.09H11.51a4 4 0 0 0-2.76 1.09l26.73 22.92z" fill="#ffffff"/>
+    <path d="M7.43 18.94v33.24l19.34-16.43L7.43 18.94z" fill="#ffffff"/>
+    <path d="M44.1 35.75l19.34 16.43V18.93L44.1 35.75z" fill="#ffffff"/>
 </svg>
