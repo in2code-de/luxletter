@@ -9,6 +9,7 @@
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 12.0.0     | 2022.04.07  | Task       | One unsubscribe page can be used for multiple newsletters with different receiver groups (we simply removed the usergroup selection in FlexForm)                                           |
 | 11.1.0     | 2022.04.04  | Task       | Add limit for receiver list, add limits for activities and logs, harden template paths, removed unneeded CSS                                                                               |
 | 11.0.2     | 2022.04.04  | Bugfix     | Clean internal SVG files from id and class attributes                                                                                                                                      |
 | 11.0.1     | 2022.04.02  | Bugfix     | Fix wrong sql structure definition                                                                                                                                                         |
