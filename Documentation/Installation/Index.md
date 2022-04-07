@@ -33,7 +33,9 @@ TYPO3 10.4 or 11.5 is required. The free extension lux can be also installed for
 
 ### Site configuration
 
-You must define one unsubscribe pid per site configuration. This is relevant the unsubscribe plugin of luxletter.
+You must define one unsubscribe pid per site configuration. This is relevant the unsubscribe plugin of luxletter. You
+can also use a pid outside the site or simply use one unsubscribe page for multiple sites. Nevertheless the PID must
+be defined in every site configuration.
 
 **Attention** Be aware to use a full domain name in base (Entry point) settings of your site configuration. Good: `https://www.domain.org/` - Bad: `/`
 
@@ -97,8 +99,10 @@ Don't forget to add the page identifier to the main extension settings (see abov
 
 <img src="../Images/documentation_installation_unsubscribeplugin.png" width="800" alt="unsubscribe plugin" />
 
-* You should select a usergroup that should be removed from the current visiting frontenduser.
 * In addition you can add a message that should appear if a user just unsubscribed.
+
+Technical note: if someone unsubscribes from a newsletter, luxletter will simply remove the receiver usergroup from
+this user. The user is not deleted from the system.
 
 **Note** Unsubscribing is only possible if a hash is added to the link call.
 See `{luxletter:mail.getUnsubscribeUrl(newsletter:newsletter,user:user,site:site)}` in the newsletter layout
