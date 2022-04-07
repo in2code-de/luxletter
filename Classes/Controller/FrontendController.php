@@ -5,7 +5,6 @@ namespace In2code\Luxletter\Controller;
 use Exception;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
-use In2code\Luxletter\Domain\Model\Usergroup;
 use In2code\Luxletter\Domain\Repository\UsergroupRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\LogService;
@@ -18,6 +17,7 @@ use In2code\Luxletter\Exception\MissingRelationException;
 use In2code\Luxletter\Exception\UserValuesAreMissingException;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
+use Throwable;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbaseObject;
@@ -117,21 +117,17 @@ class FrontendController extends ActionController
     {
         try {
             $this->checkArgumentsForUnsubscribeAction($user, $newsletter, $hash);
-            /** @var Usergroup $usergroupToRemove */
-            $usergroupToRemove = $this->usergroupRepository->findByUid((int)$this->settings['removeusergroup']);
-            $user->removeUsergroup($usergroupToRemove);
+            $user->removeUsergroup($newsletter->getReceiver());
             $this->userRepository->update($user);
             $this->userRepository->persistAll();
             $this->view->assignMultiple([
                 'success' => true,
                 'user' => $user,
                 'hash' => $hash,
-                'usergroupToRemove' => $usergroupToRemove
+                'usergroupToRemove' => $newsletter->getReceiver()
             ]);
-            if ($newsletter !== null) {
-                $this->logService->logUnsubscribe($newsletter, $user);
-            }
-        } catch (Exception $exception) {
+            $this->logService->logUnsubscribe($newsletter, $user);
+        } catch (Throwable $exception) {
             $languageKey = 'fe.unsubscribe.message.' . $exception->getCode();
             $message = LocalizationUtility::translate($languageKey);
             $this->addFlashMessage(($languageKey !== $message) ? $message : $exception->getMessage());
@@ -164,9 +160,7 @@ class FrontendController extends ActionController
         if ($hash === '') {
             throw new ArgumentMissingException('Hash not given', 1562050533);
         }
-        /** @var Usergroup $usergroupToRemove */
-        $usergroupToRemove = $this->usergroupRepository->findByUid((int)$this->settings['removeusergroup']);
-        if ($user->getUsergroup()->contains($usergroupToRemove) === false) {
+        if ($user->getUsergroup()->contains($newsletter->getReceiver()) === false) {
             throw new MissingRelationException('Usergroup not assigned to user', 1562066292);
         }
         if ($user->getUnsubscribeHash() !== $hash) {
