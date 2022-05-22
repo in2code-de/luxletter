@@ -11,16 +11,12 @@ use In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl;
 use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
-use In2code\Luxletter\Exception\RequestException;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbaseObject;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * Class TestMail
@@ -66,16 +62,12 @@ class TestMail
      * @param string $email
      * @return bool
      * @throws ApiConnectionException
-     * @throws ExceptionExtbaseObject
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidConfigurationTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      * @throws ExceptionDbalDriver
-     * @throws RequestException
      */
     public function preflight(string $origin, string $layout, int $configuration, string $subject, string $email): bool
     {

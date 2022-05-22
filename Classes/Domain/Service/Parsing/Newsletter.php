@@ -2,13 +2,13 @@
 declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Service\Parsing;
 
-use In2code\Luxletter\Signal\SignalTrait;
+use In2code\Luxletter\Events\NewsletterParseBodytextEvent;
+use In2code\Luxletter\Events\NewsletterParseMailtextEvent;
+use In2code\Luxletter\Events\NewsletterParseSubjectEvent;
 use In2code\Luxletter\Utility\ConfigurationUtility;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Object\Exception;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -17,38 +17,49 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class Newsletter
 {
-    use SignalTrait;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
 
     /**
      * @param string $subject
      * @param array $properties
      * @return string
-     * @throws Exception
      * @throws InvalidConfigurationTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      */
     public function parseSubject(string $subject, array $properties): string
     {
-        $this->signalDispatch(__CLASS__, __FUNCTION__, [&$subject, $properties, $this]);
         $properties['type'] = 'subject';
-        return $this->parseMailText($subject, $properties);
+        /** @var NewsletterParseSubjectEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            GeneralUtility::makeInstance(NewsletterParseSubjectEvent::class, $subject, $properties)
+        );
+        return $this->parseMailText($event->getSubject(), $event->getProperties());
     }
 
     /**
      * @param string $bodytext
      * @param array $properties
-     * @return string @throws Exception
+     * @return string
      * @throws InvalidConfigurationTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
-     * @throws Exception
      */
     public function parseBodytext(string $bodytext, array $properties): string
     {
-        $this->signalDispatch(__CLASS__, __FUNCTION__, [&$bodytext, $properties, $this]);
         $properties['type'] = 'bodytext';
-        return $this->parseMailText($bodytext, $properties);
+        /** @var NewsletterParseBodytextEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            GeneralUtility::makeInstance(NewsletterParseBodytextEvent::class, $bodytext, $properties)
+        );
+        return $this->parseMailText($event->getBodytext(), $event->getProperties());
     }
 
     /**
@@ -56,9 +67,6 @@ class Newsletter
      * @param array $properties
      * @return string
      * @throws InvalidConfigurationTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
-     * @throws Exception
      */
     protected function parseMailText(string $text, array $properties): string
     {
@@ -71,7 +79,11 @@ class Newsletter
             $standaloneView->setTemplateSource($text);
             $standaloneView->assignMultiple($properties);
             $text = $standaloneView->render();
-            $this->signalDispatch(__CLASS__, __FUNCTION__, [&$string, $properties, $this]);
+            /** @var NewsletterParseMailtextEvent $event */
+            $event = $this->eventDispatcher->dispatch(
+                GeneralUtility::makeInstance(NewsletterParseMailtextEvent::class, $text, $properties)
+            );
+            $text = $event->getText();
         }
         return $text;
     }

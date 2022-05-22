@@ -24,9 +24,7 @@ use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
-use In2code\Luxletter\Exception\RequestException;
 use In2code\Luxletter\Mail\TestMail;
-use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
@@ -42,12 +40,9 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentNameException;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
-use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbaseObject;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -55,8 +50,6 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class NewsletterController extends ActionController
 {
-    use SignalTrait;
-
     /**
      * @var string
      */
@@ -189,16 +182,12 @@ class NewsletterController extends ActionController
      * @return void
      * @throws ApiConnectionException
      * @throws ExceptionDbalDriver
-     * @throws ExceptionExtbaseObject
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
      * @throws InvalidConfigurationTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
-     * @throws RequestException
      * @throws SiteNotFoundException
      * @throws StopActionException
      */
@@ -343,15 +332,11 @@ class NewsletterController extends ActionController
      * @throws ApiConnectionException
      * @throws AuthenticationFailedException
      * @throws ExceptionDbalDriver
-     * @throws ExceptionExtbaseObject
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidConfigurationTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
-     * @throws RequestException
      * @noinspection PhpUnused
      */
     public function testMailAjax(ServerRequestInterface $request): ResponseInterface
@@ -380,6 +365,7 @@ class NewsletterController extends ActionController
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws MisconfigurationException
+     * @throws InvalidConfigurationTypeException
      * @noinspection PhpUnused
      */
     public function previewSourcesAjax(ServerRequestInterface $request): ResponseInterface
@@ -441,15 +427,11 @@ class NewsletterController extends ActionController
      * @param int $language
      * @return void
      * @throws ApiConnectionException
-     * @throws ExceptionExtbaseObject
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidConfigurationTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
-     * @throws RequestException
      * @throws SiteNotFoundException
      */
     protected function setBodytextInNewsletter(Newsletter $newsletter, int $language): void

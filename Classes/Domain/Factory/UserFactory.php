@@ -2,20 +2,30 @@
 declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Factory;
 
+use DateTime;
 use In2code\Luxletter\Domain\Model\User;
-use In2code\Luxletter\Signal\SignalTrait;
+use In2code\Luxletter\Events\DummyUserEvent;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Reflection\ObjectAccess;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * Class UserFactory to get some dummy values for test newsletters
  */
 class UserFactory
 {
-    use SignalTrait;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
 
     /**
      * @var array
@@ -30,14 +40,11 @@ class UserFactory
         'middleName' => 'Markus',
         'address' => 'Teststr. 123',
         'city' => 'Rosenheim',
-        'company' => 'Muster GmbH'
+        'company' => 'Muster GmbH',
     ];
 
     /**
      * @return User
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
-     * @throws Exception
      */
     public function getDummyUser(): User
     {
@@ -45,8 +52,8 @@ class UserFactory
         foreach (self::$dummyProperties as $key => $value) {
             ObjectAccess::setProperty($user, $key, $value);
         }
-        ObjectAccess::setProperty($user, 'crdate', new \DateTime());
-        $this->signalDispatch(__CLASS__, __FUNCTION__, [$user]);
+        ObjectAccess::setProperty($user, 'crdate', new DateTime());
+        $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(DummyUserEvent::class, $user));
         return $user;
     }
 }

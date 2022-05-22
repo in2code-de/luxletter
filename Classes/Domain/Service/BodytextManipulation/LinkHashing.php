@@ -9,10 +9,12 @@ use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LinkRepository;
 use In2code\Luxletter\Domain\Service\SiteService;
+use In2code\Luxletter\Events\HashLinkEvent;
+use In2code\Luxletter\Events\HashLinksEvent;
 use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Exception\MisconfigurationException;
-use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\StringUtility;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\Exception;
@@ -25,8 +27,6 @@ use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
  */
 class LinkHashing
 {
-    use SignalTrait;
-
     /**
      * @var Newsletter
      */
@@ -43,6 +43,11 @@ class LinkHashing
     protected $linkRepository = null;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * LinkHashing constructor.
      * @param Newsletter $newsletter
      * @param User $user
@@ -52,6 +57,7 @@ class LinkHashing
         $this->newsletter = $newsletter;
         $this->user = $user;
         $this->linkRepository = GeneralUtility::makeInstance(LinkRepository::class);
+        $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
     }
 
     /**
@@ -73,7 +79,7 @@ class LinkHashing
         foreach ($links as $link) {
             $this->hashLink($link);
         }
-        $this->signalDispatch(__CLASS__, __FUNCTION__, [$dom, $this]);
+        $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(HashLinksEvent::class, $dom, $this));
         return $dom->saveHTML();
     }
 
@@ -101,7 +107,7 @@ class LinkHashing
                     ->setUser($this->user)
                     ->setTarget($href);
                 $aTag->setAttribute('href', $link->getUriFromHash());
-                $this->signalDispatch(__CLASS__, __FUNCTION__, [$link, $this]);
+                $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(HashLinkEvent::class, $link, $this));
                 $this->linkRepository->add($link);
             } else {
                 $aTag->removeAttribute('data-luxletter-parselink');
