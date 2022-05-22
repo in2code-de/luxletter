@@ -79,8 +79,11 @@ All HTML-Templates (and Partials and Layouts) can be overwritten by your extensi
 be overruled in TYPO3. This fits the own content element `Teaser` and the rendering for the FluidStyledMailContent
 elements as well as the templates for the backend modules of luxletter.
 
-If you want to manipulate the PHP, there are a lot of signals added to the extension itself. Just search for
-`signalDispatch`. You will find a lot of methods where you can stop mail sending, manipulate values, etc...
+If you want to manipulate the PHP, there are a lot of PSR-14 eventdispatchers added to the extension itself.
+Just search for `eventDispatcher->dispatch`.
+You will find a lot of methods where you can stop mail sending, manipulate values, etc...
+Read more about how to use eventlisteners in the official TYPO3 documentation:
+https://docs.typo3.org/p/brotkrueml/schema/main/en-us/Developer/Events.html
 
 
 ## Add new users to the queue
