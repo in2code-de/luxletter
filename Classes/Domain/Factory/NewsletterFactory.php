@@ -21,10 +21,7 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExis
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Object\Exception as ExbaseObjectException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * NewsletterFactory
@@ -44,11 +41,8 @@ class NewsletterFactory
      * @param string $date Date format should be "2022-01-23T00:00"
      * @param string $subject Is only needed if extension runs NOT in multilanguage mode
      * @return Newsletter
-     * @throws ExbaseObjectException
      * @throws IllegalObjectTypeException
      * @throws InvalidConfigurationTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      * @throws SiteNotFoundException

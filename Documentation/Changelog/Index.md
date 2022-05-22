@@ -9,6 +9,7 @@
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| !!! 13.0.0 | 2022.05.22  | Feature    | Reduce technical debt by replacing outdated signalslots with PSR-14 eventdispatchers                                                                                                       |
 | 12.0.0     | 2022.04.07  | Task       | One unsubscribe page can be used for multiple newsletters with different receiver groups (we simply removed the usergroup selection in FlexForm)                                           |
 | 11.1.0     | 2022.04.04  | Task       | Add limit for receiver list, add limits for activities and logs, harden template paths, removed unneeded CSS                                                                               |
 | 11.0.2     | 2022.04.04  | Bugfix     | Clean internal SVG files from id and class attributes                                                                                                                                      |
@@ -62,6 +63,13 @@
 
 
 ## Breaking changes !!!
+
+### Upgrade to 13.x
+
+* If you have extended luxletter via slots (signalslots), you have to adjust your code by using PSR-14 eventdispatchers now
+  * Because we wanted to reduce technical debt and because making future updates for TYPO3 12 easier, we already switched to eventdispatchers
+  * All places that were extended with signals are now extended with eventdispatchers
+  * See official documentation how to use eventlisteners https://docs.typo3.org/p/brotkrueml/schema/main/en-us/Developer/Events.html
 
 ### Upgrade to 11.x
 

@@ -4,13 +4,13 @@ namespace In2code\Luxletter\Mail;
 
 use In2code\Luxletter\Domain\Model\Configuration;
 use In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding\Execution;
+use In2code\Luxletter\Events\SendMailSendNewsletterBeforeEvent;
+use In2code\Luxletter\Events\SendMailSendNewsletterBeforeMailMessageEvent;
 use In2code\Luxletter\Exception\MisconfigurationException;
-use In2code\Luxletter\Signal\SignalTrait;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * Class SendMail
@@ -18,8 +18,6 @@ use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
  */
 class SendMail
 {
-    use SignalTrait;
-
     /**
      * @var string
      */
@@ -36,6 +34,11 @@ class SendMail
     protected $configuration = null;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * SendMail constructor.
      * @param string $subject
      * @param string $bodytext
@@ -46,6 +49,7 @@ class SendMail
         $this->subject = $subject;
         $this->bodytext = $bodytext;
         $this->configuration = $configuration;
+        $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
     }
 
     /**
@@ -53,24 +57,34 @@ class SendMail
      * @return bool the number of recipients who were accepted for delivery
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
      */
     public function sendNewsletter(array $receiver): bool
     {
-        $send = true;
-        $this->signalDispatch(__CLASS__, 'sendbeforeSend', [&$send, $receiver, $this]);
-        $mailMessage = GeneralUtility::makeInstance(MailMessage::class);
-        $mailMessage
-            ->setTo($receiver)
-            ->setFrom([$this->configuration->getFromEmail() => $this->configuration->getFromName()])
-            ->setReplyTo([$this->configuration->getReplyEmail() => $this->configuration->getReplyName()])
-            ->setSubject($this->subject)
-            ->html($this->getBodytext($mailMessage));
-        $this->signalDispatch(__CLASS__, 'sendmailMessage', [$mailMessage, &$send, $receiver, $this]);
-        if ($send === true) {
-            return $mailMessage->send();
+        /** @var SendMailSendNewsletterBeforeEvent $event */
+        $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
+            SendMailSendNewsletterBeforeEvent::class,
+            $receiver,
+            $this
+        ));
+        if ($event->isSend()) {
+            $mailMessage = GeneralUtility::makeInstance(MailMessage::class);
+            $mailMessage
+                ->setTo($receiver)
+                ->setFrom([$this->configuration->getFromEmail() => $this->configuration->getFromName()])
+                ->setReplyTo([$this->configuration->getReplyEmail() => $this->configuration->getReplyName()])
+                ->setSubject($this->subject)
+                ->html($this->getBodytext($mailMessage));
+            /** @var SendMailSendNewsletterBeforeMailMessageEvent $event */
+            $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
+                SendMailSendNewsletterBeforeMailMessageEvent::class,
+                $receiver,
+                $mailMessage,
+                $this
+            ));
+            if ($event->isSend() === true) {
+                return $mailMessage->send();
+            }
         }
         return false;
     }

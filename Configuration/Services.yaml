@@ -7,9 +7,6 @@ services:
   In2code\Luxletter\:
     resource: '../Classes/*'
 
-  In2code\Luxletter\Domain\Service\QueueService:
-    public: true
-
   In2code\Luxletter\Command\ClearCommand:
     tags:
       - name: 'console.command'
@@ -29,3 +26,15 @@ services:
     tags:
       - name: 'console.command'
         command: 'luxletter:queue'
+
+  In2code\Luxletter\Domain\Factory\UserFactory:
+    public: true
+
+  In2code\Luxletter\Domain\Service\Parsing\Newsletter:
+    public: true
+
+  In2code\Luxletter\Domain\Service\QueueService:
+    public: true
+
+  In2code\Luxletter\Middleware\LuxletterLink:
+    public: true

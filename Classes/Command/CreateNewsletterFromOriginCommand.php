@@ -15,10 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Object\Exception as ExtbaseObjectException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * CreateNewsletterFromOriginCommand
@@ -52,9 +49,6 @@ class CreateNewsletterFromOriginCommand extends Command
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      * @throws InvalidConfigurationTypeException
-     * @throws ExtbaseObjectException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws SiteNotFoundException
      * @throws Exception
      * @throws ExceptionDbalDriver

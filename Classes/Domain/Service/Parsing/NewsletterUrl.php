@@ -12,15 +12,21 @@ use In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding\Prepara
 use In2code\Luxletter\Domain\Service\LayoutService;
 use In2code\Luxletter\Domain\Service\RequestService;
 use In2code\Luxletter\Domain\Service\SiteService;
+use In2code\Luxletter\Events\NewsletterUrlAfterParsingEvent;
+use In2code\Luxletter\Events\NewsletterUrlBeforeParsingEvent;
+use In2code\Luxletter\Events\NewsletterUrlConstructEvent;
+use In2code\Luxletter\Events\NewsletterUrlContainerAndContentEvent;
+use In2code\Luxletter\Events\NewsletterUrlContainerAndContentPostParsingEvent;
+use In2code\Luxletter\Events\NewsletterUrlGetContentFromOriginEvent;
 use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Exception\RecordInDatabaseNotFoundException;
 use In2code\Luxletter\Exception\UnvalidFilenameException;
-use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Throwable;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
@@ -30,9 +36,6 @@ use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbaseObject;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
@@ -42,8 +45,6 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  */
 class NewsletterUrl
 {
-    use SignalTrait;
-
     const MODE_NEWSLETTER = 'newsletter';
     const MODE_TESTMAIL = 'testmail';
     const MODE_PREVIEW = 'preview';
@@ -89,14 +90,15 @@ class NewsletterUrl
     protected $configuration = [];
 
     /**
-     * NewsletterUrl constructor.
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * @param string $origin can be a page uid or a complete url
      * @param string $layout Container html template filename like "NewsletterContainer"
      * @param int $language
-     * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
      * @throws SiteNotFoundException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
@@ -106,6 +108,7 @@ class NewsletterUrl
      */
     public function __construct(string $origin, string $layout, int $language)
     {
+        $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
         $this->setOrigin($origin);
         $this->setLanguage($language);
         $this->configuration = ConfigurationUtility::getExtensionSettings();
@@ -125,7 +128,7 @@ class NewsletterUrl
         }
         $this->setUrl($url);
 
-        $this->signalDispatch(__CLASS__, 'constructor', [$this]);
+        $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(NewsletterUrlConstructEvent::class, $this));
     }
 
     /**
@@ -133,12 +136,9 @@ class NewsletterUrl
      * @param User|null $user
      * @return string
      * @throws ApiConnectionException
-     * @throws ExceptionExtbaseObject
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidConfigurationTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      */
@@ -148,10 +148,15 @@ class NewsletterUrl
             $userFactory = GeneralUtility::makeInstance(UserFactory::class);
             $user = $userFactory->getDummyUser();
         }
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'BeforeParsing', [$user, $this]);
+        $this->eventDispatcher->dispatch(
+            GeneralUtility::makeInstance(NewsletterUrlBeforeParsingEvent::class, $user, $this)
+        );
         $content = $this->getNewsletterContainerAndContent($this->getContentFromOrigin($user), $site, $user);
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'AfterParsing', [$content, $this]);
-        return $content;
+        /** @var NewsletterUrlAfterParsingEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            GeneralUtility::makeInstance(NewsletterUrlAfterParsingEvent::class, $content, $this)
+        );
+        return $event->getContent();
     }
 
     /**
@@ -163,8 +168,6 @@ class NewsletterUrl
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws InvalidConfigurationTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
      */
     protected function getNewsletterContainerAndContent(string $content, Site $site, User $user): string
@@ -185,11 +188,14 @@ class NewsletterUrl
                     'settings' => (array)$this->configuration['settings']
                 ]
             );
-            $this->signalDispatch(
-                __CLASS__,
-                __FUNCTION__ . 'PostParsing',
-                [$standaloneView, $content, $this->configuration, $user, $this]
-            );
+            $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
+                NewsletterUrlContainerAndContentPostParsingEvent::class,
+                $standaloneView,
+                $content,
+                $this->configuration,
+                $user,
+                $this
+            ));
             $html = $standaloneView->render();
         } elseif ($this->mode === self::MODE_NEWSLETTER) {
             $container = file_get_contents($this->getContainerTemplate(true));
@@ -198,8 +204,16 @@ class NewsletterUrl
 
         $html = $this->bodytextManipulation($html);
 
-        $this->signalDispatch(__CLASS__, __FUNCTION__, [&$html, &$content, $user, $this]);
-        return $html;
+        /** @var NewsletterUrlContainerAndContentEvent $event */
+        $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
+            NewsletterUrlContainerAndContentEvent::class,
+            $content,
+            $this->configuration,
+            $user,
+            $html,
+            $this
+        ));
+        return $event->getHtml();
     }
 
     /**
@@ -242,11 +256,8 @@ class NewsletterUrl
     /**
      * @param User $user
      * @return string
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws InvalidUrlException
      * @throws MisconfigurationException
-     * @throws ExceptionExtbaseObject
      * @throws InvalidConfigurationTypeException
      */
     protected function getContentFromOrigin(User $user): string
@@ -269,8 +280,15 @@ class NewsletterUrl
             $parseService = GeneralUtility::makeInstance(Newsletter::class);
             $string = $parseService->parseBodytext($string, ['user' => $user]);
         }
-        $this->signalDispatch(__CLASS__, __FUNCTION__, [$string, $user, $this]);
-        return $string;
+
+        /** @var NewsletterUrlGetContentFromOriginEvent $event */
+        $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
+            NewsletterUrlGetContentFromOriginEvent::class,
+            $string,
+            $user,
+            $this
+        ));
+        return $event->getString();
     }
 
     /**

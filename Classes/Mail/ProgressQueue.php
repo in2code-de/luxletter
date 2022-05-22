@@ -8,10 +8,11 @@ use In2code\Luxletter\Domain\Service\BodytextManipulation\CssInline;
 use In2code\Luxletter\Domain\Service\BodytextManipulation\LinkHashing;
 use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Domain\Service\Parsing\Newsletter;
+use In2code\Luxletter\Events\ProgressQueueEvent;
 use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Exception\MisconfigurationException;
-use In2code\Luxletter\Signal\SignalTrait;
 use In2code\Luxletter\Utility\ConfigurationUtility;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
@@ -31,8 +32,6 @@ use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
  */
 class ProgressQueue
 {
-    use SignalTrait;
-
     /**
      * @var QueueRepository|null
      */
@@ -49,6 +48,11 @@ class ProgressQueue
     protected $cssInline = null;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * @var OutputInterface
      */
     protected $output = null;
@@ -62,6 +66,7 @@ class ProgressQueue
         $this->queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
         $this->parseService = GeneralUtility::makeInstance(Newsletter::class);
         $this->cssInline = GeneralUtility::makeInstance(CssInline::class);
+        $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
         $this->output = $output;
     }
 
@@ -88,7 +93,11 @@ class ProgressQueue
         if ($queues->count() > 0) {
             $progress = new ProgressBar($this->output, $queues->count());
             $progress->start();
-            $this->signalDispatch(__CLASS__, __FUNCTION__, [$queues]);
+            $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
+                ProgressQueueEvent::class,
+                $queues,
+                $newsletterIdentifier
+            ));
             /** @var Queue $queue */
             foreach ($queues as $queue) {
                 $this->sendNewsletterToReceiverInQueue($queue);
@@ -132,10 +141,7 @@ class ProgressQueue
     /**
      * @param Queue $queue
      * @return string
-     * @throws Exception
      * @throws InvalidConfigurationTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws SiteNotFoundException
      */
     protected function getSubject(Queue $queue): string

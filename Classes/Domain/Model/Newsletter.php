@@ -14,9 +14,6 @@ use In2code\Luxletter\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbaseObject;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * Class User
@@ -198,9 +195,6 @@ class Newsletter extends AbstractEntity
     /**
      * @return string
      * @throws InvalidConfigurationTypeException
-     * @throws ExceptionExtbaseObject
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      */
     public function getSubjectParsedWithDummyUser(): string
     {
@@ -424,6 +418,7 @@ class Newsletter extends AbstractEntity
     /**
      * @return float
      * @throws DBALException
+     * @throws ExceptionDbalDriver
      */
     public function getOpenRate(): float
     {

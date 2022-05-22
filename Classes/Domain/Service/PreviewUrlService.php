@@ -12,9 +12,6 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotCon
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbaseObject;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * Class PreviewUrlService
@@ -64,6 +61,7 @@ class PreviewUrlService
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws MisconfigurationException
+     * @throws InvalidConfigurationTypeException
      */
     public function get(string $origin, string $layout): array
     {
@@ -82,9 +80,6 @@ class PreviewUrlService
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws MisconfigurationException
      * @throws InvalidConfigurationTypeException
-     * @throws ExceptionExtbaseObject
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      */
     protected function getUrlForMultiLanguageModeInstallation(string $origin, string $layout): array
     {
