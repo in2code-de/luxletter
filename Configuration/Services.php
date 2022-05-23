@@ -9,17 +9,18 @@ use In2code\Luxletter\Widget\DataProvider\NewsletterDataProvider;
 use In2code\Luxletter\Widget\DataProvider\OpenRateDataProvider;
 use In2code\Luxletter\Widget\DataProvider\ReceiverDataProvider;
 use In2code\Luxletter\Widget\DataProvider\UnsubscribeRateDataProvider;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Dashboard\Widgets\BarChartWidget;
 use TYPO3\CMS\Dashboard\Widgets\DoughnutChartWidget;
 use TYPO3\CMS\Dashboard\Widgets\NumberWithIconWidget;
+use TYPO3\CMS\Reports\Status;
 
-return function (ContainerConfigurator $configurator) {
+return function (ContainerConfigurator $configurator, ContainerBuilder $containerBuilder) {
     $services = $configurator->services();
 
-    if (ExtensionManagementUtility::isLoaded('dashboard')) {
+    if ($containerBuilder->hasDefinition(Status::class)) {
         $services->set('dashboard.widgets.OpenRateWidget')
             ->class(DoughnutChartWidget::class)
             ->arg('$view', new Reference('dashboard.views.widget'))
