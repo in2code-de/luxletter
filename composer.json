@@ -38,7 +38,8 @@
 		"typo3-ter/luxletter": "self.version"
 	},
 	"suggest": {
-		"in2code/lux": "Marketing automation for TYPO3"
+		"in2code/lux": "Marketing automation for TYPO3",
+		"typo3/cms-dashboard": "*"
 	},
 	"autoload": {
 		"psr-4": {

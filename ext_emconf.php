@@ -15,7 +15,8 @@ $EM_CONF[$_EXTKEY] = [
         ],
         'conflicts' => [],
         'suggests' => [
-            'lux' => '0.0.0-0.0.0'
+            'lux' => '0.0.0-0.0.0',
+            'dashboard' => '0.0.0-0.0.0'
         ]
     ]
 ];
