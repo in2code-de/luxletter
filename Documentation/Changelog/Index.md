@@ -9,6 +9,7 @@
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 13.0.2     | 2022.05.24  | Bugfix     | Fix regression with 13.0.1 and also added EXT:dashboard to suggest parts in composer.json and ext_emconf.php                                                                               |
 | 13.0.1     | 2022.05.23  | Bugfix     | Prevent exception "Call to a member function isPackageActive() on null" in TYPO3 11                                                                                                        |
 | !!! 13.0.0 | 2022.05.22  | Feature    | Reduce technical debt by replacing outdated signalslots with PSR-14 eventdispatchers                                                                                                       |
 | 12.0.0     | 2022.04.07  | Task       | One unsubscribe page can be used for multiple newsletters with different receiver groups (we simply removed the usergroup selection in FlexForm)                                           |
