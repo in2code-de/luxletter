@@ -173,16 +173,28 @@ class LogRepository extends AbstractRepository
 
     /**
      * @param Newsletter $newsletter
-     * @param int $status
+     * @param int|int[] $status
+     * @param bool $distinctMails
      * @return array
-     * @throws DBALException
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function findByNewsletterAndStatus(Newsletter $newsletter, int $status): array
+    public function findByNewsletterAndStatus(Newsletter $newsletter, $status, bool $distinctMails = false): array
     {
+        $sqlSelectColumns = '*';
+        if ($distinctMails) {
+            $sqlSelectColumns = 'distinct newsletter, user';
+        }
+        $sqlWhereStatus = 'status=0';
+        if (is_int($status)) {
+            $sqlWhereStatus = 'status=' . $status;
+        } elseif (is_array($status) && count($status) > 0) {
+            $sqlWhereStatus = 'status in (' . implode(',', array_map('intval', $status)) . ')';
+        }
+
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
         return (array)$connection->executeQuery(
-            'select * from ' . Log::TABLE_NAME .
-            ' where deleted=0 and status=' . $status . ' and newsletter=' . $newsletter->getUid()
+            'select ' . $sqlSelectColumns . ' from ' . Log::TABLE_NAME .
+            ' where deleted=0 and ' . $sqlWhereStatus . ' and newsletter=' . $newsletter->getUid()
         )->fetchAll();
     }
 
