@@ -292,8 +292,9 @@ class Newsletter extends AbstractEntity
     public function getClickers(): int
     {
         if ($this->clickers === 0) {
+            /** @var $logRepository LogRepository */
             $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
-            $clickers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_LINKOPENING));
+            $clickers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_LINKOPENING, true));
             $this->clickers = $clickers;
         }
         return $this->clickers;

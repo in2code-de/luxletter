@@ -75,6 +75,19 @@ class LogRepository extends AbstractRepository
      * @return int
      * @throws DBALException
      */
+    public function getOpeningsByClickers(): int
+    {
+        $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
+        return (int)$connection->executeQuery(
+            'select count(distinct newsletter, user) from ' . Log::TABLE_NAME .
+            ' where deleted = 0 and status=' . Log::STATUS_LINKOPENING . ';'
+        )->fetchColumn(0);
+    }
+
+    /**
+     * @return int
+     * @throws DBALException
+     */
     public function getOverallClicks(): int
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
@@ -131,9 +144,9 @@ class LogRepository extends AbstractRepository
     public function getOverallClickRate(): float
     {
         $overallOpenings = $this->getOverallOpenings();
-        $overallClicks = $this->getOverallClicks();
+        $openingsByClickers = $this->getOpeningsByClickers();
         if ($overallOpenings > 0) {
-            return $overallClicks / $overallOpenings;
+            return $openingsByClickers / $overallOpenings;
         }
         return 0.0;
     }
