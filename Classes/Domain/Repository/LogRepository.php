@@ -66,8 +66,9 @@ class LogRepository extends AbstractRepository
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
         return (int)$connection->executeQuery(
-            'select count(uid) from ' . Log::TABLE_NAME .
-            ' where deleted = 0 and status=' . Log::STATUS_NEWSLETTEROPENING . ';'
+            'select count(distinct newsletter, user) from ' . Log::TABLE_NAME .
+            ' where deleted = 0' .
+            ' and status IN (' . Log::STATUS_NEWSLETTEROPENING . ',' . Log::STATUS_LINKOPENING . ')' . ';'
         )->fetchColumn(0);
     }
 

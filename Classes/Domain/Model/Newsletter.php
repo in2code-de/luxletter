@@ -277,8 +277,9 @@ class Newsletter extends AbstractEntity
     public function getOpeners(): int
     {
         if ($this->openers === 0) {
+            /** @var $logRepository LogRepository */
             $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
-            $openers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_NEWSLETTEROPENING));
+            $openers = count($logRepository->findByNewsletterAndStatus($this, [Log::STATUS_NEWSLETTEROPENING, Log::STATUS_LINKOPENING], true));
             $this->openers = $openers;
         }
         return $this->openers;
