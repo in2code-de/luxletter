@@ -1,19 +1,16 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\ViewHelpers\Mail;
 
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
-use In2code\Luxletter\Domain\Service\FrontendUrlService;
+use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Exception\UserValuesAreMissingException;
-use In2code\Luxletter\Utility\ConfigurationUtility;
-use In2code\Luxletter\Utility\ObjectUtility;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
-use TYPO3\CMS\Core\Routing\InvalidRouteArgumentsException;
-use TYPO3\CMS\Extbase\Object\Exception;
+use Throwable;
+use TYPO3\CMS\Core\Site\Entity\Site;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Object\Exception as ExceptionExbaseObject;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -28,34 +25,52 @@ class GetUnsubscribeUrlViewHelper extends AbstractViewHelper
     public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerArgument('newsletter', Newsletter::class, 'Newsletter', false, null);
-        $this->registerArgument('user', User::class, 'User', false, null);
+        $this->registerArgument('newsletter', Newsletter::class, 'Newsletter object', false);
+        $this->registerArgument('user', User::class, 'User object', false);
+        $this->registerArgument('site', Site::class, 'Site object', true);
     }
 
     /**
      * @return string
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws InvalidRouteArgumentsException
-     * @throws SiteNotFoundException
-     * @throws UserValuesAreMissingException
      * @throws MisconfigurationException
-     * @throws Exception
      */
     public function render(): string
     {
-        $frontendUrlService = ObjectUtility::getObjectManager()->get(FrontendUrlService::class);
-        $url = $frontendUrlService->getTypolinkUrlFromParameter(
-            ConfigurationUtility::getPidUnsubscribe(),
-            [
-                'tx_luxletter_fe' => [
-                    'user' => $this->getUserIdentifier(),
-                    'newsletter' => $this->getNewsletterIdentifier(),
-                    'hash' => $this->getHash()
+        $siteService = GeneralUtility::makeInstance(SiteService::class);
+        try {
+            return $siteService->getPageUrlFromParameter(
+                $this->getPidUnsubscribe(),
+                [
+                    'tx_luxletter_fe' => [
+                        'user' => $this->getUserIdentifier(),
+                        'newsletter' => $this->getNewsletterIdentifier(),
+                        'hash' => $this->getHash()
+                    ]
                 ]
-            ]
-        );
-        return $url;
+            );
+        } catch (Throwable $exception) {
+            throw new MisconfigurationException(
+                'Could not build a valid URL to unsubscribe page with PID "' . $this->getPidUnsubscribe() . '"',
+                1646380245
+            );
+        }
+    }
+
+    /**
+     * @return int
+     * @throws MisconfigurationException
+     */
+    protected function getPidUnsubscribe(): int
+    {
+        $site = $this->arguments['site'];
+        $unsubscribePid = (int)$site->getConfiguration()['luxletterUnsubscribePid'];
+        if ($unsubscribePid === 0) {
+            throw new MisconfigurationException(
+                'No unsubscribe page identifier found in site configuration',
+                1622811392
+            );
+        }
+        return $unsubscribePid;
     }
 
     /**
@@ -86,7 +101,9 @@ class GetUnsubscribeUrlViewHelper extends AbstractViewHelper
 
     /**
      * @return string
+     * @throws MisconfigurationException
      * @throws UserValuesAreMissingException
+     * @throws ExceptionExbaseObject
      */
     protected function getHash(): string
     {

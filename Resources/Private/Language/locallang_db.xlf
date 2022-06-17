@@ -6,6 +6,16 @@
 			<trans-unit id="fe_groups.luxletter_receiver">
 				<source>Is newsletter receiver group?</source>
 			</trans-unit>
+			<trans-unit id="fe_groups.luxletter_language">
+				<source>Preferred language for newsletters</source>
+			</trans-unit>
+
+			<trans-unit id="pages.doktype_luxletter">
+				<source>Newsletter</source>
+			</trans-unit>
+			<trans-unit id="pages.luxletter_subject">
+				<source>Mail subject</source>
+			</trans-unit>
 
 			<trans-unit id="ctype.teaser">
 				<source>Teaser element</source>
@@ -53,8 +63,14 @@
 			<trans-unit id="tx_luxletter_domain_model_newsletter.origin">
 				<source>Origin</source>
 			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.layout">
+				<source>Container template file</source>
+			</trans-unit>
 			<trans-unit id="tx_luxletter_domain_model_newsletter.bodytext">
 				<source>Bodytext</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.language">
+				<source>Language</source>
 			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_queue">
@@ -93,7 +109,7 @@
 			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_link">
-				<source>Log</source>
+				<source>Link</source>
 			</trans-unit>
 			<trans-unit id="tx_luxletter_domain_model_link.newsletter">
 				<source>Newsletter</source>
@@ -106,6 +122,28 @@
 			</trans-unit>
 			<trans-unit id="tx_luxletter_domain_model_link.target">
 				<source>Target</source>
+			</trans-unit>
+
+			<trans-unit id="tx_luxletter_domain_model_configuration">
+				<source>Sender configuration</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_configuration.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_configuration.from_email">
+				<source>Sender email</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_configuration.from_name">
+				<source>Sender name</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_configuration.reply_email">
+				<source>Reply to email</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_configuration.reply_name">
+				<source>Reply name</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_configuration.site">
+				<source>Site</source>
 			</trans-unit>
 
 			<trans-unit id="flexform.fe.removeusergroup">
@@ -198,6 +236,10 @@
 			</trans-unit>
 			<trans-unit id="module.dashboard.widget.lastnewslettersclickrate.label">
 				<source>Clicker</source>
+			</trans-unit>
+
+			<trans-unit id="newsletter.layouts.1">
+				<source>Default layout</source>
 			</trans-unit>
 
 			<trans-unit id="pleasechoose">

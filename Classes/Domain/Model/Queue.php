@@ -1,7 +1,8 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Model;
 
+use DateTime;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
@@ -17,17 +18,17 @@ class Queue extends AbstractEntity
     protected $email = '';
 
     /**
-     * @var \In2code\Luxletter\Domain\Model\Newsletter
+     * @var Newsletter
      */
     protected $newsletter = null;
 
     /**
-     * @var \In2code\Luxletter\Domain\Model\User
+     * @var User
      */
     protected $user = null;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     protected $datetime = null;
 
@@ -55,7 +56,7 @@ class Queue extends AbstractEntity
     }
 
     /**
-     * @return Newsletter
+     * @return Newsletter|null
      */
     public function getNewsletter(): ?Newsletter
     {
@@ -73,9 +74,9 @@ class Queue extends AbstractEntity
     }
 
     /**
-     * @return User
+     * @return User|null
      */
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -91,18 +92,18 @@ class Queue extends AbstractEntity
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime|null
      */
-    public function getDatetime(): \DateTime
+    public function getDatetime(): ?DateTime
     {
         return $this->datetime;
     }
 
     /**
-     * @param \DateTime $datetime
+     * @param DateTime $datetime
      * @return Queue
      */
-    public function setDatetime(\DateTime $datetime): self
+    public function setDatetime(DateTime $datetime): self
     {
         $this->datetime = $datetime;
         return $this;

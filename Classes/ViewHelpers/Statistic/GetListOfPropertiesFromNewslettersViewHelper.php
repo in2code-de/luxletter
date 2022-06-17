@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\ViewHelpers\Statistic;
 
 use In2code\Luxletter\Domain\Model\Newsletter;
@@ -15,7 +15,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
  */
 class GetListOfPropertiesFromNewslettersViewHelper extends AbstractViewHelper
 {
-
     /**
      * @return void
      */
@@ -23,7 +22,7 @@ class GetListOfPropertiesFromNewslettersViewHelper extends AbstractViewHelper
     {
         parent::initializeArguments();
         $this->registerArgument('newsletters', QueryResultInterface::class, 'Newsletter', true);
-        $this->registerArgument('property', 'string', 'Any concatinated property from a newsletter', true);
+        $this->registerArgument('property', 'string', 'Any concatenated property from a newsletter', true);
         $this->registerArgument('limit', 'int', 'Show X values', false, 6);
     }
 
@@ -36,7 +35,11 @@ class GetListOfPropertiesFromNewslettersViewHelper extends AbstractViewHelper
         $values = [];
         foreach ($this->arguments['newsletters'] as $newsletter) {
             /** @var Newsletter $newsletter */
-            $values[] = ObjectAccess::getProperty($newsletter, $this->arguments['property']);
+            $values[] = str_replace(
+                ',',
+                '',
+                (string)ObjectAccess::getProperty($newsletter, $this->arguments['property'])
+            );
         }
         return implode(',', $values);
     }

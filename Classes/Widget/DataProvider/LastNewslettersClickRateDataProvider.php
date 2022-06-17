@@ -1,12 +1,12 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Widget\DataProvider;
 
 use Doctrine\DBAL\DBALException;
-use In2code\Lux\Utility\LocalizationUtility;
-use In2code\Lux\Utility\ObjectUtility;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
+use In2code\Luxletter\Utility\LocalizationUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Dashboard\WidgetApi;
 use TYPO3\CMS\Dashboard\Widgets\ChartDataProviderInterface;
 use TYPO3\CMS\Extbase\Object\Exception;
@@ -58,7 +58,7 @@ class LastNewslettersClickRateDataProvider implements ChartDataProviderInterface
      */
     protected function getData(): array
     {
-        $newsletterRepository = ObjectUtility::getObjectManager()->get(NewsletterRepository::class);
+        $newsletterRepository = GeneralUtility::makeInstance(NewsletterRepository::class);
         $newsletters = $newsletterRepository->findAll()->getQuery()->setLimit(10)->execute();
         $data = [
             'amounts' => [],
@@ -78,7 +78,7 @@ class LastNewslettersClickRateDataProvider implements ChartDataProviderInterface
      */
     protected function getWidgetLabel(string $key): string
     {
-        $label = LocalizationUtility::getLanguageService()->sL(
+        $label = LocalizationUtility::translate(
             'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.' . $key
         );
         if (empty($label)) {

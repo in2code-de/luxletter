@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Repository;
 
 use In2code\Luxletter\Exception\ArgumentMissingException;
@@ -11,7 +11,6 @@ use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
  */
 class LinkRepository extends AbstractRepository
 {
-
     /**
      * @param string $hash
      * @return bool

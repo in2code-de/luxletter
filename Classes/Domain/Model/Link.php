@@ -1,13 +1,12 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Model;
 
-use In2code\Luxletter\Domain\Service\FrontendUrlService;
+use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\MisconfigurationException;
-use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Object\Exception;
 
@@ -19,12 +18,12 @@ class Link extends AbstractEntity
     const TABLE_NAME = 'tx_luxletter_domain_model_link';
 
     /**
-     * @var \In2code\Luxletter\Domain\Model\Newsletter
+     * @var Newsletter
      */
     protected $newsletter = null;
 
     /**
-     * @var \In2code\Luxletter\Domain\Model\User
+     * @var User
      */
     protected $user = null;
 
@@ -41,7 +40,7 @@ class Link extends AbstractEntity
     /**
      * @return Newsletter
      */
-    public function getNewsletter(): Newsletter
+    public function getNewsletter(): ?Newsletter
     {
         return $this->newsletter;
     }
@@ -59,7 +58,7 @@ class Link extends AbstractEntity
     /**
      * @return User
      */
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -96,15 +95,14 @@ class Link extends AbstractEntity
      * Get hashed uri
      *
      * @return string
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws Exception
      * @throws MisconfigurationException
+     * @throws SiteNotFoundException
      */
     public function getUriFromHash(): string
     {
-        $urlService = ObjectUtility::getObjectManager()->get(FrontendUrlService::class);
-        return $urlService->getFrontendUrlFromParameter(['luxletterlink' => $this->getHash()]);
+        $site = $this->getNewsletter()->getConfiguration()->getSiteConfiguration();
+        $siteService = GeneralUtility::makeInstance(SiteService::class);
+        return $siteService->getFrontendUrlFromParameter(['luxletterlink' => $this->getHash()], $site);
     }
 
     /**
@@ -117,7 +115,9 @@ class Link extends AbstractEntity
 
     /**
      * @param string $target
-     * @return Link
+     * @return $this
+     * @throws Exception
+     * @throws MisconfigurationException
      */
     public function setTarget(string $target): self
     {
@@ -129,6 +129,8 @@ class Link extends AbstractEntity
     /**
      * @param string $target
      * @return void
+     * @throws Exception
+     * @throws MisconfigurationException
      */
     private function setHashFromTarget(string $target): void
     {
@@ -140,6 +142,8 @@ class Link extends AbstractEntity
     /**
      * @param string $target
      * @return string
+     * @throws MisconfigurationException
+     * @throws Exception
      */
     private function getHashFromTarget(string $target): string
     {

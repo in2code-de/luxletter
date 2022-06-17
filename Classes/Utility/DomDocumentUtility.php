@@ -6,7 +6,6 @@ namespace In2code\Luxletter\Utility;
  */
 class DomDocumentUtility
 {
-
     /**
      * Wrap html with "<?xml encoding="utf-8" ?><html><body>|</body></html>"
      *

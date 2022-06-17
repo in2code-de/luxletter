@@ -1,8 +1,9 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Repository;
 
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Utility\DatabaseUtility;
@@ -24,13 +25,18 @@ class UserRepository extends AbstractRepository
 
     /**
      * @param int $groupIdentifier
+     * @param int $language -1 = all, otherwise only the users with the specific language are selected
      * @param int $limit
      * @return QueryResultInterface
      */
-    public function getUsersFromGroup(int $groupIdentifier, int $limit = 0): QueryResultInterface
+    public function getUsersFromGroup(int $groupIdentifier, int $language, int $limit = 0): QueryResultInterface
     {
         $query = $this->createQuery();
-        $query->matching($query->equals('usergroup.uid', $groupIdentifier));
+        $and = [$query->equals('usergroup.uid', $groupIdentifier)];
+        if ($language !== -1) {
+            $and[] = $query->equals('luxletterLanguage', $language);
+        }
+        $query->matching($query->logicalAnd($and));
         if ($limit > 0) {
             $query->setLimit($limit);
         }
@@ -41,13 +47,15 @@ class UserRepository extends AbstractRepository
      * @param int $groupIdentifier
      * @return int
      * @throws DBALException
+     * @throws Exception
      */
     public function getUserAmountFromGroup(int $groupIdentifier): int
     {
         $connection = DatabaseUtility::getConnectionForTable(User::TABLE_NAME);
+        /** @noinspection SqlDialectInspection */
         $query = 'select count(uid) from ' . User::TABLE_NAME . ' ';
-        $query .= 'where find_in_set(' . (int)$groupIdentifier . ',usergroup) and deleted=0 and disable=0';
-        return (int)$connection->executeQuery($query)->fetchColumn(0);
+        $query .= 'where find_in_set(' . $groupIdentifier . ',usergroup) and deleted=0 and disable=0';
+        return (int)$connection->executeQuery($query)->fetchOne();
     }
 
     /**
@@ -96,5 +104,7 @@ class UserRepository extends AbstractRepository
         }
         $constraint = $query->logicalAnd($and);
         $query->matching($constraint);
+
+        $query->setLimit(1000);
     }
 }

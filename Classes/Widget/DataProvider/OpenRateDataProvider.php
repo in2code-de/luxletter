@@ -1,14 +1,13 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Widget\DataProvider;
 
 use Doctrine\DBAL\DBALException;
-use In2code\Lux\Utility\LocalizationUtility;
-use In2code\Lux\Utility\ObjectUtility;
 use In2code\Luxletter\Domain\Repository\LogRepository;
+use In2code\Luxletter\Utility\LocalizationUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Dashboard\WidgetApi;
 use TYPO3\CMS\Dashboard\Widgets\ChartDataProviderInterface;
-use TYPO3\CMS\Extbase\Object\Exception;
 
 /**
  * Class OpenRateDataProvider
@@ -19,7 +18,6 @@ class OpenRateDataProvider implements ChartDataProviderInterface
     /**
      * @return array
      * @throws DBALException
-     * @throws Exception
      */
     public function getChartData(): array
     {
@@ -52,12 +50,11 @@ class OpenRateDataProvider implements ChartDataProviderInterface
      *  ]
      *
      * @return array
-     * @throws Exception
      * @throws DBALException
      */
     protected function getData(): array
     {
-        $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
+        $logRepository = GeneralUtility::makeInstance(LogRepository::class);
         return [
             'amounts' => [
                 $logRepository->getOverallOpenings(),
@@ -76,7 +73,7 @@ class OpenRateDataProvider implements ChartDataProviderInterface
      */
     protected function getWidgetLabel(string $key): string
     {
-        $label = LocalizationUtility::getLanguageService()->sL(
+        $label = LocalizationUtility::translate(
             'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.' . $key
         );
         if (empty($label)) {

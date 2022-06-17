@@ -1,5 +1,7 @@
 <?php
 use In2code\Luxletter\Domain\Model\Log;
+use In2code\Luxletter\Domain\Model\Newsletter;
+use In2code\Luxletter\Domain\Model\User;
 
 return [
     'ctrl' => [
@@ -19,10 +21,8 @@ return [
             'endtime' => 'endtime',
         ],
         'iconfile' => 'EXT:luxletter/Resources/Public/Icons/' . Log::TABLE_NAME . '.svg',
-        'rootLevel' => -1
-    ],
-    'interface' => [
-        'showRecordFieldList' => 'crdate,newsletter,user,status,properties',
+        'rootLevel' => -1,
+        'hideTable' => 1
     ],
     'types' => [
         '1' => ['showitem' => 'crdate,newsletter,user,status,properties'],
@@ -35,7 +35,8 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'datetime',
-                'readOnly' => true
+                'readOnly' => true,
+                'renderType' => 'inputDateTime'
             ]
         ],
         'newsletter' => [
@@ -45,7 +46,7 @@ return [
             'config' => [
                 'type' => 'group',
                 'internal_type' => 'db',
-                'allowed' => \In2code\Luxletter\Domain\Model\Newsletter::TABLE_NAME,
+                'allowed' => Newsletter::TABLE_NAME,
                 'size' => 1,
                 'maxitems' => 1,
                 'multiple' => 0,
@@ -60,7 +61,7 @@ return [
             'config' => [
                 'type' => 'group',
                 'internal_type' => 'db',
-                'allowed' => \In2code\Luxletter\Domain\Model\User::TABLE_NAME,
+                'allowed' => User::TABLE_NAME,
                 'size' => 1,
                 'maxitems' => 1,
                 'multiple' => 0,

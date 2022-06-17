@@ -1,6 +1,19 @@
 <f:layout name="Backend"/>
 
+
 <f:section name="content">
+	<f:if condition="{configurations}">
+		<f:then>
+			<f:render section="Newsletters" arguments="{_all}"/>
+		</f:then>
+		<f:else>
+			<f:render section="NoConfigurations" arguments="{_all}"/>
+		</f:else>
+	</f:if>
+</f:section>
+
+
+<f:section name="Newsletters">
 	<f:if condition="{newsletters}">
 		<div class="row">
 			<div class="col-md-12">
@@ -27,7 +40,10 @@
 						<tr>
 							<th>#</th>
 							<th><f:translate key="module.newsletter.list.tableheader.title">title</f:translate></th>
-							<th><f:translate key="module.newsletter.list.tableheader.description">description</f:translate></th>
+							<th><f:translate key="module.newsletter.list.tableheader.subject">subject</f:translate></th>
+                            <luxletter:condition.isMultiLanguageModeActivated>
+							    <th><f:translate key="module.newsletter.list.tableheader.language">language</f:translate></th>
+                            </luxletter:condition.isMultiLanguageModeActivated>
 							<th><f:translate key="module.newsletter.list.tableheader.datetime">datetime</f:translate></th>
 							<th><f:translate key="module.newsletter.list.tableheader.progress">progress</f:translate></th>
 							<th><f:translate key="module.newsletter.list.tableheader.receiver">receiver</f:translate></th>
@@ -37,7 +53,9 @@
 						<tbody>
 						<f:for each="{newsletters}" as="newsletter" iteration="iteration">
 							<tr>
-								<td>{iteration.cycle}.</td>
+								<td>
+									<span title="UID{newsletter.uid}">{iteration.cycle}.</span>
+								</td>
 								<td>
 									<f:if condition="{newsletter.enabled}">
 										<f:then>
@@ -48,10 +66,19 @@
 										</f:else>
 									</f:if>
 
-									<span title="UID{newsletter.uid}">{newsletter.title}</span>
+									<span title="{newsletter.description}">{newsletter.title}</span>
 								</td>
-								<td><span title="{newsletter.description}"><f:format.crop maxCharacters="200" append=" ...">{newsletter.description}</f:format.crop></span></td>
-								<td>{f:format.date(date:newsletter.datetime,format:'{f:translate(key:\'date\')}')}</td>
+								<td>
+									<span title="{newsletter.subject}">{newsletter.subjectParsedWithDummyUser}</span>
+								</td>
+                                <luxletter:condition.isMultiLanguageModeActivated>
+                                    <td>
+                                        {newsletter.languageLabel}
+                                    </td>
+                                </luxletter:condition.isMultiLanguageModeActivated>
+								<td>
+									{f:format.date(date:newsletter.datetime,format:'{f:translate(key:\'date\')}')}
+								</td>
 								<td>
 									<div class="progress">
 										<div class="progress-bar" role="progressbar" title="{newsletter.dispatchProgress} %" style="width: {newsletter.dispatchProgress}%" aria-valuenow="{newsletter.dispatchProgress}" aria-valuemin="0" aria-valuemax="100"></div>
@@ -59,7 +86,7 @@
 								</td>
 								<td>
 									<span title="UID{newsletter.receiver.uid}">{newsletter.receiver.title}</span>
-									<span class="badge" title="Amount" style="margin-left:15px;"><luxletter:usergroup.getNumberOfReceiversFromGroup usergroup="{newsletter.receiver.uid}" /></span>
+									<span class="badge" title="Amount" style="margin-left:15px;"><luxletter:queue.getNumberOfReceiversFromQueue newsletter="{newsletter}" /></span>
 								</td>
 								<td>
 									<f:if condition="{newsletter.enabled}">
@@ -75,7 +102,7 @@
 										</f:else>
 									</f:if>
 
-									<f:link.action action="delete" class="btn btn-danger" arguments="{newsletter:newsletter}">
+									<f:link.action action="delete" class="btn btn-danger" arguments="{newsletter:newsletter}" additionalAttributes="{data-luxletter-confirm:'{f:translate(key:\'deleteconfirm\')}'}">
 										<f:translate key="module.newsletter.list.delete">delete</f:translate>
 									</f:link.action>
 								</td>
@@ -94,5 +121,13 @@
 			</f:if>
 
 		</div>
+	</div>
+</f:section>
+
+
+<f:section name="NoConfigurations">
+	<div class="alert alert-danger" role="alert">
+		<h4 class="alert-heading"><f:translate key="module.newsletter.list.createnew.noconfiguration">No configuration found</f:translate></h4>
+		<p class="mb-0"><f:translate key="module.newsletter.list.createnew.noconfigurationdetails">Please add a record</f:translate></p>
 	</div>
 </f:section>

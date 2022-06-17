@@ -1,6 +1,8 @@
 <img align="left" src="../../Resources/Public/Icons/lux.svg" width="50" />
 
-# Luxletter - Email marketing in TYPO3. Send newsletters the easy way.
+# Luxletter - Email marketing in TYPO3
+
+Send newsletters the easy way
 
 ## Installation
 
@@ -10,26 +12,51 @@ Extension luxletter should be installed via composer
 composer require "in2code/luxletter"
 ```
 
-Note: Installation without composer could work but is not supported. 
-TYPO3 9.5 is required. The free extension lux can be also installed for more analysis but is not 
-neccessary.
+**Note:** TYPO3 in composer mode is needed
+
+TYPO3 10.4 or 11.5 is required. The free extension lux can be also installed for more analysis but is not eccessary.
 
 
 ### Basic settings in extension configuration
 
-| Field                         | Default value                 | Description                                                                             |
-| ----------------------------- | ----------------------------- | --------------------------------------------------------------------------------------- |
-| Webserver domain              | https://www.domain.org        | Domain for the rendering of the newsletter in frontend. Normally your current domain.   |
-| Unsubscribe PID               | 6                             | Where is your unsubscribe plugin located on your website?                               |
-| Rewrite links in newsletter   | 1                             | Do you want to track if a receiver opens a link? Then you have to check this option.    |
-| Add typenum                   | 1562349004                    | Default typenum if content of your website should be rendered in an email view.         |
-| Show receiver action          | 1                             | Disable the link to the receiver action if you don't need it.                           |
-| Sender email address          | newsletter@yourserver.org     | Define a sender email address for your newsletters.                                     |
-| Sender name                   | Sender name                   | Define a sender name for your newsletters.                                              |
-| Reply email address           | personal@youremail.org        | Real email address of a person that should receive answers to this newsletter email.    |
-| Sender name                   | Sender name                   | Name of the sender for your newsletter (mostly the same as fromName).                   |
+| Field                         | Default value                 | Description                                                                                                                                                                                 |
+| ----------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Multilanguage mode            | 0                             | This mode allows to parse pages with all localized versions. No external sources can be parsed in multilanguage mode - only internal pages.                                                 |
+| Rewrite links in newsletter   | 1                             | Rewrite links in newsletter: Absolute links in your newsletters can be rewritten automatically, to track all link clicks. If you disable this feature, clicks are not tracked.              |
+| Embed images                  | 0                             | Images with absolute url can automatically be embedded into newsletter mails. File will be stored temporary under `uploads/tx_luxletter/` when newsletters are generated. Attention: This will slow down the sending process (about 10s per email). |
+| Add typenum                   | 1562349004                    | Add typenum: Everytime you parse a html for a new newsletter, this type will be added (can be used in fluidStyledMailContent). This will work only for PID in origin, not for absolute URL. |
+| Show receiver action          | 1                             | Show receiver action: Show link to receiver view in newsletter module. This view is maybe disturbing if you don't use extension lux in addition.                                            |
+| limitToContext                |                               | Limit mails in context: If you run testinstances beside production, you can limit mail sending to a defined context (empty = no limit). Example "Production" or "Development/Docker".       |
 
 <img src="../Images/documentation_installation_settings.png" width="800" alt="extension settings" />
+
+
+### Site configuration
+
+You must define one unsubscribe pid per site configuration. This is relevant the unsubscribe plugin of luxletter. You
+can also use a pid outside the site or simply use one unsubscribe page for multiple sites. Nevertheless the PID must
+be defined in every site configuration.
+
+**Attention** Be aware to use a full domain name in base (Entry point) settings of your site configuration. Good: `https://www.domain.org/` - Bad: `/`
+
+<img src="../Images/documentation_installation_siteconfiguration.png" width="800" alt="Site configuration" />
+
+
+### Sender configuration
+
+A sender configuration can be added via list module in every folder page in backend.
+
+| Field          | Description                                                                                                                                                                                 |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Title          | Your internal title for this sender configuration                                                                                                                                           |
+| Sender email   | Sender email address for newsletter email                                                                                                                                                   |
+| Sender name    | Sender name for newsletter email                                                                                                                                                            |
+| Reply to email | Email address when a receiver wants to send an answer to the newsletter                                                                                                                     |
+| Reply to name  | Name when a receiver wants to send an answer to the newsletter                                                                                                                              |
+| Site           | This defines your domain/site and is needed for the unsubscribe plugin and for building absolute URI                                                                                        |
+
+<img src="../Images/documentation_installation_senderconfiguration.png" width="800" alt="Sender configuration" />
+
 
 
 ### TypoScript
@@ -40,6 +67,8 @@ Basicly there are two different TypoScripts that should be included in static te
 * In addition `FluidStyledMailContent` static template can also be added for rendering content in an email way (with html from the hell for outlook & co.)
 
 <img src="../Images/documentation_installation_statictyposcript.png" width="800" alt="add static typoscript" />
+
+**Important** Please do not include those templates in an extension template deep in your website but on the root template. Otherwise the backend module can't read the TypoScript.
 
 #### Basic
 
@@ -70,11 +99,13 @@ Don't forget to add the page identifier to the main extension settings (see abov
 
 <img src="../Images/documentation_installation_unsubscribeplugin.png" width="800" alt="unsubscribe plugin" />
 
-* You should select a usergroup that should be removed from the current visiting frontenduser.
 * In addition you can add a message that should appear if a user just unsubscribed.
 
-**Note** Unsubscribing is only possible if a hash is added to the link call. 
-See `{luxletter:mail.getUnsubscribeUrl(newsletter:newsletter,user:user)}` in the newsletter layout 
+Technical note: if someone unsubscribes from a newsletter, luxletter will simply remove the receiver usergroup from
+this user. The user is not deleted from the system.
+
+**Note** Unsubscribing is only possible if a hash is added to the link call.
+See `{luxletter:mail.getUnsubscribeUrl(newsletter:newsletter,user:user,site:site)}` in the newsletter layout
 on EXT:lux/Resources/Private/Templates/Mail/NewsletterContainer.html
 
 
@@ -88,9 +119,15 @@ Open a group and check `Is newsletter receiver group` for groups that should get
 <img src="../Images/documentation_installation_fegroups.png" width="800" alt="fe_groups records" />
 
 
+### Define fe_users.luxletter_language (only for multilanguage mode)
+
+If luxletter runs in multilanguage mode, you can define which fe_user record prefers which language. Just open
+such a record and select a specific value for field `luxletter_language`.
+
+
 ### Connect a mailserver
 
-If you don't set a mail configuration for luxletter, 
+If you don't set a mail configuration for luxletter,
 the default mail configuration from TYPO3 will be used when sending newsletters.
 
 Nevertheless it's highly recommended to set a different mailserver for your newsletter configuration to prevent
@@ -132,4 +169,14 @@ good solution.
 
 As an alternative, you could also process the queue directly from the console:
 
-`./vendor/bin/typo3cms luxletter:queue 50`
+```
+# Send 50 newsletters that are queued
+./vendor/bin/typo3 luxletter:queue
+
+# Send a specific number of newsletters from queue
+./vendor/bin/typo3cms luxletter:queue 10
+
+# Send some queued newsletters from newsletter with uid 123
+./vendor/bin/typo3cms luxletter:queue 10 123
+```
+

@@ -1,19 +1,19 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Command;
 
 use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Mail\ProgressQueue;
-use In2code\Luxletter\Utility\ObjectUtility;
+use In2code\Luxletter\Utility\ConfigurationUtility;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Core\Exception\SiteNotFoundException;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
@@ -27,7 +27,6 @@ use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
  */
 class QueueCommand extends Command
 {
-
     /**
      * Configure the command by defining the name, options and arguments
      */
@@ -35,6 +34,12 @@ class QueueCommand extends Command
     {
         $this->setDescription('Send a bunch of emails from the queue.');
         $this->addArgument('amount', InputArgument::OPTIONAL, 'How many mails should be send per wave?', 50);
+        $this->addArgument(
+            'newsletter',
+            InputArgument::OPTIONAL,
+            'Newsletter uid if only queued mails from a specific NL should be send',
+            0
+        );
     }
 
     /**
@@ -54,12 +59,20 @@ class QueueCommand extends Command
      * @throws ArgumentMissingException
      * @throws MisconfigurationException
      * @throws Exception
-     * @throws TransportExceptionInterface
+     * @throws SiteNotFoundException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $progressQueue = ObjectUtility::getObjectManager()->get(ProgressQueue::class, $output);
-        $progressed = $progressQueue->progress((int)$input->getArgument('amount'));
+        if (ConfigurationUtility::isContextFitting() === false) {
+            $output->writeln('Wrong context for sending mails');
+            return 1;
+        }
+
+        $progressQueue = GeneralUtility::makeInstance(ProgressQueue::class, $output);
+        $progressed = $progressQueue->progress(
+            (int)$input->getArgument('amount'),
+            (int)$input->getArgument('newsletter')
+        );
         if ($progressed > 0) {
             $output->writeln('Successfully sent ' . $progressed . ' email(s) from the queue...');
         } else {

@@ -3,10 +3,12 @@
 
 <!--
 <f:comment>
-	Used Zurb Foundation email template
-	See https://foundation.zurb.com/emails/docs/css-guide.html
+	Used Zurb Foundation email template 2.3.1
+    Documentation: https://get.foundation/emails/docs/css-guide.html
 
-	Parsed content will be inserted into variable {content}
+	Parsed content will be inserted into variable { content } (without space)
+
+	Load CSS via TypoScript settings.addInlineCss to have it inline
 </f:comment>
 -->
 
@@ -14,24 +16,6 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width">
 	<title>Newsletter</title>
-
-	<f:render partial="Mail/ZurbCss"/>
-
-	<style>
-		body,
-		html,
-		.body {
-			background: #f3f3f3 !important;
-		}
-
-		.container.header {
-			background: #f3f3f3;
-		}
-
-		.body-drip {
-			border-top: 8px solid #a5c85a;
-		}
-	</style>
 </head>
 
 <body>
@@ -170,7 +154,7 @@
 													<p class="text-center">
 														&copy; Copyright <f:format.date format="Y">now</f:format.date><br>
 														<a href="mailto:needhelp@in2code.de">needhelp@in2code.de</a> |
-														<f:link.external uri="{luxletter:mail.getUnsubscribeUrl(newsletter:newsletter,user:user)}" additionalAttributes="{data-luxletter-parselink:'false'}">Unsubscribe now</f:link.external>
+														<f:link.external uri="{luxletter:mail.getUnsubscribeUrl(newsletter:newsletter,user:user,site:site)}" additionalAttributes="{data-luxletter-parselink:'false'}">Unsubscribe now</f:link.external>
 													</p>
 
 													<center data-parsed="">
@@ -180,16 +164,16 @@
 																	<table>
 																		<tr>
 																			<th class="menu-item float-center">
-																				<a href="https://www.instagram.com/in2code.de/"><img src="{luxletter:configuration.getDomain()}/{f:uri.resource(path:'Images/IconInstagram.png',extensionName:'luxletter')}" alt="" width="24" class="small small50"></a>
+																				<a href="https://www.instagram.com/in2code.de/"><img src="{luxletter:configuration.getDomain(site:site)}{f:uri.resource(path:'Images/IconInstagram.png',extensionName:'luxletter')}" alt="" width="24" class="small small50"></a>
 																			</th>
 																			<th class="menu-item float-center">
-																				<a href="https://www.facebook.com/in2code.de/"><img src="{luxletter:configuration.getDomain()}/{f:uri.resource(path:'Images/IconFacebook.png',extensionName:'luxletter')}" alt="" width="24" class="small small50"></a>
+																				<a href="https://www.facebook.com/in2code.de/"><img src="{luxletter:configuration.getDomain(site:site)}{f:uri.resource(path:'Images/IconFacebook.png',extensionName:'luxletter')}" alt="" width="24" class="small small50"></a>
 																			</th>
 																			<th class="menu-item float-center">
-																				<a href="https://twitter.com/in2code_de"><img src="{luxletter:configuration.getDomain()}/{f:uri.resource(path:'Images/IconTwitter.png',extensionName:'luxletter')}" alt="" width="24" class="small small50"></a>
+																				<a href="https://twitter.com/in2code_de"><img src="{luxletter:configuration.getDomain(site:site)}{f:uri.resource(path:'Images/IconTwitter.png',extensionName:'luxletter')}" alt="" width="24" class="small small50"></a>
 																			</th>
 																			<th class="menu-item float-center">
-																				<a href="https://www.youtube.com/user/in2code"><img src="{luxletter:configuration.getDomain()}/{f:uri.resource(path:'Images/IconYoutube.png',extensionName:'luxletter')}" alt="" width="24" class="small small50"></a>
+																				<a href="https://www.youtube.com/user/in2code"><img src="{luxletter:configuration.getDomain(site:site)}{f:uri.resource(path:'Images/IconYoutube.png',extensionName:'luxletter')}" alt="" width="24" class="small small50"></a>
 																			</th>
 																		</tr>
 																	</table>

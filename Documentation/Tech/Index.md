@@ -2,16 +2,88 @@
 
 # Luxletter - Email marketing in TYPO3. Send newsletters the easy way.
 
+## Change templates
 
-## Tech corner or extending luxletter
+Change templates path in TypoScript setup via your sitepackage extension (e.g. EXT:sitepackage) -
+`EXT:sitepackage/Configuration/TypoScript/setup.typoscript`:
+
+```
+plugin {
+    tx_luxletter_fe {
+        view {
+            templateRootPaths {
+                0 = EXT:luxletter/Resources/Private/Templates/
+                1 = EXT:lux/Resources/Private/Templates/
+                2 = EXT:sitepackage/Resources/Private/Templates/
+            }
+            partialRootPaths {
+                0 = EXT:luxletter/Resources/Private/Partials/
+                1 = EXT:lux/Resources/Private/Partials/
+                2 = EXT:sitepackage/Resources/Private/Partials/
+            }
+            layoutRootPaths {
+                0 = EXT:luxletter/Resources/Private/Layouts/
+                2 = EXT:sitepackage/Resources/Private/Layouts/
+            }
+        }
+
+        settings {
+            addInlineCss {
+                0 = EXT:luxletter/Resources/Private/Css/ZurbFoundation.css
+                1 = EXT:luxletter/Resources/Private/Css/Luxletter.css
+                2 = EXT:sitepackage/Resources/Private/Css/Luxletter.css
+            }
+
+            # Define container.html files
+            containerHtml {
+                path = EXT:sitepackage/Resources/Private/Templates/Mail/
+                options {
+                    1 {
+                        # "NewsletterContainer" means:
+                        # "NewsletterContainer.html" in default language or
+                        # "NewsletterContainer_de.html" in german language and so on...
+                        fileName = NewsletterContainer
+                        label = Layout 1
+                    }
+                    2 {
+                        fileName = NewsletterContainer2
+                        label = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:newsletter.layouts.1
+                    }
+                }
+            }
+        }
+    }
+}
+module.tx_luxletter < plugin.tx_luxletter_fe
+```
+
+**Note:** If you change the path via TypoScript extension template, please take care that you are using the very first
+template on root (otherwise the paths could not be recognized by the backend module or CLI calls)
+
+Next copy the template file NewsletterContainer.html to your sitepackage in
+`EXT:sitepackage/Resources/Private/Templates/Mail/` and modify it a bit with your wanted HTML.
+
+Now you can include the file with a **ext_typoscript_setup.typoscript** file
+(that is **important** to include the TypoScript after the TypoScript of luxletter):
+
+`@import 'EXT:sitepackage/Configuration/TypoScript/setup.typoscript'`
+
+**Note:** The ordering of the TypoScript is the key solution to change the template files - check this in the TypoScript Object Browser
+
+**Note:** If your TypoScript is still overruled by the default TS, ensure that luxletter is loaded before your sitepackage (via ext_emconf.php depends settings in your sitepackage)
+
+## Extending luxletter
 
 There are some possibilities to extend luxletter.
 All HTML-Templates (and Partials and Layouts) can be overwritten by your extension in the way how templates can
 be overruled in TYPO3. This fits the own content element `Teaser` and the rendering for the FluidStyledMailContent
-elements as well as the templates for the backend modules of luxletter and the `NewsletterContainer.html`.
+elements as well as the templates for the backend modules of luxletter.
 
-If you want to manipulate the PHP, there are a lot of signals added to the extension itself. Just search for
-`signalDispatch`. You will find a lot of methods where you can stop mail sending, manipulate values, etc...
+If you want to manipulate the PHP, there are a lot of PSR-14 eventdispatchers added to the extension itself.
+Just search for `eventDispatcher->dispatch`.
+You will find a lot of methods where you can stop mail sending, manipulate values, etc...
+Read more about how to use eventlisteners in the official TYPO3 documentation:
+https://docs.typo3.org/p/brotkrueml/schema/main/en-us/Developer/Events.html
 
 
 ## Add new users to the queue
@@ -21,13 +93,13 @@ get the latest or a defined newsletter, there are 2 API functions in luxletter, 
 
 ```
 # Add fe_users.uid=123 to the queue and send him the latest newsletter
-$queueService = $this->objectManager->get(\In2code\Luxletter\Domain\Service\QueueService::class);
+$queueService = GeneralUtility::makeInstance(\In2code\Luxletter\Domain\Service\QueueService::class);
 $queueService->addUserWithLatestNewsletterToQueue(123);
 ```
 
 ```
 # Add fe_users.uid=123 to the queue and send him newsletter with uid 234
-$queueService = $this->objectManager->get(\In2code\Luxletter\Domain\Service\QueueService::class);
+$queueService = GeneralUtility::makeInstance(\In2code\Luxletter\Domain\Service\QueueService::class);
 $queueService->addUserWithNewsletterToQueue(123, 234);
 ```
 
@@ -37,14 +109,16 @@ $queueService->addUserWithNewsletterToQueue(123, 234);
 
 ### Do I need to install lux?
 
-No, luxletter works without the extension lux but you can also install the free extension lux. 
-After that, you can also use the Receiver action in the backend module to see some usefull information about the 
+No, luxletter works without the extension [Lux](https://www.in2code.de/produkte/lux-typo3-marketing-automation/) but
+you can additionally add the free extension lux.
+After that, you can also use the Receiver action in the backend module to see some usefull information about the
 receiver activities.
 
 
 ### What is lux?
 
-Lux is a free marketing automation tool as a TYPO3 extension and a perfect fit for luxletter.
+[Lux](https://www.in2code.de/produkte/lux-typo3-marketing-automation/) is a free marketing automation tool
+as a TYPO3 extension and a perfect fit for luxletter.
 
 
 ### Can I use a third party mailserver in luxletter?
@@ -60,20 +134,24 @@ of mail clientes.
 
 ### Can I use tt_address for my receivers?
 
-No, not at the moment. We focused on fe_users.
+No, not at the moment. We focused on fe_users - a technique nearby the core.
 
 
 ### What about bounce mail handling?
 
 At the moment there is no bounce mail handling integrated.
 
+
 ### Scheduler task is failing while sending a newsletter
 
 Look at the sys log to see which problem caused this issue. E.g. if fe_users.crdate is empty, etc...
 
+
 ### Mail sending is too slow
 
-Check how many mails can be sent per hour. Ask your hoster. Modify the queue settings.
+Check how many mails can be sent per hour. Ask your hoster. Modify the queue settings. Embedding images can slow down
+the mail performance.
+
 
 ### Mail could not be parsed in preview when adding an origin
 
@@ -115,9 +193,37 @@ routeEnhancers:
 #### 2. TypoScript for Fluid Styled Mail Content is missing
 
 Just add the TypoScript for Fluid Styled Mail Content in static template
+(but don't forget to add it at the root template)
+
+
+#### 3. The target URL can not be parsed by your webserver
+
+For some reasons your infrastructure does not allow your server to build request to it's own websites (htpasswd cover,
+no ssl certificate, page to parse is a "backend user section" application login would be needed, etc...).
+
+Tip: You could test the server requests by yourself with a curl command on the server bash like
+`curl -I https://domain.org/2022-01/newsletter.html`
+what should result in a status code 200.
 
 
 ### Images are not loaded in my Newsletter Mail
 
 If you are using `fluidStyledMailContent` luxletter will set `config.absRefPrefix` to the configured
 domain automaticly. If you are using your own rendering typenum, you have to set absRefPrefix manually.
+
+
+### Embedding images or not?
+
+Embedding images can be activated in the main extension configuration. All images are recognized automatically and will
+be embedded.
+
+#### The upside
+
+Embedding images allows you to send newsletters from a secured instance (e.g. an Intranet). In addition most mail
+clients will show the images without asking the using. On top processed images may not exists any more on the server
+when temp images are deleted - but this would have no negative effect im images are embedded.
+
+#### The downside
+
+Embedding will slow down the mail sending process. The mail itself is - of course - a lot of bigger then sending mails
+without images.

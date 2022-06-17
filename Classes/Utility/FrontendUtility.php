@@ -1,15 +1,15 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Utility;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Class FrontendUtility
  */
 class FrontendUtility
 {
-
     /**
      * Get current scheme, domain and path of the current installation
      *
@@ -22,6 +22,17 @@ class FrontendUtility
         $uri .= '://' . GeneralUtility::getIndpEnv('HTTP_HOST') . '/';
         $uri .= rtrim(GeneralUtility::getIndpEnv('TYPO3_SITE_PATH'), '/');
         return $uri;
+    }
+    /**
+     * @return int
+     */
+    public static function getCurrentPageIdentifier(): int
+    {
+        $tsfe = self::getTyposcriptFrontendController();
+        if ($tsfe !== null) {
+            return (int)$tsfe->id;
+        }
+        return 0;
     }
 
     /**
@@ -57,5 +68,14 @@ class FrontendUtility
     public static function getPluginName(): string
     {
         return 'tx_luxletter_lux_luxletterluxletter';
+    }
+
+    /**
+     * @return TypoScriptFrontendController
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    protected static function getTyposcriptFrontendController(): ?TypoScriptFrontendController
+    {
+        return $GLOBALS['TSFE'] ?: null;
     }
 }

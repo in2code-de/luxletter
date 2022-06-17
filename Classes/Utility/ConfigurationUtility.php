@@ -1,14 +1,15 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Utility;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Object\Exception;
 
 /**
  * Class ConfigurationUtility
@@ -20,7 +21,6 @@ class ConfigurationUtility
      *
      * @return array
      * @throws InvalidConfigurationTypeException
-     * @throws Exception
      */
     public static function getExtensionSettings(): array
     {
@@ -31,35 +31,61 @@ class ConfigurationUtility
     }
 
     /**
-     * @return string like "https://www.luxletter.de" without trailing slash
+     * @return string like "https://www.domain.org/"
      */
-    public static function getDomain(): string
+    public static function getCurrentDomain(): string
     {
-        $domain = (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'domain');
-        return rtrim($domain, '/');
-    }
-
-    /**
-     * @return int
-     */
-    public static function getPidUnsubscribe(): int
-    {
-        return (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'pidUnsubscribe');
+        if (GeneralUtility::getIndpEnv('HTTP_HOST') === null) {
+            throw new \LogicException(__FUNCTION__ . ' must not be called from CLI context', 1622812071);
+        }
+        $uri = parse_url(GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'), PHP_URL_SCHEME);
+        $uri .= '://' . GeneralUtility::getIndpEnv('HTTP_HOST') . '/';
+        return $uri;
     }
 
     /**
      * @return bool
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    public static function isMultiLanguageModeActivated(): bool
+    {
+        return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
+            'luxletter',
+            'multiLanguageMode'
+        ) === '1';
+    }
+
+    /**
+     * @return bool
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public static function isRewriteLinksInNewsletterActivated(): bool
     {
         return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
-                'luxletter',
-                'rewriteLinksInNewsletter'
-            ) === '1';
+            'luxletter',
+            'rewriteLinksInNewsletter'
+        ) === '1';
+    }
+
+    /**
+     * @return bool
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    public static function isImageEmbeddingActivated(): bool
+    {
+        return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
+            'luxletter',
+            'embedImagesInNewsletter'
+        ) === '1';
     }
 
     /**
      * @return int
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public static function getTypeNumToNumberLocation(): int
     {
@@ -69,6 +95,8 @@ class ConfigurationUtility
 
     /**
      * @return bool
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      */
     public static function isReceiverActionActivated(): bool
     {
@@ -76,41 +104,43 @@ class ConfigurationUtility
     }
 
     /**
-     * @return string
+     * @return bool
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      */
-    public static function getFromEmail(): string
+    public static function isContextFitting(): bool
     {
-        return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'fromEmail');
+        if (self::isLimitToContextActivated() === false) {
+            return true;
+        }
+        $allowedContext = self::getLimitToContext();
+        $currentApplicationContext = Environment::getContext()->__toString();
+        return stristr($currentApplicationContext, $allowedContext) !== false;
+    }
+
+    /**
+     * @return bool
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    protected static function isLimitToContextActivated(): bool
+    {
+        return self::getLimitToContext() !== '';
     }
 
     /**
      * @return string
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      */
-    public static function getFromName(): string
+    protected static function getLimitToContext(): string
     {
-        return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'fromName');
-    }
-
-    /**
-     * @return string
-     */
-    public static function getReplyEmail(): string
-    {
-        return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'replyEmail');
-    }
-
-    /**
-     * @return string
-     */
-    public static function getReplyName(): string
-    {
-        return (string)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'replyName');
+        return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'limitToContext');
     }
 
     /**
      * @return string
      * @throws MisconfigurationException
-     * @throws Exception
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function getEncryptionKey(): string
@@ -121,24 +151,5 @@ class ConfigurationUtility
             throw new MisconfigurationException('No encryption key found in this TYPO3 installation', 1562069158);
         }
         return $encryptionKey;
-    }
-
-    /**
-     * @param string $versionToCompare like "1.2.3"
-     * @return bool
-     */
-    public static function isVersionToCompareSameOrLowerThenCurrentTypo3Version(string $versionToCompare): bool
-    {
-        return VersionNumberUtility::convertVersionNumberToInteger($versionToCompare) <= self::getCurrentTypo3Version();
-    }
-
-    /**
-     * Return current TYPO3 version as integer - e.g. 10003000 (10.3.0) or 9005014 (9.5.14)
-     *
-     * @return int
-     */
-    protected static function getCurrentTypo3Version(): int
-    {
-        return VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version());
     }
 }

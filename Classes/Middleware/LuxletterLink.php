@@ -1,14 +1,16 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Middleware;
 
 use In2code\Lux\Utility\CookieUtility;
 use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Repository\LinkRepository;
 use In2code\Luxletter\Domain\Service\LogService;
-use In2code\Luxletter\Signal\SignalTrait;
+use In2code\Luxletter\Events\LuxletterLinkGetHashEvent;
+use In2code\Luxletter\Events\LuxletterLinkLuxIdentificationEvent;
+use In2code\Luxletter\Events\LuxletterLinkProcessEvent;
 use In2code\Luxletter\Utility\ExtensionUtility;
-use In2code\Luxletter\Utility\ObjectUtility;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -27,7 +29,18 @@ use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
  */
 class LuxletterLink implements MiddlewareInterface
 {
-    use SignalTrait;
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * @param EventDispatcherInterface $eventDispatcher
+     */
+    public function __construct(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
 
     /**
      * @param ServerRequestInterface $request
@@ -42,13 +55,20 @@ class LuxletterLink implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if ($this->isLuxletterLink()) {
-            $linkRepository = ObjectUtility::getObjectManager()->get(LinkRepository::class);
+            $linkRepository = GeneralUtility::makeInstance(LinkRepository::class);
             /** @var Link $link */
             $link = $linkRepository->findOneByHash($this->getHash());
-            $this->signalDispatch(__CLASS__, __FUNCTION__, [$link, $request, $handler]);
-            $this->luxIdentification($link);
+            /** @var LuxletterLinkProcessEvent $event */
+            $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
+                LuxletterLinkProcessEvent::class,
+                $link,
+                $request,
+                $handler
+            ));
+            $link = $event->getLink();
             if ($link !== null) {
-                $logService = ObjectUtility::getObjectManager()->get(LogService::class);
+                $this->luxIdentification($link);
+                $logService = GeneralUtility::makeInstance(LogService::class);
                 $logService->logLinkOpening($link);
                 return new RedirectResponse($link->getTarget(), 302);
             }
@@ -58,8 +78,6 @@ class LuxletterLink implements MiddlewareInterface
 
     /**
      * @return bool
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      */
     protected function isLuxletterLink(): bool
     {
@@ -68,14 +86,15 @@ class LuxletterLink implements MiddlewareInterface
 
     /**
      * @return string|null
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      */
     protected function getHash(): ?string
     {
         $hash = GeneralUtility::_GP('luxletterlink');
-        $this->signalDispatch(__CLASS__, __FUNCTION__, [&$hash]);
-        return $hash;
+        /** @var LuxletterLinkGetHashEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            GeneralUtility::makeInstance(LuxletterLinkGetHashEvent::class, $hash)
+        );
+        return $event->getHash();
     }
 
     /**
@@ -83,15 +102,15 @@ class LuxletterLink implements MiddlewareInterface
      *
      * @param Link $link
      * @return void
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws Exception
      */
     protected function luxIdentification(Link $link): void
     {
-        $identification = true;
-        $this->signalDispatch(__CLASS__, __FUNCTION__, [&$identification, $link]);
-        if (ExtensionUtility::isLuxAvailable('7.0.0') && $identification === true) {
+        /** @var LuxletterLinkLuxIdentificationEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            GeneralUtility::makeInstance(LuxletterLinkLuxIdentificationEvent::class, $link)
+        );
+        if (ExtensionUtility::isLuxAvailable('7.0.0') && $event->isIdentification()) {
             CookieUtility::setCookie('luxletterlinkhash', $link->getHash());
         }
     }

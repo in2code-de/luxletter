@@ -1,5 +1,5 @@
 <?php
-if (!defined('TYPO3_MODE')) {
+if (!defined('TYPO3')) {
     die('Access denied.');
 }
 
@@ -37,6 +37,16 @@ call_user_func(
             \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
             ['source' => 'EXT:luxletter/Resources/Public/Icons/widget_newsletter.svg']
         );
+        $iconRegistry->registerIcon(
+            'apps-pagetree-luxletter',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:luxletter/Resources/Public/Icons/luxletter_doktype.svg']
+        );
+        $iconRegistry->registerIcon(
+            'apps-pagetree-luxletter-contentFromPid',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:luxletter/Resources/Public/Icons/luxletter_doktype.svg']
+        );
 
         /**
          * Include Modules
@@ -58,12 +68,13 @@ call_user_func(
         }
         // Add module for analysis
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-            'In2code.luxletter',
+            'Luxletter',
             'lux',
             'luxletter',
             '',
             [
-                'Newsletter' => 'dashboard, list, new, create, enable, disable, delete, receiver',
+                \In2code\Luxletter\Controller\NewsletterController::class =>
+                    'dashboard, list, new, create, enable, disable, delete, receiver',
             ],
             [
                 'access' => 'user,group',
@@ -73,24 +84,25 @@ call_user_func(
         );
 
         /**
-         * Add TypoScript Static Template
-         */
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
-            'luxletter',
-            'Configuration/TypoScript/Basic/',
-            'Basic TypoScript'
-        );
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile(
-            'luxletter',
-            'Configuration/TypoScript/FluidStyledMailContent/',
-            'FluidStyledMailContent'
-        );
-
-        /**
          * Add static page TSconfig
          */
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
             '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:luxletter/Configuration/PageTSConfig/ContentElements.typoscript">'
         );
+
+        /**
+         * Add new page doktype
+         */
+        if (\In2code\Luxletter\Utility\ConfigurationUtility::isMultiLanguageModeActivated()) {
+            $doktype = \In2code\Luxletter\Domain\Repository\PageRepository::DOKTYPE_LUXLETTER;
+            $GLOBALS['PAGES_TYPES'][$doktype] = [
+                'type' => 'web',
+                'allowedTables' => '*',
+            ];
+            // Allow backend users to drag and drop the new page type:
+            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig(
+                'options.pageTree.doktypesToShowInNewPageDragArea := addToList(' . $doktype . ')'
+            );
+        }
     }
 );

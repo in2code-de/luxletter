@@ -1,13 +1,16 @@
 <?php
-declare(strict_types=1);
+/** @noinspection SqlDialectInspection */
+declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Repository;
 
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\Exception as ExceptionDbal;
 use In2code\Luxletter\Domain\Model\Log;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Utility\DatabaseUtility;
-use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
@@ -15,10 +18,10 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  */
 class LogRepository extends AbstractRepository
 {
-
     /**
      * @return int
-     * @throws DBALException
+     * @throws Exception
+     * @throws ExceptionDbal
      */
     public function getNumberOfReceivers(): int
     {
@@ -26,7 +29,7 @@ class LogRepository extends AbstractRepository
         return (int)$connection->executeQuery(
             'select count(DISTINCT user) from ' . Log::TABLE_NAME .
             ' where deleted=0 and status=' . Log::STATUS_DISPATCH . ';'
-        )->fetchColumn(0);
+        )->fetchOne();
     }
 
     /**
@@ -50,7 +53,7 @@ class LogRepository extends AbstractRepository
             ' where deleted=0 and status=' . Log::STATUS_LINKOPENING .
             ' group by properties,newsletter order by count desc limit ' . $limit
         )->fetchAll();
-        $nlRepository = ObjectUtility::getObjectManager()->get(NewsletterRepository::class);
+        $nlRepository = GeneralUtility::makeInstance(NewsletterRepository::class);
         foreach ($results as &$result) {
             $result['target'] = json_decode($result['properties'], true)['target'];
             $result['newsletter'] = $nlRepository->findByUid($result['newsletter']);
@@ -60,7 +63,8 @@ class LogRepository extends AbstractRepository
 
     /**
      * @return int
-     * @throws DBALException
+     * @throws Exception
+     * @throws ExceptionDbal
      */
     public function getOverallOpenings(): int
     {
@@ -69,7 +73,7 @@ class LogRepository extends AbstractRepository
             'select count(distinct newsletter, user) from ' . Log::TABLE_NAME .
             ' where deleted = 0' .
             ' and status IN (' . Log::STATUS_NEWSLETTEROPENING . ',' . Log::STATUS_LINKOPENING . ')' . ';'
-        )->fetchColumn(0);
+        )->fetchOne();
     }
 
     /**
@@ -82,12 +86,13 @@ class LogRepository extends AbstractRepository
         return (int)$connection->executeQuery(
             'select count(distinct newsletter, user) from ' . Log::TABLE_NAME .
             ' where deleted = 0 and status=' . Log::STATUS_LINKOPENING . ';'
-        )->fetchColumn(0);
+        )->fetchOne();
     }
 
     /**
      * @return int
-     * @throws DBALException
+     * @throws Exception
+     * @throws ExceptionDbal
      */
     public function getOverallClicks(): int
     {
@@ -95,12 +100,13 @@ class LogRepository extends AbstractRepository
         return (int)$connection->executeQuery(
             'select count(uid) from ' . Log::TABLE_NAME .
             ' where deleted = 0 and status=' . Log::STATUS_LINKOPENING . ';'
-        )->fetchColumn(0);
+        )->fetchOne();
     }
 
     /**
      * @return int
-     * @throws DBALException
+     * @throws Exception
+     * @throws ExceptionDbal
      */
     public function getOverallUnsubscribes(): int
     {
@@ -108,12 +114,13 @@ class LogRepository extends AbstractRepository
         return (int)$connection->executeQuery(
             'select count(uid) from ' . Log::TABLE_NAME .
             ' where deleted = 0 and status=' . Log::STATUS_UNSUBSCRIBE . ';'
-        )->fetchColumn(0);
+        )->fetchOne();
     }
 
     /**
      * @return int
-     * @throws DBALException
+     * @throws Exception
+     * @throws ExceptionDbal
      */
     public function getOverallMailsSent(): int
     {
@@ -121,12 +128,14 @@ class LogRepository extends AbstractRepository
         return (int)$connection->executeQuery(
             'select count(uid) from ' . Log::TABLE_NAME .
             ' where deleted = 0 and status=' . Log::STATUS_DISPATCH . ';'
-        )->fetchColumn(0);
+        )->fetchOne();
     }
 
     /**
      * @return float
      * @throws DBALException
+     * @throws Exception
+     * @throws ExceptionDbal
      */
     public function getOverallOpenRate(): float
     {
@@ -141,6 +150,8 @@ class LogRepository extends AbstractRepository
     /**
      * @return float
      * @throws DBALException
+     * @throws Exception
+     * @throws ExceptionDbal
      */
     public function getOverallClickRate(): float
     {
@@ -155,6 +166,8 @@ class LogRepository extends AbstractRepository
     /**
      * @return float
      * @throws DBALException
+     * @throws Exception
+     * @throws ExceptionDbal
      */
     public function getOverallUnsubscribeRate(): float
     {
@@ -171,17 +184,18 @@ class LogRepository extends AbstractRepository
      * @param User $user
      * @param int $status
      * @return bool
+     * @throws Exception
      */
     public function isLogRecordExisting(Newsletter $newsletter, User $user, int $status): bool
     {
-        $querybuilder = DatabaseUtility::getQueryBuilderForTable(Log::TABLE_NAME);
-        $uid = (int)$querybuilder
+        $queryBuilder = DatabaseUtility::getQueryBuilderForTable(Log::TABLE_NAME);
+        $uid = (int)$queryBuilder
             ->select('uid')
             ->from(Log::TABLE_NAME)
             ->where('newsletter=' . $newsletter->getUid() . ' and user=' . $user->getUid() . ' and status=' . $status)
             ->setMaxResults(1)
             ->execute()
-            ->fetchColumn(0);
+            ->fetchOne();
         return $uid > 0;
     }
 
@@ -190,7 +204,8 @@ class LogRepository extends AbstractRepository
      * @param int|int[] $status
      * @param bool $distinctMails
      * @return array
-     * @throws \Doctrine\DBAL\Exception
+     * @throws DBALException
+     * @throws Exception
      */
     public function findByNewsletterAndStatus(Newsletter $newsletter, $status, bool $distinctMails = false): array
     {
@@ -209,7 +224,7 @@ class LogRepository extends AbstractRepository
         return (array)$connection->executeQuery(
             'select ' . $sqlSelectColumns . ' from ' . Log::TABLE_NAME .
             ' where deleted=0 and ' . $sqlWhereStatus . ' and newsletter=' . $newsletter->getUid()
-        )->fetchAll();
+        )->fetchAllAssociative();
     }
 
     /**
@@ -218,6 +233,7 @@ class LogRepository extends AbstractRepository
      * @param array $statusBlacklist ignore logs with this status
      * @return array
      * @throws DBALException
+     * @throws Exception
      */
     public function findRawByUser(User $user, array $statusWhitelist = [], array $statusBlacklist = []): array
     {
@@ -229,7 +245,7 @@ class LogRepository extends AbstractRepository
             $sql .= ' and status not in (' . implode(',', $statusBlacklist) . ')';
         }
         $sql .= ' order by crdate desc';
-        return (array)$connection->executeQuery($sql)->fetchAll();
+        return (array)$connection->executeQuery($sql)->fetchAllAssociative();
     }
 
     /**
@@ -240,6 +256,7 @@ class LogRepository extends AbstractRepository
     {
         $query = $this->createQuery();
         $query->matching($query->equals('user', $user));
+        $query->setLimit(100);
         return $query->execute();
     }
 }

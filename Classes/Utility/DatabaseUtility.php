@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Utility;
 
 use TYPO3\CMS\Core\Database\Connection;
@@ -19,7 +19,6 @@ class DatabaseUtility
      */
     public static function getQueryBuilderForTable(string $tableName, bool $removeRestrictions = false): QueryBuilder
     {
-        /** @var QueryBuilder $queryBuilder */
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($tableName);
         if ($removeRestrictions === true) {
             $queryBuilder->getRestrictions()->removeAll();

@@ -22,12 +22,18 @@ newsletters.
 
 #### Page structure
 
-You could create two pages. The outer page should contain teaser elements with links to the 
+You could create two pages. The outer page should contain teaser elements with links to the
 full newsletter text elements on a subpage.
 
 Example pagetree:
 
 <img src="../Images/documentation_newsletter_pagetree.png" width="200" alt="example pagetree" />
+
+Or with multilanguage feature:
+
+<img src="../Images/documentation_newsletter_pagetree_multilanguage.png" width="200" alt="example pagetree" />
+
+**Note:** Don't forget to set a subject in pages settings per language
 
 Example teaser page content:
 
@@ -77,11 +83,11 @@ See ViewHelper `luxletter:format.cropyBySelection` for more details and options.
 
 If you are not that well versed in newsletter technologies, you may wondering yourself how the HTML
 should be build that mails can be shown in a large bunch of email clients.
-Looking back in the past, the Microsoft guys for Outlook used the Internet Explorer engine to render mails. 
+Looking back in the past, the Microsoft guys for Outlook used the Internet Explorer engine to render mails.
 And if you think that was a bad idea, wait what they did some times later. Now (no joke) Microsoft Word
 is the rendering engine for Outlook.
 
-Long story short: Look at https://foundation.zurb.com/emails/email-templates.html for some responsive
+Long story short: Look at https://get.foundation/emails/docs/ for some responsive
 Email templates. Those templates are build with HTML from the 90ies.
 
 But if you are looking at the page that you build for your newsletter content, you will see some HTML5
@@ -93,7 +99,7 @@ But luxletter will render your content again with TABLE-mechanism if you are add
 Example output:
 <img src="../Images/documentation_newsletter_type.png" width="800" alt="typenum for newsletter markup" />
 
-**Note** If you are using Sites in TYPO3 9, typenum should be defined in the configuration. Example:
+**Note** Typenum routing should be defined in the configuration. Example:
 
 ```
 routeEnhancers:
@@ -110,57 +116,90 @@ routeEnhancers:
 #### Zurb foundation and Newsletter wrapping
 
 You can focus your website content on the introduction and the useful content itself. Luxletter uses a wrapping
-service to wrap your content with header and footer automaticly.
+service to wrap your content with header and footer automatically.
 Look at `EXT:luxletter/Resources/Private/Templates/Mail/NewsletterContainer.html` to see the HTML that
-is used for the wrapping of the header and footer.
-The variable `{content}` will be filled with your built content when creating newsletter records (see
+is used for the wrapping of the header and footer (see below how to add more container templates).
+The variable `{content}` will be filled with the built content when creating newsletter records (see
 next chapter).
 
-Of course you can overwrite this template file in your extension in the known way like in other extension.
+Of course you can overwrite template files in your extension:
 
 ```
 plugin {
     tx_luxletter_fe {
         view {
             templateRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Templates/Extensions/Luxletter/
+                2 = EXT:yoursitepackage/Resources/Private/Templates/Extensions/Luxletter/
             }
             partialRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Partials/Extensions/Luxletter/
+                2 = EXT:yoursitepackage/Resources/Private/Partials/Extensions/Luxletter/
             }
             layoutRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Layouts/Extensions/Luxletter/
+                2 = EXT:yoursitepackage/Resources/Private/Layouts/Extensions/Luxletter/
+            }
+        }
+
+        settings {
+            addInlineCss {
+                0 = EXT:luxletter/Resources/Private/Css/ZurbFoundation.css
+                1 = EXT:luxletter/Resources/Private/Css/Luxletter.css
+                2 = EXT:sitepackage/Resources/Private/Css/Luxletter.css
+            }
+
+            # Define container.html files
+            containerHtml {
+                path = EXT:sitepackage/Resources/Private/Templates/Mail/
+                options {
+                    1 {
+                        # "NewsletterContainer" means:
+                        # "NewsletterContainer.html" in default language or
+                        # "NewsletterContainer_de.html" in german language and so on...
+                        fileName = NewsletterContainer
+                        label = Layout 1
+                    }
+                    2 {
+                        fileName = NewsletterContainer2
+                        label = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:newsletter.layouts.1
+                    }
+                }
             }
         }
     }
 }
-module {
-    tx_luxletter {
-        view {
-            templateRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Templates/Extensions/Luxletter/
-            }
-            partialRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Partials/Extensions/Luxletter/
-            }
-            layoutRootPaths {
-                1 = EXT:yoursitepackage/Resources/Private/Layouts/Extensions/Luxletter/
-            }
-        }
-    }
-}
+module.tx_luxletter.view < plugin.tx_luxletter_fe.view
 ```
 
-The existing template is using the **Zurb Foundation email template**
-(see https://foundation.zurb.com/emails/docs/css-guide.html for details)
+**Note:** If you change the path via TypoScript extension template, please take care that you are using the very first
+template on root (otherwise the paths could not be recognized by the backend module or CLI calls)
 
-**Note** There is also an unsubscribe link in the footer - look for 
-`<f:link.external uri="{luxletter:mail.getUnsubscribeUrl(newsletter:newsletter,user:user)}" additionalAttributes="{data-luxletter-parselink:'false'}">Unsubscribe now</f:link.external>`
+The existing template is using the **Zurb Foundation email template**
+(see https://get.foundation/emails/docs/ for details)
+
+**Note** There is also an unsubscribe link in the footer - look for
+`<f:link.external uri="{luxletter:mail.getUnsubscribeUrl(newsletter:newsletter,user:user,site:site)}" additionalAttributes="{data-luxletter-parselink:'false'}">Unsubscribe now</f:link.external>`
 
 **Note** Normally links in luxletter should be rewritten, so clicks can be tracked. But in some
 cases you don't want to rewrite all links. Some should not be rewritten. Just add an attribute
 `data-luxletter-parselink="false"` to the link.
 
+
+#### Inline CSS
+
+Because some webmail clients are removing style-tags, we offer a possibility to render css inline in the html-tags.
+You can define local CSS files in this way (higher numbers are overwriting lower numbers):
+
+```
+plugin {
+  tx_luxletter_fe {
+    settings {
+      addInlineCss {
+        0 = EXT:luxletter/Resources/Private/Css/ZurbFoundation.css
+        1 = EXT:luxletter/Resources/Private/Css/Luxletter.css
+      }
+    }
+  }
+}
+```
 
 ### Creating newsletters in the backend module
 
@@ -174,7 +213,7 @@ can only add new records.
 
 | Field                   | Description                                                                             |
 | ----------------------- | --------------------------------------------------------------------------------------- |
-| #                       | Newsletter number                                                                       |   
+| #                       | Newsletter number                                                                       |
 | Title                   | Newsletter title                                                                        |
 | Description             | Newsletter description                                                                  |
 | Sending time            | Time when the newsletter can be send                                                    |
@@ -193,24 +232,44 @@ Clicking on `Add new newsletter` starts a process where you can create new newsl
 
 | Field                   | Description                                                                             |
 | ----------------------- | --------------------------------------------------------------------------------------- |
-| Newsletter title        | Add a useful title to your newsletter                                                   | 
-| Description             | Add a useful title to your newsletter                                                   | 
-| Newsletter start        | If you select a start time (optional), newsletters will not be send before this time    | 
+| Newsletter title        | Add a useful title to your newsletter                                                   |
+| Newsletter start        | If you select a start time (optional), newsletters will not be send before this time    |
+| Description             | Add a useful title to your newsletter                                                   |
 
 <img src="../Images/documentation_newnewsletter_step2.png" width="800" alt="create new newsletter - step 2" />
 
-| Field                   | Description                                                                             |
-| ----------------------- | --------------------------------------------------------------------------------------- |
-| Mail subject            | Mail subject (also variables are allowed like {user.lastName}                           | 
-| Choose a receiver group | Choose a receiver group (frontenduser groups that marked as luxletter groups)           | 
-| Newsletter location     | Choose where your HTML for the newsletter is located. An absolute URL like https://domain.org/newsletter.html is possible. If you add a number, the page will be parsed (typenum is automaticly added) | 
+| Field                                       | Description                                                                             |
+| ------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Sender                                      | Choose a sender record                                                                  |
+| Receiver                                    | Choose a receiver group (frontenduser groups that marked as luxletter groups)           |
+| Layout                                      | Choose a given layout (can be defined via TypoScript)                                   |
+| Newsletter location                         | Choose where your HTML for the newsletter is located. An absolute URL like https://domain.org/newsletter.html is possible. If you add a number (PID), the page will be parsed (typenum is automaticly added) |
+| Newsletter location (multilanguage mode)    | In multilanguage mode this field is rendered as select box. Now you can only select internal pages with doktype newsletter                                                                                   |
+| Mail subject                                | Mail subject (also variables and viewhelpers are allowed like {user.lastName}). **Note:** This field is not rendered in multilanguage mode (subject is set in pages settings)                                |
 
 <img src="../Images/documentation_newnewsletter_step3.png" width="800" alt="create new newsletter - step 3" />
 
 | Field                   | Description                                                                                      |
 | ----------------------- | ------------------------------------------------------------------------------------------------ |
-| Test email address      | Send a quick testmail to an email (variables in the newsletter will be filled with dummy values) | 
-| Receivers preview       | Add small preview of your receivers will help you to be sure you haven chosen the correct group  | 
-| Newsletter preview      | You will see a newsletter preview (variables will be filled with dummy values)                   | 
+| Test email address      | Send a quick testmail to an email (variables in the newsletter will be filled with dummy values) |
+| Receivers preview       | Add small preview of your receivers will help you to be sure you haven chosen the correct group  |
+| Newsletter preview      | You will see a newsletter preview (variables will be filled with dummy values)                   |
 
 As soon as you save the newsletter, it will be parsed and after that it's ready for the dispatch.
+
+
+### Creating newsletters from CLI or scheduler task
+
+If you want to frequently create new newsletters from console or with a scheduler task, even this is possible.
+A use case could be to weekly render a page with changing content (e.g. a news list view) and send it automatically.
+
+#### CLI command
+
+```
+# Parameters are: Title, fe_groups.uid, configuration uid, source to parse (pid or absolute URL), language uid (optional), Layout template file (optional), subject (optional), description (optional), date (optional)
+./vendor/bin/typo3 luxletter:createnewsletterfromorigin "Automatic NL" 1 1 16 0 "NewsletterContainer" "Newsletter {f:format.date(date:'now',format:'Y-m')}" "Optional description here" "2021-10-31T11:00"
+```
+
+#### From scheduler
+
+<img src="../Images/documentation_scheduler_createnewsletter.png" width="800" alt="create new newsletter from scheduler task" />
