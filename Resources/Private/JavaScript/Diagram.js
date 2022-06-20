@@ -85,6 +85,11 @@ define(['jquery', 'TYPO3/CMS/Luxletter/Vendor/Chart.min'], function($) {
 						}
 					},
 					scales: {
+						xAxes: [{
+							ticks: {
+								autoSkip: false
+							}
+						}],
 						yAxes: [{
 							ticks: {
 								beginAtZero: true
