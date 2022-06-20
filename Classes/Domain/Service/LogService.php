@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Service;
 
 use In2code\Luxletter\Domain\Model\Link;
@@ -7,7 +7,7 @@ use In2code\Luxletter\Domain\Model\Log;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LogRepository;
-use In2code\Luxletter\Utility\ObjectUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
@@ -39,7 +39,7 @@ class LogService
      */
     public function logNewsletterOpening(Newsletter $newsletter, User $user): void
     {
-        $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
+        $logRepository = GeneralUtility::makeInstance(LogRepository::class);
         if ($logRepository->isLogRecordExisting($newsletter, $user, Log::STATUS_NEWSLETTEROPENING) === false) {
             $this->log($newsletter, $user, Log::STATUS_NEWSLETTEROPENING);
         }
@@ -79,8 +79,8 @@ class LogService
      */
     protected function log(Newsletter $newsletter, User $user, int $status, array $properties = []): void
     {
-        $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
-        $log = ObjectUtility::getObjectManager()->get(Log::class)
+        $logRepository = GeneralUtility::makeInstance(LogRepository::class);
+        $log = GeneralUtility::makeInstance(Log::class)
             ->setStatus($status)
             ->setProperties($properties)
             ->setNewsletter($newsletter)

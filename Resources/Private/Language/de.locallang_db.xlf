@@ -7,6 +7,19 @@
 				<source>Is newsletter receiver group?</source>
 				<target state="translated">Ist eine Newsletter Empfänger Gruppe?</target>
 			</trans-unit>
+			<trans-unit id="fe_groups.luxletter_language">
+				<source>Preferred language for newsletters</source>
+				<target state="translated">Bevorzugte Sprache für Newsletter</target>
+			</trans-unit>
+
+			<trans-unit id="pages.doktype_luxletter">
+				<source>Newsletter</source>
+				<target state="translated">Newsletter</target>
+			</trans-unit>
+			<trans-unit id="pages.luxletter_subject">
+				<source>Mail subject</source>
+				<target state="translated">Betreffzeile der E-Mail</target>
+			</trans-unit>
 
 			<trans-unit id="ctype.teaser">
 				<source>Teaser element</source>
@@ -69,9 +82,17 @@
 				<source>Origin</source>
 				<target state="translated">Text-Ursprung</target>
 			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.layout">
+				<source>Container template file</source>
+				<target state="translated">Container Template Datei</target>
+			</trans-unit>
 			<trans-unit id="tx_luxletter_domain_model_newsletter.bodytext">
 				<source>Bodytext</source>
 				<target state="translated">E-Mail Inhalt</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.language">
+				<source>Language</source>
+				<target state="translated">Sprache</target>
 			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_queue">
@@ -121,8 +142,8 @@
 			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_link">
-				<source>Log</source>
-				<target state="translated">Log</target>
+				<source>Link</source>
+				<target state="translated">Link</target>
 			</trans-unit>
 			<trans-unit id="tx_luxletter_domain_model_link.newsletter">
 				<source>Newsletter</source>
@@ -139,6 +160,35 @@
 			<trans-unit id="tx_luxletter_domain_model_link.target">
 				<source>Target</source>
 				<target state="translated">Ziel</target>
+			</trans-unit>
+
+			<trans-unit id="tx_luxletter_domain_model_configuration">
+				<source>Sender configuration</source>
+				<target state="translated">Sender Einstellungen</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_configuration.title">
+				<source>Title</source>
+				<target state="translated">Bezeichnung</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_configuration.from_email">
+				<source>Sender email</source>
+				<target state="translated">Absender E-Mail-Adresse</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_configuration.from_name">
+				<source>Sender name</source>
+				<target state="translated">Absender Name</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_configuration.reply_email">
+				<source>Reply to email</source>
+				<target state="translated">Antworten E-Mail-Adresse</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_configuration.reply_name">
+				<source>Reply name</source>
+				<target state="translated">Antworten Name</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_configuration.site">
+				<source>Site</source>
+				<target state="translated">Seitenbaum</target>
 			</trans-unit>
 
 			<trans-unit id="flexform.fe.removeusergroup">
@@ -261,6 +311,11 @@
 			<trans-unit id="module.dashboard.widget.lastnewslettersclickrate.label">
 				<source>Clicker</source>
 				<target state="translated">Klicker</target>
+			</trans-unit>
+
+			<trans-unit id="newsletter.layouts.1">
+				<source>Default layout</source>
+				<target state="translated">Standard Layout</target>
 			</trans-unit>
 
 			<trans-unit id="pleasechoose">

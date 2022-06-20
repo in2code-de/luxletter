@@ -1,121 +1,40 @@
 services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
 
   In2code\Luxletter\:
     resource: '../Classes/*'
 
-  dashboard.widgets.OpenRateWidget:
-    class: 'TYPO3\CMS\Dashboard\Widgets\DoughnutChartWidget'
-    arguments:
-      $view: '@dashboard.views.widget'
-      $dataProvider: '@In2code\Luxletter\Widget\DataProvider\OpenRateDataProvider'
+  In2code\Luxletter\Command\ClearCommand:
     tags:
-      - name: dashboard.widget
-        identifier: 'luxletterOpenRate'
-        groupNames: 'luxletter'
-        title: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.openingrate.title'
-        description: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.openingrate.description'
-        iconIdentifier: 'extension-luxletter'
-        height: 'medium'
-        width: 'small'
+      - name: 'console.command'
+        command: 'luxletter:clear'
 
-  dashboard.widgets.ClickRateWidget:
-    class: 'TYPO3\CMS\Dashboard\Widgets\DoughnutChartWidget'
-    arguments:
-      $view: '@dashboard.views.widget'
-      $dataProvider: '@In2code\Luxletter\Widget\DataProvider\ClickRateDataProvider'
+  In2code\Luxletter\Command\ClearQueueCommand:
     tags:
-      - name: dashboard.widget
-        identifier: 'luxletterClickRate'
-        groupNames: 'luxletter'
-        title: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.clickrate.title'
-        description: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.clickrate.description'
-        iconIdentifier: 'extension-luxletter'
-        height: 'medium'
-        width: 'small'
+      - name: 'console.command'
+        command: 'luxletter:clearqueue'
 
-  dashboard.widgets.UnsubscribeRateWidget:
-    class: 'TYPO3\CMS\Dashboard\Widgets\DoughnutChartWidget'
-    arguments:
-      $view: '@dashboard.views.widget'
-      $dataProvider: '@In2code\Luxletter\Widget\DataProvider\UnsubscribeRateDataProvider'
+  In2code\Luxletter\Command\CreateNewsletterFromOriginCommand:
     tags:
-      - name: dashboard.widget
-        identifier: 'luxletterUnsubscribeRate'
-        groupNames: 'luxletter'
-        title: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.unsubscriberate.title'
-        description: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.unsubscriberate.description'
-        iconIdentifier: 'extension-luxletter'
-        height: 'medium'
-        width: 'small'
+      - name: 'console.command'
+        command: 'luxletter:createnewsletterfromorigin'
 
-  dashboard.widgets.ReceiverWidget:
-    class: 'TYPO3\CMS\Dashboard\Widgets\NumberWithIconWidget'
-    arguments:
-      $view: '@dashboard.views.widget'
-      $dataProvider: '@In2code\Luxletter\Widget\DataProvider\ReceiverDataProvider'
-      $options:
-        title: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.receiver.title'
-        subtitle: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.receiver.description'
-        icon: 'luxletter-widget-receiver'
+  In2code\Luxletter\Command\QueueCommand:
     tags:
-      - name: dashboard.widget
-        identifier: 'luxletterReceiver'
-        groupNames: 'luxletter'
-        title: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.receiver.title'
-        description: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.receiver.description'
-        iconIdentifier: 'luxletter-widget-receiver'
+      - name: 'console.command'
+        command: 'luxletter:queue'
 
-  dashboard.widgets.NewsletterWidget:
-    class: 'TYPO3\CMS\Dashboard\Widgets\NumberWithIconWidget'
-    arguments:
-      $view: '@dashboard.views.widget'
-      $dataProvider: '@In2code\Luxletter\Widget\DataProvider\NewsletterDataProvider'
-      $options:
-        title: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.newsletter.title'
-        subtitle: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.newsletter.description'
-        icon: 'luxletter-widget-newsletter'
-    tags:
-      - name: dashboard.widget
-        identifier: 'luxletterNewsletter'
-        groupNames: 'luxletter'
-        title: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.newsletter.title'
-        description: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.newsletter.description'
-        iconIdentifier: 'luxletter-widget-newsletter'
+  In2code\Luxletter\Domain\Factory\UserFactory:
+    public: true
 
-  dashboard.widgets.LastNewslettersOpenRateWidget:
-    class: 'TYPO3\CMS\Dashboard\Widgets\BarChartWidget'
-    arguments:
-      $view: '@dashboard.views.widget'
-      $dataProvider: '@In2code\Luxletter\Widget\DataProvider\LastNewslettersOpenRateDataProvider'
-    tags:
-      - name: dashboard.widget
-        identifier: 'luxletterLastNewslettersOpenRate'
-        groupNames: 'luxletter'
-        title: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.lastnewslettersopenrate.title'
-        description: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.lastnewslettersopenrate.description'
-        iconIdentifier: 'extension-luxletter'
-        height: 'medium'
-        width: 'medium'
+  In2code\Luxletter\Domain\Service\Parsing\Newsletter:
+    public: true
 
-  dashboard.widgets.LastNewslettersClickRateWidget:
-    class: 'TYPO3\CMS\Dashboard\Widgets\BarChartWidget'
-    arguments:
-      $view: '@dashboard.views.widget'
-      $dataProvider: '@In2code\Luxletter\Widget\DataProvider\LastNewslettersClickRateDataProvider'
-    tags:
-      - name: dashboard.widget
-        identifier: 'luxletterLastNewslettersClickRate'
-        groupNames: 'luxletter'
-        title: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.lastnewslettersclickrate.title'
-        description: 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.lastnewslettersclickrate.description'
-        iconIdentifier: 'extension-luxletter'
-        height: 'medium'
-        width: 'medium'
+  In2code\Luxletter\Domain\Service\QueueService:
+    public: true
 
-#
-#  In2code\Luxletter\Widget\NewsletterWidget:
-#    arguments: ['luxletterNewsletter']
-#    tags:
-#      - name: dashboard.widget
-#        identifier: luxletterNewsletter
-#        widgetGroups: 'luxletter'
+  In2code\Luxletter\Middleware\LuxletterLink:
+    public: true

@@ -19,7 +19,7 @@ it.
 ### The upside
 
 * A useful and nice **dashboard** shows you the relevant information in the backend
-* Modern newsletter extension for TYPO3 9
+* Modern newsletter extension for TYPO3 10 or 11
 * Tracking of clicks via **PSR-15 interface** in TYPO3
 * Sending mails in queue via **symfony command controller**
 * Records for **fe_groups** (and there related fe_users) are used to send mails to
@@ -27,6 +27,7 @@ it.
 * A **teaser content element** helps you to create newsletters out of default content elements in TYPO3
 * Every website can be used as prototype for your newsletter
 * A **third party mailserver** can be used for newsletters
+* Since 4.0 multiple sender configuration can be saved
 
 ### The downside
 
@@ -81,17 +82,16 @@ See the full [documentation](Documentation/Index.md) (installation, configuratio
 
 ## Technical requirements
 
-* TYPO3 9 LTS is the basic CMS for this newsletter tool.
+* TYPO3 10 or 11 LTS is the basic CMS for this newsletter tool.
 * EXT:lux is **not needed** to run luxletter but both extensions can work together to show more relevant information.
 * This extension needs to be **installed with composer** (classic installation could work but is not supported and tested).
-* fe_users records are used to send emails to while fe_groups is used to select a group of them
+* fe_users in fe_groups is used to send newsletter emails to.
 
 
 ## Sponsored features (please get in contact to us if you want to sponsor a new feature)
 
 * Import of fe_users from tt_address (to migrate easier from direct_mail to luxletter)
 * Editview of existing newsletters (reparse function?)
-* Move global newsletter configuration to records to use different settings per newsletter
 
 
 ## Installation with composer
@@ -100,32 +100,14 @@ See the full [documentation](Documentation/Index.md) (installation, configuratio
 composer require "in2code/luxletter"
 ```
 
-## Changelog
 
-| Version    | Date        | State      | Description                                                                                          |
-| ---------- | ----------- | ---------- | ---------------------------------------------------------------------------------------------------- |
-| 2.4.0      | 2020.07.10  | Feature    | Settings and variables can be used via TS, fix possible charset and parsing problems                 |
-| 2.3.0      | 2020.05.10  | Task       | Support lux 8.0.0 now                                                                                |
-| 2.2.2      | 2020.04.23  | Bugfix     | Fix problem "Table tx_luxletter_domain_model_user doesn't exist" in links from newsletters           |
-| 2.2.1      | 2020.04.22  | Bugfix     | Fix CSS class in backend module, fix possible problem with template orderings                        |
-| 2.2.0      | 2020.04.20  | Task       | Update for TYPO3 10.4 LTS                                                                            |
-| 2.1.0      | 2020.03.29  | Feature    | User real receiver name in mails, Add API functions to send existing newsletters to new registered users |
-| 2.0.1      | 2020.03.23  | Bugfix     | Prevent exception direct after a new installation when configuration was not yet changed             |
-| 2.0.0      | 2020.03.21  | Task       | Update for TYPO3 10 and lux 7, Add widgets to TYPO3 dashboard, Support Mailmessage in TYPO3 9+10     |
-| 1.2.3      | 2020.03.19  | Task       | Pass value by reference in signal to change newsletter content                                       |
-| 1.2.2      | 2019.12.11  | Bugfix     | Don't stop sending if there are users without email address in the receiver group                    |
-| 1.2.1      | 2019.11.26  | Bugfix     | Fix problem on packagist.org                                                                         |
-| 1.2.0      | 2019.11.26  | Task       | Show helpful messages in some exceptional cases. Use mediumtext for bodytext for more space now.     |
-| 1.1.1      | 2019.09.19  | Bugfix     | Don't throw an exception for empty fe_users.crdate fields                                            |
-| 1.1.0      | 2019.08.20  | Bugfix     | Some css fixes, Fix for default image and small code cleanup                                         |
-| 1.0.0      | 2019.08.02  | Task       | First stable TER release with a useful documentation                                                 |
-| 0.3.0      | 2019.07.31  | Task       | Support for lux, Add signal, Receiver module                                                         |
-| 0.2.0      | 2019.07.13  | Task       | Fix for PHP 7.3, Fix for default sql mode setting, documentation update                              |
-| 0.1.0      | 2019.07.10  | Task       | Initial release of a working newsletter extension                                                    |
+## Changelog and breaking changes
+
+[documentation](Documentation/Changelog/Index.md)
 
 
 
 ## Need help with email-marketing or marketing automation?
 
-The company behind Lux, LuxLetter and LuxEnterprise - the complete marketing box for TYPO3 - is looking 
+The company behind Lux, LuxLetter and LuxEnterprise - the complete marketing box for TYPO3 - is looking
 forward to help you: https://www.in2code.de

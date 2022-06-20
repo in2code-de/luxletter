@@ -1,7 +1,8 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Repository;
 
+use Doctrine\DBAL\Driver\Exception;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\Queue;
 use In2code\Luxletter\Domain\Model\User;
@@ -17,17 +18,25 @@ class QueueRepository extends AbstractRepository
 {
     /**
      * @param int $limit
+     * @param int $newsletterIdentifier
      * @return QueryResultInterface
      * @throws InvalidQueryException
      */
-    public function findDispatchableInQueue(int $limit): QueryResultInterface
+    public function findDispatchableInQueue(int $limit, int $newsletterIdentifier): QueryResultInterface
     {
         $query = $this->createQuery();
         $and = [
             $query->lessThan('datetime', time()),
             $query->equals('sent', false),
-            $query->equals('newsletter.disabled', false)
+            $query->equals('newsletter.disabled', false),
+            $query->greaterThan('newsletter.configuration', 0),
+            $query->logicalNot($query->equals('newsletter.layout', '')),
+            $query->equals('user.deleted', false),
+            $query->equals('user.disable', false)
         ];
+        if ($newsletterIdentifier > 0) {
+            $and[] = $query->equals('newsletter.uid', $newsletterIdentifier);
+        }
         $query->matching($query->logicalAnd($and));
         $query->setLimit($limit);
         $query->setOrderings(['tstamp' => QueryInterface::ORDER_ASCENDING]);
@@ -69,6 +78,7 @@ class QueueRepository extends AbstractRepository
      * @param User $user
      * @param Newsletter $newsletter
      * @return bool
+     * @throws Exception
      */
     public function isUserAndNewsletterAlreadyAddedToQueue(User $user, Newsletter $newsletter): bool
     {
@@ -79,6 +89,19 @@ class QueueRepository extends AbstractRepository
             ->where('newsletter=' . $newsletter->getUid() . ' and user=' . $user->getUid())
             ->setMaxResults(1)
             ->execute()
-            ->fetchColumn() > 0;
+            ->fetchOne() > 0;
+    }
+
+    /**
+     * @return void
+     */
+    public function truncate(): void
+    {
+        $tables = [
+            Queue::TABLE_NAME
+        ];
+        foreach ($tables as $table) {
+            DatabaseUtility::getConnectionForTable($table)->truncate($table);
+        }
     }
 }

@@ -1,4 +1,8 @@
 <?php
+
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+
 call_user_func(
     function () {
         $languageFilePrefix = 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:';
@@ -7,7 +11,7 @@ call_user_func(
         /**
          * Register Plugins
          */
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin('luxletter', 'Fe', 'Luxletter: Unsubscribe');
+        ExtensionUtility::registerPlugin('luxletter', 'Fe', 'Luxletter: Unsubscribe');
 
         /**
          * Disable not needed fields in tt_content
@@ -19,7 +23,7 @@ call_user_func(
          * Include Flexform for plugin
          */
         $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['luxletter_fe'] = 'pi_flexform';
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+        ExtensionManagementUtility::addPiFlexFormValue(
             'luxletter_fe',
             'FILE:EXT:luxletter/Configuration/FlexForm/FlexFormFe.xml'
         );
@@ -27,7 +31,7 @@ call_user_func(
         /**
          * Register new CType Teaser
          */
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTcaSelectItem(
+        ExtensionManagementUtility::addTcaSelectItem(
             'tt_content',
             'CType',
             [
@@ -70,7 +74,7 @@ call_user_func(
         /**
          * Include Flexform for teaser content element
          */
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+        ExtensionManagementUtility::addPiFlexFormValue(
             '*',
             'FILE:EXT:luxletter/Configuration/FlexForm/FlexFormCeTeaser.xml',
             'teaser'

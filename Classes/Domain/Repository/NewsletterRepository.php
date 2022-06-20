@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Repository;
 
 use Doctrine\DBAL\DBALException;
@@ -25,6 +25,7 @@ class NewsletterRepository extends AbstractRepository
         $query->setOrderings(['uid', QueryInterface::ORDER_DESCENDING]);
         $query->setLimit(1);
         /** @var Newsletter $newsletter */
+        /** @noinspection PhpUnnecessaryLocalVariableInspection */
         $newsletter = $query->execute()->getFirst();
         return $newsletter;
     }
@@ -38,7 +39,8 @@ class NewsletterRepository extends AbstractRepository
     public function removeNewsletterAndQueues(Newsletter $newsletter): void
     {
         $connection = DatabaseUtility::getConnectionForTable(Queue::TABLE_NAME);
-        $connection->query('delete from ' . Queue::TABLE_NAME . ' where newsletter=' . $newsletter->getUid());
+        /** @noinspection SqlDialectInspection */
+        $connection->executeQuery('delete from ' . Queue::TABLE_NAME . ' where newsletter=' . $newsletter->getUid());
         $this->remove($newsletter);
     }
 

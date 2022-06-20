@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\ViewHelpers\User;
 
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Utility\FrontendUtility;
-use In2code\Luxletter\Utility\ObjectUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
@@ -39,7 +37,6 @@ class GetUserImageUrlViewHelper extends AbstractViewHelper
 
     /**
      * @return string
-     * @throws Exception
      */
     public function render(): string
     {
@@ -53,14 +50,14 @@ class GetUserImageUrlViewHelper extends AbstractViewHelper
     /**
      * @param string $url
      * @return string
-     * @throws Exception
      */
     protected function getImageUrlFromFrontenduser(string $url): string
     {
         if ($this->isFrontendUserWithImage()) {
             foreach ($this->getUser()->getImage() as $imageObject) {
                 $file = $imageObject->getOriginalResource()->getOriginalFile();
-                $imageService = ObjectUtility::getObjectManager()->get(ImageService::class);
+                $imageService = GeneralUtility::makeInstance(ImageService::class);
+                /** @noinspection PhpInternalEntityUsedInspection */
                 $image = $imageService->getImage('', $file, false);
                 $processConfiguration = [
                     'width' => (string)$this->arguments['size'] . 'c',
@@ -107,9 +104,7 @@ class GetUserImageUrlViewHelper extends AbstractViewHelper
      */
     protected function getUser(): User
     {
-        /** @var User $user */
-        $user = $this->arguments['user'];
-        return $user;
+        return $this->arguments['user'];
     }
 
     /**

@@ -1,23 +1,26 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Controller;
 
+use Exception;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
-use In2code\Luxletter\Domain\Model\Usergroup;
 use In2code\Luxletter\Domain\Repository\UsergroupRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\LogService;
-use In2code\Luxletter\Domain\Service\ParseNewsletterUrlService;
+use In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl;
+use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
+use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Exception\MissingRelationException;
 use In2code\Luxletter\Exception\UserValuesAreMissingException;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
-use In2code\Luxletter\Utility\ObjectUtility;
+use Throwable;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Object\Exception;
+use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbaseObject;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
 /**
@@ -41,6 +44,23 @@ class FrontendController extends ActionController
     protected $logService = null;
 
     /**
+     * Constructor
+     *
+     * @param UserRepository $userRepository
+     * @param UsergroupRepository $usergroupRepository
+     * @param LogService $logService
+     */
+    public function __construct(
+        UserRepository $userRepository,
+        UsergroupRepository $usergroupRepository,
+        LogService $logService
+    ) {
+        $this->userRepository = $userRepository;
+        $this->usergroupRepository = $usergroupRepository;
+        $this->logService = $logService;
+    }
+
+    /**
      * @return void
      * @throws AuthenticationFailedException
      */
@@ -52,17 +72,21 @@ class FrontendController extends ActionController
     }
 
     /**
-     * @param string $origin
+     * @param string $origin URL or page identifier
+     * @param string $layout Container HTML template filename
+     * @param int $language
      * @return string
      */
-    public function previewAction(string $origin): string
+    public function previewAction(string $origin, string $layout, int $language = 0): string
     {
         try {
-            $urlService = ObjectUtility::getObjectManager()->get(ParseNewsletterUrlService::class, $origin);
-            return $urlService->getParsedContent();
-        } catch (\Exception $exception) {
-            return 'Origin ' . htmlspecialchars($origin) . ' could not be converted into a valid url!<br>'
-                . 'Message: ' . $exception->getMessage();
+            $siteService = GeneralUtility::makeInstance(SiteService::class);
+            $urlService = GeneralUtility::makeInstance(NewsletterUrl::class, $origin, $layout, $language)
+                ->setModePreview();
+            return $urlService->getParsedContent($siteService->getSite());
+        } catch (Exception $exception) {
+            return 'Error: Origin ' . htmlspecialchars($origin) . ' could not be converted into a valid url!<br>'
+                . 'Reason: ' . $exception->getMessage() . ' (' . $exception->getCode() . ')';
         }
     }
 
@@ -73,7 +97,7 @@ class FrontendController extends ActionController
      * @param User|null $user
      * @return string
      * @throws IllegalObjectTypeException
-     * @throws Exception
+     * @throws ExceptionExtbaseObject
      */
     public function trackingPixelAction(Newsletter $newsletter = null, User $user = null): string
     {
@@ -85,7 +109,7 @@ class FrontendController extends ActionController
 
     /**
      * @param User|null $user
-     * @param Newsletter $newsletter
+     * @param Newsletter|null $newsletter
      * @param string $hash
      * @return void
      */
@@ -93,21 +117,17 @@ class FrontendController extends ActionController
     {
         try {
             $this->checkArgumentsForUnsubscribeAction($user, $newsletter, $hash);
-            /** @var Usergroup $usergroupToRemove */
-            $usergroupToRemove = $this->usergroupRepository->findByUid((int)$this->settings['removeusergroup']);
-            $user->removeUsergroup($usergroupToRemove);
+            $user->removeUsergroup($newsletter->getReceiver());
             $this->userRepository->update($user);
             $this->userRepository->persistAll();
             $this->view->assignMultiple([
                 'success' => true,
                 'user' => $user,
                 'hash' => $hash,
-                'usergroupToRemove' => $usergroupToRemove
+                'usergroupToRemove' => $newsletter->getReceiver()
             ]);
-            if ($newsletter !== null) {
-                $this->logService->logUnsubscribe($newsletter, $user);
-            }
-        } catch (\Exception $exception) {
+            $this->logService->logUnsubscribe($newsletter, $user);
+        } catch (Throwable $exception) {
             $languageKey = 'fe.unsubscribe.message.' . $exception->getCode();
             $message = LocalizationUtility::translate($languageKey);
             $this->addFlashMessage(($languageKey !== $message) ? $message : $exception->getMessage());
@@ -121,8 +141,10 @@ class FrontendController extends ActionController
      * @return void
      * @throws ArgumentMissingException
      * @throws AuthenticationFailedException
+     * @throws ExceptionExtbaseObject
      * @throws MissingRelationException
      * @throws UserValuesAreMissingException
+     * @throws MisconfigurationException
      */
     protected function checkArgumentsForUnsubscribeAction(
         User $user = null,
@@ -138,39 +160,11 @@ class FrontendController extends ActionController
         if ($hash === '') {
             throw new ArgumentMissingException('Hash not given', 1562050533);
         }
-        $usergroupToRemove = $this->usergroupRepository->findByUid((int)$this->settings['removeusergroup']);
-        if ($user->getUsergroup()->contains($usergroupToRemove) === false) {
+        if ($user->getUsergroup()->contains($newsletter->getReceiver()) === false) {
             throw new MissingRelationException('Usergroup not assigned to user', 1562066292);
         }
         if ($user->getUnsubscribeHash() !== $hash) {
             throw new AuthenticationFailedException('Given hash is incorrect', 1562069583);
         }
-    }
-
-    /**
-     * @param UserRepository $userRepository
-     * @return void
-     */
-    public function injectUserRepository(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
-    }
-
-    /**
-     * @param UsergroupRepository $usergroupRepository
-     * @return void
-     */
-    public function injectUsergroupRepository(UsergroupRepository $usergroupRepository)
-    {
-        $this->usergroupRepository = $usergroupRepository;
-    }
-
-    /**
-     * @param LogService $logService
-     * @return void
-     */
-    public function injectLogService(LogService $logService)
-    {
-        $this->logService = $logService;
     }
 }

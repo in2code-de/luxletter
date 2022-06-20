@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Utility;
 
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
@@ -9,7 +9,6 @@ use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
  */
 class BackendUserUtility
 {
-
     /**
      * @return bool
      */

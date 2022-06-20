@@ -1,24 +1,23 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Mail;
 
-use In2code\Luxletter\Signal\SignalTrait;
-use In2code\Luxletter\Utility\ConfigurationUtility;
-use In2code\Luxletter\Utility\ObjectUtility;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use In2code\Luxletter\Domain\Model\Configuration;
+use In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding\Execution;
+use In2code\Luxletter\Events\SendMailSendNewsletterBeforeEvent;
+use In2code\Luxletter\Events\SendMailSendNewsletterBeforeMailMessageEvent;
+use In2code\Luxletter\Exception\MisconfigurationException;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
-use TYPO3\CMS\Extbase\Object\Exception;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class SendMail
+ * is used for testmails and for final newsletter mails
  */
 class SendMail
 {
-    use SignalTrait;
-
     /**
      * @var string
      */
@@ -30,14 +29,27 @@ class SendMail
     protected $bodytext = '';
 
     /**
-     * MailService constructor.
+     * @var Configuration|null
+     */
+    protected $configuration = null;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
+     * SendMail constructor.
      * @param string $subject
      * @param string $bodytext
+     * @param Configuration $configuration
      */
-    public function __construct(string $subject, string $bodytext)
+    public function __construct(string $subject, string $bodytext, Configuration $configuration)
     {
         $this->subject = $subject;
         $this->bodytext = $bodytext;
+        $this->configuration = $configuration;
+        $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
     }
 
     /**
@@ -45,81 +57,58 @@ class SendMail
      * @return bool the number of recipients who were accepted for delivery
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
-     * @throws TransportExceptionInterface
-     * @throws Exception
+     * @throws MisconfigurationException
      */
     public function sendNewsletter(array $receiver): bool
     {
-        if (ConfigurationUtility::isVersionToCompareSameOrLowerThenCurrentTypo3Version('10.0.0')) {
-            // TYPO3 10
-            return $this->send($receiver);
-        } else {
-            // TYPO3 9
-            return $this->sendLegacy($receiver);
-        }
-    }
-
-    /**
-     * Send with new MailMessage from TYPO3 10
-     *
-     * @param array $receiver
-     * @return bool
-     * @throws Exception
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
-     * @throws TransportExceptionInterface
-     */
-    protected function send(array $receiver): bool
-    {
-        $send = true;
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'beforeSend', [&$send, $receiver, $this]);
-        $mailMessage = ObjectUtility::getObjectManager()->get(MailMessage::class);
-        $mailMessage
-            ->setTo($receiver)
-            ->setFrom([ConfigurationUtility::getFromEmail() => ConfigurationUtility::getFromName()])
-            ->setReplyTo([ConfigurationUtility::getReplyEmail() => ConfigurationUtility::getReplyName()])
-            ->setSubject($this->subject)
-            ->html($this->bodytext);
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'mailMessage', [$mailMessage, &$send, $receiver, $this]);
-        if ($send === true) {
-            // Todo: Can be renamed to send() when TYPO3 9 support is dropped
-            return $mailMessage->sendMail();
+        /** @var SendMailSendNewsletterBeforeEvent $event */
+        $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
+            SendMailSendNewsletterBeforeEvent::class,
+            $receiver,
+            $this
+        ));
+        if ($event->isSend()) {
+            $mailMessage = GeneralUtility::makeInstance(MailMessage::class);
+            $mailMessage
+                ->setTo($receiver)
+                ->setFrom([$this->configuration->getFromEmail() => $this->configuration->getFromName()])
+                ->setReplyTo([$this->configuration->getReplyEmail() => $this->configuration->getReplyName()])
+                ->setSubject($this->subject)
+                ->html($this->getBodytext($mailMessage));
+            /** @var SendMailSendNewsletterBeforeMailMessageEvent $event */
+            $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
+                SendMailSendNewsletterBeforeMailMessageEvent::class,
+                $receiver,
+                $mailMessage,
+                $this
+            ));
+            if ($event->isSend() === true) {
+                return $mailMessage->send();
+            }
         }
         return false;
     }
 
     /**
-     * Send with old MailMessage from TYPO3 9
+     * Get the bodytext (with or without embedded images)
      *
-     * @param array $receiver
-     * @return bool
-     * @throws Exception
+     * @param MailMessage $mailMessage
+     * @return string
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
-     * @throws TransportExceptionInterface
-     * Todo: Can be removed when TYPO3 9 support is dropped
+     * @throws MisconfigurationException
      */
-    protected function sendLegacy(array $receiver): bool
+    protected function getBodytext(MailMessage $mailMessage): string
     {
-        $send = true;
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'beforeSendLegacy', [&$send, $receiver, $this]);
-        $mailMessage = ObjectUtility::getObjectManager()->get(MailMessageLegacy::class);
-        $mailMessage
-            ->setTo($receiver)
-            ->setFrom([ConfigurationUtility::getFromEmail() => ConfigurationUtility::getFromName()])
-            ->setReplyTo([ConfigurationUtility::getReplyEmail() => ConfigurationUtility::getReplyName()])
-            ->setSubject($this->subject)
-            ->setBody($this->bodytext, 'text/html');
-        $this->signalDispatch(__CLASS__, __FUNCTION__ . 'mailMessageLegacy', [$mailMessage, &$send, $receiver, $this]);
-        if ($send === true) {
-            return $mailMessage->send() > 0;
+        $imageEmbedding = GeneralUtility::makeInstance(Execution::class);
+        if ($imageEmbedding->isActive()) {
+            $imageEmbedding->setBodytext($this->bodytext);
+            $images = $imageEmbedding->getImages();
+            foreach ($images as $hash => $pathAndFilename) {
+                $mailMessage->embedFromPath($pathAndFilename, $hash);
+            }
+            return $imageEmbedding->getRewrittenContent();
         }
-        return false;
+        return $this->bodytext;
     }
 }

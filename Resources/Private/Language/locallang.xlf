@@ -87,8 +87,20 @@
 			<trans-unit id="module.newsletter.list.createnew.2">
 				<source>Just create a new one</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.list.createnew.noconfiguration">
+				<source>No configuration yet</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.createnew.noconfigurationdetails">
+				<source>Please create a sender configuration in a sysfolder first</source>
+			</trans-unit>
 			<trans-unit id="module.newsletter.list.tableheader.title">
 				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.tableheader.subject">
+				<source>Email Subject</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.tableheader.language">
+				<source>Language</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.list.tableheader.description">
 				<source>Description</source>
@@ -146,7 +158,7 @@
 				<source>You can add a small description for internal useage</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.datetime">
-				<source>Newsletter start</source>
+				<source>Newsletter start (optional)</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.datetime.description">
 				<source>Don't send newsletter before this date (empty for sending as soon as possible)</source>
@@ -155,19 +167,31 @@
 				<source>Mail subject</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.subject.description">
-				<source>Choose an email subject for this newsletter.</source>
+				<source>Choose an email subject for this newsletter. It's possible to use variables like {user.email} or {user.firstName}</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.receiver">
-				<source>Choose a receiver group</source>
+				<source>Receiver</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.receiver.description">
 				<source>Please choose a frontend user group. Every user in this group will receive this newsletter.</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.configuration">
+				<source>Sender</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.configuration.description">
+				<source>Please choose between your predefined sender settings</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.layout">
+				<source>Layout</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.layout.description">
+				<source>Please select a newsletter container layout</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.origin">
 				<source>Where is the newsletter located?</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.origin.description">
-				<source>Please add the absolute URL (https://domain.org/newsletter/) or a page UID where your former created newsletter is located. Afterwards the newsletter will be parsed and prepared for sending.</source>
+				<source>Please add the page ID to any TYPO3 page as a newsletter source (the "type" parameter is automatically added here). Alternatively, you can also enter an absolute URL here. Luxletter then reads this URL and prepares it for dispatch.</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.testmail">
 				<source>Send a test mail to yourself</source>
@@ -195,6 +219,9 @@
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.message.notready.origin">
 				<source>Please select an origin for your newsletter</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.message.notready.mandatory">
+				<source>Please fill all mandatory fields</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.wizarduserpreview.previewreceivers">
 				<source>Receivers preview</source>
@@ -233,7 +260,7 @@
 				<source>Not yet identified</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.receiverdetail.notidentified.text">
-				<source>This newsletter receiver is not yet identified in lux</source>
+				<source>This newsletter receiver is not yet identified in LUX</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.receiverdetail.activities.title">
 				<source>Activities</source>
@@ -283,6 +310,12 @@
 			</trans-unit>
 			<trans-unit id="date">
 				<source>%Y-%m-%d, %H:%M</source>
+			</trans-unit>
+			<trans-unit id="deleteconfirm">
+				<source>Are you sure to delete this record?</source>
+			</trans-unit>
+			<trans-unit id="defaultLanguage">
+				<source>Default</source>
 			</trans-unit>
 		</body>
 	</file>

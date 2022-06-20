@@ -10,27 +10,6 @@
 				</TCEforms>
 				<type>array</type>
 				<el>
-					<settings.removeusergroup>
-						<TCEforms>
-							<exclude>1</exclude>
-							<label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:flexform.fe.removeusergroup</label>
-							<config>
-								<type>select</type>
-								<renderType>selectSingle</renderType>
-								<items type="array">
-									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:pleasechoose</numIndex>
-										<numIndex index="1"></numIndex>
-									</numIndex>
-								</items>
-								<size>1</size>
-								<minitems>1</minitems>
-								<maxitems>1</maxitems>
-								<foreign_table>fe_groups</foreign_table>
-								<foreign_table_where>AND fe_groups.deleted = 0 AND fe_groups.luxletter_receiver = 1 order by fe_groups.title</foreign_table_where>
-							</config>
-						</TCEforms>
-					</settings.removeusergroup>
 					<settings.text>
 						<TCEforms>
 							<exclude>1</exclude>

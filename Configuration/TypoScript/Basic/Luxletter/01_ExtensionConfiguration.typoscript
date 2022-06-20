@@ -1,28 +1,46 @@
 plugin {
-    tx_luxletter_fe {
-        view {
-            templateRootPaths {
-                0 = EXT:luxletter/Resources/Private/Templates/
-            }
-            partialRootPaths {
-                0 = EXT:luxletter/Resources/Private/Partials/
-            }
-            layoutRootPaths {
-                0 = EXT:luxletter/Resources/Private/Layouts/
-            }
-        }
-        features.requireCHashArgumentForActionArguments = 0
+  tx_luxletter_fe {
+    view {
+      templateRootPaths {
+        0 = EXT:luxletter/Resources/Private/Templates/
 
-        settings {
-            # Example setting. Can be used in HTML for newsletter with {foo}
-#           foo = bar
-        }
-        variables {
-            # Example variable. Can be used HTML for newsletter with {subject}
-#           subject = TEXT
-#           subject.value = My own Newsletter
-        }
+        # If EXT:lux is installed, it must be possible to overrule templates for a better receiver module
+        # This is only needed for the backend module. Now plugin.tx_luxletter_fe can be copied into module.tx_luxletter
+        1 = EXT:lux/Resources/Private/Templates/
+      }
+
+      partialRootPaths {
+        0 = EXT:luxletter/Resources/Private/Partials/
+      }
+
+      layoutRootPaths {
+        0 = EXT:luxletter/Resources/Private/Layouts/
+      }
     }
+
+    features.requireCHashArgumentForActionArguments = 0
+
+    settings {
+      addInlineCss {
+        0 = EXT:luxletter/Resources/Private/Css/ZurbFoundation.css
+        1 = EXT:luxletter/Resources/Private/Css/Luxletter.css
+      }
+
+      # Define container.html files
+      containerHtml {
+        path = EXT:luxletter/Resources/Private/Templates/Mail/
+        options {
+          1 {
+            # "NewsletterContainer" means:
+            # "NewsletterContainer.html" in default language or
+            # "NewsletterContainer_de.html" in german language and so on...
+            fileName = NewsletterContainer
+            label = LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:newsletter.layouts.1
+          }
+        }
+      }
+    }
+  }
 }
 
 # Copy plugin configuration to module configuration to just use one configuration for both places.

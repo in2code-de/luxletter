@@ -18,3 +18,5 @@ node_modules/
 .Build/
 composer.lock
 package-lock.json
+.php_cs.cache
+var/

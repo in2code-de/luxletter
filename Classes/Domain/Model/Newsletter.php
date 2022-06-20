@@ -1,13 +1,19 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 namespace In2code\Luxletter\Domain\Model;
 
+use DateTime;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
+use In2code\Luxletter\Domain\Factory\UserFactory;
+use In2code\Luxletter\Domain\Repository\LanguageRepository;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
-use In2code\Luxletter\Utility\ObjectUtility;
+use In2code\Luxletter\Domain\Service\Parsing\Newsletter as NewsletterParsing;
+use In2code\Luxletter\Utility\LocalizationUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Object\Exception;
 
 /**
  * Class User
@@ -32,7 +38,7 @@ class Newsletter extends AbstractEntity
     protected $disabled = false;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      */
     protected $datetime = null;
 
@@ -42,9 +48,14 @@ class Newsletter extends AbstractEntity
     protected $subject = '';
 
     /**
-     * @var \In2code\Luxletter\Domain\Model\Usergroup
+     * @var Usergroup
      */
     protected $receiver = null;
+
+    /**
+     * @var Configuration
+     */
+    protected $configuration = null;
 
     /**
      * @var string
@@ -52,12 +63,19 @@ class Newsletter extends AbstractEntity
     protected $origin = '';
 
     /**
+     * Contains container filename
+     *
+     * @var string
+     */
+    protected $layout = '';
+
+    /**
      * @var string
      */
     protected $bodytext = '';
 
     /**
-     * @var null|int
+     * @var int|null
      */
     protected $dispatchedProgress = null;
 
@@ -80,6 +98,11 @@ class Newsletter extends AbstractEntity
      * @var int
      */
     protected $unsubscribers = 0;
+
+    /**
+     * @var int
+     */
+    protected $language = 0;
 
     /**
      * @return string
@@ -144,18 +167,18 @@ class Newsletter extends AbstractEntity
     }
 
     /**
-     * @return \DateTime
+     * @return DateTime|null
      */
-    public function getDatetime(): ?\DateTime
+    public function getDatetime(): ?DateTime
     {
         return $this->datetime;
     }
 
     /**
-     * @param \DateTime $datetime
+     * @param DateTime $datetime
      * @return Newsletter
      */
-    public function setDatetime(\DateTime $datetime): Newsletter
+    public function setDatetime(DateTime $datetime): Newsletter
     {
         $this->datetime = $datetime;
         return $this;
@@ -167,6 +190,18 @@ class Newsletter extends AbstractEntity
     public function getSubject(): string
     {
         return $this->subject;
+    }
+
+    /**
+     * @return string
+     * @throws InvalidConfigurationTypeException
+     */
+    public function getSubjectParsedWithDummyUser(): string
+    {
+        $userFactory = GeneralUtility::makeInstance(UserFactory::class);
+        $user = $userFactory->getDummyUser();
+        $newsletterParsing = GeneralUtility::makeInstance(NewsletterParsing::class);
+        return $newsletterParsing->parseSubject($this->getSubject(), ['user' => $user]);
     }
 
     /**
@@ -198,6 +233,24 @@ class Newsletter extends AbstractEntity
     }
 
     /**
+     * @return Configuration
+     */
+    public function getConfiguration(): Configuration
+    {
+        return $this->configuration;
+    }
+
+    /**
+     * @param Configuration $configuration
+     * @return Newsletter
+     */
+    public function setConfiguration(Configuration $configuration): self
+    {
+        $this->configuration = $configuration;
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function getOrigin(): string
@@ -212,6 +265,24 @@ class Newsletter extends AbstractEntity
     public function setOrigin(string $origin): Newsletter
     {
         $this->origin = $origin;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLayout(): string
+    {
+        return $this->layout;
+    }
+
+    /**
+     * @param string $layout
+     * @return Newsletter
+     */
+    public function setLayout(string $layout): Newsletter
+    {
+        $this->layout = $layout;
         return $this;
     }
 
@@ -234,15 +305,46 @@ class Newsletter extends AbstractEntity
     }
 
     /**
+     * @return int
+     */
+    public function getLanguage(): int
+    {
+        return $this->language;
+    }
+
+    /**
+     * @return string
+     * @throws ExceptionDbalDriver
+     */
+    public function getLanguageLabel(): string
+    {
+        $language = $this->getLanguage();
+        if ($language > 0) {
+            $languageRepository = GeneralUtility::makeInstance(LanguageRepository::class);
+            return $languageRepository->getTitleFromIdentifier($language);
+        }
+        return LocalizationUtility::translateByKey('defaultLanguage');
+    }
+
+    /**
+     * @param int $language
+     * @return Newsletter
+     */
+    public function setLanguage(int $language): Newsletter
+    {
+        $this->language = $language;
+        return $this;
+    }
+
+    /**
      * Checks the queue progress of this newsletter. 100 means 100% are sent.
      *
      * @return int
-     * @throws Exception
      */
     public function getDispatchProgress(): int
     {
         if ($this->dispatchedProgress === null) {
-            $queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
+            $queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
             $dispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, true)->count();
             $notDispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, false)->count();
             $overall = $dispatched + $notDispatched;
@@ -257,12 +359,11 @@ class Newsletter extends AbstractEntity
 
     /**
      * @return int
-     * @throws Exception
      */
     public function getQueues(): int
     {
         if ($this->queues === 0) {
-            $queueRepository = ObjectUtility::getObjectManager()->get(QueueRepository::class);
+            $queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
             $queues = $queueRepository->findAllByNewsletter($this)->count();
             $this->queues = $queues;
         }
@@ -272,12 +373,12 @@ class Newsletter extends AbstractEntity
     /**
      * @return int
      * @throws DBALException
-     * @throws Exception
+     * @throws ExceptionDbalDriver
      */
     public function getOpeners(): int
     {
         if ($this->openers === 0) {
-            $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
+            $logRepository = GeneralUtility::makeInstance(LogRepository::class);
             $openers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_NEWSLETTEROPENING));
             $this->openers = $openers;
         }
@@ -287,12 +388,12 @@ class Newsletter extends AbstractEntity
     /**
      * @return int
      * @throws DBALException
-     * @throws Exception
+     * @throws ExceptionDbalDriver
      */
     public function getClickers(): int
     {
         if ($this->clickers === 0) {
-            $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
+            $logRepository = GeneralUtility::makeInstance(LogRepository::class);
             $clickers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_LINKOPENING));
             $this->clickers = $clickers;
         }
@@ -302,12 +403,12 @@ class Newsletter extends AbstractEntity
     /**
      * @return int
      * @throws DBALException
-     * @throws Exception
+     * @throws ExceptionDbalDriver
      */
     public function getUnsubscribers(): int
     {
         if ($this->unsubscribers === 0) {
-            $logRepository = ObjectUtility::getObjectManager()->get(LogRepository::class);
+            $logRepository = GeneralUtility::makeInstance(LogRepository::class);
             $unsubscribers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_UNSUBSCRIBE));
             $this->unsubscribers = $unsubscribers;
         }
@@ -317,7 +418,7 @@ class Newsletter extends AbstractEntity
     /**
      * @return float
      * @throws DBALException
-     * @throws Exception
+     * @throws ExceptionDbalDriver
      */
     public function getOpenRate(): float
     {
@@ -332,7 +433,7 @@ class Newsletter extends AbstractEntity
     /**
      * @return float
      * @throws DBALException
-     * @throws Exception
+     * @throws ExceptionDbalDriver
      */
     public function getClickRate(): float
     {
@@ -347,7 +448,7 @@ class Newsletter extends AbstractEntity
     /**
      * @return float
      * @throws DBALException
-     * @throws Exception
+     * @throws ExceptionDbalDriver
      */
     public function getUnsubscribeRate(): float
     {
