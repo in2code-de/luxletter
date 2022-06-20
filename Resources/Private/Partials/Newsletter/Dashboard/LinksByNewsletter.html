@@ -1,0 +1,21 @@
+<f:for each="{newsletters}" as="newsletter" iteration="iterator">
+	<div class="col-md-6">
+		<div class="panel panel-default" id="txluxletter-dashboard-panel-links-nl{newsletter.uid}">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					Links: {newsletter.title}
+				</h3>
+			</div>
+			<div class="panel-body">
+				<ul class="list-group">
+					<f:for each="{newsletter.groupedLinksByHref}" as="groupedLink">
+						<li class="list-group-item">
+							<span class="badge" style="float: right;" title="Overall">{groupedLink.count}</span>
+							<f:link.external uri="{groupedLink.target}">{groupedLink.target}</f:link.external>
+						</li>
+					</f:for>
+				</ul>
+			</div>
+		</div>
+	</div>
+</f:for>
