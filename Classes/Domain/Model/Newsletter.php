@@ -85,7 +85,7 @@ class Newsletter extends AbstractEntity
     protected $queues = 0;
 
     /**
-     * @var null|array
+     * @var array|null
      */
     protected $linksByHref = null;
 
