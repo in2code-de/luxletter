@@ -85,6 +85,11 @@ class Newsletter extends AbstractEntity
     protected $queues = 0;
 
     /**
+     * @var null|array
+     */
+    protected $linksByHref = null;
+
+    /**
      * @var int
      */
     protected $openers = 0;
@@ -368,6 +373,19 @@ class Newsletter extends AbstractEntity
             $this->queues = $queues;
         }
         return $this->queues;
+    }
+
+    /**
+     * @return array
+     * @throws DBALException
+     */
+    public function getGroupedLinksByHref(): array
+    {
+        if ($this->linksByHref === null) {
+            $logRepository = GeneralUtility::makeInstance(LogRepository::class);
+            $this->linksByHref = $logRepository->getGroupedLinksByHref(10, $this);
+        }
+        return $this->linksByHref;
     }
 
     /**

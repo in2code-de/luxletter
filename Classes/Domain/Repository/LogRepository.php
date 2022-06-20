@@ -42,21 +42,25 @@ class LogRepository extends AbstractRepository
      *  ]
      *
      * @param int $limit
+     * @param ?Newsletter $newsletter
      * @return array
      * @throws DBALException
      */
-    public function getGroupedLinksByHref(int $limit = 8): array
+    public function getGroupedLinksByHref(int $limit = 8, ?Newsletter $newsletter = null): array
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
         $results = (array)$connection->executeQuery(
             'select count(*) as count, properties, newsletter from ' . Log::TABLE_NAME .
             ' where deleted=0 and status=' . Log::STATUS_LINKOPENING .
+            ($newsletter === null ? '' : ' and newsletter=' . $newsletter->getUid()) .
             ' group by properties,newsletter order by count desc limit ' . $limit
         )->fetchAll();
         $nlRepository = GeneralUtility::makeInstance(NewsletterRepository::class);
         foreach ($results as &$result) {
             $result['target'] = json_decode($result['properties'], true)['target'];
-            $result['newsletter'] = $nlRepository->findByUid($result['newsletter']);
+            if ($newsletter === null) {
+                $result['newsletter'] = $nlRepository->findByUid($result['newsletter']);
+            }
         }
         return $results;
     }
