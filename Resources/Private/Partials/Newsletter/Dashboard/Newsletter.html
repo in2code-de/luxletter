@@ -15,8 +15,10 @@
 						<f:translate key="module.newsletter.dashboard.label.openrate">Open rate</f:translate>
 					</td>
 					<td>
-						<luxletter:format.percent number="{newsletter.clickRate}">11 %</luxletter:format.percent>
-						<f:translate key="module.newsletter.dashboard.label.clickrate">Click rate</f:translate>
+                        <a href="#txluxletter-dashboard-panel-links-nl{newsletter.uid}">
+                            <luxletter:format.percent number="{newsletter.clickRate}">11 %</luxletter:format.percent>
+                            <f:translate key="module.newsletter.dashboard.label.clickrate">Click rate</f:translate>
+                        </a>
 					</td>
 					<td>
 						<luxletter:format.percent number="{newsletter.unsubscribeRate}">1.3 %</luxletter:format.percent>
