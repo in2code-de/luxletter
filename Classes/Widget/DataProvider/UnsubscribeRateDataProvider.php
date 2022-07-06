@@ -58,7 +58,7 @@ class UnsubscribeRateDataProvider implements ChartDataProviderInterface
         return [
             'amounts' => [
                 $logRepository->getOverallUnsubscribes(),
-                ($logRepository->getOverallMailsSent() - $logRepository->getOverallUnsubscribes())
+                ($logRepository->getOverallOpenings() - $logRepository->getOverallUnsubscribes())
             ],
             'titles' => [
                 $this->getWidgetLabel('unsubscriberate.label.0'),
