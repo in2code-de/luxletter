@@ -378,8 +378,9 @@ class Newsletter extends AbstractEntity
     public function getOpeners(): int
     {
         if ($this->openers === 0) {
+            /** @var $logRepository LogRepository */
             $logRepository = GeneralUtility::makeInstance(LogRepository::class);
-            $openers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_NEWSLETTEROPENING));
+            $openers = count($logRepository->findByNewsletterAndStatus($this, [Log::STATUS_NEWSLETTEROPENING, Log::STATUS_LINKOPENING], true));
             $this->openers = $openers;
         }
         return $this->openers;
@@ -393,8 +394,9 @@ class Newsletter extends AbstractEntity
     public function getClickers(): int
     {
         if ($this->clickers === 0) {
+            /** @var $logRepository LogRepository */
             $logRepository = GeneralUtility::makeInstance(LogRepository::class);
-            $clickers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_LINKOPENING));
+            $clickers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_LINKOPENING, true));
             $this->clickers = $clickers;
         }
         return $this->clickers;
