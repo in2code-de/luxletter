@@ -57,8 +57,8 @@ class ClickRateDataProvider implements ChartDataProviderInterface
         $logRepository = GeneralUtility::makeInstance(LogRepository::class);
         return [
             'amounts' => [
-                $logRepository->getOverallClicks(),
-                ($logRepository->getOverallOpenings() - $logRepository->getOverallClicks())
+                $logRepository->getOpeningsByClickers(),
+                ($logRepository->getOverallOpenings() - $logRepository->getOpeningsByClickers())
             ],
             'titles' => [
                 $this->getWidgetLabel('clickrate.label.0'),

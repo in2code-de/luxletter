@@ -70,8 +70,22 @@ class LogRepository extends AbstractRepository
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
         return (int)$connection->executeQuery(
-            'select count(uid) from ' . Log::TABLE_NAME .
-            ' where deleted = 0 and status=' . Log::STATUS_NEWSLETTEROPENING . ';'
+            'select count(distinct newsletter, user) from ' . Log::TABLE_NAME .
+            ' where deleted = 0' .
+            ' and status IN (' . Log::STATUS_NEWSLETTEROPENING . ',' . Log::STATUS_LINKOPENING . ')' . ';'
+        )->fetchOne();
+    }
+
+    /**
+     * @return int
+     * @throws DBALException
+     */
+    public function getOpeningsByClickers(): int
+    {
+        $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
+        return (int)$connection->executeQuery(
+            'select count(distinct newsletter, user) from ' . Log::TABLE_NAME .
+            ' where deleted = 0 and status=' . Log::STATUS_LINKOPENING . ';'
         )->fetchOne();
     }
 
@@ -142,9 +156,9 @@ class LogRepository extends AbstractRepository
     public function getOverallClickRate(): float
     {
         $overallOpenings = $this->getOverallOpenings();
-        $overallClicks = $this->getOverallClicks();
+        $openingsByClickers = $this->getOpeningsByClickers();
         if ($overallOpenings > 0) {
-            return $overallClicks / $overallOpenings;
+            return $openingsByClickers / $overallOpenings;
         }
         return 0.0;
     }
@@ -187,17 +201,22 @@ class LogRepository extends AbstractRepository
 
     /**
      * @param Newsletter $newsletter
-     * @param int $status
+     * @param int[] $status
+     * @param bool $distinctMails
      * @return array
      * @throws DBALException
      * @throws Exception
      */
-    public function findByNewsletterAndStatus(Newsletter $newsletter, int $status): array
+    public function findByNewsletterAndStatus(Newsletter $newsletter, array $status, bool $distinctMails = true): array
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
+        $sqlSelectColumns = '*';
+        if ($distinctMails === true) {
+            $sqlSelectColumns = 'distinct newsletter, user';
+        }
         return (array)$connection->executeQuery(
-            'select * from ' . Log::TABLE_NAME .
-            ' where deleted=0 and status=' . $status . ' and newsletter=' . $newsletter->getUid()
+            'select ' . $sqlSelectColumns . ' from ' . Log::TABLE_NAME .
+            ' where deleted=0 and status in (' . implode(',', $status) . ') and newsletter=' . $newsletter->getUid()
         )->fetchAllAssociative();
     }
 

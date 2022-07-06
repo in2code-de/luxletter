@@ -379,7 +379,10 @@ class Newsletter extends AbstractEntity
     {
         if ($this->openers === 0) {
             $logRepository = GeneralUtility::makeInstance(LogRepository::class);
-            $openers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_NEWSLETTEROPENING));
+            $openers = count($logRepository->findByNewsletterAndStatus(
+                $this,
+                [Log::STATUS_NEWSLETTEROPENING, Log::STATUS_LINKOPENING]
+            ));
             $this->openers = $openers;
         }
         return $this->openers;
@@ -394,7 +397,7 @@ class Newsletter extends AbstractEntity
     {
         if ($this->clickers === 0) {
             $logRepository = GeneralUtility::makeInstance(LogRepository::class);
-            $clickers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_LINKOPENING));
+            $clickers = count($logRepository->findByNewsletterAndStatus($this, [Log::STATUS_LINKOPENING]));
             $this->clickers = $clickers;
         }
         return $this->clickers;
@@ -409,7 +412,7 @@ class Newsletter extends AbstractEntity
     {
         if ($this->unsubscribers === 0) {
             $logRepository = GeneralUtility::makeInstance(LogRepository::class);
-            $unsubscribers = count($logRepository->findByNewsletterAndStatus($this, Log::STATUS_UNSUBSCRIBE));
+            $unsubscribers = count($logRepository->findByNewsletterAndStatus($this, [Log::STATUS_UNSUBSCRIBE], false));
             $this->unsubscribers = $unsubscribers;
         }
         return $this->unsubscribers;
