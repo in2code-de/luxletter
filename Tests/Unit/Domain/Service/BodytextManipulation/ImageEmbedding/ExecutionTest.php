@@ -50,6 +50,17 @@ class ExecutionTest extends UnitTestCase
                 </div>
             </body>
         </html>',
+        '<html>
+            <body>
+                <div>
+                    <img src="https://via.placeholder.com/100.jpg" class="class name"/>
+                    <img src="https://via.placeholder.com/200.jpg" class="class name"/>
+                    <img src="https://via.placeholder.com/200.jpg" class="class name"/>
+                    <img src="https://via.placeholder.com/200.jpg" class="class name"/>
+                    <h1>in2code</h1>
+                </div>
+            </body>
+        </html>',
     ];
 
     /**
@@ -103,6 +114,17 @@ class ExecutionTest extends UnitTestCase
             $this->assertEmpty(preg_replace('~name_\d{8}~', '', $name));
         }
         $this->assertEquals(10, $iteration);
+
+        // check for two images - no duplicates
+        $preparationFixture->storeImages($this->bodytextExamples[2]);
+        $this->generalValidatorMock->_call('setBodytext', $this->bodytextExamples[2]);
+        $result3 = $this->generalValidatorMock->_call('getImages');
+        $iteration = 0;
+        foreach ($result3 as $name => $path) {
+            $iteration++;
+            $this->assertEmpty(preg_replace('~name_\d{8}~', '', $name));
+        }
+        $this->assertEquals(2, $iteration);
     }
 
     /**
