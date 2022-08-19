@@ -99,7 +99,7 @@ define(['jquery'], function($) {
     var addWizardNewsletterPreview = function() {
       var input = document.querySelector('[data-luxletter-wizardpreviewevent="newsletter"]');
       if (input !== null) {
-        input.addEventListener('blur', function() {
+        input.addEventListener('change', function() {
           initializeNewsletterPreviewIframe();
         });
       }
