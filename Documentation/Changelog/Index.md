@@ -9,6 +9,7 @@
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 14.0.1     | 2022.08.19  | Bugfix     | Fix "newsletter is not ready yet" bug in multilanguage mode                                                                                                                                |
 | 14.0.0     | 2022.07.06  | Task       | Fix the overview charts in the dashboards, always show newletter names, increase height of some charts                                                                                     |
 | 13.0.2     | 2022.05.24  | Bugfix     | Fix regression with 13.0.1 and also added EXT:dashboard to suggest parts in composer.json and ext_emconf.php                                                                               |
 | 13.0.1     | 2022.05.23  | Bugfix     | Prevent exception "Call to a member function isPackageActive() on null" in TYPO3 11                                                                                                        |
