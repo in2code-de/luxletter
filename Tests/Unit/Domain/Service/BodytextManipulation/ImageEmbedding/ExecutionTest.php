@@ -102,6 +102,7 @@ class ExecutionTest extends UnitTestCase
             $iteration++;
             $this->assertEmpty(preg_replace('~name_\d{8}~', '', $name));
         }
+        $this->assertEquals(10, $iteration);
     }
 
     /**
