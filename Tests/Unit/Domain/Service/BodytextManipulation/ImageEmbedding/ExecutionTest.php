@@ -53,14 +53,38 @@ class ExecutionTest extends UnitTestCase
         '<html>
             <body>
                 <div>
-                    <img src="https://via.placeholder.com/100.jpg" class="class name"/>
                     <img src="https://via.placeholder.com/200.jpg" class="class name"/>
+                    <img src="https://via.placeholder.com/100.jpg" class="class name"/>
                     <img src="https://via.placeholder.com/200.jpg" class="class name"/>
                     <img src="https://via.placeholder.com/200.jpg" class="class name"/>
                     <h1>in2code</h1>
                 </div>
             </body>
         </html>',
+    ];
+
+    protected $imagesExamples = [
+        [
+            'https://via.placeholder.com/300/09f/fff.png',
+        ],
+        [
+            'https://via.placeholder.com/300/09f/fff.png',
+            'https://via.placeholder.com/300.jpg',
+            'https://via.placeholder.com/250/09f/fff.png',
+            'https://via.placeholder.com/250.jpg',
+            'https://via.placeholder.com/200/09f/fff.png',
+            'https://via.placeholder.com/200.jpg',
+            'https://via.placeholder.com/150/09f/fff.png',
+            'https://via.placeholder.com/150.jpg',
+            'https://via.placeholder.com/100/09f/fff.png',
+            'https://via.placeholder.com/100.jpg',
+        ],
+        [
+            'https://via.placeholder.com/200.jpg',
+            'https://via.placeholder.com/100.jpg',
+            'https://via.placeholder.com/200.jpg',
+            'https://via.placeholder.com/200.jpg',
+        ],
     ];
 
     protected $pathExamples = [
@@ -109,8 +133,10 @@ class ExecutionTest extends UnitTestCase
         // check for one image
         $this->generalValidatorMock->_call('setBodytext', $this->bodytextExamples[0]);
         $result1 = $this->generalValidatorMock->_call('getImages');
-        $this->assertArrayHasKey('name_00000001', $result1);
-        $this->assertTrue(file_exists(current($result1)));
+        $image1Cid = $this->generalValidatorMock->_call('getEmbedNameForPathAndFilename',
+            $this->generalValidatorMock->_call('getNewImagePathAndFilename', $this->imagesExamples[0][0]));
+        $this->assertArrayHasKey($image1Cid, $result1);
+        $this->assertFileExists(current($result1));
 
         // check for ten images
         $preparationFixture->storeImages($this->bodytextExamples[1]);
@@ -119,7 +145,7 @@ class ExecutionTest extends UnitTestCase
         $iteration = 0;
         foreach ($result2 as $name => $path) {
             $iteration++;
-            $this->assertEmpty(preg_replace('~name_\d{8}~', '', $name));
+            $this->assertRegExp('~^name_[0-9a-f]{32}$~', $name);
         }
         $this->assertEquals(10, $iteration);
 
@@ -130,7 +156,7 @@ class ExecutionTest extends UnitTestCase
         $iteration = 0;
         foreach ($result3 as $name => $path) {
             $iteration++;
-            $this->assertEmpty(preg_replace('~name_\d{8}~', '', $name));
+            $this->assertRegExp('~^name_[0-9a-f]{32}$~', $name);
         }
         $this->assertEquals(2, $iteration);
     }
@@ -143,8 +169,13 @@ class ExecutionTest extends UnitTestCase
     {
         $this->generalValidatorMock->_call('setBodytext', $this->bodytextExamples[1]);
         $content = $this->generalValidatorMock->_call('getRewrittenContent');
-        $this->assertTrue(stristr($content, 'cid:name_00000001') !== false);
-        $this->assertTrue(stristr($content, 'cid:name_00000010') !== false);
+        $image1Cid = $this->generalValidatorMock->_call('getEmbedNameForPathAndFilename',
+            $this->generalValidatorMock->_call('getNewImagePathAndFilename', $this->imagesExamples[1][0]));
+        $image10Cid = $this->generalValidatorMock->_call('getEmbedNameForPathAndFilename',
+            $this->generalValidatorMock->_call('getNewImagePathAndFilename', $this->imagesExamples[1][9]));
+        $this->assertNotSame($image1Cid, $image10Cid);
+        $this->assertNotFalse(stripos($content, 'cid:' . $image1Cid));
+        $this->assertNotFalse(stripos($content, 'cid:' . $image10Cid));
     }
 
     /**
