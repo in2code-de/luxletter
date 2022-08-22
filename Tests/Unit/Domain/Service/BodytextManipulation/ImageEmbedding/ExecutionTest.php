@@ -63,6 +63,14 @@ class ExecutionTest extends UnitTestCase
         </html>',
     ];
 
+    protected $pathExamples = [
+        [
+            '/path/absolute/uploads/tx_luxletter/166e41227ca179735b3e29ee363c4d6810a767d77fb5d37ed18e1b064e56faaa.png',
+            '/path/absolute/uploads/tx_luxletter/dab5e6deb01f5264f07143a3b02f5082d17c21fdf362d8228d85d3c0c4c3ac4c.jpg',
+            '/path/absolute/uploads/tx_luxletter/166e41227ca179735b3e29ee363c4d6810a767d77fb5d37ed18e1b064e56faaa.png',
+        ],
+    ];
+
     /**
      * @return void
      */
@@ -143,11 +151,16 @@ class ExecutionTest extends UnitTestCase
      * @return void
      * @covers ::getEmbedNameFromIterator
      */
-    public function testGetEmbedNameFromIterator(): void
+    public function testGetEmbedNameForPathAndFilename(): void
     {
-        $this->assertSame('name_00000001', $this->generalValidatorMock->_call('getEmbedNameFromIterator', 1));
-        $this->assertSame('name_00000011', $this->generalValidatorMock->_call('getEmbedNameFromIterator', 11));
-        $this->assertSame('name_00000456', $this->generalValidatorMock->_call('getEmbedNameFromIterator', 456));
+        $image1Cid = $this->generalValidatorMock->_call('getEmbedNameForPathAndFilename', $this->pathExamples[0][0]);
+        $image2Cid = $this->generalValidatorMock->_call('getEmbedNameForPathAndFilename', $this->pathExamples[0][1]);
+        $image3Cid = $this->generalValidatorMock->_call('getEmbedNameForPathAndFilename', $this->pathExamples[0][2]);
+        $this->assertNotSame($image1Cid, $image2Cid);
+        $this->assertSame($image1Cid, $image3Cid);
+        $this->assertSame('name_0986b8209e4f2bd20600ceaa608aa66e', $image1Cid);
+        $this->assertSame('name_a04943510563b9f18be90c3f38ecb806', $image2Cid);
+        $this->assertSame('name_0986b8209e4f2bd20600ceaa608aa66e', $image3Cid);
     }
 
     /**
