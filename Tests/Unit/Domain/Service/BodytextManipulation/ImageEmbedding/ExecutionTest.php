@@ -113,7 +113,7 @@ class ExecutionTest extends UnitTestCase
         $this->assertNull($this->generalValidatorMock->_get('dom'));
         $this->generalValidatorMock->_call('setBodytext', $this->bodytextExamples[0]);
         $this->assertSame($this->bodytextExamples[0], $this->generalValidatorMock->_get('content'));
-        $this->assertInstanceOf(\DomDocument::class, $this->generalValidatorMock->_get('dom'));
+        $this->assertInstanceOf(\DOMDocument::class, $this->generalValidatorMock->_get('dom'));
     }
 
     /**
