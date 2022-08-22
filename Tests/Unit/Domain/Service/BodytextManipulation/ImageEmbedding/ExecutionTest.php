@@ -133,8 +133,10 @@ class ExecutionTest extends UnitTestCase
         // check for one image
         $this->generalValidatorMock->_call('setBodytext', $this->bodytextExamples[0]);
         $result1 = $this->generalValidatorMock->_call('getImages');
-        $image1Cid = $this->generalValidatorMock->_call('getEmbedNameForPathAndFilename',
-            $this->generalValidatorMock->_call('getNewImagePathAndFilename', $this->imagesExamples[0][0]));
+        $image1Cid = $this->generalValidatorMock->_call(
+            'getEmbedNameForPathAndFilename',
+            $this->generalValidatorMock->_call('getNewImagePathAndFilename', $this->imagesExamples[0][0])
+        );
         $this->assertArrayHasKey($image1Cid, $result1);
         $this->assertFileExists(current($result1));
 
@@ -169,10 +171,14 @@ class ExecutionTest extends UnitTestCase
     {
         $this->generalValidatorMock->_call('setBodytext', $this->bodytextExamples[1]);
         $content = $this->generalValidatorMock->_call('getRewrittenContent');
-        $image1Cid = $this->generalValidatorMock->_call('getEmbedNameForPathAndFilename',
-            $this->generalValidatorMock->_call('getNewImagePathAndFilename', $this->imagesExamples[1][0]));
-        $image10Cid = $this->generalValidatorMock->_call('getEmbedNameForPathAndFilename',
-            $this->generalValidatorMock->_call('getNewImagePathAndFilename', $this->imagesExamples[1][9]));
+        $image1Cid = $this->generalValidatorMock->_call(
+            'getEmbedNameForPathAndFilename',
+            $this->generalValidatorMock->_call('getNewImagePathAndFilename', $this->imagesExamples[1][0])
+        );
+        $image10Cid = $this->generalValidatorMock->_call(
+            'getEmbedNameForPathAndFilename',
+            $this->generalValidatorMock->_call('getNewImagePathAndFilename', $this->imagesExamples[1][9])
+        );
         $this->assertNotSame($image1Cid, $image10Cid);
         $this->assertNotFalse(stripos($content, 'cid:' . $image1Cid));
         $this->assertNotFalse(stripos($content, 'cid:' . $image10Cid));
