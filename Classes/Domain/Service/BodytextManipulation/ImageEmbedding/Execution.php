@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types = 1);
+
 namespace In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding;
 
 use DOMDocument;
@@ -40,11 +42,15 @@ class Execution extends AbstractEmbedding implements SingletonInterface
     /**
      * Get bodytext of a mail and rewrite src to (e.g.) "cig:name_1"
      *
+     * Example bodytext:
+     * <img src="/var/www/imagehash1.jpg">
+     * <img src="/var/www/imagehash2.jpg">
+     * <img src="/var/www/imagehash1.jpg">
+     *
      * Example return value:
      *  [
-     *      'name_00000001' => '/var/www/imagehash1.jpg',
-     *      'name_00000002' => '/var/www/imagehash2.jpg',
-     *      'name_00000003' => '/var/www/imagehash1.jpg',
+     *      'name_ab0662afe84da6407fa0920a4d339494' => '/var/www/imagehash1.jpg',
+     *      'name_39261b47697d687db54f32f0a7e26a43' => '/var/www/imagehash2.jpg',
      *  ]
      *
      * @return array
@@ -57,14 +63,13 @@ class Execution extends AbstractEmbedding implements SingletonInterface
         $images = [];
         $imageTags = $this->dom->getElementsByTagName('img');
         /** @var DOMElement $imageTag */
-        $iterator = 1;
         foreach ($imageTags as $imageTag) {
             $src = $imageTag->getAttribute('src');
             if (StringUtility::isAbsoluteImageUrl($src)) {
                 $pathAndFilename = $this->getNewImagePathAndFilename($src);
-                if (file_exists($pathAndFilename)) {
-                    $images[$this->getEmbedNameFromIterator($iterator)] = $pathAndFilename;
-                    $iterator++;
+                $embedName = $this->getEmbedNameForPathAndFilename($pathAndFilename);
+                if (!isset($images[$embedName]) && file_exists($pathAndFilename)) {
+                    $images[$embedName] = $pathAndFilename;
                 }
             }
         }
@@ -72,7 +77,7 @@ class Execution extends AbstractEmbedding implements SingletonInterface
     }
 
     /**
-     * Rewrite src to "cid:name_00000001"
+     * Rewrite src to "cid:name_0123456789abcdef0123456789abcdef"
      *
      * @return string
      * @throws MisconfigurationException
@@ -83,14 +88,12 @@ class Execution extends AbstractEmbedding implements SingletonInterface
 
         $imageTags = $this->dom->getElementsByTagName('img');
         /** @var DOMElement $imageTag */
-        $iterator = 1;
         foreach ($imageTags as $imageTag) {
             $src = $imageTag->getAttribute('src');
             if (StringUtility::isAbsoluteImageUrl($src)) {
                 $pathAndFilename = $this->getNewImagePathAndFilename($src);
                 if (file_exists($pathAndFilename)) {
-                    $imageTag->setAttribute('src', 'cid:' . $this->getEmbedNameFromIterator($iterator));
-                    $iterator++;
+                    $imageTag->setAttribute('src', 'cid:' . $this->getEmbedNameForPathAndFilename($pathAndFilename));
                 }
             }
         }
@@ -98,12 +101,12 @@ class Execution extends AbstractEmbedding implements SingletonInterface
     }
 
     /**
-     * @param int $iterator
-     * @return string "name_00000012"
+     * @param string $pathAndFilename
+     * @return string "name_0123456789abcdef0123456789abcdef"
      */
-    protected function getEmbedNameFromIterator(int $iterator): string
+    protected function getEmbedNameForPathAndFilename(string $pathAndFilename): string
     {
-        return 'name_' . str_pad((string)$iterator, 8, '0', STR_PAD_LEFT);
+        return 'name_' . \md5($pathAndFilename);
     }
 
     /**
