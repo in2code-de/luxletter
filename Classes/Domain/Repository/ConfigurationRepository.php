@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
@@ -13,6 +14,6 @@ class ConfigurationRepository extends AbstractRepository
      * @var array
      */
     protected $defaultOrderings = [
-        'title' => QueryInterface::ORDER_ASCENDING
+        'title' => QueryInterface::ORDER_ASCENDING,
     ];
 }

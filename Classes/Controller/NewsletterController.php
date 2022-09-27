@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
 use DateTime;
@@ -134,10 +135,10 @@ class NewsletterController extends ActionController
                     'overallMailsSent' => $this->logRepository->getOverallMailsSent(),
                     'overallOpenRate' => $this->logRepository->getOverallOpenRate(),
                     'overallClickRate' => $this->logRepository->getOverallClickRate(),
-                    'overallUnsubscribeRate' => $this->logRepository->getOverallUnsubscribeRate()
+                    'overallUnsubscribeRate' => $this->logRepository->getOverallUnsubscribeRate(),
                 ],
                 'groupedLinksByHref' => $this->logRepository->getGroupedLinksByHref(),
-                'newsletters' => $this->newsletterRepository->findAll()->getQuery()->setLimit(10)->execute()
+                'newsletters' => $this->newsletterRepository->findAll()->getQuery()->setLimit(10)->execute(),
             ]
         );
     }

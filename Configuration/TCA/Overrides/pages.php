@@ -1,4 +1,5 @@
 <?php
+
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 call_user_func(
@@ -18,7 +19,7 @@ call_user_func(
                 [
                     'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:pages.doktype_luxletter',
                     $doktype,
-                    'EXT:luxletter/Resources/Public/Icons/luxletter_doktype.svg'
+                    'EXT:luxletter/Resources/Public/Icons/luxletter_doktype.svg',
                 ],
                 '6',
                 'after'
@@ -39,9 +40,9 @@ call_user_func(
                     // add all page standard fields and tabs to your new page type
                     'types' => [
                         $doktype => [
-                            'showitem' => $GLOBALS['TCA']['pages']['types'][$doktypeDefault]['showitem']
-                        ]
-                    ]
+                            'showitem' => $GLOBALS['TCA']['pages']['types'][$doktypeDefault]['showitem'],
+                        ],
+                    ],
                 ]
             );
 
@@ -56,8 +57,8 @@ call_user_func(
                         'description' => $llPath . 'module.newsletter.new.field.subject.description',
                         'default' => '',
                         'eval' => 'trim,required',
-                    ]
-                ]
+                    ],
+                ],
             ];
             ExtensionManagementUtility::addTCAcolumns('pages', $columns);
             ExtensionManagementUtility::addToAllTCAtypes(

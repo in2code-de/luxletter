@@ -1,4 +1,5 @@
 <?php
+
 use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
@@ -22,7 +23,7 @@ return [
         ],
         'iconfile' => 'EXT:luxletter/Resources/Public/Icons/' . Link::TABLE_NAME . '.svg',
         'rootLevel' => -1,
-        'hideTable' => 1
+        'hideTable' => 1,
     ],
     'types' => [
         '1' => ['showitem' => 'newsletter,user,hash,target'],
@@ -40,8 +41,8 @@ return [
                 'maxitems' => 1,
                 'multiple' => 0,
                 'default' => 0,
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
         'user' => [
             'exclude' => true,
@@ -55,8 +56,8 @@ return [
                 'maxitems' => 1,
                 'multiple' => 0,
                 'default' => 0,
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
         'hash' => [
             'exclude' => true,
@@ -64,8 +65,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
         'target' => [
             'exclude' => true,
@@ -75,8 +76,8 @@ return [
                 'type' => 'text',
                 'cols' => 32,
                 'rows' => 5,
-                'readOnly' => true
-            ]
-        ]
-    ]
+                'readOnly' => true,
+            ],
+        ],
+    ],
 ];

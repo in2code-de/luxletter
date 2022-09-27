@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Model;
 
 use In2code\Luxletter\Domain\Service\SiteService;
@@ -150,7 +151,7 @@ class Link extends AbstractEntity
         $parts = [
             $target,
             $this->getUser()->getUid(),
-            $this->getNewsletter()->getUid()
+            $this->getNewsletter()->getUid(),
         ];
         return StringUtility::getHashFromArguments($parts);
     }

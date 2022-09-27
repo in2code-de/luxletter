@@ -7,8 +7,8 @@ return [
         'luxletter-luxletterlink' => [
             'target' => LuxletterLink::class,
             'after' => [
-                'typo3/cms-frontend/tsfe'
-            ]
-        ]
-    ]
+                'typo3/cms-frontend/tsfe',
+            ],
+        ],
+    ],
 ];

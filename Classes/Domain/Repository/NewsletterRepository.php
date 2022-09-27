@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
 use Doctrine\DBAL\DBALException;
@@ -55,7 +56,7 @@ class NewsletterRepository extends AbstractRepository
             Newsletter::TABLE_NAME,
             Link::TABLE_NAME,
             Log::TABLE_NAME,
-            Queue::TABLE_NAME
+            Queue::TABLE_NAME,
         ];
         foreach ($tables as $table) {
             DatabaseUtility::getConnectionForTable($table)->truncate($table);

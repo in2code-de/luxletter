@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding;
 
@@ -34,7 +34,7 @@ class Execution extends AbstractEmbedding implements SingletonInterface
     public function setBodytext(string $content): self
     {
         $this->content = $content;
-        $this->dom = new DOMDocument;
+        $this->dom = new DOMDocument();
         @$this->dom->loadHTML($this->content);
         return $this;
     }

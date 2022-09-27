@@ -9,8 +9,8 @@ call_user_func(
             'crdate' => [
                 'exclude' => false,
                 'config' => [
-                    'type' => 'none'
-                ]
+                    'type' => 'none',
+                ],
             ],
             'luxletter_language' => [
                 'exclude' => true,
@@ -23,8 +23,8 @@ call_user_func(
                     ],
                     'foreign_table' => LanguageRepository::TABLE_NAME,
                     'default' => 0,
-                ]
-            ]
+                ],
+            ],
         ];
         ExtensionManagementUtility::addTCAcolumns('fe_users', $columns);
         if (\In2code\Luxletter\Utility\ConfigurationUtility::isMultiLanguageModeActivated()) {

@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Mail;
 
 use TYPO3\CMS\Core\Mail\MailMessage as MailMessageCore;

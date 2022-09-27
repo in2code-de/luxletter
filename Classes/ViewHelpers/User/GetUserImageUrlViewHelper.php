@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\ViewHelpers\User;
 
 use In2code\Luxletter\Domain\Model\User;
@@ -61,7 +62,7 @@ class GetUserImageUrlViewHelper extends AbstractViewHelper
                 $image = $imageService->getImage('', $file, false);
                 $processConfiguration = [
                     'width' => (string)$this->arguments['size'] . 'c',
-                    'height' => (string)$this->arguments['size'] . 'c'
+                    'height' => (string)$this->arguments['size'] . 'c',
                 ];
                 $processedImage = $imageService->applyProcessingInstructions($image, $processConfiguration);
                 $url = $imageService->getImageUri($processedImage, true);

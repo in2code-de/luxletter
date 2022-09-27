@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Widget\DataProvider;
 
 use Doctrine\DBAL\DBALException;
@@ -28,12 +29,12 @@ class ClickRateDataProvider implements ChartDataProviderInterface
                     'label' => $this->getWidgetLabel('clickrate.label'),
                     'backgroundColor' => [
                         WidgetApi::getDefaultChartColors()[0],
-                        '#dddddd'
+                        '#dddddd',
                     ],
                     'border' => 0,
-                    'data' => $this->getData()['amounts']
-                ]
-            ]
+                    'data' => $this->getData()['amounts'],
+                ],
+            ],
         ];
     }
 
@@ -58,12 +59,12 @@ class ClickRateDataProvider implements ChartDataProviderInterface
         return [
             'amounts' => [
                 $logRepository->getOpeningsByClickers(),
-                ($logRepository->getOverallOpenings() - $logRepository->getOpeningsByClickers())
+                ($logRepository->getOverallOpenings() - $logRepository->getOpeningsByClickers()),
             ],
             'titles' => [
                 $this->getWidgetLabel('clickrate.label.0'),
-                $this->getWidgetLabel('clickrate.label.1')
-            ]
+                $this->getWidgetLabel('clickrate.label.1'),
+            ],
         ];
     }
 

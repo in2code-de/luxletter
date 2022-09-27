@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
 use In2code\Luxletter\Exception\RequestException;
@@ -48,7 +49,7 @@ class RequestService
             'headers' => [
                 'Cache-Control' => 'no-cache',
                 'User-Agent' => 'TYPO3 luxletter',
-            ]
+            ],
         ];
     }
 }

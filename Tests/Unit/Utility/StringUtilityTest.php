@@ -1,4 +1,5 @@
 <?php
+
 namespace In2code\Luxletter\Tests\Unit\Utility;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
@@ -19,16 +20,16 @@ class StringUtilityTest extends UnitTestCase
      */
     public function testIsAbsoluteImageUrl(): void
     {
-        $this->assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.png'));
-        $this->assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.jpeg'));
-        $this->assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.gif'));
-        $this->assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.jpg'));
-        $this->assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.webp'));
-        $this->assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.svg'));
-        $this->assertFalse(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.svg/path'));
-        $this->assertFalse(StringUtility::isAbsoluteImageUrl('https://www.in2code.de'));
-        $this->assertFalse(StringUtility::isAbsoluteImageUrl('http://in2code.de/fileadmin/whitepaper.pdf'));
-        $this->assertFalse(StringUtility::isAbsoluteImageUrl('/folder/page.jpg'));
+        self::assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.png'));
+        self::assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.jpeg'));
+        self::assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.gif'));
+        self::assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.jpg'));
+        self::assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.webp'));
+        self::assertTrue(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.svg'));
+        self::assertFalse(StringUtility::isAbsoluteImageUrl('https://www.in2code.de/image.svg/path'));
+        self::assertFalse(StringUtility::isAbsoluteImageUrl('https://www.in2code.de'));
+        self::assertFalse(StringUtility::isAbsoluteImageUrl('http://in2code.de/fileadmin/whitepaper.pdf'));
+        self::assertFalse(StringUtility::isAbsoluteImageUrl('/folder/page.jpg'));
     }
 
     /**
@@ -38,14 +39,14 @@ class StringUtilityTest extends UnitTestCase
      */
     public function testIsValidUrl(): void
     {
-        $this->assertTrue(StringUtility::isValidUrl('https://www.in2code.de'));
-        $this->assertTrue(StringUtility::isValidUrl('http://in2code.de/fileadmin/whitepaper.pdf'));
-        $this->assertFalse(StringUtility::isValidUrl('abc'));
-        $this->assertFalse(StringUtility::isValidUrl('/'));
-        $this->assertFalse(StringUtility::isValidUrl('#'));
-        $this->assertFalse(StringUtility::isValidUrl('/folder/page'));
-        $this->assertFalse(StringUtility::isValidUrl('/folder/page.html'));
-        $this->assertFalse(StringUtility::isValidUrl('undefined'));
+        self::assertTrue(StringUtility::isValidUrl('https://www.in2code.de'));
+        self::assertTrue(StringUtility::isValidUrl('http://in2code.de/fileadmin/whitepaper.pdf'));
+        self::assertFalse(StringUtility::isValidUrl('abc'));
+        self::assertFalse(StringUtility::isValidUrl('/'));
+        self::assertFalse(StringUtility::isValidUrl('#'));
+        self::assertFalse(StringUtility::isValidUrl('/folder/page'));
+        self::assertFalse(StringUtility::isValidUrl('/folder/page.html'));
+        self::assertFalse(StringUtility::isValidUrl('undefined'));
     }
 
     /**
@@ -57,27 +58,27 @@ class StringUtilityTest extends UnitTestCase
             [
                 'Finisherx',
                 'Finisher',
-                true
+                true,
             ],
             [
                 'inisher',
                 'Finisher',
-                false
+                false,
             ],
             [
                 'abc',
                 'a',
-                true
+                true,
             ],
             [
                 'abc',
                 'ab',
-                true
+                true,
             ],
             [
                 'abc',
                 'abc',
-                true
+                true,
             ],
         ];
     }
@@ -93,7 +94,7 @@ class StringUtilityTest extends UnitTestCase
      */
     public function testStartsWith($haystack, $needle, $expectedResult): void
     {
-        $this->assertSame($expectedResult, StringUtility::startsWith($haystack, $needle));
+        self::assertSame($expectedResult, StringUtility::startsWith($haystack, $needle));
     }
 
     /**
@@ -105,37 +106,37 @@ class StringUtilityTest extends UnitTestCase
             [
                 'xFinisher',
                 'Finisher',
-                true
+                true,
             ],
             [
                 'inisher',
                 'Finisher',
-                false
+                false,
             ],
             [
                 'abc',
                 'c',
-                true
+                true,
             ],
             [
                 'abc',
                 'bc',
-                true
+                true,
             ],
             [
                 'abc',
                 'abc',
-                true
+                true,
             ],
             [
                 '/test//',
                 '/',
-                true
+                true,
             ],
             [
                 '/test//x',
                 '/',
-                false
+                false,
             ],
         ];
     }
@@ -151,7 +152,7 @@ class StringUtilityTest extends UnitTestCase
      */
     public function testEndsWith($haystack, $needle, $expectedResult): void
     {
-        $this->assertSame($expectedResult, StringUtility::endsWith($haystack, $needle));
+        self::assertSame($expectedResult, StringUtility::endsWith($haystack, $needle));
     }
 
     /**
@@ -164,9 +165,9 @@ class StringUtilityTest extends UnitTestCase
     {
         $arguments = [
             'foo' => 'bar',
-            'bar' => 'foo'
+            'bar' => 'foo',
         ];
         $hash = StringUtility::getHashFromArguments($arguments, false);
-        $this->assertSame('852efa41125da97602459ac029689f486999f5d10ba84ab0432a144e7bb3abab', $hash);
+        self::assertSame('852efa41125da97602459ac029689f486999f5d10ba84ab0432a144e7bb3abab', $hash);
     }
 }

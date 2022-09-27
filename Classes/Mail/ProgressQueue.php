@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Mail;
 
 use In2code\Luxletter\Domain\Model\Queue;
@@ -151,7 +152,7 @@ class ProgressQueue
             [
                 'user' => $queue->getUser(),
                 'newsletter' => $queue->getNewsletter(),
-                'site' => $queue->getNewsletter()->getConfiguration()->getSiteConfiguration()
+                'site' => $queue->getNewsletter()->getConfiguration()->getSiteConfiguration(),
             ]
         );
     }
@@ -177,7 +178,7 @@ class ProgressQueue
             [
                 'user' => $queue->getUser(),
                 'newsletter' => $queue->getNewsletter(),
-                'site' => $queue->getNewsletter()->getConfiguration()->getSiteConfiguration()
+                'site' => $queue->getNewsletter()->getConfiguration()->getSiteConfiguration(),
             ]
         );
         $bodytext = $this->hashLinksInBodytext($queue, $bodytext);

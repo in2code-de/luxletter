@@ -1,4 +1,5 @@
 <?php
+
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\Queue;
 use In2code\Luxletter\Domain\Model\User;
@@ -22,7 +23,7 @@ return [
         ],
         'iconfile' => 'EXT:luxletter/Resources/Public/Icons/' . Queue::TABLE_NAME . '.svg',
         'rootLevel' => -1,
-        'hideTable' => 1
+        'hideTable' => 1,
     ],
     'types' => [
         '1' => ['showitem' => 'email,newsletter,user,datetime,sent'],
@@ -33,8 +34,8 @@ return [
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:' . Queue::TABLE_NAME . '.email',
             'config' => [
                 'type' => 'input',
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
         'newsletter' => [
             'exclude' => true,
@@ -49,8 +50,8 @@ return [
                 'foreign_table' => Newsletter::TABLE_NAME,
                 'foreign_table_where' => 'AND sys_language_uid in (0,-1)',
                 'default' => 0,
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
         'user' => [
             'exclude' => true,
@@ -65,8 +66,8 @@ return [
                 'foreign_table' => User::TABLE_NAME,
                 'foreign_table_where' => 'AND 1',
                 'default' => 0,
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
         'datetime' => [
             'exclude' => true,
@@ -79,19 +80,19 @@ return [
                 'checkbox' => 0,
                 'default' => 0,
                 'range' => [
-                    'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
+                    'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y')),
                 ],
                 'readOnly' => true,
-                'renderType' => 'inputDateTime'
-            ]
+                'renderType' => 'inputDateTime',
+            ],
         ],
         'sent' => [
             'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:' . Queue::TABLE_NAME . '.sent',
             'config' => [
                 'type' => 'check',
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
-    ]
+    ],
 ];

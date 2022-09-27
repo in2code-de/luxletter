@@ -37,7 +37,7 @@ call_user_func(
             [
                 $languageFilePrefix . 'ctype.teaser',
                 'teaser',
-                'teaser'
+                'teaser',
             ]
         );
 
@@ -47,10 +47,10 @@ call_user_func(
         $tca = [
             'ctrl' => [
                 'typeicons' => [
-                    'teaser' => 'teaser'
+                    'teaser' => 'teaser',
                 ],
                 'typeicon_classes' => [
-                    'teaser' => 'teaser'
+                    'teaser' => 'teaser',
                 ],
             ],
             'types' => [
@@ -65,9 +65,9 @@ call_user_func(
                         --div--;' . $frontendLanguageFilePrefix . 'tabs.access,
                         --palette--;' . $frontendLanguageFilePrefix . 'palette.hidden;hidden,
                         --palette--;' . $frontendLanguageFilePrefix . 'palette.visibility;visibility,
-                        --palette--;' . $frontendLanguageFilePrefix . 'palette.access;access,'
-                ]
-            ]
+                        --palette--;' . $frontendLanguageFilePrefix . 'palette.access;access,',
+                ],
+            ],
         ];
         $GLOBALS['TCA']['tt_content'] = array_replace_recursive($GLOBALS['TCA']['tt_content'], $tca);
 

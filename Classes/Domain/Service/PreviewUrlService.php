@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
 use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
@@ -91,7 +92,7 @@ class PreviewUrlService
                     $this->pageRepository->getSubjectFromPageIdentifier((int)$origin, $language),
                     ['user' => $user]
                 ),
-                'url' => $this->getUrl($origin, $layout, $language)
+                'url' => $this->getUrl($origin, $layout, $language),
             ];
         }
         return $urls;
@@ -107,8 +108,8 @@ class PreviewUrlService
         return [
             [
                 'subject' => '',
-                'url' => $this->getUrl($origin, $layout)
-            ]
+                'url' => $this->getUrl($origin, $layout),
+            ],
         ];
     }
 
