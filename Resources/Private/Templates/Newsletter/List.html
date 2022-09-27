@@ -110,23 +110,38 @@
                                 <td>
                                     <f:if condition="{newsletter.enabled}">
                                         <f:then>
-                                            <f:link.action action="disable" class="btn btn-warning"
-                                                           arguments="{newsletter:newsletter}">
-                                                <f:translate key="module.newsletter.list.disable">disable</f:translate>
+                                            <f:link.action action="disable" class="btn btn-default"
+                                                           arguments="{newsletter:newsletter}"
+                                                           title="{f:translate(key:'module.newsletter.list.disable')}">
+                                                <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-hide">
+                                                    <span class="icon-markup">
+                                                        <span class="t3-icon fa fa-pause"></span>
+                                                    </span>
+                                                </span>
                                             </f:link.action>
                                         </f:then>
                                         <f:else>
-                                            <f:link.action action="enable" class="btn btn-warning"
-                                                           arguments="{newsletter:newsletter}">
-                                                <f:translate key="module.newsletter.list.enable">enable</f:translate>
+                                            <f:link.action action="enable" class="btn btn-default"
+                                                           arguments="{workflow:workflow}"
+                                                           title="{f:translate(key:'module.newsletter.list.enable')}">
+                                                <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-edit-hide">
+                                                    <span class="icon-markup">
+                                                        <span class="t3-icon fa fa-play"></span>
+                                                    </span>
+                                                </span>
                                             </f:link.action>
                                         </f:else>
                                     </f:if>
 
-                                    <f:link.action action="delete" class="btn btn-danger"
+                                    <f:link.action action="delete" class="btn btn-default"
                                                    arguments="{newsletter:newsletter}"
+                                                   title="{f:translate(key:'module.newsletter.list.delete')}"
                                                    additionalAttributes="{data-luxletter-confirm:'{f:translate(key:\'deleteconfirm\')}'}">
-                                        <f:translate key="module.newsletter.list.delete">delete</f:translate>
+                                        <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-view-page">
+                                            <span class="icon-markup">
+                                                <span class="t3-icon fa fa-trash"></span>
+                                            </span>
+                                        </span>
                                     </f:link.action>
                                 </td>
                             </tr>
