@@ -21,6 +21,11 @@
 				<target state="translated">Betreffzeile der E-Mail</target>
 			</trans-unit>
 
+			<trans-unit id="sys_category.luxletter_newsletter_category">
+				<source>Is Luxletter category?</source>
+				<target state="translated">Ist eine Luxletter-Kategorie?</target>
+			</trans-unit>
+
 			<trans-unit id="ctype.teaser">
 				<source>Teaser element</source>
 				<target state="translated">Teaser Element</target>
@@ -61,6 +66,10 @@
 			<trans-unit id="tx_luxletter_domain_model_newsletter.title">
 				<source>Title</source>
 				<target state="translated">Bezeichnung</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.category">
+				<source>Category</source>
+				<target state="translated">Kategorie</target>
 			</trans-unit>
 			<trans-unit id="tx_luxletter_domain_model_newsletter.description">
 				<source>Description</source>

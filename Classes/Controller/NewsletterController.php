@@ -11,6 +11,7 @@ use Exception;
 use In2code\Lux\Domain\Repository\VisitorRepository;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Newsletter;
+use In2code\Luxletter\Domain\Repository\CategoryRepository;
 use In2code\Luxletter\Domain\Repository\ConfigurationRepository;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
@@ -92,12 +93,18 @@ class NewsletterController extends ActionController
     protected $layoutService = null;
 
     /**
+     * @var CategoryRepository|null
+     */
+    protected $categoryRepository = null;
+
+    /**
      * @param NewsletterRepository $newsletterRepository
      * @param UserRepository $userRepository
      * @param LogRepository $logRepository
      * @param ConfigurationRepository $configurationRepository
      * @param PageRepository $pageRepository
      * @param LayoutService $layoutService
+     * @param CategoryRepository $categoryRepository
      */
     public function __construct(
         NewsletterRepository $newsletterRepository,
@@ -105,7 +112,8 @@ class NewsletterController extends ActionController
         LogRepository $logRepository,
         ConfigurationRepository $configurationRepository,
         PageRepository $pageRepository,
-        LayoutService $layoutService
+        LayoutService $layoutService,
+        CategoryRepository $categoryRepository
     ) {
         $this->newsletterRepository = $newsletterRepository;
         $this->userRepository = $userRepository;
@@ -113,6 +121,7 @@ class NewsletterController extends ActionController
         $this->configurationRepository = $configurationRepository;
         $this->pageRepository = $pageRepository;
         $this->layoutService = $layoutService;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -166,6 +175,7 @@ class NewsletterController extends ActionController
             'configurations' => $this->configurationRepository->findAll(),
             'layouts' => $this->layoutService->getLayouts(),
             'newsletterpages' => $this->pageRepository->findAllNewsletterPages(),
+            'categories' => $this->categoryRepository->findAllLuxletterCategories(),
         ]);
     }
 
@@ -176,7 +186,7 @@ class NewsletterController extends ActionController
      */
     public function initializeCreateAction(): void
     {
-        $this->setDatetimeObjectInNewsletterRequest();
+        $this->prepareArgumentsForPersistence();
     }
 
     /**
@@ -412,16 +422,25 @@ class NewsletterController extends ActionController
      * @throws NoSuchArgumentException
      * @throws Exception
      */
-    protected function setDatetimeObjectInNewsletterRequest(): void
+    protected function prepareArgumentsForPersistence(): void
     {
-        $newsletter = (array)$this->request->getArgument('newsletter');
-        if (!empty($newsletter['datetime'])) {
-            $datetime = new DateTime($newsletter['datetime']);
-        } else {
+        if ($this->request->hasArgument('newsletter')) {
+            $newsletter = (array)$this->request->getArgument('newsletter');
+
+            // DateTime
             $datetime = new DateTime();
+            if (!empty($newsletter['datetime'])) {
+                $datetime = new DateTime($newsletter['datetime']);
+            }
+            $newsletter['datetime'] = $datetime;
+
+            // Category
+            if (isset($newsletter['category']) && $newsletter['category'] === '0') {
+                unset($newsletter['category']);
+            }
+
+            $this->request->setArgument('newsletter', $newsletter);
         }
-        $newsletter['datetime'] = $datetime;
-        $this->request->setArgument('newsletter', $newsletter);
     }
 
     /**

@@ -17,6 +17,10 @@
 				<source>Mail subject</source>
 			</trans-unit>
 
+			<trans-unit id="sys_category.luxletter_newsletter_category">
+				<source>Is Luxletter category?</source>
+			</trans-unit>
+
 			<trans-unit id="ctype.teaser">
 				<source>Teaser element</source>
 			</trans-unit>
@@ -47,6 +51,9 @@
 			</trans-unit>
 			<trans-unit id="tx_luxletter_domain_model_newsletter.title">
 				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.category">
+				<source>Category</source>
 			</trans-unit>
 			<trans-unit id="tx_luxletter_domain_model_newsletter.description">
 				<source>Description</source>

@@ -151,6 +151,12 @@
 			<trans-unit id="module.newsletter.new.field.title.description">
 				<source>We would recommend you to use a meaningful title that separates each newsletter</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.category">
+				<source>Luxletter Category</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.category.description">
+				<source>Choose an internal category to categorize your newsletter</source>
+			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.description">
 				<source>Description</source>
 			</trans-unit>

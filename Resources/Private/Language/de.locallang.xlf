@@ -200,6 +200,14 @@
 				<source>We would recommend you to use a meaningful title that separates each newsletter</source>
 				<target state="translated">Benutze einen aussagekräftigen Namen um die Newsletter später voneinander unterscheiden zu können</target>
 			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.category">
+				<source>Luxletter Category</source>
+				<target state="translated">Luxletter Kategorie</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.category.description">
+				<source>Choose an internal category to categorize your newsletter</source>
+				<target state="translated">Wähle eine Kategorie um deinen Newsletter gruppieren zu können</target>
+			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.description">
 				<source>Description</source>
 				<target state="translated">Beschreibung</target>

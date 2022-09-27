@@ -1,5 +1,6 @@
 <?php
 
+use In2code\Luxletter\Domain\Model\Category;
 use In2code\Luxletter\Domain\Model\Configuration;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\Usergroup;
@@ -27,7 +28,7 @@ return [
     ],
     'types' => [
         '1' => [
-            'showitem' => 'disabled,title,description,datetime,subject,receiver,configuration,layout,' .
+            'showitem' => 'disabled,title,category,description,datetime,subject,receiver,configuration,layout,' .
                 'origin,bodytext,language',
         ],
     ],
@@ -48,6 +49,22 @@ return [
                 'type' => 'input',
                 'readOnly' => true,
                 'default' => '',
+            ],
+        ],
+        'category' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
+                . Newsletter::TABLE_NAME . '.category',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['', 0],
+                ],
+                'foreign_table' => Category::TABLE_NAME,
+                'foreign_table_where' => 'AND 1',
+                'default' => 0,
+                'readOnly' => true,
             ],
         ],
         'description' => [

@@ -29,6 +29,11 @@ class Newsletter extends AbstractEntity
     protected $title = '';
 
     /**
+     * @var Category
+     */
+    protected $category = null;
+
+    /**
      * @var string
      */
     protected $description = '';
@@ -120,6 +125,24 @@ class Newsletter extends AbstractEntity
     public function setTitle(string $title): Newsletter
     {
         $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param ?Category $category
+     * @return Newsletter
+     */
+    public function setCategory(?Category $category): Newsletter
+    {
+        $this->category = $category;
         return $this;
     }
 
