@@ -327,6 +327,11 @@
 				<target state="translated">Standard Layout</target>
 			</trans-unit>
 
+			<trans-unit id="category.empty.title">
+				<source>[not yet categorized]</source>
+				<target state="translated">[noch nicht kategorisiert]</target>
+			</trans-unit>
+
 			<trans-unit id="pleasechoose">
 				<source>Please choose...</source>
 				<target state="translated">Bitte wählen...</target>

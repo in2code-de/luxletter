@@ -159,6 +159,7 @@ class NewsletterController extends ActionController
     {
         $this->view->assignMultiple([
             'newsletters' => $this->newsletterRepository->findAll(),
+            'newslettersGrouped' => $this->newsletterRepository->findAllGroupedByCategories(),
             'configurations' => $this->configurationRepository->findAll(),
         ]);
     }

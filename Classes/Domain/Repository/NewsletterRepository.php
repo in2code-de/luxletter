@@ -11,6 +11,7 @@ use In2code\Luxletter\Domain\Model\Queue;
 use In2code\Luxletter\Utility\DatabaseUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Class NewsletterRepository
@@ -46,6 +47,25 @@ class NewsletterRepository extends AbstractRepository
     }
 
     /**
+     * @return array
+     */
+    public function findAllGroupedByCategories(): array
+    {
+        $newsletters = $this->findAll();
+        $newslettersGrouped = [];
+        /** @var Newsletter $newsletter */
+        foreach ($newsletters as $newsletter) {
+            $categoryKey = $this->getDefaultCategoryLabel();
+            if ($newsletter->getCategory() !== null) {
+                $categoryKey = $newsletter->getCategory()->getTitle();
+            }
+            $newslettersGrouped[$categoryKey][] = $newsletter;
+        }
+        uksort($newslettersGrouped, [$this, 'sortByKeyAndIgnoreDefaultLabelCallback']);
+        return $newslettersGrouped;
+    }
+
+    /**
      * Remove (really remove) all data from all luxletter tables
      *
      * @return void
@@ -61,5 +81,33 @@ class NewsletterRepository extends AbstractRepository
         foreach ($tables as $table) {
             DatabaseUtility::getConnectionForTable($table)->truncate($table);
         }
+    }
+
+    /**
+     * Sort by key but ignore the default label. This label should always be ordered at the very last entry.
+     *
+     * @param string $a
+     * @param string $b
+     * @return int
+     */
+    protected function sortByKeyAndIgnoreDefaultLabelCallback(string $a, string $b): int
+    {
+        $result = strcasecmp($a, $b);
+        if ($result !== 0) {
+            if ($a === $this->getDefaultCategoryLabel() || $b === $this->getDefaultCategoryLabel()) {
+                return $a === $this->getDefaultCategoryLabel() ? 1 : -1;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getDefaultCategoryLabel(): string
+    {
+        return LocalizationUtility::translate(
+            'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:category.empty.title'
+        );
     }
 }

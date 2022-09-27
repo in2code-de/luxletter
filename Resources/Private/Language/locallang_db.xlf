@@ -249,6 +249,10 @@
 				<source>Default layout</source>
 			</trans-unit>
 
+			<trans-unit id="category.empty.title">
+				<source>[not yet categorized]</source>
+			</trans-unit>
+
 			<trans-unit id="pleasechoose">
 				<source>Please choose...</source>
 			</trans-unit>
