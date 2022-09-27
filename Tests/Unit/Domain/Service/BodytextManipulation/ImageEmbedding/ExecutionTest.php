@@ -99,7 +99,7 @@ class ExecutionTest extends UnitTestCase
     /**
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->generalValidatorMock = $this->getAccessibleMock(ExecutionFixture::class, ['dummy']);
     }
@@ -148,7 +148,7 @@ class ExecutionTest extends UnitTestCase
         $iteration = 0;
         foreach ($result2 as $name => $path) {
             $iteration++;
-            self::assertRegExp('~^name_[0-9a-f]{32}$~', $name);
+            self::assertMatchesRegularExpression('~^name_[0-9a-f]{32}$~', $name);
         }
         self::assertEquals(10, $iteration);
 
@@ -159,7 +159,7 @@ class ExecutionTest extends UnitTestCase
         $iteration = 0;
         foreach ($result3 as $name => $path) {
             $iteration++;
-            self::assertRegExp('~^name_[0-9a-f]{32}$~', $name);
+            self::assertMatchesRegularExpression('~^name_[0-9a-f]{32}$~', $name);
         }
         self::assertEquals(2, $iteration);
     }
