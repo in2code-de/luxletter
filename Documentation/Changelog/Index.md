@@ -9,6 +9,7 @@
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 15.0.0     | 2022.09.28  | Feature    | Newsletters can be categorized now. Grouped list view by category. Added a filter above the list view.                                                                                     |
 | 14.1.0     | 2022.08.30  | Feature    | Image embedding: Don't attach the same image twice or even more often                                                                                                                      |
 | 14.0.1     | 2022.08.19  | Bugfix     | Fix "newsletter is not ready yet" bug in multilanguage mode                                                                                                                                |
 | 14.0.0     | 2022.07.06  | Task       | Fix the overview charts in the dashboards, always show newletter names, increase height of some charts                                                                                     |

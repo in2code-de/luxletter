@@ -206,8 +206,10 @@ plugin {
 Now, when your content is ready to be parsed, you can add new newsletter records. Simply open
 the luxletter backend module and switch from `Dashboard` to `Newsletter` view.
 
-If you already have built some newsletters, you will see a list of existing records. Otherwise you
+If you already have built some newsletters, you will see a grouped list of existing records. Otherwise you
 can only add new records.
+
+At the top of the list view there is a filter that can be used for filter by a searchterm or a category.
 
 #### List view
 
@@ -233,6 +235,7 @@ Clicking on `Add new newsletter` starts a process where you can create new newsl
 | Field                   | Description                                                                             |
 | ----------------------- | --------------------------------------------------------------------------------------- |
 | Newsletter title        | Add a useful title to your newsletter                                                   |
+| Newsletter category     | Group this newsletter to this category (sys_category record must be added before)       |
 | Newsletter start        | If you select a start time (optional), newsletters will not be send before this time    |
 | Description             | Add a useful title to your newsletter                                                   |
 

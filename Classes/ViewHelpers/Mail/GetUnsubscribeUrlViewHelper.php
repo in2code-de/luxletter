@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\ViewHelpers\Mail;
 
 use In2code\Luxletter\Domain\Model\Newsletter;
@@ -44,8 +45,8 @@ class GetUnsubscribeUrlViewHelper extends AbstractViewHelper
                     'tx_luxletter_fe' => [
                         'user' => $this->getUserIdentifier(),
                         'newsletter' => $this->getNewsletterIdentifier(),
-                        'hash' => $this->getHash()
-                    ]
+                        'hash' => $this->getHash(),
+                    ],
                 ]
             );
         } catch (Throwable $exception) {

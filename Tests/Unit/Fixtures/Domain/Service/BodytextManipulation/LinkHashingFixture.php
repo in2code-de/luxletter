@@ -1,4 +1,5 @@
 <?php
+
 namespace In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service\BodytextManipulation;
 
 use In2code\Luxletter\Domain\Model\Newsletter;

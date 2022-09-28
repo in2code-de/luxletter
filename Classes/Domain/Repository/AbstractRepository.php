@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -17,7 +18,7 @@ abstract class AbstractRepository extends Repository
      * @var array
      */
     protected $defaultOrderings = [
-        'crdate' => QueryInterface::ORDER_DESCENDING
+        'crdate' => QueryInterface::ORDER_DESCENDING,
     ];
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace In2code\Luxletter\Tests\Unit\Domain\Service\BodytextManipulation;
 
 use In2code\Luxletter\Domain\Model\Configuration;
@@ -21,7 +22,7 @@ class LinkHashingTest extends UnitTestCase
     /**
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $configuration = new Configuration();
         $newsletter = new Newsletter();
@@ -31,7 +32,7 @@ class LinkHashingTest extends UnitTestCase
             ['dummy'],
             [
                 $newsletter,
-                new User()
+                new User(),
             ]
         );
     }
@@ -44,6 +45,6 @@ class LinkHashingTest extends UnitTestCase
     {
         $testUri = 'https://test.org';
         $uri = $this->generalValidatorMock->_call('convertToAbsoluteHref', $testUri);
-        $this->assertSame($testUri, $uri);
+        self::assertSame($testUri, $uri);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace In2code\Luxletter\Tests\Unit\Utility;
 
 use In2code\Luxletter\Utility\FileUtility;
@@ -16,8 +17,8 @@ class FileUtilityTest extends UnitTestCase
      */
     public function testGetExtensionFromPathAndFilename(): void
     {
-        $this->assertSame('jpeg', FileUtility::getExtensionFromPathAndFilename('filename.jpeg'));
-        $this->assertSame('webp', FileUtility::getExtensionFromPathAndFilename('fileadmin/image.webp'));
-        $this->assertSame('zip', FileUtility::getExtensionFromPathAndFilename('/var/www/file.jpg.zip'));
+        self::assertSame('jpeg', FileUtility::getExtensionFromPathAndFilename('filename.jpeg'));
+        self::assertSame('webp', FileUtility::getExtensionFromPathAndFilename('fileadmin/image.webp'));
+        self::assertSame('zip', FileUtility::getExtensionFromPathAndFilename('/var/www/file.jpg.zip'));
     }
 }

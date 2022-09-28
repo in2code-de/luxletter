@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Widget\DataProvider;
 
 use Doctrine\DBAL\DBALException;
@@ -31,12 +32,12 @@ class LastNewslettersClickRateDataProvider implements ChartDataProviderInterface
                     'label' => $this->getWidgetLabel('lastnewslettersclickrate.label'),
                     'backgroundColor' => [
                         WidgetApi::getDefaultChartColors()[0],
-                        '#dddddd'
+                        '#dddddd',
                     ],
                     'border' => 0,
-                    'data' => $this->getData()['amounts']
-                ]
-            ]
+                    'data' => $this->getData()['amounts'],
+                ],
+            ],
         ];
     }
 
@@ -62,7 +63,7 @@ class LastNewslettersClickRateDataProvider implements ChartDataProviderInterface
         $newsletters = $newsletterRepository->findAll()->getQuery()->setLimit(10)->execute();
         $data = [
             'amounts' => [],
-            'titles' => []
+            'titles' => [],
         ];
         /** @var Newsletter $newsletter */
         foreach ($newsletters as $newsletter) {

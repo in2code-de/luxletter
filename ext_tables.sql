@@ -3,6 +3,7 @@ CREATE TABLE tx_luxletter_domain_model_newsletter (
 	pid int(11) DEFAULT '0' NOT NULL,
 
 	title varchar(255) DEFAULT '' NOT NULL,
+	category int(11) DEFAULT '0' NOT NULL,
 	description text NOT NULL,
 	datetime int(11) DEFAULT '0' NOT NULL,
 	subject varchar(255) DEFAULT '' NOT NULL,
@@ -150,4 +151,8 @@ CREATE TABLE fe_groups (
 
 CREATE TABLE pages (
 	luxletter_subject text,
+);
+
+CREATE TABLE sys_category (
+	luxletter_newsletter_category tinyint(4) unsigned DEFAULT '0' NOT NULL
 );

@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
 use Doctrine\DBAL\DBALException;
@@ -20,7 +21,7 @@ class UserRepository extends AbstractRepository
      * @var array
      */
     protected $defaultOrderings = [
-        'lastName' => QueryInterface::ORDER_ASCENDING
+        'lastName' => QueryInterface::ORDER_ASCENDING,
     ];
 
     /**
@@ -81,7 +82,7 @@ class UserRepository extends AbstractRepository
     protected function buildQueryForFilter(Filter $filter, QueryInterface $query): void
     {
         $and = [
-            $query->equals('usergroup.luxletterReceiver', true)
+            $query->equals('usergroup.luxletterReceiver', true),
         ];
         if ($filter->getSearchterms() !== []) {
             foreach ($filter->getSearchterms() as $searchterm) {

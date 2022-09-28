@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service\BodytextManipulation;
 
 use DOMDocument;
@@ -73,7 +74,7 @@ class LinkHashing
      */
     public function hashLinks(string $content): string
     {
-        $dom = new DOMDocument;
+        $dom = new DOMDocument();
         @$dom->loadHTML($content);
         $links = $dom->getElementsByTagName('a');
         foreach ($links as $link) {

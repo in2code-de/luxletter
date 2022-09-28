@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Utility;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
@@ -65,5 +66,15 @@ class StringUtility
             $arguments = array_merge($arguments, [ConfigurationUtility::getEncryptionKey()]);
         }
         return hash('sha256', implode('/', $arguments));
+    }
+
+    /**
+     * @param string $string
+     * @param string $postfix
+     * @return string
+     */
+    public static function removeStringPostfix(string $string, string $postfix): string
+    {
+        return preg_replace('~' . $postfix . '$~', '', $string);
     }
 }

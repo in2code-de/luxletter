@@ -1,4 +1,5 @@
 <?php
+
 use In2code\Luxletter\Domain\Model\Log;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
@@ -22,7 +23,7 @@ return [
         ],
         'iconfile' => 'EXT:luxletter/Resources/Public/Icons/' . Log::TABLE_NAME . '.svg',
         'rootLevel' => -1,
-        'hideTable' => 1
+        'hideTable' => 1,
     ],
     'types' => [
         '1' => ['showitem' => 'crdate,newsletter,user,status,properties'],
@@ -36,8 +37,8 @@ return [
                 'size' => 30,
                 'eval' => 'datetime',
                 'readOnly' => true,
-                'renderType' => 'inputDateTime'
-            ]
+                'renderType' => 'inputDateTime',
+            ],
         ],
         'newsletter' => [
             'exclude' => true,
@@ -51,8 +52,8 @@ return [
                 'maxitems' => 1,
                 'multiple' => 0,
                 'default' => 0,
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
         'user' => [
             'exclude' => true,
@@ -66,8 +67,8 @@ return [
                 'maxitems' => 1,
                 'multiple' => 0,
                 'default' => 0,
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
         'status' => [
             'exclude' => true,
@@ -75,8 +76,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
         'properties' => [
             'exclude' => true,
@@ -86,8 +87,8 @@ return [
                 'type' => 'text',
                 'cols' => 32,
                 'rows' => 5,
-                'readOnly' => true
-            ]
-        ]
-    ]
+                'readOnly' => true,
+            ],
+        ],
+    ],
 ];

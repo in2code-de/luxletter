@@ -16,9 +16,25 @@
                     <f:translate key="module.newsletter.new.field.title.description">Useful title</f:translate>
                 </span>
             </div>
-        </div>
 
-        <div class="col-md-6">
+            <div class="form-group">
+                <label for="category" class="lb-lg">
+                    <f:translate key="module.newsletter.new.field.category">category</f:translate>
+                </label>
+                <f:form.select
+                    class="form-control form-select input-lg"
+                    id="category"
+                    options="{categories}"
+                    optionValueField="uid"
+                    optionLabelField="title"
+                    prependOptionLabel="{f:translate(key:'pleasechoose')}"
+                    prependOptionValue="0"
+                    property="category"/>
+                <span class="help-block">
+                    <f:translate key="module.newsletter.new.field.category.description">Category description</f:translate>
+                </span>
+            </div>
+
             <div class="form-group">
                 <label for="datetime" class="lb-lg">
                     <f:translate key="module.newsletter.new.field.datetime">Datetime</f:translate>
@@ -34,16 +50,15 @@
             </div>
         </div>
 
-
-        <div class="col-md-12">
+        <div class="col-md-6">
             <div class="form-group">
                 <label for="description" class="lb-lg">
                     <f:translate key="module.newsletter.new.field.description">description</f:translate>
                 </label>
                 <f:form.textarea class="form-control input-lg"
-                     property="description"
-                     id="description"
-                     style="height: 200px;"></f:form.textarea>
+                                 property="description"
+                                 id="description"
+                                 style="height: 302px;"></f:form.textarea>
                 <span class="help-block">
                     <f:translate key="module.newsletter.new.field.description.description">Example description</f:translate>
                 </span>

@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
 use In2code\Luxletter\Exception\ArgumentMissingException;

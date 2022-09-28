@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\DataProcessing;
 
 use Doctrine\DBAL\Driver\Exception;
@@ -39,7 +40,7 @@ class TeaserProcessor implements DataProcessorInterface
             foreach ($records as $record) {
                 $processedData['teaserElements'][] = [
                     'html' => $this->getHtmlOfTeaserElement($record),
-                    'data' => $this->getDataFromTeaserElement($record)
+                    'data' => $this->getDataFromTeaserElement($record),
                 ];
             }
         }
@@ -69,7 +70,7 @@ class TeaserProcessor implements DataProcessorInterface
         $contentConfiguration = [
             'tables' => 'tt_content',
             'source' => $identifier,
-            'dontCheckPid' => true
+            'dontCheckPid' => true,
         ];
         return $contentObject->cObjGetSingle('RECORDS', $contentConfiguration);
     }

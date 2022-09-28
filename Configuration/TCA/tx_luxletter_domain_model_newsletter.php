@@ -1,4 +1,6 @@
 <?php
+
+use In2code\Luxletter\Domain\Model\Category;
 use In2code\Luxletter\Domain\Model\Configuration;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\Usergroup;
@@ -22,12 +24,12 @@ return [
         ],
         'iconfile' => 'EXT:luxletter/Resources/Public/Icons/' . Newsletter::TABLE_NAME . '.svg',
         'rootLevel' => -1,
-        'hideTable' => 1
+        'hideTable' => 1,
     ],
     'types' => [
         '1' => [
-            'showitem' => 'disabled,title,description,datetime,subject,receiver,configuration,layout,' .
-                'origin,bodytext,language'
+            'showitem' => 'disabled,title,category,description,datetime,subject,receiver,configuration,layout,' .
+                'origin,bodytext,language',
         ],
     ],
     'columns' => [
@@ -36,7 +38,7 @@ return [
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
             'config' => [
                 'type' => 'check',
-                'default' => 0
+                'default' => 0,
             ],
         ],
         'title' => [
@@ -46,8 +48,24 @@ return [
             'config' => [
                 'type' => 'input',
                 'readOnly' => true,
-                'default' => ''
-            ]
+                'default' => '',
+            ],
+        ],
+        'category' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
+                . Newsletter::TABLE_NAME . '.category',
+            'config' => [
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    ['', 0],
+                ],
+                'foreign_table' => Category::TABLE_NAME,
+                'foreign_table_where' => 'AND 1',
+                'default' => 0,
+                'readOnly' => true,
+            ],
         ],
         'description' => [
             'exclude' => true,
@@ -58,8 +76,8 @@ return [
                 'cols' => 500,
                 'rows' => 3,
                 'readOnly' => true,
-                'default' => ''
-            ]
+                'default' => '',
+            ],
         ],
         'datetime' => [
             'exclude' => true,
@@ -72,11 +90,11 @@ return [
                 'checkbox' => 0,
                 'default' => 0,
                 'range' => [
-                    'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
+                    'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y')),
                 ],
                 'readOnly' => true,
-                'renderType' => 'inputDateTime'
-            ]
+                'renderType' => 'inputDateTime',
+            ],
         ],
         'subject' => [
             'exclude' => true,
@@ -85,8 +103,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'readOnly' => true,
-                'default' => ''
-            ]
+                'default' => '',
+            ],
         ],
         'receiver' => [
             'exclude' => true,
@@ -101,8 +119,8 @@ return [
                 'foreign_table' => Usergroup::TABLE_NAME,
                 'foreign_table_where' => 'AND 1',
                 'default' => 0,
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
         'configuration' => [
             'exclude' => true,
@@ -117,8 +135,8 @@ return [
                 'foreign_table' => Configuration::TABLE_NAME,
                 'foreign_table_where' => 'AND 1',
                 'default' => 0,
-                'readOnly' => true
-            ]
+                'readOnly' => true,
+            ],
         ],
         'origin' => [
             'exclude' => true,
@@ -127,8 +145,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'readOnly' => true,
-                'default' => ''
-            ]
+                'default' => '',
+            ],
         ],
         'layout' => [
             'exclude' => true,
@@ -137,8 +155,8 @@ return [
             'config' => [
                 'type' => 'input',
                 'readOnly' => true,
-                'default' => ''
-            ]
+                'default' => '',
+            ],
         ],
         'bodytext' => [
             'exclude' => true,
@@ -149,8 +167,8 @@ return [
                 'cols' => 800,
                 'rows' => 3,
                 'readOnly' => true,
-                'default' => ''
-            ]
+                'default' => '',
+            ],
         ],
         'language' => [
             'exclude' => true,
@@ -163,12 +181,12 @@ return [
                     [
                         'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
                         -1,
-                        'flags-multiple'
+                        'flags-multiple',
                     ],
                 ],
                 'renderType' => 'selectSingle',
-                'default' => 0
-            ]
-        ]
-    ]
+                'default' => 0,
+            ],
+        ],
+    ],
 ];

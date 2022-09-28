@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
 use Exception;
@@ -124,7 +125,7 @@ class FrontendController extends ActionController
                 'success' => true,
                 'user' => $user,
                 'hash' => $hash,
-                'usergroupToRemove' => $newsletter->getReceiver()
+                'usergroupToRemove' => $newsletter->getReceiver(),
             ]);
             $this->logService->logUnsubscribe($newsletter, $user);
         } catch (Throwable $exception) {

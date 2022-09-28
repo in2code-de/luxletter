@@ -1,6 +1,7 @@
 <?php
+
 /** @noinspection SqlDialectInspection */
-declare(strict_types = 1);
+declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
 use Doctrine\DBAL\DBALException;

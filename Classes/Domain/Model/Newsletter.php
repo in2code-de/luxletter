@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Model;
 
 use DateTime;
@@ -26,6 +27,11 @@ class Newsletter extends AbstractEntity
      * @var string
      */
     protected $title = '';
+
+    /**
+     * @var Category
+     */
+    protected $category = null;
 
     /**
      * @var string
@@ -119,6 +125,24 @@ class Newsletter extends AbstractEntity
     public function setTitle(string $title): Newsletter
     {
         $this->title = $title;
+        return $this;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param ?Category $category
+     * @return Newsletter
+     */
+    public function setCategory(?Category $category): Newsletter
+    {
+        $this->category = $category;
         return $this;
     }
 

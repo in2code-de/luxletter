@@ -1,4 +1,5 @@
 <?php
+
 namespace In2code\Luxletter\Tests\Unit\Domain\Service\BodytextManipulation\ImageEmbedding;
 
 use In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding\Execution;
@@ -98,7 +99,7 @@ class ExecutionTest extends UnitTestCase
     /**
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->generalValidatorMock = $this->getAccessibleMock(ExecutionFixture::class, ['dummy']);
     }
@@ -109,11 +110,11 @@ class ExecutionTest extends UnitTestCase
      */
     public function testSetBodytext(): void
     {
-        $this->assertSame('', $this->generalValidatorMock->_get('content'));
-        $this->assertNull($this->generalValidatorMock->_get('dom'));
+        self::assertSame('', $this->generalValidatorMock->_get('content'));
+        self::assertNull($this->generalValidatorMock->_get('dom'));
         $this->generalValidatorMock->_call('setBodytext', $this->bodytextExamples[0]);
-        $this->assertSame($this->bodytextExamples[0], $this->generalValidatorMock->_get('content'));
-        $this->assertInstanceOf(\DOMDocument::class, $this->generalValidatorMock->_get('dom'));
+        self::assertSame($this->bodytextExamples[0], $this->generalValidatorMock->_get('content'));
+        self::assertInstanceOf(\DOMDocument::class, $this->generalValidatorMock->_get('dom'));
     }
 
     /**
@@ -137,8 +138,8 @@ class ExecutionTest extends UnitTestCase
             'getEmbedNameForPathAndFilename',
             $this->generalValidatorMock->_call('getNewImagePathAndFilename', $this->imagesExamples[0][0])
         );
-        $this->assertArrayHasKey($image1Cid, $result1);
-        $this->assertFileExists(current($result1));
+        self::assertArrayHasKey($image1Cid, $result1);
+        self::assertFileExists(current($result1));
 
         // check for ten images
         $preparationFixture->storeImages($this->bodytextExamples[1]);
@@ -147,9 +148,9 @@ class ExecutionTest extends UnitTestCase
         $iteration = 0;
         foreach ($result2 as $name => $path) {
             $iteration++;
-            $this->assertRegExp('~^name_[0-9a-f]{32}$~', $name);
+            self::assertMatchesRegularExpression('~^name_[0-9a-f]{32}$~', $name);
         }
-        $this->assertEquals(10, $iteration);
+        self::assertEquals(10, $iteration);
 
         // check for two images - no duplicates
         $preparationFixture->storeImages($this->bodytextExamples[2]);
@@ -158,9 +159,9 @@ class ExecutionTest extends UnitTestCase
         $iteration = 0;
         foreach ($result3 as $name => $path) {
             $iteration++;
-            $this->assertRegExp('~^name_[0-9a-f]{32}$~', $name);
+            self::assertMatchesRegularExpression('~^name_[0-9a-f]{32}$~', $name);
         }
-        $this->assertEquals(2, $iteration);
+        self::assertEquals(2, $iteration);
     }
 
     /**
@@ -179,9 +180,9 @@ class ExecutionTest extends UnitTestCase
             'getEmbedNameForPathAndFilename',
             $this->generalValidatorMock->_call('getNewImagePathAndFilename', $this->imagesExamples[1][9])
         );
-        $this->assertNotSame($image1Cid, $image10Cid);
-        $this->assertNotFalse(stripos($content, 'cid:' . $image1Cid));
-        $this->assertNotFalse(stripos($content, 'cid:' . $image10Cid));
+        self::assertNotSame($image1Cid, $image10Cid);
+        self::assertNotFalse(stripos($content, 'cid:' . $image1Cid));
+        self::assertNotFalse(stripos($content, 'cid:' . $image10Cid));
     }
 
     /**
@@ -193,11 +194,11 @@ class ExecutionTest extends UnitTestCase
         $image1Cid = $this->generalValidatorMock->_call('getEmbedNameForPathAndFilename', $this->pathExamples[0][0]);
         $image2Cid = $this->generalValidatorMock->_call('getEmbedNameForPathAndFilename', $this->pathExamples[0][1]);
         $image3Cid = $this->generalValidatorMock->_call('getEmbedNameForPathAndFilename', $this->pathExamples[0][2]);
-        $this->assertNotSame($image1Cid, $image2Cid);
-        $this->assertSame($image1Cid, $image3Cid);
-        $this->assertSame('name_0986b8209e4f2bd20600ceaa608aa66e', $image1Cid);
-        $this->assertSame('name_a04943510563b9f18be90c3f38ecb806', $image2Cid);
-        $this->assertSame('name_0986b8209e4f2bd20600ceaa608aa66e', $image3Cid);
+        self::assertNotSame($image1Cid, $image2Cid);
+        self::assertSame($image1Cid, $image3Cid);
+        self::assertSame('name_0986b8209e4f2bd20600ceaa608aa66e', $image1Cid);
+        self::assertSame('name_a04943510563b9f18be90c3f38ecb806', $image2Cid);
+        self::assertSame('name_0986b8209e4f2bd20600ceaa608aa66e', $image3Cid);
     }
 
     /**

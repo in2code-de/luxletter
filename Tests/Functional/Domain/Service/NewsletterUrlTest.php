@@ -1,4 +1,5 @@
 <?php
+
 namespace In2code\Luxletter\Tests\Functional\Domain\Service;
 
 use In2code\Luxletter\Domain\Factory\UserFactory;
@@ -164,8 +165,8 @@ class NewsletterUrlTest extends FunctionalTestCase
                     'partialRootPaths' => [],
                 ],
                 'settings' => [
-                    'foo' => 'bar'
-                ]
+                    'foo' => 'bar',
+                ],
             ]);
 
         $this->standaloneView
@@ -195,14 +196,14 @@ class NewsletterUrlTest extends FunctionalTestCase
                 'variables' => [
                     'subject' => [
                         '_typoScriptNodeValue' => 'TEXT',
-                        'value' => 'Hello world'
-                    ]
-                ]
+                        'value' => 'Hello world',
+                    ],
+                ],
             ]);
 
         $this->standaloneView
             ->assignMultiple([
-                'subject' => 'Hello world'
+                'subject' => 'Hello world',
             ])
             ->shouldBeCalled();
         $this->standaloneView

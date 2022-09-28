@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Model\Dto;
 
 use In2code\Luxletter\Domain\Model\Usergroup;
@@ -18,6 +19,11 @@ class Filter
      * @var Usergroup
      */
     protected $usergroup = null;
+
+    /**
+     * @var \In2code\Lux\Domain\Model\Category|null
+     */
+    protected $category = null;
 
     /**
      * This is just a dummy property, that helps to recognize if a filter is set and helps to save this to the session
@@ -71,6 +77,24 @@ class Filter
     }
 
     /**
+     * @return \In2code\Lux\Domain\Model\Category|null
+     */
+    public function getCategory(): ?\In2code\Lux\Domain\Model\Category
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param \In2code\Lux\Domain\Model\Category|null $category
+     * @return Filter
+     */
+    public function setCategory(?\In2code\Lux\Domain\Model\Category $category): Filter
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isReset(): bool
@@ -93,6 +117,6 @@ class Filter
      */
     public function isSet(): bool
     {
-        return $this->searchterm !== '' || $this->usergroup !== null;
+        return $this->searchterm !== '' || $this->usergroup !== null || $this->category !== null;
     }
 }

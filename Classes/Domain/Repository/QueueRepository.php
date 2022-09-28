@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
 use Doctrine\DBAL\Driver\Exception;
@@ -32,7 +33,7 @@ class QueueRepository extends AbstractRepository
             $query->greaterThan('newsletter.configuration', 0),
             $query->logicalNot($query->equals('newsletter.layout', '')),
             $query->equals('user.deleted', false),
-            $query->equals('user.disable', false)
+            $query->equals('user.disable', false),
         ];
         if ($newsletterIdentifier > 0) {
             $and[] = $query->equals('newsletter.uid', $newsletterIdentifier);
@@ -55,7 +56,7 @@ class QueueRepository extends AbstractRepository
         $query = $this->createQuery();
         $and = [
             $query->equals('sent', $dispatched),
-            $query->equals('newsletter', $newsletter)
+            $query->equals('newsletter', $newsletter),
         ];
         $query->matching($query->logicalAnd($and));
         return $query->execute();
@@ -98,7 +99,7 @@ class QueueRepository extends AbstractRepository
     public function truncate(): void
     {
         $tables = [
-            Queue::TABLE_NAME
+            Queue::TABLE_NAME,
         ];
         foreach ($tables as $table) {
             DatabaseUtility::getConnectionForTable($table)->truncate($table);

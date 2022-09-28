@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service\Parsing;
 
 use DOMDocument;
@@ -185,7 +186,7 @@ class NewsletterUrl
                     'content' => $content,
                     'user' => $user,
                     'site' => $site,
-                    'settings' => (array)$this->configuration['settings']
+                    'settings' => (array)$this->configuration['settings'],
                 ]
             );
             $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
@@ -322,7 +323,7 @@ class NewsletterUrl
     protected function getBodyFromHtml(string $string): string
     {
         try {
-            $document = new DOMDocument;
+            $document = new DOMDocument();
             libxml_use_internal_errors(true);
             @$document->loadHtml($string);
             libxml_use_internal_errors(false);

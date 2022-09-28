@@ -1,4 +1,5 @@
 <?php
+
 return [
     'luxletter' => [
         'title' =>
@@ -15,6 +16,6 @@ return [
             'luxletterLastNewslettersOpenRate',
             'luxletterLastNewslettersClickRate',
         ],
-        'showInWizard' => true
-    ]
+        'showInWizard' => true,
+    ],
 ];

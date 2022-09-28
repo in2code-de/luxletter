@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Utility;
 
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
@@ -19,21 +20,25 @@ class BackendUserUtility
 
     /**
      * @param string $key
+     * @param string $action
+     * @param string $controller
      * @param array $data
      * @return void
      */
-    public static function saveValueToSession(string $key, array $data): void
+    public static function saveValueToSession(string $key, string $action, string $controller, array $data): void
     {
-        self::getBackendUserAuthentication()->setAndSaveSessionData($key . '_luxletter', $data);
+        self::getBackendUserAuthentication()->setAndSaveSessionData($key . $action . $controller . '_luxletter', $data);
     }
 
     /**
      * @param string $key
+     * @param string $action
+     * @param string $controller
      * @return array
      */
-    public static function getSessionValue(string $key): array
+    public static function getSessionValue(string $key, string $action, string $controller): array
     {
-        return (array)self::getBackendUserAuthentication()->getSessionData($key . '_luxletter');
+        return (array)self::getBackendUserAuthentication()->getSessionData($key . $action . $controller . '_luxletter');
     }
 
     /**

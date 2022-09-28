@@ -1,5 +1,6 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
 use Doctrine\DBAL\DBALException;
@@ -39,7 +40,7 @@ class ReceiverAnalysisService
         foreach ($users as $user) {
             $activities[$user->getUid()] = [
                 'newlettersdispatched' => $logRepository->findRawByUser($user, [100]),
-                'activities' => $logRepository->findRawByUser($user, [], [100])
+                'activities' => $logRepository->findRawByUser($user, [], [100]),
             ];
         }
         return $activities;
