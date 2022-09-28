@@ -3,22 +3,14 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
-use DateTime;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use Doctrine\DBAL\Exception as ExceptionDbal;
-use Exception;
 use In2code\Lux\Domain\Repository\VisitorRepository;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Newsletter;
-use In2code\Luxletter\Domain\Repository\CategoryRepository;
-use In2code\Luxletter\Domain\Repository\ConfigurationRepository;
 use In2code\Luxletter\Domain\Repository\LogRepository;
-use In2code\Luxletter\Domain\Repository\NewsletterRepository;
-use In2code\Luxletter\Domain\Repository\PageRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
-use In2code\Luxletter\Domain\Service\LayoutService;
-use In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl;
 use In2code\Luxletter\Domain\Service\PreviewUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
@@ -38,7 +30,6 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExis
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentNameException;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
@@ -50,80 +41,8 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 /**
  * Class NewsletterController
  */
-class NewsletterController extends ActionController
+class NewsletterController extends AbstractNewsletterController
 {
-    /**
-     * @var string
-     */
-    protected $wizardUserPreviewFile = 'EXT:luxletter/Resources/Private/Templates/Newsletter/WizardUserPreview.html';
-
-    /**
-     * @var string
-     */
-    protected $receiverDetailFile = 'EXT:luxletter/Resources/Private/Templates/Newsletter/ReceiverDetail.html';
-
-    /**
-     * @var NewsletterRepository|null
-     */
-    protected $newsletterRepository = null;
-
-    /**
-     * @var UserRepository|null
-     */
-    protected $userRepository = null;
-
-    /**
-     * @var LogRepository|null
-     */
-    protected $logRepository = null;
-
-    /**
-     * @var ConfigurationRepository|null
-     */
-    protected $configurationRepository = null;
-
-    /**
-     * @var PageRepository|null
-     */
-    protected $pageRepository = null;
-
-    /**
-     * @var LayoutService|null
-     */
-    protected $layoutService = null;
-
-    /**
-     * @var CategoryRepository|null
-     */
-    protected $categoryRepository = null;
-
-    /**
-     * @param NewsletterRepository $newsletterRepository
-     * @param UserRepository $userRepository
-     * @param LogRepository $logRepository
-     * @param ConfigurationRepository $configurationRepository
-     * @param PageRepository $pageRepository
-     * @param LayoutService $layoutService
-     * @param CategoryRepository $categoryRepository
-     */
-    public function __construct(
-        NewsletterRepository $newsletterRepository,
-        UserRepository $userRepository,
-        LogRepository $logRepository,
-        ConfigurationRepository $configurationRepository,
-        PageRepository $pageRepository,
-        LayoutService $layoutService,
-        CategoryRepository $categoryRepository
-    ) {
-        $this->newsletterRepository = $newsletterRepository;
-        $this->userRepository = $userRepository;
-        $this->logRepository = $logRepository;
-        $this->configurationRepository = $configurationRepository;
-        $this->pageRepository = $pageRepository;
-        $this->layoutService = $layoutService;
-        $this->categoryRepository = $categoryRepository;
-    }
-
     /**
      * @return void
      * @throws DBALException
@@ -154,14 +73,38 @@ class NewsletterController extends ActionController
 
     /**
      * @return void
+     * @throws InvalidArgumentNameException
+     * @throws NoSuchArgumentException
      */
-    public function listAction(): void
+    public function initializeListAction(): void
+    {
+        $this->setFilter();
+    }
+
+    /**
+     * @param Filter $filter
+     * @return void
+     */
+    public function listAction(Filter $filter): void
     {
         $this->view->assignMultiple([
             'newsletters' => $this->newsletterRepository->findAll(),
-            'newslettersGrouped' => $this->newsletterRepository->findAllGroupedByCategories(),
+            'newslettersGrouped' => $this->newsletterRepository->findAllGroupedByCategories($filter),
             'configurations' => $this->configurationRepository->findAll(),
+            'categories' => $this->categoryRepository->findAllLuxletterCategories(),
+            'filter' => $filter,
         ]);
+    }
+
+    /**
+     * @param string $redirectAction
+     * @return void
+     * @throws StopActionException
+     */
+    public function resetFilterAction(string $redirectAction): void
+    {
+        BackendUserUtility::saveValueToSession('filter', $redirectAction, $this->getControllerName(), []);
+        $this->redirect($redirectAction);
     }
 
     /**
@@ -280,19 +223,7 @@ class NewsletterController extends ActionController
      */
     public function initializeReceiverAction(): void
     {
-        $filterArgument = $this->arguments->getArgument('filter');
-        $filterPropertyMapping = $filterArgument->getPropertyMappingConfiguration();
-        $filterPropertyMapping->allowAllProperties();
-        if ($this->request->hasArgument('filter') === false) {
-            $filter = BackendUserUtility::getSessionValue('filter');
-        } else {
-            $filter = (array)$this->request->getArgument('filter');
-            BackendUserUtility::saveValueToSession('filter', $filter);
-        }
-        if (isset($filter['usergroup']['__identity']) && $filter['usergroup']['__identity'] === '0') {
-            unset($filter['usergroup']);
-        }
-        $this->request->setArgument('filter', $filter);
+        $this->setFilter();
     }
 
     /**
@@ -416,55 +347,5 @@ class NewsletterController extends ActionController
             ['html' => $standaloneView->render()]
         ));
         return $response;
-    }
-
-    /**
-     * @return void
-     * @throws NoSuchArgumentException
-     * @throws Exception
-     */
-    protected function prepareArgumentsForPersistence(): void
-    {
-        if ($this->request->hasArgument('newsletter')) {
-            $newsletter = (array)$this->request->getArgument('newsletter');
-
-            // DateTime
-            $datetime = new DateTime();
-            if (!empty($newsletter['datetime'])) {
-                $datetime = new DateTime($newsletter['datetime']);
-            }
-            $newsletter['datetime'] = $datetime;
-
-            // Category
-            if (isset($newsletter['category']) && $newsletter['category'] === '0') {
-                unset($newsletter['category']);
-            }
-
-            $this->request->setArgument('newsletter', $newsletter);
-        }
-    }
-
-    /**
-     * @param Newsletter $newsletter
-     * @param int $language
-     * @return void
-     * @throws ApiConnectionException
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws InvalidConfigurationTypeException
-     * @throws InvalidUrlException
-     * @throws MisconfigurationException
-     * @throws SiteNotFoundException
-     */
-    protected function setBodytextInNewsletter(Newsletter $newsletter, int $language): void
-    {
-        $parseService = GeneralUtility::makeInstance(
-            NewsletterUrl::class,
-            $newsletter->getOrigin(),
-            $newsletter->getLayout(),
-            $language
-        );
-        $bodytext = $parseService->getParsedContent($newsletter->getConfiguration()->getSiteConfiguration());
-        $newsletter->setBodytext($bodytext);
     }
 }

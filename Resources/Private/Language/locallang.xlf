@@ -126,6 +126,24 @@
 			<trans-unit id="module.newsletter.list.delete">
 				<source>Delete</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.list.norecordsfoundfiltered">
+				<source>No newsletter records found</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.filter.search.label">
+				<source>Search</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.filter.search.placeholder">
+				<source>Searchterm</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.filter.category.label">
+				<source>Category</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.filter.submit">
+				<source>Filter now</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.filter.reset">
+				<source>Reset filter</source>
+			</trans-unit>
 
 			<trans-unit id="module.newsletter.new.title">
 				<source>Add new newsletter</source>

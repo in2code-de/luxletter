@@ -21,6 +21,11 @@ class Filter
     protected $usergroup = null;
 
     /**
+     * @var \In2code\Lux\Domain\Model\Category|null
+     */
+    protected $category = null;
+
+    /**
      * This is just a dummy property, that helps to recognize if a filter is set and helps to save this to the session
      *
      * @var bool
@@ -72,6 +77,24 @@ class Filter
     }
 
     /**
+     * @return \In2code\Lux\Domain\Model\Category|null
+     */
+    public function getCategory(): ?\In2code\Lux\Domain\Model\Category
+    {
+        return $this->category;
+    }
+
+    /**
+     * @param \In2code\Lux\Domain\Model\Category|null $category
+     * @return Filter
+     */
+    public function setCategory(?\In2code\Lux\Domain\Model\Category $category): Filter
+    {
+        $this->category = $category;
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isReset(): bool
@@ -94,6 +117,6 @@ class Filter
      */
     public function isSet(): bool
     {
-        return $this->searchterm !== '' || $this->usergroup !== null;
+        return $this->searchterm !== '' || $this->usergroup !== null || $this->category !== null;
     }
 }

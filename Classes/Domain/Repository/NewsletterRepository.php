@@ -4,13 +4,16 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
 use Doctrine\DBAL\DBALException;
+use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Model\Log;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\Queue;
 use In2code\Luxletter\Utility\DatabaseUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -47,11 +50,13 @@ class NewsletterRepository extends AbstractRepository
     }
 
     /**
+     * @param Filter $filter
      * @return array
+     * @throws InvalidQueryException
      */
-    public function findAllGroupedByCategories(): array
+    public function findAllGroupedByCategories(Filter $filter): array
     {
-        $newsletters = $this->findAll();
+        $newsletters = $this->findAllByFilter($filter);
         $newslettersGrouped = [];
         /** @var Newsletter $newsletter */
         foreach ($newsletters as $newsletter) {
@@ -63,6 +68,33 @@ class NewsletterRepository extends AbstractRepository
         }
         uksort($newslettersGrouped, [$this, 'sortByKeyAndIgnoreDefaultLabelCallback']);
         return $newslettersGrouped;
+    }
+
+    /**
+     * @param Filter $filter
+     * @return QueryResultInterface|null
+     * @throws InvalidQueryException
+     */
+    protected function findAllByFilter(Filter $filter): ?QueryResultInterface
+    {
+        $query = $this->createQuery();
+        if ($filter->isSet()) {
+            $logicalAnd = [];
+            if ($filter->getSearchterm() !== '') {
+                $logicalOr = [];
+                foreach ($filter->getSearchterms() as $searchterm) {
+                    $logicalOr[] = $query->like('title', '%' . $searchterm . '%');
+                    $logicalOr[] = $query->like('description', '%' . $searchterm . '%');
+                    $logicalOr[] = $query->like('subject', '%' . $searchterm . '%');
+                }
+                $logicalAnd[] = $query->logicalOr($logicalOr);
+            }
+            if ($filter->getCategory() !== null) {
+                $logicalAnd[] = $query->equals('category', $filter->getCategory());
+            }
+            $query->matching($query->logicalAnd($logicalAnd));
+        }
+        return $query->execute();
     }
 
     /**

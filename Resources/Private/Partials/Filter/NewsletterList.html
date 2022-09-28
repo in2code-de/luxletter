@@ -1,0 +1,79 @@
+<f:if condition="{newsletters}">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Filter</h3>
+        </div>
+
+        <div class="panel-body">
+            <f:form name="filter" class="form" object="{filter}" action="list">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5><f:translate key="module.newsletter.list.filter.search.label">search</f:translate></h5>
+
+                        <div class="input-group form-group">
+                            <f:form.textfield
+                                type="input"
+                                property="searchterm"
+                                id="searchterm"
+                                class="form-control"
+                                placeholder="{f:translate(key:'module.newsletter.list.filter.search.placeholder')}" />
+                            <luxletter:condition.isTypo3Eleven>
+                                <f:then>
+                                    <label class="btn btn-default" for="searchterm">
+                                        <span class="fa fa-search"></span>
+                                    </label>
+                                </f:then>
+                                <f:else>
+                                    <label class="input-group-addon fa fa-search" for="searchterm"></label>
+                                </f:else>
+                            </luxletter:condition.isTypo3Eleven>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4">
+                        <h5><f:translate key="module.newsletter.list.filter.category.label">Category</f:translate></h5>
+
+                        <div class="input-group form-group">
+                            <f:form.select
+                                property="category"
+                                options="{categories}"
+                                optionLabelField="title"
+                                optionValueField="uid"
+                                prependOptionValue=""
+                                prependOptionLabel=""
+                                class="form-control form-select"
+                                id="categoryScoring"/>
+                            <luxletter:condition.isTypo3Eleven>
+                                <f:then>
+                                    <label class="btn btn-default" for="categoryScoring">
+                                        <span class="fa fa-tag"></span>
+                                    </label>
+                                </f:then>
+                                <f:else>
+                                    <label class="input-group-addon fa fa-tag" for="categoryScoring"></label>
+                                </f:else>
+                            </luxletter:condition.isTypo3Eleven>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-4" style="flex-direction: initial;">
+                        <f:comment>Clear filter</f:comment>
+                        <f:if condition="{filter.set}">
+                            <f:link.action class="btn btn-default" style="flex: 50%; height: 32px; margin-top: auto; margin-right: 10px" action="resetFilter" arguments="{redirectAction:view.action}">
+                                <f:translate key="module.newsletter.list.filter.reset">Reset</f:translate>
+                            </f:link.action>
+                        </f:if>
+
+                        <f:comment>Submit filter</f:comment>
+                        <f:form.submit
+                            style="flex: 50%; height: 32px; margin-top: auto;"
+                            class="btn btn-primary"
+                            value="{f:translate(key:'module.newsletter.list.filter.submit')}" />
+                    </div>
+                </div>
+            </f:form>
+        </div>
+    </div>
+</f:if>

@@ -67,4 +67,14 @@ class StringUtility
         }
         return hash('sha256', implode('/', $arguments));
     }
+
+    /**
+     * @param string $string
+     * @param string $postfix
+     * @return string
+     */
+    public static function removeStringPostfix(string $string, string $postfix): string
+    {
+        return preg_replace('~' . $postfix . '$~', '', $string);
+    }
 }
