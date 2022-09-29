@@ -199,6 +199,9 @@
 			<trans-unit id="module.newsletter.new.field.receiver.description">
 				<source>Please choose a frontend user group. Every user in this group will receive this newsletter.</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.receiver.description_alternative">
+				<source>Note: Recipient lists that have already been created cannot be changed later.</source>
+			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.configuration">
 				<source>Sender</source>
 			</trans-unit>
@@ -216,6 +219,9 @@
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.origin.description">
 				<source>Please add the page ID to any TYPO3 page as a newsletter source (the "type" parameter is automatically added here). Alternatively, you can also enter an absolute URL here. Luxletter then reads this URL and prepares it for dispatch.</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.origin.description_alternative">
+				<source>Please select a newsletter page that should be parsed and then sent</source>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.testmail">
 				<source>Send a test mail to yourself</source>
@@ -261,6 +267,15 @@
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.wizarduserpreview.further">
 				<source>further receivers</source>
+			</trans-unit>
+
+			<trans-unit id="module.newsletter.edit.title">
+				<source>Edit newsletter</source>
+			</trans-unit>
+
+			<trans-unit id="module.newsletter.update.message">
+				<source>Newsletter successfully updated</source>
+				<target state="translated">Newsletter erfolgreich aktualisiert</target>
 			</trans-unit>
 
 			<trans-unit id="module.newsletter.create.message">

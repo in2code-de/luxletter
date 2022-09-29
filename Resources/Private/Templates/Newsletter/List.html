@@ -24,6 +24,8 @@
         </div>
     </div>
 
+    <f:render partial="Miscellaneous/FlashMessages" arguments="{_all}"/>
+
     <f:if condition="{newsletters}">
         <f:then>
             <f:if condition="{newslettersGrouped}">
@@ -149,6 +151,16 @@
             </span>
         </td>
         <td>
+            <f:link.action action="edit" class="btn btn-default"
+                           arguments="{newsletter:newsletter}"
+                           title="{f:translate(key:'module.newsletter.list.edit')}">
+                <span class="t3js-icon icon icon-size-small icon-state-default icon-actions-view-page">
+                    <span class="icon-markup">
+                        <span class="t3-icon fa fa-pencil"></span>
+                    </span>
+                </span>
+            </f:link.action>
+
             <f:if condition="{newsletter.enabled}">
                 <f:then>
                     <f:link.action action="disable" class="btn btn-default"

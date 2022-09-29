@@ -42,6 +42,7 @@
                 <f:form.textfield
                     type="datetime-local"
                     property="datetime"
+                    value="{newsletter.datetime -> f:format.date(format:'Y-m-d H:i')}"
                     id="datetime"
                     class="form-control input-lg" />
                 <span class="help-block">
@@ -106,17 +107,32 @@
                 <label for="receiver" class="lb-lg">
                     <f:translate key="module.newsletter.new.field.receiver">Receiver</f:translate>*
                 </label>
-                <f:form.select
-                        id="receiver"
-                        class="form-control form-select input-lg"
-                        options="{luxletter:usergroup.getReceiverGroups()}"
-                        prependOptionValue=""
-                        prependOptionLabel="{f:translate(key:'pleasechoose')}"
-                        data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'users'}"
-                        property="receiver"
-                        required="required" />
+                <f:if condition="{view.action} == 'edit'">
+                    <f:then>
+                        <f:form.textfield name="dummy" readonly="readonly" value="{newsletter.receiver.title}" class="form-control input-lg" />
+                        <f:form.hidden property="receiver" value="{newsletter.receiver.uid}" data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'users'}" />
+                    </f:then>
+                    <f:else>
+                        <f:form.select
+                            id="receiver"
+                            class="form-control form-select input-lg"
+                            options="{luxletter:usergroup.getReceiverGroups()}"
+                            prependOptionValue=""
+                            prependOptionLabel="{f:translate(key:'pleasechoose')}"
+                            data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'users'}"
+                            property="receiver"
+                            required="required" />
+                    </f:else>
+                </f:if>
                 <span class="help-block">
-                    <f:translate key="module.newsletter.new.field.receiver.description">Receiver group description</f:translate>
+                <f:if condition="{view.action} == 'edit'">
+                    <f:then>
+                        <f:translate key="module.newsletter.new.field.receiver.description_alternative">Receiver group description</f:translate>
+                    </f:then>
+                    <f:else>
+                        <f:translate key="module.newsletter.new.field.receiver.description">Receiver group description</f:translate>
+                    </f:else>
+                </f:if>
                 </span>
             </div>
         </div>
@@ -156,6 +172,9 @@
                             data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'newsletter'}"
                             prependOptionValue=""
                             prependOptionLabel="Please choose..."/>
+                        <span class="help-block">
+                            <f:translate key="module.newsletter.new.field.origin.description_alternative">Choose an origin</f:translate>
+                        </span>
                     </f:then>
                     <f:else>
                         <f:form.textfield
