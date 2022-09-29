@@ -264,6 +264,10 @@
 				<source>Please choose a frontend user group. Every user in this group will receive this newsletter.</source>
 				<target state="translated">Bitte eine Frontend-Benutzergruppe auswählen. Jeder Benutzer dieser Gruppe wird den Newsletter erhalten.</target>
 			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.receiver.description_alternative">
+				<source>Note: Recipient lists that have already been created cannot be changed later.</source>
+				<target state="translated">Hinweis: Bereits angelegt Empfängerlisten können nachträglich nicht mehr geändert werden.</target>
+			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.configuration">
 				<source>Sender</source>
 				<target state="translated">Absender</target>
@@ -287,6 +291,10 @@
 			<trans-unit id="module.newsletter.new.field.origin.description">
 				<source>Please add the page ID to any TYPO3 page as a newsletter source (the "type" parameter is automatically added here). Alternatively, you can also enter an absolute URL here. Luxletter then reads this URL and prepares it for dispatch.</source>
 				<target state="translated">Bitte füge die Page ID einer beliebigen TYPO3 Seite als Newsletter-Quelle hinzu ("type" Paramter wird hier automatisch hinzugefügt). Alternativ kannst du auch eine absolute URL eintragen. Im Anschluss wird diese URL von Luxletter gelesen und für den Versand vorbereitet.</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.origin.description_alternative">
+				<source>Please select a newsletter page that should be parsed and then sent</source>
+				<target state="translated">Bitte wähle eine Newsletterseite aus, die geparst und anschließend versendet werden soll</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.testmail">
 				<source>Send a test mail to yourself</source>
@@ -347,6 +355,16 @@
 			<trans-unit id="module.newsletter.new.wizarduserpreview.further">
 				<source>further receivers</source>
 				<target state="translated">weitere Empfänger</target>
+			</trans-unit>
+
+			<trans-unit id="module.newsletter.edit.title">
+				<source>Edit newsletter</source>
+				<target state="translated">Newsletter bearbeiten</target>
+			</trans-unit>
+
+			<trans-unit id="module.newsletter.update.message">
+				<source>Newsletter successfully updated</source>
+				<target state="translated">Newsletter erfolgreich aktualisiert</target>
 			</trans-unit>
 
 			<trans-unit id="module.newsletter.create.message">

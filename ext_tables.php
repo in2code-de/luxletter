@@ -74,7 +74,7 @@ call_user_func(
             '',
             [
                 \In2code\Luxletter\Controller\NewsletterController::class =>
-                    'dashboard, list, resetFilter, new, create, enable, disable, delete, receiver',
+                    'dashboard, list, resetFilter, edit, update, new, create, enable, disable, delete, receiver',
             ],
             [
                 'access' => 'user,group',

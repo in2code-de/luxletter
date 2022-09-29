@@ -84,6 +84,7 @@ class NewsletterController extends AbstractNewsletterController
     /**
      * @param Filter $filter
      * @return void
+     * @throws InvalidQueryException
      */
     public function listAction(Filter $filter): void
     {
@@ -105,6 +106,65 @@ class NewsletterController extends AbstractNewsletterController
     {
         BackendUserUtility::saveValueToSession('filter', $redirectAction, $this->getControllerName(), []);
         $this->redirect($redirectAction);
+    }
+
+    /**
+     * @param Newsletter $newsletter
+     * @return void
+     * @throws ExceptionDbalDriver
+     * @throws InvalidConfigurationTypeException
+     */
+    public function editAction(Newsletter $newsletter): void
+    {
+        $this->view->assignMultiple([
+            'newsletter' => $newsletter,
+            'configurations' => $this->configurationRepository->findAll(),
+            'layouts' => $this->layoutService->getLayouts(),
+            'newsletterpages' => $this->pageRepository->findAllNewsletterPages(),
+            'categories' => $this->categoryRepository->findAllLuxletterCategories(),
+        ]);
+    }
+
+    /**
+     * @return void
+     * @throws NoSuchArgumentException
+     * @noinspection PhpUnused
+     */
+    public function initializeUpdateAction(): void
+    {
+        $this->prepareArgumentsForPersistence();
+    }
+
+    /**
+     * @param Newsletter $newsletter
+     * @return void
+     * @throws ApiConnectionException
+     * @throws ExceptionDbalDriver
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws IllegalObjectTypeException
+     * @throws InvalidConfigurationTypeException
+     * @throws InvalidUrlException
+     * @throws MisconfigurationException
+     * @throws SiteNotFoundException
+     * @throws StopActionException
+     * @throws UnknownObjectException
+     */
+    public function updateAction(Newsletter $newsletter): void
+    {
+        $this->setBodytextInNewsletter($newsletter, $newsletter->getLanguage());
+        if (ConfigurationUtility::isMultiLanguageModeActivated()) {
+            $newsletter->setSubject(
+                $this->pageRepository->getSubjectFromPageIdentifier(
+                    (int)$newsletter->getOrigin(),
+                    $newsletter->getLanguage()
+                )
+            );
+        }
+        $this->newsletterRepository->update($newsletter);
+        $this->newsletterRepository->persistAll();
+        $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.update.message'));
+        $this->redirect('list');
     }
 
     /**

@@ -85,24 +85,36 @@ define(['jquery'], function($) {
     var addWizardUserPreview = function() {
       var select = document.querySelector('[data-luxletter-wizardpreviewevent="users"]');
       if (select !== null) {
-        select.addEventListener('change', function() {
-          ajaxConnection(TYPO3.settings.ajaxUrls['/luxletter/wizardUserPreview'], {
-            usergroup: this.value,
-          }, 'addWizardUserPreviewCallback');
+        wizardUserPreviewAction(select);
+        select.addEventListener('change', function(event) {
+          wizardUserPreviewAction(event.target);
         });
       }
     };
 
     /**
+     * @param element
+     * @returns {void}
+     */
+    var wizardUserPreviewAction = function(element) {
+      ajaxConnection(TYPO3.settings.ajaxUrls['/luxletter/wizardUserPreview'], {
+        usergroup: element.value,
+      }, 'addWizardUserPreviewCallback');
+    }
+
+    /**
      * @returns {void}
      */
     var addWizardNewsletterPreview = function() {
+      initializeNewsletterPreviewIframe();
+
       var input = document.querySelector('[data-luxletter-wizardpreviewevent="newsletter"]');
       if (input !== null) {
         input.addEventListener('change', function() {
           initializeNewsletterPreviewIframe();
         });
       }
+
       var layoutField = document.querySelector('[data-luxletter-wizardpreviewevent="layout"]');
       if (layoutField !== null) {
         layoutField.addEventListener('change', function() {
