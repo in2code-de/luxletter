@@ -269,8 +269,8 @@ A use case could be to weekly render a page with changing content (e.g. a news l
 #### CLI command
 
 ```
-# Parameters are: Title, fe_groups.uid, configuration uid, source to parse (pid or absolute URL), language uid (optional), Layout template file (optional), subject (optional), description (optional), date (optional)
-./vendor/bin/typo3 luxletter:createnewsletterfromorigin "Automatic NL" 1 1 16 0 "NewsletterContainer" "Newsletter {f:format.date(date:'now',format:'Y-m')}" "Optional description here" "2021-10-31T11:00"
+# Parameters are: Title, fe_groups.uid, configuration uid, source to parse (pid or absolute URL), language uid (optional), Layout template file (optional), subject (optional), sys_category.uid (optional), description (optional), date (optional)
+./vendor/bin/typo3 luxletter:createnewsletterfromorigin "Automatic NL" 1 1 16 0 "NewsletterContainer" "Newsletter {f:format.date(date:'now',format:'Y-m')}" 123 "Optional description here" "2022-12-24T14:00:00+00:00"
 ```
 
 #### From scheduler

@@ -83,22 +83,32 @@ define(['jquery'], function($) {
      * @returns {void}
      */
     var addWizardUserPreview = function() {
-      var select = document.querySelector('[data-luxletter-wizardpreviewevent="users"]');
-      if (select !== null) {
-        wizardUserPreviewAction(select);
-        select.addEventListener('change', function(event) {
-          wizardUserPreviewAction(event.target);
+      wizardUserPreviewAction();
+
+      var checkboxes = document.querySelectorAll('input[data-luxletter-wizardpreviewevent="users"][type="checkbox"]');
+      for (var i = 0; i < checkboxes.length; i++) {
+        checkboxes[i].addEventListener('change', function(event) {
+          wizardUserPreviewAction();
         });
       }
     };
 
     /**
-     * @param element
      * @returns {void}
      */
-    var wizardUserPreviewAction = function(element) {
+    var wizardUserPreviewAction = function() {
+      var checkboxes = document.querySelectorAll(
+        'input[data-luxletter-wizardpreviewevent="users"][type="checkbox"]:checked,' +
+        'input[data-luxletter-wizardpreviewevent="users"][type="hidden"]'
+      );
+      var values = [];
+      for (var i = 0; i < checkboxes.length; i++) {
+        values.push(checkboxes[i].getAttribute('value'));
+      }
+
+      // Even send if values is empty, when checkboxes are dechecked again
       ajaxConnection(TYPO3.settings.ajaxUrls['/luxletter/wizardUserPreview'], {
-        usergroup: element.value,
+        usergroups: values.join(','),
       }, 'addWizardUserPreviewCallback');
     }
 

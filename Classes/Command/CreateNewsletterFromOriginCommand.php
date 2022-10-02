@@ -30,12 +30,13 @@ class CreateNewsletterFromOriginCommand extends Command
     {
         $this->setDescription('Create a newsletter from CLI or Scheduler');
         $this->addArgument('title', InputArgument::REQUIRED, 'Newsletter title');
-        $this->addArgument('usergroup', InputArgument::REQUIRED, 'fe_groups.uid as receiver group');
+        $this->addArgument('usergroups', InputArgument::REQUIRED, 'fe_groups.uid commaseparated');
         $this->addArgument('configuration', InputArgument::REQUIRED, 'Sender configuration uid');
         $this->addArgument('origin', InputArgument::REQUIRED, 'Page identifier or absolute URL');
         $this->addArgument('language', InputArgument::OPTIONAL, 'Language for newsletter', 0);
         $this->addArgument('layout', InputArgument::OPTIONAL, 'Layout template name', 'NewsletterContainer');
         $this->addArgument('subject', InputArgument::OPTIONAL, 'Newsletter subject', '');
+        $this->addArgument('category', InputArgument::OPTIONAL, 'Optional category', 0);
         $this->addArgument('description', InputArgument::OPTIONAL, 'Newsletter description', '');
         $this->addArgument('date', InputArgument::OPTIONAL, 'Newsletter date in format "Y-m-d\TH:i"', '');
     }
@@ -59,11 +60,12 @@ class CreateNewsletterFromOriginCommand extends Command
         $newsletterFactory = GeneralUtility::makeInstance(NewsletterFactory::class);
         $newsletter = $newsletterFactory->get(
             $input->getArgument('title'),
-            (int)$input->getArgument('usergroup'),
+            explode(',', $input->getArgument('usergroups')),
             (int)$input->getArgument('configuration'),
             $input->getArgument('origin'),
             (int)$input->getArgument('language'),
             $input->getArgument('layout'),
+            (int)$input->getArgument('category'),
             $input->getArgument('description'),
             $input->getArgument('date'),
             $input->getArgument('subject')

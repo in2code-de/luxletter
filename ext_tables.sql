@@ -7,7 +7,7 @@ CREATE TABLE tx_luxletter_domain_model_newsletter (
 	description text NOT NULL,
 	datetime int(11) DEFAULT '0' NOT NULL,
 	subject varchar(255) DEFAULT '' NOT NULL,
-	receiver int(11) DEFAULT '0' NOT NULL,
+	receivers varchar(255) DEFAULT '' NOT NULL,
 	configuration int(11) DEFAULT '0' NOT NULL,
 	layout varchar(255) DEFAULT '' NOT NULL,
 	origin varchar(255) DEFAULT '' NOT NULL,
@@ -30,7 +30,7 @@ CREATE TABLE tx_luxletter_domain_model_newsletter (
 	PRIMARY KEY (uid),
 	KEY parent (pid),
 	KEY language (l10n_parent,sys_language_uid),
-	KEY receiver (receiver),
+	KEY receiver (receivers),
 	KEY configuration (configuration)
 );
 
