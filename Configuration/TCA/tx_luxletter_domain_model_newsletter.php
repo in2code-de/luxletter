@@ -28,8 +28,8 @@ return [
     ],
     'types' => [
         '1' => [
-            'showitem' => 'disabled,title,category,description,datetime,subject,receiver,configuration,layout,' .
-                'origin,bodytext,language',
+            'showitem' => 'disabled,title,category,description,datetime,subject,receivers,configuration,layout,' .
+                'origin,bodytext,language,crdate',
         ],
     ],
     'columns' => [
@@ -106,18 +106,15 @@ return [
                 'default' => '',
             ],
         ],
-        'receiver' => [
+        'receivers' => [
             'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Newsletter::TABLE_NAME . '.receiver',
             'config' => [
                 'type' => 'select',
-                'renderType' => 'selectSingle',
-                'items' => [
-                    ['', 0],
-                ],
+                'renderType' => 'selectMultipleSideBySide',
                 'foreign_table' => Usergroup::TABLE_NAME,
-                'foreign_table_where' => 'AND 1',
+                'foreign_table_where' => 'AND luxletter_receiver=1',
                 'default' => 0,
                 'readOnly' => true,
             ],
@@ -186,6 +183,18 @@ return [
                 ],
                 'renderType' => 'selectSingle',
                 'default' => 0,
+            ],
+        ],
+        'crdate' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
+                . Newsletter::TABLE_NAME . '.crdate',
+            'config' => [
+                'type' => 'input',
+                'renderType' => 'inputDateTime',
+                'size' => 30,
+                'eval' => 'datetime',
+                'readOnly' => true,
             ],
         ],
     ],

@@ -15,6 +15,7 @@ use In2code\Luxletter\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Class User
@@ -54,9 +55,9 @@ class Newsletter extends AbstractEntity
     protected $subject = '';
 
     /**
-     * @var Usergroup
+     * @var ObjectStorage<Usergroup>
      */
-    protected $receiver = null;
+    protected $receivers = null;
 
     /**
      * @var Configuration
@@ -109,6 +110,11 @@ class Newsletter extends AbstractEntity
      * @var int
      */
     protected $language = 0;
+
+    /**
+     * @var ?DateTime
+     */
+    protected $crdate;
 
     /**
      * @return string
@@ -239,20 +245,33 @@ class Newsletter extends AbstractEntity
     }
 
     /**
-     * @return Usergroup
+     * @return ObjectStorage|null
      */
-    public function getReceiver(): ?Usergroup
+    public function getReceivers(): ?ObjectStorage
     {
-        return $this->receiver;
+        return $this->receivers;
     }
 
     /**
-     * @param Usergroup $receiver
+     * @return int[]
+     */
+    public function getReceiverGroupIdentifiers(): array
+    {
+        $receivers = $this->getReceivers();
+        $identifiers = [];
+        foreach ($receivers as $receiver) {
+            $identifiers[] = $receiver->getUid();
+        }
+        return $identifiers;
+    }
+
+    /**
+     * @param ObjectStorage $receivers
      * @return Newsletter
      */
-    public function setReceiver(Usergroup $receiver): self
+    public function setReceivers(ObjectStorage $receivers): self
     {
-        $this->receiver = $receiver;
+        $this->receivers = $receivers;
         return $this;
     }
 
@@ -357,6 +376,24 @@ class Newsletter extends AbstractEntity
     public function setLanguage(int $language): Newsletter
     {
         $this->language = $language;
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getCrdate(): ?DateTime
+    {
+        return $this->crdate;
+    }
+
+    /**
+     * @param DateTime|null $crdate
+     * @return Newsletter
+     */
+    public function setCrdate(?DateTime $crdate): Newsletter
+    {
+        $this->crdate = $crdate;
         return $this;
     }
 

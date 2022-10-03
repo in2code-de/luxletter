@@ -25,38 +25,62 @@ class UserRepository extends AbstractRepository
     ];
 
     /**
-     * @param int $groupIdentifier
+     * @param int[] $groupIdentifiers
      * @param int $language -1 = all, otherwise only the users with the specific language are selected
      * @param int $limit
      * @return QueryResultInterface
      */
-    public function getUsersFromGroup(int $groupIdentifier, int $language, int $limit = 0): QueryResultInterface
+    public function getUsersFromGroups(array $groupIdentifiers, int $language, int $limit = 0): QueryResultInterface
     {
-        $query = $this->createQuery();
-        $and = [$query->equals('usergroup.uid', $groupIdentifier)];
+        $lll = '';
         if ($language !== -1) {
-            $and[] = $query->equals('luxletterLanguage', $language);
+            $lll = ' and luxletter_language=' . (int)$language . ' ';
         }
-        $query->matching($query->logicalAnd($and));
+        /** @noinspection SqlDialectInspection */
+        $sql = 'select * from ' . User::TABLE_NAME;
+        $sql .= $this->getUserByGroupsWhereClause($groupIdentifiers, $lll);
+        $sql .= ' group by email';
         if ($limit > 0) {
-            $query->setLimit($limit);
+            $sql .= ' limit ' . (int)$limit;
         }
-        return $query->execute();
+        $query = $this->createQuery();
+        return $query->statement($sql)->execute();
     }
 
     /**
-     * @param int $groupIdentifier
+     * @param int[] $groupIdentifiers
      * @return int
      * @throws DBALException
      * @throws Exception
      */
-    public function getUserAmountFromGroup(int $groupIdentifier): int
+    public function getUserAmountFromGroups(array $groupIdentifiers): int
     {
-        $connection = DatabaseUtility::getConnectionForTable(User::TABLE_NAME);
-        /** @noinspection SqlDialectInspection */
-        $query = 'select count(uid) from ' . User::TABLE_NAME . ' ';
-        $query .= 'where find_in_set(' . $groupIdentifier . ',usergroup) and deleted=0 and disable=0';
-        return (int)$connection->executeQuery($query)->fetchOne();
+        if ($groupIdentifiers !== []) {
+            $connection = DatabaseUtility::getConnectionForTable(User::TABLE_NAME);
+            /** @noinspection SqlDialectInspection */
+            $sql = 'select count(distinct email) from ' . User::TABLE_NAME;
+            $sql .= $this->getUserByGroupsWhereClause($groupIdentifiers);
+            return (int)$connection->executeQuery($sql)->fetchOne();
+        }
+        return 0;
+    }
+
+    /**
+     * @param int[] $groupIdentifiers
+     * @param string $addition
+     * @return string
+     */
+    protected function getUserByGroupsWhereClause(array $groupIdentifiers, string $addition = ''): string
+    {
+        $sub = '';
+        foreach ($groupIdentifiers as $identifier) {
+            if ($sub !== '') {
+                $sub .= ' or ';
+            }
+            $sub .= 'find_in_set(' . (int)$identifier . ',usergroup)';
+        }
+        return ' where deleted=0 and disable=0 and email like "%@%" and (' . $sub
+            . ')' . $addition;
     }
 
     /**

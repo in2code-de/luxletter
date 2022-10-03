@@ -64,7 +64,7 @@ class QueueService
      */
     public function addMailReceiversToQueue(Newsletter $newsletter, int $language): int
     {
-        $users = $this->userRepository->getUsersFromGroup($newsletter->getReceiver()->getUid(), $language);
+        $users = $this->userRepository->getUsersFromGroups($newsletter->getReceiverGroupIdentifiers(), $language);
         /** @var QueueServiceAddMailReceiversToQueueEvent $event */
         $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
             QueueServiceAddMailReceiversToQueueEvent::class,

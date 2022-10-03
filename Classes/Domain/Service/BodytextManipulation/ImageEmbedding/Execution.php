@@ -106,7 +106,7 @@ class Execution extends AbstractEmbedding implements SingletonInterface
      */
     protected function getEmbedNameForPathAndFilename(string $pathAndFilename): string
     {
-        return 'name_' . \md5($pathAndFilename);
+        return 'name_' . md5($pathAndFilename);
     }
 
     /**

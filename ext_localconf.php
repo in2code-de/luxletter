@@ -36,5 +36,11 @@ call_user_func(
                 . \In2code\Luxletter\Utility\ConfigurationUtility::getCurrentDomain()
             );
         }
+
+        /**
+         * Update Wizards
+         */
+        $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['luxletterReceiversUpdateWizard']
+            = \In2code\Luxletter\Update\LuxletterReceiversUpdateWizard::class;
     }
 );
