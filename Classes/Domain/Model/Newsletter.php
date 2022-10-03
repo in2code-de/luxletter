@@ -112,6 +112,11 @@ class Newsletter extends AbstractEntity
     protected $language = 0;
 
     /**
+     * @var ?DateTime
+     */
+    protected $crdate;
+
+    /**
      * @return string
      */
     public function getTitle(): string
@@ -371,6 +376,24 @@ class Newsletter extends AbstractEntity
     public function setLanguage(int $language): Newsletter
     {
         $this->language = $language;
+        return $this;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getCrdate(): ?DateTime
+    {
+        return $this->crdate;
+    }
+
+    /**
+     * @param DateTime|null $crdate
+     * @return Newsletter
+     */
+    public function setCrdate(?DateTime $crdate): Newsletter
+    {
+        $this->crdate = $crdate;
         return $this;
     }
 

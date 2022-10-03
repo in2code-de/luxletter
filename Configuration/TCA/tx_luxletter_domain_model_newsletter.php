@@ -29,7 +29,7 @@ return [
     'types' => [
         '1' => [
             'showitem' => 'disabled,title,category,description,datetime,subject,receivers,configuration,layout,' .
-                'origin,bodytext,language',
+                'origin,bodytext,language,crdate',
         ],
     ],
     'columns' => [
@@ -183,6 +183,18 @@ return [
                 ],
                 'renderType' => 'selectSingle',
                 'default' => 0,
+            ],
+        ],
+        'crdate' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
+                . Newsletter::TABLE_NAME . '.crdate',
+            'config' => [
+                'type' => 'input',
+                'renderType' => 'inputDateTime',
+                'size' => 30,
+                'eval' => 'datetime',
+                'readOnly' => true,
             ],
         ],
     ],

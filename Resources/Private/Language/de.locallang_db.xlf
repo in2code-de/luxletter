@@ -103,6 +103,10 @@
 				<source>Language</source>
 				<target state="translated">Sprache</target>
 			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.crdate">
+				<source>Creation date</source>
+				<target state="translated">Erstellungsdatum</target>
+			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_queue">
 				<source>Mail queue</source>

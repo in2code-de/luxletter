@@ -191,6 +191,34 @@
 				<source>Reset filter</source>
 				<target state="translated">Filter aufheben</target>
 			</trans-unit>
+			<trans-unit id="module.newsletter.list.filter.time.label">
+				<source>Time</source>
+				<target state="translated">Zeitpunkt</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.filter.time.0">
+				<source>Show all newsletters</source>
+				<target state="translated">Zeige alle Newsletter</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.filter.time.10">
+				<source>Show newsletters from the last week</source>
+				<target state="translated">Zeige alle Newsletter der letzten Woche</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.filter.time.20">
+				<source>Show newsletters from the last month</source>
+				<target state="translated">Zeige alle Newsletter des letzten Monats</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.filter.time.30">
+				<source>Show newsletters from the last three months</source>
+				<target state="translated">Zeige alle Newsletter der letzten drei Monate</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.filter.time.40">
+				<source>Show newsletters from the last six months</source>
+				<target state="translated">Zeige alle Newsletter der letzten sechs Monate</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.filter.time.50">
+				<source>Show newsletters from the last year</source>
+				<target state="translated">Zeige alle Newsletter des letzten Jahres</target>
+			</trans-unit>
 
 			<trans-unit id="module.newsletter.new.title">
 				<source>Add new newsletter</source>

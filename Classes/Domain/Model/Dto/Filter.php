@@ -3,13 +3,22 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Model\Dto;
 
+use DateTime;
 use In2code\Luxletter\Domain\Model\Usergroup;
+use In2code\Luxletter\Utility\LocalizationUtility;
 
 /**
  * Class Filter
  */
 class Filter
 {
+    const TIME_DEFAULT = 0;
+    const TIME_1_WEEK = 10;
+    const TIME_1_MONTH = 20;
+    const TIME_3_MONTHS = 30;
+    const TIME_6_MONTHS = 40;
+    const TIME_1_YEAR = 50;
+
     /**
      * @var string
      */
@@ -24,6 +33,11 @@ class Filter
      * @var \In2code\Lux\Domain\Model\Category|null
      */
     protected $category = null;
+
+    /**
+     * @var int
+     */
+    protected $time = self::TIME_DEFAULT;
 
     /**
      * This is just a dummy property, that helps to recognize if a filter is set and helps to save this to the session
@@ -95,6 +109,50 @@ class Filter
     }
 
     /**
+     * @return int
+     */
+    public function getTime(): int
+    {
+        return $this->time;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getTimeDateStart(): DateTime
+    {
+        $date = new DateTime();
+        switch ($this->getTime()) {
+            case self::TIME_1_WEEK:
+                $date->modify('-1 week');
+                break;
+            case self::TIME_1_MONTH:
+                $date->modify('-1 month');
+                break;
+            case self::TIME_3_MONTHS:
+                $date->modify('-3 months');
+                break;
+            case self::TIME_6_MONTHS:
+                $date->modify('-6 months');
+                break;
+            case self::TIME_1_YEAR:
+                $date->modify('-1 year');
+                break;
+        }
+        return $date;
+    }
+
+    /**
+     * @param int $time
+     * @return Filter
+     */
+    public function setTime(int $time): Filter
+    {
+        $this->time = $time;
+        return $this;
+    }
+
+    /**
      * @return bool
      */
     public function isReset(): bool
@@ -117,6 +175,19 @@ class Filter
      */
     public function isSet(): bool
     {
-        return $this->searchterm !== '' || $this->usergroup !== null || $this->category !== null;
+        return $this->searchterm !== '' || $this->usergroup !== null || $this->category !== null || $this->time > 0;
+    }
+
+    public function getTimeOptions(): array
+    {
+        $llPrefix = 'module.newsletter.list.filter.time.';
+        return [
+            self::TIME_DEFAULT => LocalizationUtility::translate($llPrefix . self::TIME_DEFAULT),
+            self::TIME_1_WEEK => LocalizationUtility::translate($llPrefix . self::TIME_1_WEEK),
+            self::TIME_1_MONTH => LocalizationUtility::translate($llPrefix . self::TIME_1_MONTH),
+            self::TIME_3_MONTHS => LocalizationUtility::translate($llPrefix . self::TIME_3_MONTHS),
+            self::TIME_6_MONTHS => LocalizationUtility::translate($llPrefix . self::TIME_6_MONTHS),
+            self::TIME_1_YEAR => LocalizationUtility::translate($llPrefix . self::TIME_1_YEAR),
+        ];
     }
 }
