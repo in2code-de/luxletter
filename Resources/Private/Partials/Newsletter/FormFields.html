@@ -104,24 +104,37 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="receiver" class="lb-lg">
+                <label class="lb-lg">
                     <f:translate key="module.newsletter.new.field.receiver">Receiver</f:translate>*
                 </label>
                 <f:if condition="{view.action} == 'edit'">
                     <f:then>
-                        <f:form.textfield name="dummy" readonly="readonly" value="{newsletter.receiver.title}" class="form-control input-lg" />
-                        <f:form.hidden property="receiver" value="{newsletter.receiver.uid}" data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'users'}" />
+                        <f:form.textfield
+                            name="dummy"
+                            readonly="readonly"
+                            value="{luxletter:string.joinGroupTitles(groups:newsletter.receivers) -> f:format.crop(maxCharacters:100,append:' ...')}"
+                            title="{luxletter:string.joinGroupTitles(groups:newsletter.receivers)}"
+                            class="form-control input-lg" />
+                        <f:for each="{newsletter.receivers}" as="group">
+                            <f:form.hidden property="receivers." value="{group.uid}" data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'users'}" />
+                        </f:for>
                     </f:then>
                     <f:else>
-                        <f:form.select
-                            id="receiver"
-                            class="form-control form-select input-lg"
-                            options="{luxletter:usergroup.getReceiverGroups()}"
-                            prependOptionValue=""
-                            prependOptionLabel="{f:translate(key:'pleasechoose')}"
-                            data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'users'}"
-                            property="receiver"
-                            required="required" />
+                        <div style="max-height: 160px; overflow: auto;">
+                            <f:for each="{usergroups}" as="title" key="identifier" iteration="iteration">
+                                <div class="form-check form-switch">
+                                    <f:form.checkbox
+                                        property="receivers."
+                                        value="{identifier}"
+                                        id="receivers-{iteration.index}"
+                                        data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'users'}"
+                                        class="form-check-input"/>
+                                    <label class="form-check-label" for="receivers-{iteration.index}">
+                                        {title}
+                                    </label>
+                                </div>
+                            </f:for>
+                        </div>
                     </f:else>
                 </f:if>
                 <span class="help-block">

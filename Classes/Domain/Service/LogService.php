@@ -3,13 +3,13 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
+use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Model\Log;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
 /**
@@ -22,7 +22,6 @@ class LogService
      * @param User $user
      * @return void
      * @throws IllegalObjectTypeException
-     * @throws Exception
      */
     public function logNewsletterDispatch(Newsletter $newsletter, User $user): void
     {
@@ -36,7 +35,7 @@ class LogService
      * @param User $user
      * @return void
      * @throws IllegalObjectTypeException
-     * @throws Exception
+     * @throws ExceptionDbalDriver
      */
     public function logNewsletterOpening(Newsletter $newsletter, User $user): void
     {
@@ -50,7 +49,6 @@ class LogService
      * @param Link $link
      * @return void
      * @throws IllegalObjectTypeException
-     * @throws Exception
      */
     public function logLinkOpening(Link $link): void
     {
@@ -62,7 +60,6 @@ class LogService
      * @param User $user
      * @return void
      * @throws IllegalObjectTypeException
-     * @throws Exception
      */
     public function logUnsubscribe(Newsletter $newsletter, User $user): void
     {
@@ -76,7 +73,6 @@ class LogService
      * @param array $properties
      * @return void
      * @throws IllegalObjectTypeException
-     * @throws Exception
      */
     protected function log(Newsletter $newsletter, User $user, int $status, array $properties = []): void
     {

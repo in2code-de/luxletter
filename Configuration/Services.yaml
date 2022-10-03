@@ -27,6 +27,9 @@ services:
       - name: 'console.command'
         command: 'luxletter:queue'
 
+  In2code\Luxletter\Domain\Factory\NewsletterFactory:
+    public: true
+
   In2code\Luxletter\Domain\Factory\UserFactory:
     public: true
 

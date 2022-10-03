@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
+use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use Exception;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
@@ -45,8 +46,6 @@ class FrontendController extends ActionController
     protected $logService = null;
 
     /**
-     * Constructor
-     *
      * @param UserRepository $userRepository
      * @param UsergroupRepository $usergroupRepository
      * @param LogService $logService
@@ -98,7 +97,7 @@ class FrontendController extends ActionController
      * @param User|null $user
      * @return string
      * @throws IllegalObjectTypeException
-     * @throws ExceptionExtbaseObject
+     * @throws ExceptionDbalDriver
      */
     public function trackingPixelAction(Newsletter $newsletter = null, User $user = null): string
     {
@@ -109,6 +108,8 @@ class FrontendController extends ActionController
     }
 
     /**
+     * Remove user from all to newsletter related usergroups
+     *
      * @param User|null $user
      * @param Newsletter|null $newsletter
      * @param string $hash
@@ -118,14 +119,16 @@ class FrontendController extends ActionController
     {
         try {
             $this->checkArgumentsForUnsubscribeAction($user, $newsletter, $hash);
-            $user->removeUsergroup($newsletter->getReceiver());
+            foreach ($newsletter->getReceivers() as $group) {
+                $user->removeUsergroup($group);
+            }
             $this->userRepository->update($user);
             $this->userRepository->persistAll();
             $this->view->assignMultiple([
                 'success' => true,
                 'user' => $user,
                 'hash' => $hash,
-                'usergroupToRemove' => $newsletter->getReceiver(),
+                'usergroupToRemove' => $newsletter->getReceivers(),
             ]);
             $this->logService->logUnsubscribe($newsletter, $user);
         } catch (Throwable $exception) {
@@ -161,11 +164,28 @@ class FrontendController extends ActionController
         if ($hash === '') {
             throw new ArgumentMissingException('Hash not given', 1562050533);
         }
-        if ($user->getUsergroup()->contains($newsletter->getReceiver()) === false) {
-            throw new MissingRelationException('Usergroup not assigned to user', 1562066292);
-        }
+        $this->checkForUsergroups($user, $newsletter);
         if ($user->getUnsubscribeHash() !== $hash) {
             throw new AuthenticationFailedException('Given hash is incorrect', 1562069583);
+        }
+    }
+
+    /**
+     * @param User|null $user
+     * @param Newsletter|null $newsletter
+     * @return void
+     * @throws MissingRelationException
+     */
+    protected function checkForUsergroups(User $user = null, Newsletter $newsletter = null)
+    {
+        $match = false;
+        foreach ($newsletter->getReceivers() as $group) {
+            if ($user->getUsergroup()->contains($group) === true) {
+                $match = true;
+            }
+        }
+        if ($match === false) {
+            throw new MissingRelationException('Usergroups not assigned to user', 1562066292);
         }
     }
 }

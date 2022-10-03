@@ -3,8 +3,11 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
+use Doctrine\DBAL\DBALException;
 use In2code\Luxletter\Domain\Model\Usergroup;
 use In2code\Luxletter\Utility\DatabaseUtility;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 /**
  * Class UsergroupRepository
@@ -12,7 +15,26 @@ use In2code\Luxletter\Utility\DatabaseUtility;
 class UsergroupRepository extends AbstractRepository
 {
     /**
+     * @param array $usergroupIdentifiers
+     * @return QueryResultInterface
+     * @throws InvalidQueryException
+     */
+    public function findByIdentifiers(array $usergroupIdentifiers): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        $query->matching($query->in('uid', $usergroupIdentifiers));
+        return $query->execute();
+    }
+
+    /**
+     * Example return values like
+     *  [
+     *      123 => 'Usergroup title A',
+     *      234 => 'Usergroup title B',
+     *  ]
+     *
      * @return array
+     * @throws DBALException
      */
     public function getReceiverGroups(): array
     {

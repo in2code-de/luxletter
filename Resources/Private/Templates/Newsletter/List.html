@@ -112,7 +112,7 @@
 <f:section name="TableRow">
     <tr style="{f:if(condition:newsletter.enabled,else:'opacity:0.4;')}">
         <td>
-            {newsletter.uid}
+            <span title="{newsletter.crdate -> f:format.date(format:'Y-m-d')}">{newsletter.uid}</span>
         </td>
         <td>
             <span title="{newsletter.title}"><f:format.crop maxCharacters="80" append=" ..."><f:format.nl2br>{newsletter.title}</f:format.nl2br></f:format.crop></span>

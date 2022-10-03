@@ -79,7 +79,7 @@ class NewsletterRepository extends AbstractRepository
     {
         $query = $this->createQuery();
         if ($filter->isSet()) {
-            $logicalAnd = [];
+            $logicalAnd = [$query->greaterThan('uid', 0)];
             if ($filter->getSearchterm() !== '') {
                 $logicalOr = [];
                 foreach ($filter->getSearchterms() as $searchterm) {
@@ -91,6 +91,9 @@ class NewsletterRepository extends AbstractRepository
             }
             if ($filter->getCategory() !== null) {
                 $logicalAnd[] = $query->equals('category', $filter->getCategory());
+            }
+            if ($filter->getTime() > 0) {
+                $logicalAnd[] = $query->greaterThanOrEqual('crdate', $filter->getTimeDateStart());
             }
             $query->matching($query->logicalAnd($logicalAnd));
         }

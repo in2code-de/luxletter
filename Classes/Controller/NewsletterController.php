@@ -113,6 +113,7 @@ class NewsletterController extends AbstractNewsletterController
      * @return void
      * @throws ExceptionDbalDriver
      * @throws InvalidConfigurationTypeException
+     * @throws DBALException
      */
     public function editAction(Newsletter $newsletter): void
     {
@@ -122,6 +123,7 @@ class NewsletterController extends AbstractNewsletterController
             'layouts' => $this->layoutService->getLayouts(),
             'newsletterpages' => $this->pageRepository->findAllNewsletterPages(),
             'categories' => $this->categoryRepository->findAllLuxletterCategories(),
+            'usergroups' => $this->usergroupRepository->getReceiverGroups(),
         ]);
     }
 
@@ -171,6 +173,7 @@ class NewsletterController extends AbstractNewsletterController
      * @return void
      * @throws InvalidConfigurationTypeException
      * @throws ExceptionDbalDriver
+     * @throws DBALException
      * @noinspection PhpUnused
      */
     public function newAction(): void
@@ -180,6 +183,7 @@ class NewsletterController extends AbstractNewsletterController
             'layouts' => $this->layoutService->getLayouts(),
             'newsletterpages' => $this->pageRepository->findAllNewsletterPages(),
             'categories' => $this->categoryRepository->findAllLuxletterCategories(),
+            'usergroups' => $this->usergroupRepository->getReceiverGroups(),
         ]);
     }
 
@@ -303,6 +307,7 @@ class NewsletterController extends AbstractNewsletterController
                 'filter' => $filter,
                 'users' => $users,
                 'activities' => $receiverAnalysisService->getActivitiesStatistic($users),
+                'usergroups' => $this->usergroupRepository->getReceiverGroups(),
             ]
         );
     }
@@ -316,12 +321,13 @@ class NewsletterController extends AbstractNewsletterController
      */
     public function wizardUserPreviewAjax(ServerRequestInterface $request): ResponseInterface
     {
+        $usergroups = GeneralUtility::intExplode(',', $request->getQueryParams()['usergroups'], true);
         $userRepository = GeneralUtility::makeInstance(UserRepository::class);
         $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
         $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->wizardUserPreviewFile));
         $standaloneView->assignMultiple([
-            'userPreview' => $userRepository->getUsersFromGroup((int)$request->getQueryParams()['usergroup'], -1, 3),
-            'userAmount' => $userRepository->getUserAmountFromGroup((int)$request->getQueryParams()['usergroup']),
+            'userPreview' => $userRepository->getUsersFromGroups($usergroups, -1, 3),
+            'userAmount' => $userRepository->getUserAmountFromGroups($usergroups),
         ]);
         $response = ObjectUtility::getJsonResponse();
         $response->getBody()->write(json_encode(

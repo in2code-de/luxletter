@@ -9,6 +9,7 @@
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 17.0.0     | 2022.10.??  | Feature    | Multiple receiver groups can now be selected for sending newsletters (of course if an email is shared in more usergroups, the newsletter will only be sent once per mail)                  |
 | 16.0.0     | 2022.09.29  | Feature    | Newsletters can now be edited later from the list view.                                                                                                                                    |
 | 15.0.0     | 2022.09.28  | Feature    | Newsletters can be categorized now. Grouped list view by category. Added a filter above the list view.                                                                                     |
 | 14.1.0     | 2022.08.30  | Feature    | Image embedding: Don't attach the same image twice or even more often                                                                                                                      |
@@ -70,6 +71,16 @@
 
 
 ## Breaking changes !!!
+
+### Upgrade to 17.x
+
+* Multiple user groups can now be used for receiving newsletters.
+  * So the fieldname changed from `tx_luxletter_domain_model_newsletter.receiver` to `.receivers`
+  * To allow sending of old newsletters that are not yet completely sent, the value must be copied from one field to the oter
+  * Todo: Simple run the upgrade wizard (e.g. `./vendor/bin/typo3cms upgrade:run luxletterReceiversUpdateWizard`)
+* If newsletters are added via CLI command, you can now set a category uid
+  * Example call (see third last parameter for category uid) `./vendor/bin/typo3 luxletter:createnewsletterfromorigin "Automatic NL" 1 1 16 0 "NewsletterContainer" "Newsletter {f:format.date(date:'now',format:'Y-m')}" 123 "Optional description here" "2022-12-24T14:00:00+00:00"`
+  * Todo: Adjust your CLI commands or your scheduler tasks if you want to add a category
 
 ### Upgrade to 13.x
 

@@ -11,6 +11,7 @@ use In2code\Luxletter\Domain\Repository\ConfigurationRepository;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\PageRepository;
+use In2code\Luxletter\Domain\Repository\UsergroupRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\LayoutService;
 use In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl;
@@ -55,6 +56,11 @@ abstract class AbstractNewsletterController extends ActionController
     protected $userRepository = null;
 
     /**
+     * @var UsergroupRepository|null
+     */
+    protected $usergroupRepository = null;
+
+    /**
      * @var LogRepository|null
      */
     protected $logRepository = null;
@@ -82,6 +88,7 @@ abstract class AbstractNewsletterController extends ActionController
     /**
      * @param NewsletterRepository $newsletterRepository
      * @param UserRepository $userRepository
+     * @param UsergroupRepository $usergroupRepository
      * @param LogRepository $logRepository
      * @param ConfigurationRepository $configurationRepository
      * @param PageRepository $pageRepository
@@ -91,6 +98,7 @@ abstract class AbstractNewsletterController extends ActionController
     public function __construct(
         NewsletterRepository $newsletterRepository,
         UserRepository $userRepository,
+        UsergroupRepository $usergroupRepository,
         LogRepository $logRepository,
         ConfigurationRepository $configurationRepository,
         PageRepository $pageRepository,
@@ -99,6 +107,7 @@ abstract class AbstractNewsletterController extends ActionController
     ) {
         $this->newsletterRepository = $newsletterRepository;
         $this->userRepository = $userRepository;
+        $this->usergroupRepository = $usergroupRepository;
         $this->logRepository = $logRepository;
         $this->configurationRepository = $configurationRepository;
         $this->pageRepository = $pageRepository;
