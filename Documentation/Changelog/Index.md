@@ -9,6 +9,7 @@
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 17.0.1     | 2022.10.04  | Bugfix     | Remove unwanted PHP dependencies to EXT:lux to prevent Category exception if LUX is not installed at the same time                                                                         |
 | !!! 17.0.0 | 2022.10.03  | Feature    | Multiple receiver groups can now be selected for sending newsletters (of course if an email is shared in more usergroups, the newsletter will only be sent once per mail)                  |
 | 16.0.0     | 2022.09.29  | Feature    | Newsletters can now be edited later from the list view.                                                                                                                                    |
 | 15.0.0     | 2022.09.28  | Feature    | Newsletters can be categorized now. Grouped list view by category. Added a filter above the list view.                                                                                     |
