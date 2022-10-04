@@ -3,7 +3,7 @@
         <ul class="f3-widget-paginator pagination">
             <f:if condition="{pagination.previousPageNumber} && {pagination.previousPageNumber} >= {pagination.firstPageNumber}">
                 <li class="previous">
-                    <a href="{lux:pagination.uri(arguments:'{currentPage:pagination.previousPageNumber}',name:name)}" title="previous" class="page-link">
+                    <a href="{luxletter:pagination.uri(arguments:'{currentPage:pagination.previousPageNumber}',name:name)}" title="previous" class="page-link">
                         &lt;
                     </a>
                 </li>
@@ -20,7 +20,7 @@
                     </f:then>
                     <f:else>
                         <li class="page-item">
-                            <a href="{lux:pagination.uri(arguments:'{currentPage:page}',name:name)}" class="page-link">{page}</a>
+                            <a href="{luxletter:pagination.uri(arguments:'{currentPage:page}',name:name)}" class="page-link">{page}</a>
                         </li>
                     </f:else>
                 </f:if>
@@ -30,7 +30,7 @@
             </f:if>
             <f:if condition="{pagination.nextPageNumber} && {pagination.nextPageNumber} <= {pagination.lastPageNumber}">
                 <li class="next">
-                    <a href="{lux:pagination.uri(arguments:'{currentPage:pagination.nextPageNumber}',name:name)}" title="next" class="page-link">
+                    <a href="{luxletter:pagination.uri(arguments:'{currentPage:pagination.nextPageNumber}',name:name)}" title="next" class="page-link">
                         &gt;
                     </a>
                 </li>
