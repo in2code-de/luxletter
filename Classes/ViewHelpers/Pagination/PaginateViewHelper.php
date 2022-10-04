@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace In2code\Luxletter\ViewHelpers\Pagination;
 
 use Closure;
-use In2code\Lux\Exception\NotPaginatableException;
+use In2code\Luxletter\Exception\NotPaginatableException;
 use TYPO3\CMS\Core\Pagination\ArrayPaginator;
 use TYPO3\CMS\Core\Pagination\PaginationInterface;
 use TYPO3\CMS\Core\Pagination\PaginatorInterface;

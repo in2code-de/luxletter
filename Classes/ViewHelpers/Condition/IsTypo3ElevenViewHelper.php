@@ -3,7 +3,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\ViewHelpers\Condition;
 
-use In2code\Lux\Utility\ConfigurationUtility;
+use In2code\Luxletter\Utility\ConfigurationUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
 /**

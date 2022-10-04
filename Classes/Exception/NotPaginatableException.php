@@ -6,8 +6,8 @@ namespace In2code\Luxletter\Exception;
 use Exception;
 
 /**
- * UnvalidFilenameException
+ * NotPaginatableException
  */
-class UnvalidFilenameException extends Exception
+class NotPaginatableException extends Exception
 {
 }
