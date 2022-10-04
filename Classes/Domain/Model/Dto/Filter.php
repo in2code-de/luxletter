@@ -30,7 +30,7 @@ class Filter
     protected $usergroup = null;
 
     /**
-     * @var \In2code\Lux\Domain\Model\Category|null
+     * @var \In2code\Luxletter\Domain\Model\Category|null
      */
     protected $category = null;
 
@@ -91,18 +91,18 @@ class Filter
     }
 
     /**
-     * @return \In2code\Lux\Domain\Model\Category|null
+     * @return \In2code\Luxletter\Domain\Model\Category|null
      */
-    public function getCategory(): ?\In2code\Lux\Domain\Model\Category
+    public function getCategory(): ?\In2code\Luxletter\Domain\Model\Category
     {
         return $this->category;
     }
 
     /**
-     * @param \In2code\Lux\Domain\Model\Category|null $category
+     * @param \In2code\Luxletter\Domain\Model\Category|null $category
      * @return Filter
      */
-    public function setCategory(?\In2code\Lux\Domain\Model\Category $category): Filter
+    public function setCategory(?\In2code\Luxletter\Domain\Model\Category $category): Filter
     {
         $this->category = $category;
         return $this;
