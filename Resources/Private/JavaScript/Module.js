@@ -1,4 +1,4 @@
-define(['jquery'], function($) {
+define(['jquery', "TYPO3/CMS/Luxletter/Vendor/Multiselect"], function($) {
   'use strict';
 
   /**
@@ -37,6 +37,7 @@ define(['jquery'], function($) {
       userDetailMockListener();
       userDetailListener();
       addConfirmListeners();
+      addUserGroupsMultiselect();
     };
 
     /**
@@ -226,6 +227,15 @@ define(['jquery'], function($) {
           }, 'userDetailListenerCallback');
         });
       }
+    };
+
+    /**
+     * @returns {void}
+     */
+    var addUserGroupsMultiselect = function() {
+        var multiselect = document.querySelector("#vsb-multiselect");
+        var selectBox = new vanillaSelectBox('#vsb-multiselect', {"maxHeight":200, "maxWidth":-1, "search": true, "placeHolder": multiselect.getAttribute('data-placeholder')});
+        selectBox.enable();
     };
 
     /**

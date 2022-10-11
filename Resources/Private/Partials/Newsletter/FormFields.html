@@ -120,20 +120,12 @@
                         </f:for>
                     </f:then>
                     <f:else>
-                        <div style="max-height: 160px; overflow: auto;">
-                            <f:for each="{usergroups}" as="title" key="identifier" iteration="iteration">
-                                <div class="form-check form-switch">
-                                    <f:form.checkbox
-                                        property="receivers."
-                                        value="{identifier}"
-                                        id="receivers-{iteration.index}"
-                                        data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'users'}"
-                                        class="form-check-input"/>
-                                    <label class="form-check-label" for="receivers-{iteration.index}">
-                                        {title}
-                                    </label>
-                                </div>
-                            </f:for>
+                        <div class="form-group">
+                            <select id="vsb-multiselect" multiple data-placeholder="{f:translate(key:'pleasechoose')}">
+                            	<f:for each="{usergroups}" as="title" key="identifier" iteration="iteration">
+                            		<option value="{identifier}">{title}</option>
+                            	</f:for>
+                            </select>
                         </div>
                     </f:else>
                 </f:if>
