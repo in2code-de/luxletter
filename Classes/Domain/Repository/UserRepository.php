@@ -39,7 +39,6 @@ class UserRepository extends AbstractRepository
         /** @noinspection SqlDialectInspection */
         $sql = 'select * from ' . User::TABLE_NAME;
         $sql .= $this->getUserByGroupsWhereClause($groupIdentifiers, $lll);
-        $sql .= ' group by email';
         if ($limit > 0) {
             $sql .= ' limit ' . (int)$limit;
         }
