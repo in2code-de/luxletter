@@ -1,5 +1,7 @@
 <f:if condition="{teaserElements}">
-	<f:render section="SectionMenu" arguments="{_all}" />
+	<f:if condition="{flexformConfiguration.sectionmenu}">
+		<f:render section="SectionMenu" arguments="{_all}" />
+	</f:if>
 
 	<f:for each="{teaserElements}" as="teaserElement">
 		<luxletter:format.cropBySelection
