@@ -25,13 +25,20 @@ class UserRepository extends AbstractRepository
     ];
 
     /**
+     * Get users grouped by email from groupIdentifiers
+     * We don't use `group by` any more because of the problems that came with "sql_mode=only_full_group_by"
+     *
      * @param int[] $groupIdentifiers
      * @param int $language -1 = all, otherwise only the users with the specific language are selected
      * @param int $limit
-     * @return QueryResultInterface
+     * @return array
      */
-    public function getUsersFromGroups(array $groupIdentifiers, int $language, int $limit = 0): QueryResultInterface
+    public function getUsersFromGroups(array $groupIdentifiers, int $language, int $limit = 0): array
     {
+        if ($groupIdentifiers === []) {
+            return [];
+        }
+
         $lll = '';
         if ($language !== -1) {
             $lll = ' and luxletter_language=' . (int)$language . ' ';
@@ -39,12 +46,32 @@ class UserRepository extends AbstractRepository
         /** @noinspection SqlDialectInspection */
         $sql = 'select * from ' . User::TABLE_NAME;
         $sql .= $this->getUserByGroupsWhereClause($groupIdentifiers, $lll);
-        $sql .= ' group by email';
         if ($limit > 0) {
-            $sql .= ' limit ' . (int)$limit;
+            $sql .= ' limit ' . ($limit * 10);
         }
+
         $query = $this->createQuery();
-        return $query->statement($sql)->execute();
+        $users = $query->statement($sql)->execute()->toArray();
+        return $this->groupResultByEmail($users, $limit);
+    }
+
+    /**
+     * @param array $users
+     * @param int $limit
+     * @return array
+     */
+    protected function groupResultByEmail(array $users, int $limit): array
+    {
+        $result = [];
+        foreach ($users as $user) {
+            if (array_key_exists($user->getEmail(), $result) === false) {
+                $result[$user->getEmail()] = $user;
+            }
+            if ($limit > 0 && count($result) >= $limit) {
+                break;
+            }
+        }
+        return $result;
     }
 
     /**
