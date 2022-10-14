@@ -76,7 +76,7 @@ class QueueService
         foreach ($event->getUsers() as $user) {
             $this->addUserToQueue($newsletter, $user);
         }
-        return $users->count();
+        return count($users);
     }
 
     /**

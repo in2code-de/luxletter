@@ -4,14 +4,13 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Events;
 
 use In2code\Luxletter\Domain\Model\Newsletter;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 final class QueueServiceAddMailReceiversToQueueEvent
 {
     /**
-     * @var QueryResultInterface
+     * @var array
      */
-    protected $users;
+    protected $users = [];
 
     /**
      * @var Newsletter
@@ -24,11 +23,11 @@ final class QueueServiceAddMailReceiversToQueueEvent
     protected $language;
 
     /**
-     * @param QueryResultInterface $users
+     * @param array $users
      * @param Newsletter $newsletter
      * @param int $language
      */
-    public function __construct(QueryResultInterface $users, Newsletter $newsletter, int $language)
+    public function __construct(array $users, Newsletter $newsletter, int $language)
     {
         $this->users = $users;
         $this->newsletter = $newsletter;
@@ -36,18 +35,18 @@ final class QueueServiceAddMailReceiversToQueueEvent
     }
 
     /**
-     * @return QueryResultInterface
+     * @return array
      */
-    public function getUsers(): QueryResultInterface
+    public function getUsers(): array
     {
         return $this->users;
     }
 
     /**
-     * @param QueryResultInterface $users
+     * @param array $users
      * @return QueueServiceAddMailReceiversToQueueEvent
      */
-    public function setUsers(QueryResultInterface $users): QueueServiceAddMailReceiversToQueueEvent
+    public function setUsers(array $users): QueueServiceAddMailReceiversToQueueEvent
     {
         $this->users = $users;
         return $this;
