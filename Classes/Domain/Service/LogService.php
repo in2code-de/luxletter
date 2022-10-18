@@ -53,6 +53,11 @@ class LogService
     public function logLinkOpening(Link $link): void
     {
         $this->log($link->getNewsletter(), $link->getUser(), Log::STATUS_LINKOPENING, ['target' => $link->getTarget()]);
+        // If Newsletter Open is not triggered by the Tracking Pixel, the first click from a user logs the opening 
+        $logRepository = GeneralUtility::makeInstance(LogRepository::class);
+        if ($logRepository->isLogRecordExisting($link->getNewsletter(), $link->getUser(), Log::STATUS_NEWSLETTEROPENING) === false) {
+            $this->log($link->getNewsletter(), $link->getUser(), Log::STATUS_NEWSLETTEROPENING);
+        }
     }
 
     /**
