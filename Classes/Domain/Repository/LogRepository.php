@@ -80,6 +80,7 @@ class LogRepository extends AbstractRepository
     /**
      * @return int
      * @throws DBALException
+     * @throws Exception
      */
     public function getOpeningsByClickers(): int
     {
@@ -186,6 +187,7 @@ class LogRepository extends AbstractRepository
      * @param int $status
      * @return bool
      * @throws Exception
+     * @throws DBALException
      */
     public function isLogRecordExisting(Newsletter $newsletter, User $user, int $status): bool
     {

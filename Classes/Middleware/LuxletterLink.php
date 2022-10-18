@@ -3,6 +3,8 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Middleware;
 
+use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use In2code\Lux\Utility\CookieUtility;
 use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Repository\LinkRepository;
@@ -19,10 +21,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Http\RedirectResponse;
 use TYPO3\CMS\Core\Package\Exception;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbase;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * Class LuxletterLink
@@ -47,11 +46,10 @@ class LuxletterLink implements MiddlewareInterface
      * @param ServerRequestInterface $request
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
-     * @throws IllegalObjectTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
-     * @throws ExceptionExtbase
      * @throws Exception
+     * @throws IllegalObjectTypeException
+     * @throws DBALException
+     * @throws ExceptionDbalDriver
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {

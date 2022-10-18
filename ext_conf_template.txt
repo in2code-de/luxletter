@@ -1,5 +1,5 @@
 # cat=basic//200; type=boolean; label= Multilanguage mode: Multilanguage mode allows you to parse an internal TYPO3 page in all it's languages. Subject will be found in page settings with this. No external URL supported in this mode.
-multiLanguageMode = 0
+multiLanguageMode = 1
 
 # cat=basic//210; type=boolean; label= Rewrite links in newsletter: Absolute links in your newsletters can be rewritten automatically, to track all link clicks. If you disable this feature, clicks are not tracked.
 rewriteLinksInNewsletter = 1

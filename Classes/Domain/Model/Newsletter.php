@@ -433,6 +433,15 @@ class Newsletter extends AbstractEntity
 
     /**
      * @return int
+     */
+    public function getDispatchedQueues(): int
+    {
+        $queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
+        return $queueRepository->findAllByNewsletterAndDispatchedStatus($this, true)->count();
+    }
+
+    /**
+     * @return int
      * @throws DBALException
      * @throws ExceptionDbalDriver
      */
@@ -486,10 +495,10 @@ class Newsletter extends AbstractEntity
      */
     public function getOpenRate(): float
     {
-        $all = $this->getQueues();
+        $dispatched = $this->getDispatchedQueues();
         $openers = $this->getOpeners();
-        if ($all > 0) {
-            return $openers / $all;
+        if ($dispatched > 0) {
+            return $openers / $dispatched;
         }
         return 0.0;
     }
