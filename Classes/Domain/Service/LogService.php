@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Model\Log;
@@ -29,13 +30,14 @@ class LogService
     }
 
     /**
-     * Log the opening of a newsletter (via tracking pixel) only once per newsletter and user
+     * Log the opening of a newsletter (via tracking pixel or when clicking a link) only once per newsletter and user
      *
      * @param Newsletter $newsletter
      * @param User $user
      * @return void
      * @throws IllegalObjectTypeException
      * @throws ExceptionDbalDriver
+     * @throws DBALException
      */
     public function logNewsletterOpening(Newsletter $newsletter, User $user): void
     {
@@ -48,16 +50,14 @@ class LogService
     /**
      * @param Link $link
      * @return void
+     * @throws ExceptionDbalDriver
      * @throws IllegalObjectTypeException
+     * @throws DBALException
      */
     public function logLinkOpening(Link $link): void
     {
+        $this->logNewsletterOpening($link->getNewsletter(), $link->getUser());
         $this->log($link->getNewsletter(), $link->getUser(), Log::STATUS_LINKOPENING, ['target' => $link->getTarget()]);
-        // If Newsletter Open is not triggered by the Tracking Pixel, the first click from a user logs the opening 
-        $logRepository = GeneralUtility::makeInstance(LogRepository::class);
-        if ($logRepository->isLogRecordExisting($link->getNewsletter(), $link->getUser(), Log::STATUS_NEWSLETTEROPENING) === false) {
-            $this->log($link->getNewsletter(), $link->getUser(), Log::STATUS_NEWSLETTEROPENING);
-        }
     }
 
     /**
