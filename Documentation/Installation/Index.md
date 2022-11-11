@@ -14,7 +14,7 @@ composer require "in2code/luxletter"
 
 **Note:** TYPO3 in composer mode is needed
 
-TYPO3 10.4 or 11.5 is required. The free extension lux can be also installed for more analysis but is not eccessary.
+TYPO3 10.4 or 11.5 is required. The free extension lux can be also installed for more analysis but is not neccessary.
 
 
 ### Basic settings in extension configuration
