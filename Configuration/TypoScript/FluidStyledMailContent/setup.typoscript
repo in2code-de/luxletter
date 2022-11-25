@@ -50,7 +50,6 @@ fluidStyledMailContent {
   typeNum = 1562349004
 
   config {
-    no_cache = 0
     disableAllHeaderCode = 0
     disablePrefixComment = 1
     xhtml_cleaning = 0
