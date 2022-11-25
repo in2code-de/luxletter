@@ -3,7 +3,6 @@ luxletterPreviewNewsletter = PAGE
 luxletterPreviewNewsletter {
   typeNum = 1560777975
   config {
-    no_cache = 1
     disableAllHeaderCode = 1
     disablePrefixComment = 1
     xhtml_cleaning = 0
@@ -11,7 +10,7 @@ luxletterPreviewNewsletter {
     debug = 0
   }
 
-  10 = USER
+  10 = USER_INT
   10 {
     userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
     extensionName = Luxletter
@@ -30,7 +29,6 @@ luxletterTrackingPixel {
   typeNum = 1561894816
   config {
     additionalHeaders.10.header = Content-Type: image/gif
-    no_cache = 1
     disableAllHeaderCode = 1
     disablePrefixComment = 1
     xhtml_cleaning = 0
@@ -38,7 +36,7 @@ luxletterTrackingPixel {
     debug = 0
   }
 
-  10 = USER
+  10 = USER_INT
   10 {
     userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
     extensionName = Luxletter

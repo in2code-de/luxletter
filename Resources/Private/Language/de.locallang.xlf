@@ -9,8 +9,8 @@
 				<target state="translated">Dashboard</target>
 			</trans-unit>
 			<trans-unit id="layout.backend.link.actionnewsletter">
-				<source>Newsletter</source>
-				<target state="translated">Newsletter</target>
+				<source>Newsletter dispatch</source>
+				<target state="translated">Newsletter Versand</target>
 			</trans-unit>
 			<trans-unit id="layout.backend.link.actionreceiver">
 				<source>Receiver</source>

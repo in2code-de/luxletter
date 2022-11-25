@@ -7,7 +7,7 @@
 				<source>Dashboard</source>
 			</trans-unit>
 			<trans-unit id="layout.backend.link.actionnewsletter">
-				<source>Newsletter</source>
+				<source>Newsletter dispatch</source>
 			</trans-unit>
 			<trans-unit id="layout.backend.link.actionreceiver">
 				<source>Receiver</source>
