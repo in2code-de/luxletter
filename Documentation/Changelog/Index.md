@@ -9,6 +9,7 @@
 
 | Version    | Date        | State      | Description                                                                                                                                                                                |
 | ---------- | ----------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 17.3.0     | 2022.11.25  | Task       | Remove config.no_cache=1, small label change, fix typo in documentation                                                                                                                    |
 | 17.2.0     | 2022.10.18  | Feature    | Track open when a link is clicked (and there was no open log entry yet), Always show open rate by the already dispatched newsletters, enable multiLanguageMode per default                 |
 | 17.1.0     | 2022.10.14  | Bugfix     | Enable sectionmenu switch in teaser element, fix users preview together with sql_mode=only_full_group_by                                                                                   |
 | 17.0.2     | 2022.10.05  | Bugfix     | Remove unwanted Fluid namespace dependencies to EXT:lux if LUX is not installed at the same time                                                                                           |
