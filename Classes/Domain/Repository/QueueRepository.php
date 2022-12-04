@@ -8,7 +8,10 @@ use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\Queue;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Utility\DatabaseUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ConstraintInterface;
+use TYPO3\CMS\Extbase\Persistence\Generic\Qom\LogicalAnd;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
@@ -38,7 +41,7 @@ class QueueRepository extends AbstractRepository
         if ($newsletterIdentifier > 0) {
             $and[] = $query->equals('newsletter.uid', $newsletterIdentifier);
         }
-        $query->matching($query->logicalAnd($and));
+        $query->matching($query->logicalAnd(...$and));
         $query->setLimit($limit);
         $query->setOrderings(['tstamp' => QueryInterface::ORDER_ASCENDING]);
         return $query->execute();
@@ -58,7 +61,7 @@ class QueueRepository extends AbstractRepository
             $query->equals('sent', $dispatched),
             $query->equals('newsletter', $newsletter),
         ];
-        $query->matching($query->logicalAnd($and));
+        $query->matching($query->logicalAnd(...$and));
         return $query->execute();
     }
 
@@ -89,7 +92,7 @@ class QueueRepository extends AbstractRepository
             ->from(Queue::TABLE_NAME)
             ->where('newsletter=' . $newsletter->getUid() . ' and user=' . $user->getUid())
             ->setMaxResults(1)
-            ->execute()
+            ->executeQuery()
             ->fetchOne() > 0;
     }
 

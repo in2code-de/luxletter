@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
 use DateTime;
-use Exception;
+use In2code\Luxletter\Backend\Buttons\NavigationGroupButton;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Repository\CategoryRepository;
 use In2code\Luxletter\Domain\Repository\ConfigurationRepository;
@@ -15,87 +15,37 @@ use In2code\Luxletter\Domain\Repository\UsergroupRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\LayoutService;
 use In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl;
-use In2code\Luxletter\Exception\ApiConnectionException;
-use In2code\Luxletter\Exception\InvalidUrlException;
-use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\StringUtility;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
+use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentNameException;
-use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
-/**
- * Class AbstractNewsletterController
- */
 abstract class AbstractNewsletterController extends ActionController
 {
-    /**
-     * @var string
-     */
-    protected $wizardUserPreviewFile = 'EXT:luxletter/Resources/Private/Templates/Newsletter/WizardUserPreview.html';
+    protected string $wizardUserPreviewFile =
+        'EXT:luxletter/Resources/Private/Templates/Newsletter/WizardUserPreview.html';
+    protected string $receiverDetailFile = 'EXT:luxletter/Resources/Private/Templates/Newsletter/ReceiverDetail.html';
 
-    /**
-     * @var string
-     */
-    protected $receiverDetailFile = 'EXT:luxletter/Resources/Private/Templates/Newsletter/ReceiverDetail.html';
+    protected ModuleTemplateFactory $moduleTemplateFactory;
+    protected IconFactory $iconFactory;
+    protected ModuleTemplate $moduleTemplate;
+    protected NewsletterRepository $newsletterRepository;
+    protected UserRepository $userRepository;
+    protected UsergroupRepository $usergroupRepository;
+    protected LogRepository $logRepository;
+    protected ConfigurationRepository $configurationRepository;
+    protected PageRepository $pageRepository;
+    protected LayoutService $layoutService;
+    protected CategoryRepository $categoryRepository;
 
-    /**
-     * @var NewsletterRepository|null
-     */
-    protected $newsletterRepository = null;
-
-    /**
-     * @var UserRepository|null
-     */
-    protected $userRepository = null;
-
-    /**
-     * @var UsergroupRepository|null
-     */
-    protected $usergroupRepository = null;
-
-    /**
-     * @var LogRepository|null
-     */
-    protected $logRepository = null;
-
-    /**
-     * @var ConfigurationRepository|null
-     */
-    protected $configurationRepository = null;
-
-    /**
-     * @var PageRepository|null
-     */
-    protected $pageRepository = null;
-
-    /**
-     * @var LayoutService|null
-     */
-    protected $layoutService = null;
-
-    /**
-     * @var CategoryRepository|null
-     */
-    protected $categoryRepository = null;
-
-    /**
-     * @param NewsletterRepository $newsletterRepository
-     * @param UserRepository $userRepository
-     * @param UsergroupRepository $usergroupRepository
-     * @param LogRepository $logRepository
-     * @param ConfigurationRepository $configurationRepository
-     * @param PageRepository $pageRepository
-     * @param LayoutService $layoutService
-     * @param CategoryRepository $categoryRepository
-     */
     public function __construct(
+        ModuleTemplateFactory $moduleTemplateFactory,
+        IconFactory $iconFactory,
         NewsletterRepository $newsletterRepository,
         UserRepository $userRepository,
         UsergroupRepository $usergroupRepository,
@@ -105,6 +55,8 @@ abstract class AbstractNewsletterController extends ActionController
         LayoutService $layoutService,
         CategoryRepository $categoryRepository
     ) {
+        $this->moduleTemplateFactory = $moduleTemplateFactory;
+        $this->iconFactory = $iconFactory;
         $this->newsletterRepository = $newsletterRepository;
         $this->userRepository = $userRepository;
         $this->usergroupRepository = $usergroupRepository;
@@ -115,15 +67,8 @@ abstract class AbstractNewsletterController extends ActionController
         $this->categoryRepository = $categoryRepository;
     }
 
-    /**
-     * Pass some important variables to all views
-     *
-     * @param ViewInterface $view
-     * @return void
-     */
-    public function initializeView(ViewInterface $view)
+    public function initializeView($view)
     {
-        parent::initializeView($view);
         $this->view->assignMultiple([
             'view' => [
                 'controller' => $this->getControllerName(),
@@ -132,11 +77,11 @@ abstract class AbstractNewsletterController extends ActionController
         ]);
     }
 
-    /**
-     * @return void
-     * @throws InvalidArgumentNameException
-     * @throws NoSuchArgumentException
-     */
+    public function initializeAction()
+    {
+        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+    }
+
     protected function setFilter(): void
     {
         $filterArgument = $this->arguments->getArgument('filter');
@@ -159,14 +104,9 @@ abstract class AbstractNewsletterController extends ActionController
         if (array_key_exists('category', $filter) && (is_array($filter['category']) || $filter['category'] === '')) {
             $filter['category'] = 0;
         }
-        $this->request->setArgument('filter', $filter);
+        $this->request = $this->request->withArgument('filter', $filter);
     }
 
-    /**
-     * @return void
-     * @throws NoSuchArgumentException
-     * @throws Exception
-     */
     protected function prepareArgumentsForPersistence(): void
     {
         if ($this->request->hasArgument('newsletter')) {
@@ -184,22 +124,10 @@ abstract class AbstractNewsletterController extends ActionController
                 unset($newsletter['category']);
             }
 
-            $this->request->setArgument('newsletter', $newsletter);
+            $this->request = $this->request->withArgument('newsletter', $newsletter);
         }
     }
 
-    /**
-     * @param Newsletter $newsletter
-     * @param int $language
-     * @return void
-     * @throws ApiConnectionException
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws InvalidConfigurationTypeException
-     * @throws InvalidUrlException
-     * @throws MisconfigurationException
-     * @throws SiteNotFoundException
-     */
     protected function setBodytextInNewsletter(Newsletter $newsletter, int $language): void
     {
         $parseService = GeneralUtility::makeInstance(
@@ -228,5 +156,40 @@ abstract class AbstractNewsletterController extends ActionController
     protected function getActionName(): string
     {
         return StringUtility::removeStringPostfix($this->actionMethodName, 'Action');
+    }
+
+    protected function defaultRendering(): ResponseInterface
+    {
+        $this->moduleTemplate->setContent($this->view->render());
+        return $this->htmlResponse($this->moduleTemplate->renderContent());
+    }
+
+    protected function addDocumentHeader(array $configuration): void
+    {
+        $this->addNavigationButtons($configuration);
+        $this->addShortcutButton();
+    }
+
+    protected function addNavigationButtons(array $configuration): void
+    {
+        $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
+        $navigationGroupButton = GeneralUtility::makeInstance(
+            NavigationGroupButton::class,
+            $this->request,
+            $this->getActionName(),
+            $configuration,
+        );
+        $buttonBar->addButton($navigationGroupButton, ButtonBar::BUTTON_POSITION_LEFT, 2);
+    }
+
+    protected function addShortcutButton(): void
+    {
+        $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
+        $shortCutButton = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar()->makeShortcutButton();
+        $shortCutButton
+            ->setRouteIdentifier('lux_Luxletter')
+            ->setDisplayName('Shortcut')
+            ->setArguments(['action' => $this->getActionName(), 'controller' => $this->getControllerName()]);
+        $buttonBar->addButton($shortCutButton, ButtonBar::BUTTON_POSITION_RIGHT, 1);
     }
 }

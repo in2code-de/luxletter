@@ -3,7 +3,6 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\User;
@@ -26,7 +25,7 @@ class UserRepository extends AbstractRepository
 
     /**
      * Get users grouped by email from groupIdentifiers
-     * We don't use `group by` any more because of the problems that came with "sql_mode=only_full_group_by"
+     * We don't use `group by` anymore because of the problems that came with "sql_mode=only_full_group_by"
      *
      * @param int[] $groupIdentifiers
      * @param int $language -1 = all, otherwise only the users with the specific language are selected
@@ -77,7 +76,6 @@ class UserRepository extends AbstractRepository
     /**
      * @param int[] $groupIdentifiers
      * @return int
-     * @throws DBALException
      * @throws Exception
      */
     public function getUserAmountFromGroups(array $groupIdentifiers): int
@@ -148,13 +146,13 @@ class UserRepository extends AbstractRepository
                     $query->like('title', '%' . $searchterm . '%'),
                     $query->like('company', '%' . $searchterm . '%'),
                 ];
-                $and[] = $query->logicalOr($or);
+                $and[] = $query->logicalOr(...$or);
             }
         }
         if ($filter->getUsergroup() !== null) {
             $and[] = $query->contains('usergroup', $filter->getUsergroup());
         }
-        $constraint = $query->logicalAnd($and);
+        $constraint = $query->logicalAnd(...$and);
         $query->matching($constraint);
 
         $query->setLimit(1000);

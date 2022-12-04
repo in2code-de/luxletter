@@ -13,6 +13,11 @@ call_user_func(
             \TYPO3\CMS\Core\Imaging\IconRegistry::class
         );
         $iconRegistry->registerIcon(
+            'extension-lux',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:luxletter/Resources/Public/Icons/lux.svg']
+        );
+        $iconRegistry->registerIcon(
             'extension-luxletter',
             \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
             ['source' => 'EXT:luxletter/Resources/Public/Icons/Extension.svg']
@@ -21,6 +26,16 @@ call_user_func(
             'extension-lux-module',
             \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
             ['source' => 'EXT:luxletter/Resources/Public/Icons/lux_white.svg']
+        );
+        $iconRegistry->registerIcon(
+            'extension-luxletter-module',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:luxletter/Resources/Public/Icons/lux_module_newsletter.svg']
+        );
+        $iconRegistry->registerIcon(
+            'extension-luxletter-star',
+            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+            ['source' => 'EXT:luxletter/Resources/Public/Icons/star.svg']
         );
         $iconRegistry->registerIcon(
             'teaser',
@@ -53,6 +68,7 @@ call_user_func(
          */
         // Add Main module "LUX" - shared with EXT:lux and EXT:luxenterprise (if installed)
         // Acces to a main module is implicit, as soon as a user has access to at least one of its submodules.
+        // Todo: Can be removed, if TYPO3 11 support is dropped
         if (empty($GLOBALS['TBE_MODULES']['lux'])) {
             \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModule(
                 'lux',
@@ -67,6 +83,7 @@ call_user_func(
             );
         }
         // Add module for analysis
+        // Todo: Can be removed, if TYPO3 11 support is dropped
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
             'Luxletter',
             'lux',

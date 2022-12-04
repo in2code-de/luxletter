@@ -32,7 +32,7 @@ class User extends AbstractEntity
     protected string $country = '';
     protected string $www = '';
     protected string $company = '';
-    protected ?DateTime $lastlogin;
+    protected ?DateTime $lastlogin = null;
     protected ?DateTime $crdate = null;
     protected int $luxletterLanguage = 0;
 
@@ -91,13 +91,13 @@ class User extends AbstractEntity
         return $this;
     }
 
-    public function addUsergroup(UserGroup $usergroup): self
+    public function addUsergroup(Usergroup $usergroup): self
     {
         $this->usergroup->attach($usergroup);
         return $this;
     }
 
-    public function removeUsergroup(UserGroup $usergroup): self
+    public function removeUsergroup(Usergroup $usergroup): self
     {
         $this->usergroup->detach($usergroup);
         return $this;

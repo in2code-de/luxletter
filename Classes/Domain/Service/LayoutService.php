@@ -15,9 +15,6 @@ use Throwable;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 
-/**
- * LayoutService
- */
 class LayoutService
 {
     /**

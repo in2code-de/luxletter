@@ -19,51 +19,39 @@ use In2code\Luxletter\Exception\MissingRelationException;
 use In2code\Luxletter\Exception\UserValuesAreMissingException;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
+use TYPO3\CMS\Backend\Template\ModuleTemplate;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Object\Exception as ExceptionExtbaseObject;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
-/**
- * Class FrontendController
- */
 class FrontendController extends ActionController
 {
-    /**
-     * @var UserRepository
-     */
-    protected $userRepository = null;
+    protected ?UserRepository $userRepository;
+    protected UsergroupRepository $usergroupRepository;
+    protected LogService $logService;
+    protected ModuleTemplateFactory $moduleTemplateFactory;
+    protected ModuleTemplate $moduleTemplate;
 
-    /**
-     * @var UsergroupRepository
-     */
-    protected $usergroupRepository = null;
-
-    /**
-     * @var LogService
-     */
-    protected $logService = null;
-
-    /**
-     * @param UserRepository $userRepository
-     * @param UsergroupRepository $usergroupRepository
-     * @param LogService $logService
-     */
     public function __construct(
         UserRepository $userRepository,
         UsergroupRepository $usergroupRepository,
-        LogService $logService
+        LogService $logService,
+        ModuleTemplateFactory $moduleTemplateFactory
     ) {
         $this->userRepository = $userRepository;
         $this->usergroupRepository = $usergroupRepository;
         $this->logService = $logService;
+        $this->moduleTemplateFactory = $moduleTemplateFactory;
     }
 
-    /**
-     * @return void
-     * @throws AuthenticationFailedException
-     */
+    public function initializeAction()
+    {
+        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+    }
+
     public function initializePreviewAction(): void
     {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
@@ -71,23 +59,19 @@ class FrontendController extends ActionController
         }
     }
 
-    /**
-     * @param string $origin URL or page identifier
-     * @param string $layout Container HTML template filename
-     * @param int $language
-     * @return string
-     */
-    public function previewAction(string $origin, string $layout, int $language = 0): string
+    public function previewAction(string $origin, string $layout, int $language = 0): ResponseInterface
     {
         try {
             $siteService = GeneralUtility::makeInstance(SiteService::class);
             $urlService = GeneralUtility::makeInstance(NewsletterUrl::class, $origin, $layout, $language)
                 ->setModePreview();
-            return $urlService->getParsedContent($siteService->getSite());
+            $content = $urlService->getParsedContent($siteService->getSite());
         } catch (Exception $exception) {
-            return 'Error: Origin ' . htmlspecialchars($origin) . ' could not be converted into a valid url!<br>'
+            $content = 'Error: Origin ' . htmlspecialchars($origin) . ' could not be converted into a valid url!<br>'
                 . 'Reason: ' . $exception->getMessage() . ' (' . $exception->getCode() . ')';
         }
+
+        return $this->htmlResponse($content);
     }
 
     /**
@@ -95,16 +79,17 @@ class FrontendController extends ActionController
      *
      * @param Newsletter|null $newsletter
      * @param User|null $user
-     * @return string
+     * @return ResponseInterface
      * @throws IllegalObjectTypeException
      * @throws ExceptionDbalDriver
      */
-    public function trackingPixelAction(Newsletter $newsletter = null, User $user = null): string
+    public function trackingPixelAction(Newsletter $newsletter = null, User $user = null): ResponseInterface
     {
         if ($newsletter !== null && $user !== null) {
             $this->logService->logNewsletterOpening($newsletter, $user);
         }
-        return base64_decode('R0lGODlhAQABAJAAAP8AAAAAACH5BAUQAAAALAAAAAABAAEAAAICBAEAOw==');
+        $content = base64_decode('R0lGODlhAQABAJAAAP8AAAAAACH5BAUQAAAALAAAAAABAAEAAAICBAEAOw==');
+        return $this->htmlResponse($content);
     }
 
     /**
@@ -113,12 +98,15 @@ class FrontendController extends ActionController
      * @param User|null $user
      * @param Newsletter|null $newsletter
      * @param string $hash
-     * @return void
+     * @return ResponseInterface
      */
-    public function unsubscribeAction(User $user = null, Newsletter $newsletter = null, string $hash = ''): void
-    {
+    public function unsubscribeAction(
+        User $user = null,
+        Newsletter $newsletter = null,
+        string $hash = ''
+    ): ResponseInterface {
         try {
-            $this->checkArgumentsForUnsubscribeAction($user, $newsletter, $hash);
+            $this->checkArgumentsForUnsubscribe($user, $newsletter, $hash);
             foreach ($newsletter->getReceivers() as $group) {
                 $user->removeUsergroup($group);
             }
@@ -136,6 +124,9 @@ class FrontendController extends ActionController
             $message = LocalizationUtility::translate($languageKey);
             $this->addFlashMessage(($languageKey !== $message) ? $message : $exception->getMessage());
         }
+
+        $this->moduleTemplate->setContent($this->view->render());
+        return $this->htmlResponse($this->moduleTemplate->renderContent());
     }
 
     /**
@@ -145,12 +136,11 @@ class FrontendController extends ActionController
      * @return void
      * @throws ArgumentMissingException
      * @throws AuthenticationFailedException
-     * @throws ExceptionExtbaseObject
      * @throws MissingRelationException
      * @throws UserValuesAreMissingException
      * @throws MisconfigurationException
      */
-    protected function checkArgumentsForUnsubscribeAction(
+    protected function checkArgumentsForUnsubscribe(
         User $user = null,
         Newsletter $newsletter = null,
         string $hash = ''
@@ -176,7 +166,7 @@ class FrontendController extends ActionController
      * @return void
      * @throws MissingRelationException
      */
-    protected function checkForUsergroups(User $user = null, Newsletter $newsletter = null)
+    protected function checkForUsergroups(User $user = null, Newsletter $newsletter = null): void
     {
         $match = false;
         foreach ($newsletter->getReceivers() as $group) {

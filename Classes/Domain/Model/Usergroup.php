@@ -15,8 +15,12 @@ class Usergroup extends AbstractEntity
 
     protected string $title = '';
     protected string $description = '';
-    protected ObjectStorage $subgroup;
     protected bool $luxletterReceiver = false;
+
+    /**
+     * @var ObjectStorage<Usergroup>
+     */
+    protected ObjectStorage $subgroup;
 
     public function __construct(string $title = '')
     {
@@ -52,13 +56,13 @@ class Usergroup extends AbstractEntity
         return $this;
     }
 
-    public function addSubgroup(UserGroup $subgroup): self
+    public function addSubgroup(Usergroup $subgroup): self
     {
         $this->subgroup->attach($subgroup);
         return $this;
     }
 
-    public function removeSubgroup(UserGroup $subgroup): self
+    public function removeSubgroup(Usergroup $subgroup): self
     {
         $this->subgroup->detach($subgroup);
         return $this;

@@ -3,9 +3,6 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
-use Doctrine\DBAL\Exception as ExceptionDbal;
 use In2code\Lux\Domain\Repository\VisitorRepository;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Newsletter;
@@ -14,10 +11,7 @@ use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\PreviewUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
-use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
-use In2code\Luxletter\Exception\InvalidUrlException;
-use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Mail\TestMail;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\ConfigurationUtility;
@@ -25,32 +19,12 @@ use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentNameException;
-use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
-use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
-use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
-use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
-use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
-/**
- * Class NewsletterController
- */
 class NewsletterController extends AbstractNewsletterController
 {
-    /**
-     * @return void
-     * @throws DBALException
-     * @throws ExceptionDbalDriver
-     * @throws ExceptionDbal
-     * @noinspection PhpUnused
-     */
-    public function dashboardAction(): void
+    public function dashboardAction(): ResponseInterface
     {
         $this->view->assignMultiple(
             [
@@ -69,24 +43,17 @@ class NewsletterController extends AbstractNewsletterController
                 'newsletters' => $this->newsletterRepository->findAll()->getQuery()->setLimit(10)->execute(),
             ]
         );
+
+        $this->addDocumentHeaderForNewsletterController();
+        return $this->defaultRendering();
     }
 
-    /**
-     * @return void
-     * @throws InvalidArgumentNameException
-     * @throws NoSuchArgumentException
-     */
     public function initializeListAction(): void
     {
         $this->setFilter();
     }
 
-    /**
-     * @param Filter $filter
-     * @return void
-     * @throws InvalidQueryException
-     */
-    public function listAction(Filter $filter): void
+    public function listAction(Filter $filter): ResponseInterface
     {
         $this->view->assignMultiple([
             'newsletters' => $this->newsletterRepository->findAll(),
@@ -95,27 +62,18 @@ class NewsletterController extends AbstractNewsletterController
             'categories' => $this->categoryRepository->findAllLuxletterCategories(),
             'filter' => $filter,
         ]);
+
+        $this->addDocumentHeaderForNewsletterController();
+        return $this->defaultRendering();
     }
 
-    /**
-     * @param string $redirectAction
-     * @return void
-     * @throws StopActionException
-     */
-    public function resetFilterAction(string $redirectAction): void
+    public function resetFilterAction(string $redirectAction): ResponseInterface
     {
         BackendUserUtility::saveValueToSession('filter', $redirectAction, $this->getControllerName(), []);
-        $this->redirect($redirectAction);
+        return $this->redirect($redirectAction);
     }
 
-    /**
-     * @param Newsletter $newsletter
-     * @return void
-     * @throws ExceptionDbalDriver
-     * @throws InvalidConfigurationTypeException
-     * @throws DBALException
-     */
-    public function editAction(Newsletter $newsletter): void
+    public function editAction(Newsletter $newsletter): ResponseInterface
     {
         $this->view->assignMultiple([
             'newsletter' => $newsletter,
@@ -125,34 +83,17 @@ class NewsletterController extends AbstractNewsletterController
             'categories' => $this->categoryRepository->findAllLuxletterCategories(),
             'usergroups' => $this->usergroupRepository->getReceiverGroups(),
         ]);
+
+        $this->addDocumentHeaderForNewsletterController();
+        return $this->defaultRendering();
     }
 
-    /**
-     * @return void
-     * @throws NoSuchArgumentException
-     * @noinspection PhpUnused
-     */
     public function initializeUpdateAction(): void
     {
         $this->prepareArgumentsForPersistence();
     }
 
-    /**
-     * @param Newsletter $newsletter
-     * @return void
-     * @throws ApiConnectionException
-     * @throws ExceptionDbalDriver
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws IllegalObjectTypeException
-     * @throws InvalidConfigurationTypeException
-     * @throws InvalidUrlException
-     * @throws MisconfigurationException
-     * @throws SiteNotFoundException
-     * @throws StopActionException
-     * @throws UnknownObjectException
-     */
-    public function updateAction(Newsletter $newsletter): void
+    public function updateAction(Newsletter $newsletter): ResponseInterface
     {
         $this->setBodytextInNewsletter($newsletter, $newsletter->getLanguage());
         if (ConfigurationUtility::isMultiLanguageModeActivated()) {
@@ -166,17 +107,10 @@ class NewsletterController extends AbstractNewsletterController
         $this->newsletterRepository->update($newsletter);
         $this->newsletterRepository->persistAll();
         $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.update.message'));
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
-    /**
-     * @return void
-     * @throws InvalidConfigurationTypeException
-     * @throws ExceptionDbalDriver
-     * @throws DBALException
-     * @noinspection PhpUnused
-     */
-    public function newAction(): void
+    public function newAction(): ResponseInterface
     {
         $this->view->assignMultiple([
             'configurations' => $this->configurationRepository->findAll(),
@@ -185,33 +119,17 @@ class NewsletterController extends AbstractNewsletterController
             'categories' => $this->categoryRepository->findAllLuxletterCategories(),
             'usergroups' => $this->usergroupRepository->getReceiverGroups(),
         ]);
+
+        $this->addDocumentHeaderForNewsletterController();
+        return $this->defaultRendering();
     }
 
-    /**
-     * @return void
-     * @throws NoSuchArgumentException
-     * @noinspection PhpUnused
-     */
     public function initializeCreateAction(): void
     {
         $this->prepareArgumentsForPersistence();
     }
 
-    /**
-     * @param Newsletter $newsletter
-     * @return void
-     * @throws ApiConnectionException
-     * @throws ExceptionDbalDriver
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws IllegalObjectTypeException
-     * @throws InvalidConfigurationTypeException
-     * @throws InvalidUrlException
-     * @throws MisconfigurationException
-     * @throws SiteNotFoundException
-     * @throws StopActionException
-     */
-    public function createAction(Newsletter $newsletter): void
+    public function createAction(Newsletter $newsletter): ResponseInterface
     {
         $languages = $this->pageRepository->getLanguagesFromOrigin($newsletter->getOrigin());
         foreach ($languages as $language) {
@@ -232,73 +150,36 @@ class NewsletterController extends AbstractNewsletterController
             $queueService->addMailReceiversToQueue($newsletterLanguage, $language);
         }
         $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.create.message'));
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
-    /**
-     * @param Newsletter $newsletter
-     * @return void
-     * @throws IllegalObjectTypeException
-     * @throws StopActionException
-     * @throws UnknownObjectException
-     */
-    public function disableAction(Newsletter $newsletter): void
+    public function disableAction(Newsletter $newsletter): ResponseInterface
     {
         $newsletter->disable();
         $this->newsletterRepository->update($newsletter);
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
-    /**
-     * @param Newsletter $newsletter
-     * @return void
-     * @throws IllegalObjectTypeException
-     * @throws StopActionException
-     * @throws UnknownObjectException
-     * @noinspection PhpUnused
-     */
-    public function enableAction(Newsletter $newsletter): void
+    public function enableAction(Newsletter $newsletter): ResponseInterface
     {
         $newsletter->enable();
         $this->newsletterRepository->update($newsletter);
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
-    /**
-     * @param Newsletter $newsletter
-     * @return void
-     * @throws IllegalObjectTypeException
-     * @throws StopActionException
-     * @throws DBALException
-     */
-    public function deleteAction(Newsletter $newsletter): void
+    public function deleteAction(Newsletter $newsletter): ResponseInterface
     {
         $this->newsletterRepository->removeNewsletterAndQueues($newsletter);
         $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.delete.message'));
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
-    /**
-     * Always pass a filter to receiverAction. If filter is given, save in session.
-     *
-     * @return void
-     * @throws NoSuchArgumentException
-     * @throws InvalidArgumentNameException
-     */
     public function initializeReceiverAction(): void
     {
         $this->setFilter();
     }
 
-    /**
-     * @param Filter $filter
-     * @return void
-     * @throws DBALException
-     * @throws ExceptionDbalDriver
-     * @throws InvalidQueryException
-     * @noinspection PhpUnused
-     */
-    public function receiverAction(Filter $filter): void
+    public function receiverAction(Filter $filter): ResponseInterface
     {
         $receiverAnalysisService = GeneralUtility::makeInstance(ReceiverAnalysisService::class);
         $users = $this->userRepository->getUsersByFilter($filter);
@@ -310,15 +191,12 @@ class NewsletterController extends AbstractNewsletterController
                 'usergroups' => $this->usergroupRepository->getReceiverGroups(),
             ]
         );
+
+        $this->addDocumentHeaderForNewsletterController();
+        $this->moduleTemplate->setContent($this->view->render());
+        return $this->htmlResponse($this->moduleTemplate->renderContent());
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return ResponseInterface
-     * @throws DBALException
-     * @throws ExceptionDbalDriver
-     * @noinspection PhpUnused
-     */
     public function wizardUserPreviewAjax(ServerRequestInterface $request): ResponseInterface
     {
         $usergroups = GeneralUtility::intExplode(',', $request->getQueryParams()['usergroups'], true);
@@ -336,19 +214,6 @@ class NewsletterController extends AbstractNewsletterController
         return $response;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return ResponseInterface
-     * @throws ApiConnectionException
-     * @throws AuthenticationFailedException
-     * @throws ExceptionDbalDriver
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws InvalidConfigurationTypeException
-     * @throws InvalidUrlException
-     * @throws MisconfigurationException
-     * @noinspection PhpUnused
-     */
     public function testMailAjax(ServerRequestInterface $request): ResponseInterface
     {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
@@ -367,17 +232,6 @@ class NewsletterController extends AbstractNewsletterController
         return $response;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return ResponseInterface
-     * @throws AuthenticationFailedException
-     * @throws ExceptionDbalDriver
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws MisconfigurationException
-     * @throws InvalidConfigurationTypeException
-     * @noinspection PhpUnused
-     */
     public function previewSourcesAjax(ServerRequestInterface $request): ResponseInterface
     {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
@@ -390,11 +244,6 @@ class NewsletterController extends AbstractNewsletterController
         return $response;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return ResponseInterface
-     * @noinspection PhpUnused
-     */
     public function receiverDetailAjax(ServerRequestInterface $request): ResponseInterface
     {
         $userRepository = GeneralUtility::makeInstance(UserRepository::class);
@@ -413,5 +262,17 @@ class NewsletterController extends AbstractNewsletterController
             ['html' => $standaloneView->render()]
         ));
         return $response;
+    }
+
+    protected function addDocumentHeaderForNewsletterController(): void
+    {
+        $menuConfiguration = [
+            'dashboard' => LocalizationUtility::translate('layout.backend.link.actiondashboard'),
+            'list' => LocalizationUtility::translate('layout.backend.link.actionnewsletter'),
+        ];
+        if (ConfigurationUtility::isReceiverActionActivated()) {
+            $menuConfiguration['receiver'] = LocalizationUtility::translate('layout.backend.link.actionreceiver');
+        }
+        $this->addDocumentHeader($menuConfiguration);
     }
 }

@@ -42,5 +42,19 @@ call_user_func(
          */
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['luxletterReceiversUpdateWizard']
             = \In2code\Luxletter\Update\LuxletterReceiversUpdateWizard::class;
+
+        /**
+         * Add TypoScript automatically (to use it in backend modules)
+         */
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
+            'Luxletter',
+            'setup',
+            '@import "EXT:luxletter/Configuration/TypoScript/Basic/setup.typoscript"'
+        );
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
+            'Luxletter',
+            'constants',
+            '@import "EXT:luxletter/Configuration/TypoScript/Basic/constants.typoscript"'
+        );
     }
 );

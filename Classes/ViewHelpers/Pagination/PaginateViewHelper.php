@@ -110,8 +110,8 @@ class PaginateViewHelper extends AbstractViewHelper
      */
     protected static function getPageNumber(array $arguments, RenderingContextInterface $renderingContext): int
     {
-        $extensionName = $renderingContext->getControllerContext()->getRequest()->getControllerExtensionName();
-        $pluginName = $renderingContext->getControllerContext()->getRequest()->getPluginName();
+        $extensionName = $renderingContext->getRequest()->getControllerExtensionName();
+        $pluginName = $renderingContext->getRequest()->getPluginName();
         $extensionService = GeneralUtility::makeInstance(ExtensionService::class);
         $pluginNamespace = $extensionService->getPluginNamespace($extensionName, $pluginName);
         $variables = GeneralUtility::_GP($pluginNamespace);
