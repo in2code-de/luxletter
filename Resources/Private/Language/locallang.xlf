@@ -369,7 +369,7 @@
 				<source>Send</source>
 			</trans-unit>
 			<trans-unit id="date">
-				<source><![CDATA[%Y-%m-%d, %H:%M]]></source>
+				<source>%Y-%m-%d, %H:%M</source>
 			</trans-unit>
 			<trans-unit id="deleteconfirm">
 				<source>Are you sure to delete this record?</source>
