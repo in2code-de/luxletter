@@ -104,7 +104,7 @@ call_user_func(
          * Add static page TSconfig
          */
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-            '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:luxletter/Configuration/PageTSConfig/ContentElements.typoscript">'
+            '@import "EXT:luxletter/Configuration/PageTSConfig/ContentElements.typoscript"'
         );
 
         /**
