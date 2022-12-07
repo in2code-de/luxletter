@@ -31,19 +31,27 @@ class UserRepository extends AbstractRepository
             return [];
         }
 
-        $lll = '';
+        $query = $this->createQuery();
+
+        $constraints = [];
+
         if ($language !== -1) {
-            $lll = ' and luxletter_language in (-1,' . (int)$language . ') ';
+            $constraints[] = $query->equals('luxletter_language', (int)$language);
         }
-        /** @noinspection SqlDialectInspection */
-        $sql = 'select * from ' . User::TABLE_NAME;
-        $sql .= $this->getUserByGroupsWhereClause($groupIdentifiers, $lll);
-        if ($limit > 0) {
-            $sql .= ' limit ' . ($limit * 10);
+        $subConstraints = [];
+        foreach ($groupIdentifiers as $identifier) {
+            $subConstraints[] = $query->contains('usergroup', $identifier);
         }
 
-        $query = $this->createQuery();
-        $users = $query->statement($sql)->execute()->toArray();
+        $constraints[] = $query->logicalOr($subConstraints);
+        $constraints[] = $query->equals('deleted', 0);
+        $constraints[] = $query->equals('disable', 0);
+        $constraints[] = $query->like('email', '%@%');
+        if ($limit > 0) {
+            $query->setLimit($limit * 10);
+        }
+        $query->matching($query->logicalAnd($constraints));
+        $users = $query->execute()->toArray();
         return $this->groupResultByEmail($users, $limit);
     }
 
@@ -67,23 +75,17 @@ class UserRepository extends AbstractRepository
             $connection = DatabaseUtility::getConnectionForTable(User::TABLE_NAME);
             /** @noinspection SqlDialectInspection */
             $sql = 'select count(distinct email) from ' . User::TABLE_NAME;
-            $sql .= $this->getUserByGroupsWhereClause($groupIdentifiers);
+            $sub = '';
+            foreach ($groupIdentifiers as $identifier) {
+                if ($sub !== '') {
+                    $sub .= ' or ';
+                }
+                $sub .= 'find_in_set(' . (int)$identifier . ',usergroup)';
+            }
+            $sql .= ' where deleted=0 and disable=0 and email like "%@%" and (' . $sub . ')';
             return (int)$connection->executeQuery($sql)->fetchOne();
         }
         return 0;
-    }
-
-    protected function getUserByGroupsWhereClause(array $groupIdentifiers, string $addition = ''): string
-    {
-        $sub = '';
-        foreach ($groupIdentifiers as $identifier) {
-            if ($sub !== '') {
-                $sub .= ' or ';
-            }
-            $sub .= 'find_in_set(' . (int)$identifier . ',usergroup)';
-        }
-        return ' where deleted=0 and disable=0 and email like "%@%" and (' . $sub
-            . ')' . $addition;
     }
 
     /**
