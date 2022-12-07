@@ -122,9 +122,9 @@ class PreviewUrlService
     protected function getUrl(string $origin, string $layout, int $language = 0): string
     {
         $url = '//' . GeneralUtility::getIndpEnv('HTTP_HOST') . '?type=1560777975';
-        $url .= '&tx_luxletter_fe[origin]=' . htmlspecialchars($origin);
-        $url .= '&tx_luxletter_fe[layout]=' . htmlspecialchars($layout);
-        $url .= '&tx_luxletter_fe[language]=' . $language;
+        $url .= '&tx_luxletter_preview[origin]=' . htmlspecialchars($origin);
+        $url .= '&tx_luxletter_preview[layout]=' . htmlspecialchars($layout);
+        $url .= '&tx_luxletter_preview[language]=' . $language;
         return $url;
     }
 }

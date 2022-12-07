@@ -32,8 +32,8 @@ class FrontendController extends ActionController
     protected ?UserRepository $userRepository;
     protected UsergroupRepository $usergroupRepository;
     protected LogService $logService;
-    protected ModuleTemplateFactory $moduleTemplateFactory;
-    protected ModuleTemplate $moduleTemplate;
+    protected ?ModuleTemplateFactory $moduleTemplateFactory = null;
+    protected ?ModuleTemplate $moduleTemplate = null;
 
     public function __construct(
         UserRepository $userRepository,
@@ -49,7 +49,7 @@ class FrontendController extends ActionController
 
     public function initializeAction()
     {
-        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+//        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
     }
 
     public function initializePreviewAction(): void

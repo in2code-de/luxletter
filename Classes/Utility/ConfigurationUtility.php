@@ -28,7 +28,7 @@ class ConfigurationUtility
     {
         return ObjectUtility::getConfigurationManager()->getConfiguration(
             ConfigurationManagerInterface::CONFIGURATION_TYPE_FRAMEWORK,
-            'luxletter'
+            'luxletter',
         );
     }
 

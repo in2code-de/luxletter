@@ -12,12 +12,20 @@ call_user_func(
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'Luxletter',
             'Fe',
-            [
-                \In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe,preview,trackingPixel'
-            ],
-            [
-                \In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe,preview,trackingPixel'
-            ]
+            [\In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe'],
+            [\In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe'],
+        );
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'Luxletter',
+            'Preview',
+            [\In2code\Luxletter\Controller\FrontendController::class => 'preview'],
+            [\In2code\Luxletter\Controller\FrontendController::class => 'preview'],
+        );
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'Luxletter',
+            'TrackingPixel',
+            [\In2code\Luxletter\Controller\FrontendController::class => 'trackingPixel'],
+            [\In2code\Luxletter\Controller\FrontendController::class => 'trackingPixel'],
         );
 
         /**
