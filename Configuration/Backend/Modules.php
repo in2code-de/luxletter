@@ -1,4 +1,5 @@
 <?php
+
 return [
     'lux_module' => [
         'labels' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_mod.xlf',
