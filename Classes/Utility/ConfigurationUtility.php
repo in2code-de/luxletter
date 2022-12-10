@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Utility;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
+use LogicException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -38,7 +39,7 @@ class ConfigurationUtility
     public static function getCurrentDomain(): string
     {
         if (GeneralUtility::getIndpEnv('HTTP_HOST') === null) {
-            throw new \LogicException(__FUNCTION__ . ' must not be called from CLI context', 1622812071);
+            throw new LogicException(__FUNCTION__ . ' must not be called from CLI context', 1622812071);
         }
         $uri = parse_url(GeneralUtility::getIndpEnv('TYPO3_REQUEST_URL'), PHP_URL_SCHEME);
         $uri .= '://' . GeneralUtility::getIndpEnv('HTTP_HOST') . '/';
@@ -163,16 +164,6 @@ class ConfigurationUtility
     public static function isTypo3Version12(): bool
     {
         return self::isVersionToCompareSameOrLowerThenCurrentTypo3Version('11.5.99');
-    }
-
-    /**
-     * Todo: Can be removed if TYPO3 10 support is dropped
-     *
-     * @return bool
-     */
-    public static function isTypo3Version11(): bool
-    {
-        return self::isVersionToCompareSameOrLowerThenCurrentTypo3Version('10.4.99');
     }
 
     /**

@@ -17,16 +17,9 @@
                                 id="searchterm"
                                 class="form-control"
                                 placeholder="{f:translate(key:'module.newsletter.list.filter.search.placeholder')}" />
-                            <luxletter:condition.isTypo3Eleven>
-                                <f:then>
-                                    <label class="btn btn-default" for="searchterm">
-                                        <span class="fa fa-search"></span>
-                                    </label>
-                                </f:then>
-                                <f:else>
-                                    <label class="input-group-addon fa fa-search" for="searchterm"></label>
-                                </f:else>
-                            </luxletter:condition.isTypo3Eleven>
+                            <label class="btn btn-default" for="searchterm">
+                                <span class="fa fa-search"></span>
+                            </label>
                         </div>
                     </div>
 
@@ -44,16 +37,9 @@
                                 prependOptionLabel=""
                                 class="form-control form-select"
                                 id="categoryScoring"/>
-                            <luxletter:condition.isTypo3Eleven>
-                                <f:then>
-                                    <label class="btn btn-default" for="categoryScoring">
-                                        <span class="fa fa-tag"></span>
-                                    </label>
-                                </f:then>
-                                <f:else>
-                                    <label class="input-group-addon fa fa-tag" for="categoryScoring"></label>
-                                </f:else>
-                            </luxletter:condition.isTypo3Eleven>
+                            <label class="btn btn-default" for="categoryScoring">
+                                <span class="fa fa-tag"></span>
+                            </label>
                         </div>
                     </div>
 
@@ -67,16 +53,9 @@
                                 options="{filter.timeOptions}"
                                 class="form-control form-select"
                                 id="time"/>
-                            <luxletter:condition.isTypo3Eleven>
-                                <f:then>
-                                    <label class="btn btn-default" for="time">
-                                        <span class="fa fa-calendar"></span>
-                                    </label>
-                                </f:then>
-                                <f:else>
-                                    <label class="input-group-addon fa fa-calendar" for="time"></label>
-                                </f:else>
-                            </luxletter:condition.isTypo3Eleven>
+                            <label class="btn btn-default" for="time">
+                                <span class="fa fa-calendar"></span>
+                            </label>
                         </div>
                     </div>
 
