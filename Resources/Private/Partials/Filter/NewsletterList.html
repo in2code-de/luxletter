@@ -11,15 +11,18 @@
                         <h5><f:translate key="module.newsletter.list.filter.search.label">search</f:translate></h5>
 
                         <div class="input-group form-group">
+                            <label for="searchterm" class="hidden">
+                                <f:translate key="module.newsletter.list.filter.search.label">search</f:translate>
+                            </label>
                             <f:form.textfield
                                 type="input"
                                 property="searchterm"
                                 id="searchterm"
                                 class="form-control"
                                 placeholder="{f:translate(key:'module.newsletter.list.filter.search.placeholder')}" />
-                            <label class="btn btn-default" for="searchterm">
-                                <span class="fa fa-search"></span>
-                            </label>
+                            <button type="button" class="btn btn-default" data-global-event="click" data-action-focus="#searchterm">
+                                <core:icon identifier="actions-search" />
+                            </button>
                         </div>
                     </div>
 
@@ -28,6 +31,9 @@
                         <h5><f:translate key="module.newsletter.list.filter.category.label">Category</f:translate></h5>
 
                         <div class="input-group form-group">
+                            <label for="categoryScoring" class="hidden">
+                                <f:translate key="module.newsletter.list.filter.category.label">Category</f:translate>
+                            </label>
                             <f:form.select
                                 property="category"
                                 options="{categories}"
@@ -37,9 +43,9 @@
                                 prependOptionLabel=""
                                 class="form-control form-select"
                                 id="categoryScoring"/>
-                            <label class="btn btn-default" for="categoryScoring">
-                                <span class="fa fa-tag"></span>
-                            </label>
+                            <button type="button" class="btn btn-default" data-global-event="click" data-action-focus="#categoryScoring">
+                                <core:icon identifier="actions-tag" />
+                            </button>
                         </div>
                     </div>
 
@@ -48,14 +54,17 @@
                         <h5><f:translate key="module.newsletter.list.filter.time.label">Time</f:translate></h5>
 
                         <div class="input-group form-group">
+                            <label for="time" class="hidden">
+                                <f:translate key="module.newsletter.list.filter.time.label">Time</f:translate>
+                            </label>
                             <f:form.select
                                 property="time"
                                 options="{filter.timeOptions}"
                                 class="form-control form-select"
                                 id="time"/>
-                            <label class="btn btn-default" for="time">
-                                <span class="fa fa-calendar"></span>
-                            </label>
+                            <button type="button" class="btn btn-default" data-global-event="click" data-action-focus="#time">
+                                <core:icon identifier="actions-calendar-alternative" />
+                            </button>
                         </div>
                     </div>
 
@@ -63,14 +72,14 @@
                     <div class="col-md-3" style="flex-direction: initial;">
                         <f:comment>Clear filter</f:comment>
                         <f:if condition="{filter.set}">
-                            <f:link.action class="btn btn-default" style="flex: 50%; height: 32px; margin-top: auto; margin-right: 10px" action="resetFilter" arguments="{redirectAction:view.action}">
+                            <f:link.action class="btn btn-default" style="flex: 50%; height: 32px; margin-top: auto; margin-right: 10px; margin-bottom: 8px;" action="resetFilter" arguments="{redirectAction:view.action}">
                                 <f:translate key="module.newsletter.list.filter.reset">Reset</f:translate>
                             </f:link.action>
                         </f:if>
 
                         <f:comment>Submit filter</f:comment>
                         <f:form.submit
-                            style="flex: 50%; height: 32px; margin-top: auto;"
+                            style="flex: 50%; height: 32px; margin-top: auto; margin-bottom: 8px;"
                             class="btn btn-primary"
                             value="{f:translate(key:'module.newsletter.list.filter.submit')}" />
                     </div>
