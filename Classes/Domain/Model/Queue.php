@@ -6,121 +6,67 @@ namespace In2code\Luxletter\Domain\Model;
 use DateTime;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
-/**
- * Class Queue
- */
 class Queue extends AbstractEntity
 {
     const TABLE_NAME = 'tx_luxletter_domain_model_queue';
 
-    /**
-     * @var string
-     */
-    protected $email = '';
+    protected string $email = '';
 
-    /**
-     * @var Newsletter
-     */
-    protected $newsletter = null;
+    protected bool $sent = false;
 
-    /**
-     * @var User
-     */
-    protected $user = null;
+    protected ?DateTime $datetime = null;
+    protected ?Newsletter $newsletter = null;
+    protected ?User $user = null;
 
-    /**
-     * @var DateTime
-     */
-    protected $datetime = null;
-
-    /**
-     * @var bool
-     */
-    protected $sent = false;
-
-    /**
-     * @return string
-     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
-    /**
-     * @param string $email
-     * @return Queue
-     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
         return $this;
     }
 
-    /**
-     * @return Newsletter|null
-     */
     public function getNewsletter(): ?Newsletter
     {
         return $this->newsletter;
     }
 
-    /**
-     * @param Newsletter $newsletter
-     * @return Queue
-     */
     public function setNewsletter(Newsletter $newsletter): self
     {
         $this->newsletter = $newsletter;
         return $this;
     }
 
-    /**
-     * @return User|null
-     */
     public function getUser(): ?User
     {
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     * @return Queue
-     */
     public function setUser(User $user): self
     {
         $this->user = $user;
         return $this;
     }
 
-    /**
-     * @return DateTime|null
-     */
     public function getDatetime(): ?DateTime
     {
         return $this->datetime;
     }
 
-    /**
-     * @param DateTime $datetime
-     * @return Queue
-     */
     public function setDatetime(DateTime $datetime): self
     {
         $this->datetime = $datetime;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isSent(): bool
     {
         return $this->sent;
     }
 
-    /**
-     * @return Queue
-     */
     public function setSent(): self
     {
         $this->sent = true;

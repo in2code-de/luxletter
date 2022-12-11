@@ -7,7 +7,6 @@ use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\FrontendUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use LogicException;
-use Throwable;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;

@@ -3,7 +3,6 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
-use Doctrine\DBAL\Driver\Exception;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Utility\DatabaseUtility;

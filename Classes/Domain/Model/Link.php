@@ -4,101 +4,53 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Model;
 
 use In2code\Luxletter\Domain\Service\SiteService;
-use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\StringUtility;
-use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Object\Exception;
 
-/**
- * Class Link
- */
 class Link extends AbstractEntity
 {
     const TABLE_NAME = 'tx_luxletter_domain_model_link';
 
-    /**
-     * @var Newsletter
-     */
-    protected $newsletter = null;
+    protected string $hash = '';
+    protected string $target = '';
 
-    /**
-     * @var User
-     */
-    protected $user = null;
+    protected ?Newsletter $newsletter = null;
+    protected ?User $user = null;
 
-    /**
-     * @var string
-     */
-    protected $hash = '';
-
-    /**
-     * @var string
-     */
-    protected $target = '';
-
-    /**
-     * @return Newsletter
-     */
     public function getNewsletter(): ?Newsletter
     {
         return $this->newsletter;
     }
 
-    /**
-     * @param Newsletter $newsletter
-     * @return Link
-     */
     public function setNewsletter(Newsletter $newsletter): self
     {
         $this->newsletter = $newsletter;
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): ?User
     {
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     * @return Link
-     */
     public function setUser(User $user): self
     {
         $this->user = $user;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getHash(): string
     {
         return $this->hash;
     }
 
-    /**
-     * @param string $hash
-     * @return Link
-     */
     public function setHash(string $hash): self
     {
         $this->hash = $hash;
         return $this;
     }
 
-    /**
-     * Get hashed uri
-     *
-     * @return string
-     * @throws MisconfigurationException
-     * @throws SiteNotFoundException
-     */
     public function getUriFromHash(): string
     {
         $site = $this->getNewsletter()->getConfiguration()->getSiteConfiguration();
@@ -106,20 +58,11 @@ class Link extends AbstractEntity
         return $siteService->getFrontendUrlFromParameter(['luxletterlink' => $this->getHash()], $site);
     }
 
-    /**
-     * @return string
-     */
     public function getTarget(): string
     {
         return $this->target;
     }
 
-    /**
-     * @param string $target
-     * @return $this
-     * @throws Exception
-     * @throws MisconfigurationException
-     */
     public function setTarget(string $target): self
     {
         $this->target = $target;
@@ -127,12 +70,6 @@ class Link extends AbstractEntity
         return $this;
     }
 
-    /**
-     * @param string $target
-     * @return void
-     * @throws Exception
-     * @throws MisconfigurationException
-     */
     private function setHashFromTarget(string $target): void
     {
         if ($this->getHash() === '' && $this->getNewsletter() !== null && $this->getUser() !== null) {
@@ -140,12 +77,6 @@ class Link extends AbstractEntity
         }
     }
 
-    /**
-     * @param string $target
-     * @return string
-     * @throws MisconfigurationException
-     * @throws Exception
-     */
     private function getHashFromTarget(string $target): string
     {
         $parts = [

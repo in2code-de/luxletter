@@ -17,9 +17,6 @@ use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
-/**
- * Class User
- */
 class Newsletter extends AbstractEntity
 {
     const TABLE_NAME = 'tx_luxletter_domain_model_newsletter';

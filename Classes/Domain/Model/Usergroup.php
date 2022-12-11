@@ -6,9 +6,6 @@ namespace In2code\Luxletter\Domain\Model;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
-/**
- * Class Usergroup
- */
 class Usergroup extends AbstractEntity
 {
     const TABLE_NAME = 'fe_groups';
