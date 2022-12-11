@@ -23,14 +23,10 @@ use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
 use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
-/**
- * Class QueueCommand
- */
 class QueueCommand extends Command
 {
-    /**
-     * Configure the command by defining the name, options and arguments
-     */
+    use FakeRequestTrait;
+
     public function configure()
     {
         $this->setDescription('Send a bunch of emails from the queue.');
@@ -64,9 +60,11 @@ class QueueCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->fakeRequest();
+
         if (ConfigurationUtility::isContextFitting() === false) {
             $output->writeln('Wrong context for sending mails');
-            return 1;
+            return parent::FAILURE;
         }
 
         $progressQueue = GeneralUtility::makeInstance(ProgressQueue::class, $output);
@@ -79,6 +77,6 @@ class QueueCommand extends Command
         } else {
             $output->writeln('No mails in queue found');
         }
-        return 0;
+        return parent::SUCCESS;
     }
 }
