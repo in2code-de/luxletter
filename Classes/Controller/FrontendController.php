@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use Exception;
 use In2code\Luxletter\Domain\Model\Newsletter;
@@ -47,11 +48,6 @@ class FrontendController extends ActionController
         $this->moduleTemplateFactory = $moduleTemplateFactory;
     }
 
-    public function initializeAction()
-    {
-//        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
-    }
-
     public function initializePreviewAction(): void
     {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
@@ -82,6 +78,7 @@ class FrontendController extends ActionController
      * @return ResponseInterface
      * @throws IllegalObjectTypeException
      * @throws ExceptionDbalDriver
+     * @throws DBALException
      */
     public function trackingPixelAction(Newsletter $newsletter = null, User $user = null): ResponseInterface
     {
@@ -124,9 +121,7 @@ class FrontendController extends ActionController
             $message = LocalizationUtility::translate($languageKey);
             $this->addFlashMessage(($languageKey !== $message) ? $message : $exception->getMessage());
         }
-
-        $this->moduleTemplate->setContent($this->view->render());
-        return $this->htmlResponse($this->moduleTemplate->renderContent());
+        return $this->htmlResponse();
     }
 
     /**
