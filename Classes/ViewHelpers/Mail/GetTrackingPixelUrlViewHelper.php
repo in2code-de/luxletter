@@ -11,15 +11,8 @@ use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
-/**
- * Class GetTrackingPixelUrlViewHelper
- * @noinspection PhpUnused
- */
 class GetTrackingPixelUrlViewHelper extends AbstractViewHelper
 {
-    /**
-     * @return void
-     */
     public function initializeArguments(): void
     {
         parent::initializeArguments();
@@ -36,8 +29,8 @@ class GetTrackingPixelUrlViewHelper extends AbstractViewHelper
     {
         $url = $this->getDomainPrefix();
         $url .= '?type=1561894816';
-        $url .= '&tx_luxletter_fe[user]=' . $this->getUserIdentifier();
-        $url .= '&tx_luxletter_fe[newsletter]=' . $this->getNewsletterIdentifier();
+        $url .= '&tx_luxletter_trackingpixel[user]=' . $this->getUserIdentifier();
+        $url .= '&tx_luxletter_trackingpixel[newsletter]=' . $this->getNewsletterIdentifier();
         return $url;
     }
 
@@ -53,9 +46,6 @@ class GetTrackingPixelUrlViewHelper extends AbstractViewHelper
         return $siteService->getDomainFromSite($site);
     }
 
-    /**
-     * @return int
-     */
     protected function getUserIdentifier(): int
     {
         /** @var User $user */
@@ -66,9 +56,6 @@ class GetTrackingPixelUrlViewHelper extends AbstractViewHelper
         return 0;
     }
 
-    /**
-     * @return int
-     */
     protected function getNewsletterIdentifier(): int
     {
         /** @var Newsletter $newsletter */

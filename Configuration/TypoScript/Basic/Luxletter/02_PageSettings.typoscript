@@ -38,7 +38,7 @@ luxletterTrackingPixel {
   10 {
     userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
     extensionName = Luxletter
-    pluginName = Fe
+    pluginName = TrackingPixel
     vendorName = In2code
     controller = Frontend
     action = trackingPixel
