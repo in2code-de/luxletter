@@ -11,14 +11,8 @@ use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
-/**
- * Class UserRepository
- */
 class UserRepository extends AbstractRepository
 {
-    /**
-     * @var array
-     */
     protected $defaultOrderings = [
         'lastName' => QueryInterface::ORDER_ASCENDING,
     ];
@@ -40,7 +34,7 @@ class UserRepository extends AbstractRepository
 
         $lll = '';
         if ($language !== -1) {
-            $lll = ' and luxletter_language=' . (int)$language . ' ';
+            $lll = ' and luxletter_language in (-1,' . (int)$language . ') ';
         }
         /** @noinspection SqlDialectInspection */
         $sql = 'select * from ' . User::TABLE_NAME;
@@ -54,11 +48,6 @@ class UserRepository extends AbstractRepository
         return $this->groupResultByEmail($users, $limit);
     }
 
-    /**
-     * @param array $users
-     * @param int $limit
-     * @return array
-     */
     protected function groupResultByEmail(array $users, int $limit): array
     {
         $result = [];
@@ -73,11 +62,6 @@ class UserRepository extends AbstractRepository
         return $result;
     }
 
-    /**
-     * @param int[] $groupIdentifiers
-     * @return int
-     * @throws Exception
-     */
     public function getUserAmountFromGroups(array $groupIdentifiers): int
     {
         if ($groupIdentifiers !== []) {
@@ -90,11 +74,6 @@ class UserRepository extends AbstractRepository
         return 0;
     }
 
-    /**
-     * @param int[] $groupIdentifiers
-     * @param string $addition
-     * @return string
-     */
     protected function getUserByGroupsWhereClause(array $groupIdentifiers, string $addition = ''): string
     {
         $sub = '';
@@ -122,12 +101,6 @@ class UserRepository extends AbstractRepository
         return $query->execute();
     }
 
-    /**
-     * @param Filter $filter
-     * @param QueryInterface $query
-     * @return void
-     * @throws InvalidQueryException
-     */
     protected function buildQueryForFilter(Filter $filter, QueryInterface $query): void
     {
         $and = [

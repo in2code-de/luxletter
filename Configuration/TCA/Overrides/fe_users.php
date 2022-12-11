@@ -1,6 +1,5 @@
 <?php
 
-use In2code\Luxletter\Domain\Repository\LanguageRepository;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 call_user_func(
@@ -16,13 +15,7 @@ call_user_func(
                 'exclude' => true,
                 'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:fe_groups.luxletter_language',
                 'config' => [
-                    'type' => 'select',
-                    'renderType' => 'selectSingle',
-                    'items' => [
-                        ['Standard', 0],
-                    ],
-                    'foreign_table' => LanguageRepository::TABLE_NAME,
-                    'default' => 0,
+                    'type' => 'language',
                 ],
             ],
         ];
