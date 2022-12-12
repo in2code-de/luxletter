@@ -3,8 +3,6 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\Exception;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Utility\DatabaseUtility;
@@ -12,21 +10,15 @@ use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
-/**
- * Class UserRepository
- */
 class UserRepository extends AbstractRepository
 {
-    /**
-     * @var array
-     */
     protected $defaultOrderings = [
         'lastName' => QueryInterface::ORDER_ASCENDING,
     ];
 
     /**
      * Get users grouped by email from groupIdentifiers
-     * We don't use `group by` any more because of the problems that came with "sql_mode=only_full_group_by"
+     * We don't use `group by` anymore because of the problems that came with "sql_mode=only_full_group_by"
      *
      * @param int[] $groupIdentifiers
      * @param int $language -1 = all, otherwise only the users with the specific language are selected
@@ -41,7 +33,7 @@ class UserRepository extends AbstractRepository
 
         $lll = '';
         if ($language !== -1) {
-            $lll = ' and luxletter_language=' . (int)$language . ' ';
+            $lll = ' and luxletter_language in (-1,' . (int)$language . ') ';
         }
         /** @noinspection SqlDialectInspection */
         $sql = 'select * from ' . User::TABLE_NAME;
@@ -55,11 +47,6 @@ class UserRepository extends AbstractRepository
         return $this->groupResultByEmail($users, $limit);
     }
 
-    /**
-     * @param array $users
-     * @param int $limit
-     * @return array
-     */
     protected function groupResultByEmail(array $users, int $limit): array
     {
         $result = [];
@@ -74,12 +61,6 @@ class UserRepository extends AbstractRepository
         return $result;
     }
 
-    /**
-     * @param int[] $groupIdentifiers
-     * @return int
-     * @throws DBALException
-     * @throws Exception
-     */
     public function getUserAmountFromGroups(array $groupIdentifiers): int
     {
         if ($groupIdentifiers !== []) {
@@ -92,11 +73,6 @@ class UserRepository extends AbstractRepository
         return 0;
     }
 
-    /**
-     * @param int[] $groupIdentifiers
-     * @param string $addition
-     * @return string
-     */
     protected function getUserByGroupsWhereClause(array $groupIdentifiers, string $addition = ''): string
     {
         $sub = '';
@@ -124,12 +100,6 @@ class UserRepository extends AbstractRepository
         return $query->execute();
     }
 
-    /**
-     * @param Filter $filter
-     * @param QueryInterface $query
-     * @return void
-     * @throws InvalidQueryException
-     */
     protected function buildQueryForFilter(Filter $filter, QueryInterface $query): void
     {
         $and = [
@@ -148,13 +118,13 @@ class UserRepository extends AbstractRepository
                     $query->like('title', '%' . $searchterm . '%'),
                     $query->like('company', '%' . $searchterm . '%'),
                 ];
-                $and[] = $query->logicalOr($or);
+                $and[] = $query->logicalOr(...$or);
             }
         }
         if ($filter->getUsergroup() !== null) {
             $and[] = $query->contains('usergroup', $filter->getUsergroup());
         }
-        $constraint = $query->logicalAnd($and);
+        $constraint = $query->logicalAnd(...$and);
         $query->matching($constraint);
 
         $query->setLimit(1000);

@@ -12,12 +12,20 @@ call_user_func(
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'Luxletter',
             'Fe',
-            [
-                \In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe,preview,trackingPixel'
-            ],
-            [
-                \In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe,preview,trackingPixel'
-            ]
+            [\In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe'],
+            [\In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe'],
+        );
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'Luxletter',
+            'Preview',
+            [\In2code\Luxletter\Controller\FrontendController::class => 'preview'],
+            [\In2code\Luxletter\Controller\FrontendController::class => 'preview'],
+        );
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'Luxletter',
+            'TrackingPixel',
+            [\In2code\Luxletter\Controller\FrontendController::class => 'trackingPixel'],
+            [\In2code\Luxletter\Controller\FrontendController::class => 'trackingPixel'],
         );
 
         /**
@@ -42,5 +50,19 @@ call_user_func(
          */
         $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['luxletterReceiversUpdateWizard']
             = \In2code\Luxletter\Update\LuxletterReceiversUpdateWizard::class;
+
+        /**
+         * Add TypoScript automatically (to use it in backend modules)
+         */
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
+            'Luxletter',
+            'setup',
+            '@import "EXT:luxletter/Configuration/TypoScript/Basic/setup.typoscript"'
+        );
+        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
+            'Luxletter',
+            'constants',
+            '@import "EXT:luxletter/Configuration/TypoScript/Basic/constants.typoscript"'
+        );
     }
 );

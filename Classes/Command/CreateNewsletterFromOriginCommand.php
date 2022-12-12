@@ -18,14 +18,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
-/**
- * CreateNewsletterFromOriginCommand
- */
 class CreateNewsletterFromOriginCommand extends Command
 {
-    /**
-     * Configure the command by defining the name, options and arguments
-     */
+    use FakeRequestTrait;
+
     public function configure()
     {
         $this->setDescription('Create a newsletter from CLI or Scheduler');
@@ -42,8 +38,6 @@ class CreateNewsletterFromOriginCommand extends Command
     }
 
     /**
-     * Sends a bunch of emails from the queue
-     *
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int|null
@@ -57,6 +51,7 @@ class CreateNewsletterFromOriginCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->fakeRequest();
         $newsletterFactory = GeneralUtility::makeInstance(NewsletterFactory::class);
         $newsletter = $newsletterFactory->get(
             $input->getArgument('title'),
@@ -75,6 +70,6 @@ class CreateNewsletterFromOriginCommand extends Command
         $queueService = GeneralUtility::makeInstance(QueueService::class);
         $queuedAmount = $queueService->addMailReceiversToQueue($newsletter, (int)$input->getArgument('language'));
         $output->writeln('Added ' . $queuedAmount . ' queue records');
-        return 0;
+        return parent::SUCCESS;
     }
 }

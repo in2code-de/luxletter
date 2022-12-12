@@ -91,7 +91,7 @@ class Preparation extends AbstractEmbedding
     }
 
     /**
-     * Create temp folder if it is not existing. Also add a .htacces file for a permission denied for requests over
+     * Create temp folder if it is not existing. Also add a .htaccess file for a permission denied for requests over
      * apache to this folder.
      *
      * @return void

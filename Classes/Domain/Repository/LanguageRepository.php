@@ -3,45 +3,42 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
-use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
-use In2code\Luxletter\Utility\DatabaseUtility;
+use In2code\Luxletter\Domain\Service\SiteService;
+use TYPO3\CMS\Core\Site\Entity\SiteLanguage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 
-/**
- * Class LanguageRepository
- */
 class LanguageRepository
 {
-    const TABLE_NAME = 'sys_language';
-
-    /**
-     * @param int $languageIdentifier
-     * @return string
-     * @throws ExceptionDbalDriver
-     */
-    public function getTitleFromIdentifier(int $languageIdentifier): string
+    public function getTitleFromIdentifier(int $languageIdentifier, string $origin): string
     {
-        $queryBuilder = DatabaseUtility::getQueryBuilderForTable(self::TABLE_NAME);
-        return $queryBuilder
-            ->select('title')
-            ->from(self::TABLE_NAME)
-            ->where('uid=' . (int)$languageIdentifier)
-            ->execute()
-            ->fetchOne();
+        $siteLanguage = $this->getSiteLanguage($languageIdentifier, $origin);
+        if ($siteLanguage !== null) {
+            return $siteLanguage->getTitle();
+        }
+        return '';
     }
 
-    /**
-     * @param int $languageIdentifier
-     * @return string
-     * @throws ExceptionDbalDriver
-     */
-    public function getIsocodeFromIdentifier(int $languageIdentifier): string
+    public function getIsocodeFromIdentifier(int $languageIdentifier, string $origin): string
     {
-        $queryBuilder = DatabaseUtility::getQueryBuilderForTable(self::TABLE_NAME);
-        return $queryBuilder
-            ->select('language_isocode')
-            ->from(self::TABLE_NAME)
-            ->where('uid=' . (int)$languageIdentifier)
-            ->execute()
-            ->fetchOne();
+        $siteLanguage = $this->getSiteLanguage($languageIdentifier, $origin);
+        if ($siteLanguage !== null) {
+            return $siteLanguage->getTwoLetterIsoCode();
+        }
+        return '';
+    }
+
+    protected function getSiteLanguage(int $languageIdentifier, string $origin): ?SiteLanguage
+    {
+        if (MathUtility::canBeInterpretedAsInteger($origin)) {
+            $siteService = GeneralUtility::makeInstance(SiteService::class);
+            $languages = $siteService->getLanguages((int)$origin);
+            if (array_key_exists($languageIdentifier, $languages)) {
+                /** @var SiteLanguage $siteLanguage */
+                $siteLanguage = $languages[$languageIdentifier];
+                return $siteLanguage;
+            }
+        }
+        return null;
     }
 }

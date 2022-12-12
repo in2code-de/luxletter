@@ -47,6 +47,6 @@ class BackendUserUtility
      */
     public static function getBackendUserAuthentication(): ?BackendUserAuthentication
     {
-        return $GLOBALS['BE_USER'];
+        return $GLOBALS['BE_USER'] ?? null;
     }
 }

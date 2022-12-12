@@ -86,6 +86,11 @@ label {
     background-color: $colorMain;
 }
 
+.badge {
+    background-color: #5a5a5a;
+    color: white;
+}
+
 .alert-lux {
     background-color: $colorMain;
 }
@@ -100,6 +105,10 @@ label {
 
 .progress-bar {
     background-color: $colorMain;
+}
+
+.pull-right {
+    float: right !important;
 }
 
 /**

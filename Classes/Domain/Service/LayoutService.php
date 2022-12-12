@@ -15,9 +15,6 @@ use Throwable;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 
-/**
- * LayoutService
- */
 class LayoutService
 {
     /**
@@ -51,18 +48,19 @@ class LayoutService
     /**
      * @param string $layout
      * @param int $language
+     * @param string $origin
      * @return string Relative path and filename like "EXT:sitepackage/../MailContainer.html"
      * @throws InvalidConfigurationTypeException
      * @throws MisconfigurationException
-     * @throws UnvalidFilenameException
      * @throws RecordInDatabaseNotFoundException
+     * @throws UnvalidFilenameException
      */
-    public function getPathAndFilenameFromLayout(string $layout, int $language): string
+    public function getPathAndFilenameFromLayout(string $layout, int $language, string $origin): string
     {
         $this->checkForValidFilename($layout);
         $pathAndFilename = '';
         if ($language > 0) {
-            $pathAndFilename = $this->getPathAndFilenameFromLayoutForSpecificLanguage($layout, $language);
+            $pathAndFilename = $this->getPathAndFilenameFromLayoutForSpecificLanguage($layout, $language, $origin);
         }
         if ($pathAndFilename === '') {
             $pathAndFilename = $this->getPathAndFilenameFromLayoutForDefaultLanguage($layout);
@@ -91,16 +89,20 @@ class LayoutService
     /**
      * @param string $layout
      * @param int $language
+     * @param string $origin
      * @return string
      * @throws InvalidConfigurationTypeException
      * @throws MisconfigurationException
      * @throws RecordInDatabaseNotFoundException
      */
-    protected function getPathAndFilenameFromLayoutForSpecificLanguage(string $layout, int $language): string
-    {
+    protected function getPathAndFilenameFromLayoutForSpecificLanguage(
+        string $layout,
+        int $language,
+        string $origin
+    ): string {
         $languageRepository = GeneralUtility::makeInstance(LanguageRepository::class);
         try {
-            $isocode = $languageRepository->getIsocodeFromIdentifier($language);
+            $isocode = $languageRepository->getIsocodeFromIdentifier($language, $origin);
         } catch (Throwable $exception) {
             throw new RecordInDatabaseNotFoundException(
                 'No isocode found found in table sys_language for language with uid ' . $language,

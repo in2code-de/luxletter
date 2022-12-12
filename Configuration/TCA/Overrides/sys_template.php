@@ -9,11 +9,6 @@ call_user_func(
          */
         ExtensionManagementUtility::addStaticFile(
             'luxletter',
-            'Configuration/TypoScript/Basic/',
-            'Basic TypoScript'
-        );
-        ExtensionManagementUtility::addStaticFile(
-            'luxletter',
             'Configuration/TypoScript/FluidStyledMailContent/',
             'FluidStyledMailContent'
         );
