@@ -69,19 +69,23 @@
                     </div>
 
 
-                    <div class="col-md-3" style="flex-direction: initial;">
-                        <f:comment>Clear filter</f:comment>
-                        <f:if condition="{filter.set}">
-                            <f:link.action class="btn btn-default" style="flex: 50%; height: 32px; margin-top: auto; margin-right: 10px; margin-bottom: 8px;" action="resetFilter" arguments="{redirectAction:view.action}">
-                                <f:translate key="module.newsletter.list.filter.reset">Reset</f:translate>
-                            </f:link.action>
-                        </f:if>
+                    <div class="col-md-3">
+                        <h5 style="visibility: hidden;">Submit</h5>
 
-                        <f:comment>Submit filter</f:comment>
-                        <f:form.submit
-                            style="flex: 50%; height: 32px; margin-top: auto; margin-bottom: 8px;"
-                            class="btn btn-primary"
-                            value="{f:translate(key:'module.newsletter.list.filter.submit')}" />
+                        <div style="display: flex; flex-direction: initial;">
+                            <f:comment>Clear filter</f:comment>
+                            <f:if condition="{filter.set}">
+                                <f:link.action class="btn btn-default" style="flex: 50%; height: 32px; margin-top: auto; margin-right: 10px;" action="resetFilter" arguments="{redirectAction:view.action}">
+                                    <f:translate key="module.newsletter.list.filter.reset">Reset</f:translate>
+                                </f:link.action>
+                            </f:if>
+
+                            <f:comment>Submit filter</f:comment>
+                            <f:form.submit
+                                style="flex: 50%; height: 32px; margin-top: auto;"
+                                class="btn btn-primary"
+                                value="{f:translate(key:'module.newsletter.list.filter.submit')}" />
+                        </div>
                     </div>
                 </div>
             </f:form>
