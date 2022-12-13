@@ -6,9 +6,9 @@
 ## TYPO3 Dashboard Module
 
 In addition to the build in dashboard, since TYPO3 10 it is possible to install another dashboard for system wide
-diagrams in TYPO3. 
+diagrams in TYPO3.
 You could do this simply with `composer require typo3/cms-dashboard`. Once it is available, you can add some widgets
-from Lux. 
+from Lux.
 
 This is a screenshot from default values:
 
@@ -22,16 +22,16 @@ how your newsletters perform.
 
 <img src="../Images/documentation_dashboard.png" width="800" alt="luxletter dashboard" />
 
-| Field                   | Description                                                                                      |
-| ----------------------- | ------------------------------------------------------------------------------------------------ |
-| Receiver                | See the current number of different receivers all over your newsletters                          | 
-| Openrate                | How many mails are opened compared to the overall dispatched mails                               | 
-| Clickrate               | How many clicks are generated compared to the overall openrate                                   | 
-| Unsubscriberate         | How many unsubscribes are generated compared to the overall openrate                             | 
-| Open                    | See an open statistic of the last sent newsletters                                               | 
-| Newsletter              | See the last sent newsletters with the analysis data                                             | 
-| Click                   | See a click statistic of the last sent newsletters                                               | 
-| Links                   | See the most clicked links of all your newsletters                                               | 
+| Field           | Description                                                             |
+|-----------------|-------------------------------------------------------------------------|
+| Receiver        | See the current number of different receivers all over your newsletters |
+| Openrate        | How many mails are opened compared to the overall dispatched mails      |
+| Clickrate       | How many clicks are generated compared to the overall openrate          |
+| Unsubscriberate | How many unsubscribes are generated compared to the overall openrate    |
+| Open            | See an open statistic of the last sent newsletters                      |
+| Newsletter      | See the last sent newsletters with the analysis data                    |
+| Click           | See a click statistic of the last sent newsletters                      |
+| Links           | See the most clicked links of all your newsletters                      |
 
 ## Receiver
 
@@ -70,7 +70,7 @@ An activity is if the user clicks a link in a newsletter e.g.
 
 **Note** Mouseover over an activitiy will show you the exact time of this action
 
-On the right you will see a list of website activities of the user (but only if the user is already identified in lux - 
+On the right you will see a list of website activities of the user (but only if the user is already identified in lux -
 see the lux documentation for more details what identification means and how you can identify a visitor).
 
 **Note** Mouseover over the time on the right will show you the exact time of this action
