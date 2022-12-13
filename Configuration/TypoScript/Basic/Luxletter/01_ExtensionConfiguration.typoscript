@@ -1,5 +1,5 @@
 plugin {
-  tx_luxletter_fe {
+  tx_luxletter {
     view {
       templateRootPaths {
         0 = EXT:luxletter/Resources/Private/Templates/
@@ -17,8 +17,6 @@ plugin {
         0 = EXT:luxletter/Resources/Private/Layouts/
       }
     }
-
-    features.requireCHashArgumentForActionArguments = 0
 
     settings {
       addInlineCss {
@@ -44,4 +42,4 @@ plugin {
 }
 
 # Copy plugin configuration to module configuration to just use one configuration for both places.
-module.tx_luxletter < plugin.tx_luxletter_fe
+module.tx_luxletter < plugin.tx_luxletter

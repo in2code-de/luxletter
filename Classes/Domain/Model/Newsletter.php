@@ -17,206 +17,97 @@ use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
-/**
- * Class User
- */
 class Newsletter extends AbstractEntity
 {
     const TABLE_NAME = 'tx_luxletter_domain_model_newsletter';
 
-    /**
-     * @var string
-     */
-    protected $title = '';
+    protected string $title = '';
+    protected string $description = '';
+    protected string $subject = '';
+    protected string $origin = '';
+    protected string $layout = '';
+    protected string $bodytext = '';
 
-    /**
-     * @var Category
-     */
-    protected $category = null;
+    protected bool $disabled = false;
 
-    /**
-     * @var string
-     */
-    protected $description = '';
+    protected int $queues = 0;
+    protected int $openers = 0;
+    protected int $clickers = 0;
+    protected int $unsubscribers = 0;
+    protected int $language = 0;
+    protected ?int $dispatchedProgress = null;
 
-    /**
-     * @var bool
-     */
-    protected $disabled = false;
-
-    /**
-     * @var DateTime
-     */
-    protected $datetime = null;
-
-    /**
-     * @var string
-     */
-    protected $subject = '';
+    protected ?Category $category = null;
+    protected ?DateTime $datetime = null;
+    protected ?DateTime $crdate = null;
+    protected ?Configuration $configuration = null;
 
     /**
      * @var ObjectStorage<Usergroup>
      */
-    protected $receivers = null;
+    protected ObjectStorage $receivers;
 
-    /**
-     * @var Configuration
-     */
-    protected $configuration = null;
-
-    /**
-     * @var string
-     */
-    protected $origin = '';
-
-    /**
-     * Contains container filename
-     *
-     * @var string
-     */
-    protected $layout = '';
-
-    /**
-     * @var string
-     */
-    protected $bodytext = '';
-
-    /**
-     * @var int|null
-     */
-    protected $dispatchedProgress = null;
-
-    /**
-     * @var int
-     */
-    protected $queues = 0;
-
-    /**
-     * @var int
-     */
-    protected $openers = 0;
-
-    /**
-     * @var int
-     */
-    protected $clickers = 0;
-
-    /**
-     * @var int
-     */
-    protected $unsubscribers = 0;
-
-    /**
-     * @var int
-     */
-    protected $language = 0;
-
-    /**
-     * @var ?DateTime
-     */
-    protected $crdate;
-
-    /**
-     * @return string
-     */
     public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param string $title
-     * @return Newsletter
-     */
     public function setTitle(string $title): Newsletter
     {
         $this->title = $title;
         return $this;
     }
 
-    /**
-     * @return Category
-     */
     public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    /**
-     * @param ?Category $category
-     * @return Newsletter
-     */
     public function setCategory(?Category $category): Newsletter
     {
         $this->category = $category;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     * @return Newsletter
-     */
     public function setDescription(string $description): Newsletter
     {
         $this->description = $description;
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function enable()
+    public function enable(): self
     {
         $this->disabled = false;
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    public function disable()
+    public function disable(): self
     {
         $this->disabled = true;
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isEnabled(): bool
     {
         return $this->disabled === false;
     }
 
-    /**
-     * @return DateTime|null
-     */
     public function getDatetime(): ?DateTime
     {
         return $this->datetime;
     }
 
-    /**
-     * @param DateTime $datetime
-     * @return Newsletter
-     */
-    public function setDatetime(DateTime $datetime): Newsletter
+    public function setDatetime(DateTime $datetime): self
     {
         $this->datetime = $datetime;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSubject(): string
     {
         return $this->subject;
@@ -234,27 +125,17 @@ class Newsletter extends AbstractEntity
         return $newsletterParsing->parseSubject($this->getSubject(), ['user' => $user]);
     }
 
-    /**
-     * @param string $subject
-     * @return Newsletter
-     */
-    public function setSubject(string $subject): Newsletter
+    public function setSubject(string $subject): self
     {
         $this->subject = $subject;
         return $this;
     }
 
-    /**
-     * @return ObjectStorage|null
-     */
     public function getReceivers(): ?ObjectStorage
     {
         return $this->receivers;
     }
 
-    /**
-     * @return int[]
-     */
     public function getReceiverGroupIdentifiers(): array
     {
         $receivers = $this->getReceivers();
@@ -265,97 +146,64 @@ class Newsletter extends AbstractEntity
         return $identifiers;
     }
 
-    /**
-     * @param ObjectStorage $receivers
-     * @return Newsletter
-     */
     public function setReceivers(ObjectStorage $receivers): self
     {
         $this->receivers = $receivers;
         return $this;
     }
 
-    /**
-     * @return Configuration
-     */
     public function getConfiguration(): Configuration
     {
         return $this->configuration;
     }
 
-    /**
-     * @param Configuration $configuration
-     * @return Newsletter
-     */
     public function setConfiguration(Configuration $configuration): self
     {
         $this->configuration = $configuration;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getOrigin(): string
     {
         return $this->origin;
     }
 
-    /**
-     * @param string $origin
-     * @return Newsletter
-     */
-    public function setOrigin(string $origin): Newsletter
+    public function setOrigin(string $origin): self
     {
         $this->origin = $origin;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getLayout(): string
     {
         return $this->layout;
     }
 
-    /**
-     * @param string $layout
-     * @return Newsletter
-     */
-    public function setLayout(string $layout): Newsletter
+    public function setLayout(string $layout): self
     {
         $this->layout = $layout;
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getBodytext(): string
     {
         return $this->bodytext;
     }
 
-    /**
-     * @param string $bodytext
-     * @return Newsletter
-     */
-    public function setBodytext(string $bodytext): Newsletter
+    public function setBodytext(string $bodytext): self
     {
         $this->bodytext = $bodytext;
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getLanguage(): int
     {
         return $this->language;
     }
 
     /**
+     * Get a readable language label
+     *
      * @return string
      * @throws ExceptionDbalDriver
      */
@@ -364,34 +212,23 @@ class Newsletter extends AbstractEntity
         $language = $this->getLanguage();
         if ($language > 0) {
             $languageRepository = GeneralUtility::makeInstance(LanguageRepository::class);
-            return $languageRepository->getTitleFromIdentifier($language);
+            return $languageRepository->getTitleFromIdentifier($language, $this->getOrigin());
         }
         return LocalizationUtility::translateByKey('defaultLanguage');
     }
 
-    /**
-     * @param int $language
-     * @return Newsletter
-     */
-    public function setLanguage(int $language): Newsletter
+    public function setLanguage(int $language): self
     {
         $this->language = $language;
         return $this;
     }
 
-    /**
-     * @return DateTime|null
-     */
     public function getCrdate(): ?DateTime
     {
         return $this->crdate;
     }
 
-    /**
-     * @param DateTime|null $crdate
-     * @return Newsletter
-     */
-    public function setCrdate(?DateTime $crdate): Newsletter
+    public function setCrdate(?DateTime $crdate): ?Newsletter
     {
         $this->crdate = $crdate;
         return $this;
@@ -418,9 +255,6 @@ class Newsletter extends AbstractEntity
         return $this->dispatchedProgress;
     }
 
-    /**
-     * @return int
-     */
     public function getQueues(): int
     {
         if ($this->queues === 0) {
@@ -431,9 +265,6 @@ class Newsletter extends AbstractEntity
         return $this->queues;
     }
 
-    /**
-     * @return int
-     */
     public function getDispatchedQueues(): int
     {
         $queueRepository = GeneralUtility::makeInstance(QueueRepository::class);

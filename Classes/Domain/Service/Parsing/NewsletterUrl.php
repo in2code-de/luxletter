@@ -57,43 +57,43 @@ class NewsletterUrl
      *
      * @var string
      */
-    protected $mode = self::MODE_NEWSLETTER;
+    protected string $mode = self::MODE_NEWSLETTER;
 
     /**
-     * Hold origin (number as page identifier or absolute URL)
+     * Hold origin (number for page identifier OR absolute URL)
      *
      * @var string
      */
-    protected $origin = '';
+    protected string $origin = '';
 
     /**
      * Hold url from origin (page identifier from origin parsed with URL or keep the absolute URL)
      *
      * @var string
      */
-    protected $url = '';
+    protected string $url = '';
 
     /**
      * @var int
      */
-    protected $language = 0;
+    protected int $language = 0;
 
     /**
      * @var string Path to container html template like "EXT:sitepackage/../MailContainer.html"
      */
-    protected $containerTemplate = '';
+    protected string $containerTemplate = '';
 
     /**
      * Extension configuration from TypoScript
      *
      * @var array
      */
-    protected $configuration = [];
+    protected array $configuration = [];
 
     /**
      * @var EventDispatcherInterface
      */
-    private $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
     /**
      * @param string $origin can be a page uid or a complete url
@@ -316,10 +316,6 @@ class NewsletterUrl
         return $html;
     }
 
-    /**
-     * @param string $string
-     * @return string
-     */
     protected function getBodyFromHtml(string $string): string
     {
         try {
@@ -340,62 +336,39 @@ class NewsletterUrl
         return $string;
     }
 
-    /**
-     * @return string
-     */
     public function getOrigin(): string
     {
         return $this->origin;
     }
 
-    /**
-     * @param string $origin
-     */
-    public function setOrigin(string $origin)
+    public function setOrigin(string $origin): self
     {
         $this->origin = $origin;
+        return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getUrl(): string
     {
         return $this->url;
     }
 
-    /**
-     * @param string $url
-     * @return NewsletterUrl
-     */
     public function setUrl(string $url): self
     {
         $this->url = $url;
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getLanguage(): int
     {
         return $this->language;
     }
 
-    /**
-     * @param int $language
-     * @return NewsletterUrl
-     */
     public function setLanguage(int $language): self
     {
         $this->language = $language;
         return $this;
     }
 
-    /**
-     * @param bool $absolute
-     * @return string
-     */
     public function getContainerTemplate(bool $absolute = false): string
     {
         $containerTemplate = $this->containerTemplate;
@@ -416,22 +389,20 @@ class NewsletterUrl
     public function setContainerTemplateFromLayout(string $layout): self
     {
         $layoutService = GeneralUtility::makeInstance(LayoutService::class);
-        $this->containerTemplate = $layoutService->getPathAndFilenameFromLayout($layout, $this->getLanguage());
+        $this->containerTemplate = $layoutService->getPathAndFilenameFromLayout(
+            $layout,
+            $this->getLanguage(),
+            $this->getOrigin()
+        );
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function setModeTestmail(): self
     {
         $this->mode = self::MODE_TESTMAIL;
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function setModePreview(): self
     {
         $this->mode = self::MODE_PREVIEW;

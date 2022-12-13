@@ -12,30 +12,38 @@ use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * Class SiteService
- */
 class SiteService
 {
     /**
      * Get a site from current page identifier. Works only in frontend context (so not when in CLI and BACKEND context)
      *
+     * @param int $pageIdentifier
      * @return Site
      * @throws SiteNotFoundException
      */
-    public function getSite(): Site
+    public function getSite(int $pageIdentifier = 0): Site
     {
-        $pageIdentifier = FrontendUtility::getCurrentPageIdentifier();
+        if ($pageIdentifier === 0) {
+            $pageIdentifier = FrontendUtility::getCurrentPageIdentifier();
+        }
         if ($pageIdentifier > 0) {
             $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
             return $siteFinder->getSiteByPageId($pageIdentifier);
         }
-        throw new LogicException('Not in frontend context? No page identifier given.', 1622813408);
+        throw new LogicException('No page identifier given. Maybe no frontend context?', 1622813408);
     }
 
     /**
-     * @return Site
+     * @param int $pageIdentifier
+     * @return array
+     * @throws SiteNotFoundException
      */
+    public function getLanguages(int $pageIdentifier): array
+    {
+        $site = $this->getSite($pageIdentifier);
+        return $site->getLanguages();
+    }
+
     public function getFirstSite(): Site
     {
         $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);

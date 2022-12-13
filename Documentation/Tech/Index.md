@@ -9,7 +9,7 @@ Change templates path in TypoScript setup via your sitepackage extension (e.g. E
 
 ```
 plugin {
-    tx_luxletter_fe {
+    tx_luxletter {
         view {
             templateRootPaths {
                 0 = EXT:luxletter/Resources/Private/Templates/
@@ -54,7 +54,7 @@ plugin {
         }
     }
 }
-module.tx_luxletter < plugin.tx_luxletter_fe
+module.tx_luxletter < plugin.tx_luxletter
 ```
 
 **Note:** If you change the path via TypoScript extension template, please take care that you are using the very first
@@ -161,10 +161,10 @@ This could have different reasons:
 
 If you define any type-parameters in your site configuration, you have to define also the types for luxletter:
 
-| Type | Explanation |
-|------|-------------|
-| 1560777975 | Needed for a prerendering |
-| 1562349004 | Needed for the newsletter rendering |
+| Type       | Explanation                                   |
+|------------|-----------------------------------------------|
+| 1560777975 | Needed for a prerendering                     |
+| 1562349004 | Needed for the newsletter rendering           |
 | 1561894816 | Type for tracking pixel (neede for open rate) |
 
 Example configuration:

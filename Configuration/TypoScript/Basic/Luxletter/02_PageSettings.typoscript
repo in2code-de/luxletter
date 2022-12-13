@@ -14,12 +14,10 @@ luxletterPreviewNewsletter {
   10 {
     userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
     extensionName = Luxletter
-    pluginName = Fe
+    pluginName = Preview
     vendorName = In2code
     controller = Frontend
     action = preview
-    switchableControllerActions.Frontend.1 = preview
-    features.requireCHashArgumentForActionArguments = 0
   }
 }
 
@@ -40,11 +38,9 @@ luxletterTrackingPixel {
   10 {
     userFunc = TYPO3\CMS\Extbase\Core\Bootstrap->run
     extensionName = Luxletter
-    pluginName = Fe
+    pluginName = TrackingPixel
     vendorName = In2code
     controller = Frontend
     action = trackingPixel
-    switchableControllerActions.Frontend.1 = trackingPixel
-    features.requireCHashArgumentForActionArguments = 0
   }
 }

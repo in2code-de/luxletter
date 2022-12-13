@@ -63,13 +63,13 @@ a news plugin, etc...)
 If you add a content element of type `Teaser element` to your outer page, you can select single
 content elements that you will teaser automatically.
 
-| Field                                    | Description                                                                             |
-| ---------------------------------------- | --------------------------------------------------------------------------------------- |
-| Show maximum number of characters        | Automaticly crop text after this number of characters                                   |
-| Append this characters                   | Add this characters after the cropped text                                              |
-| Choose a text for the "read more" button | Text for the read more button                                                           |
-| Render a teaser of this record(s)        | Choose some content elments that you want to teaser                                     |
-| Render a section menu before             | Check this for a automaticly build jump-menu                                            |
+| Field                                    | Description                                           |
+|------------------------------------------|-------------------------------------------------------|
+| Show maximum number of characters        | Automaticly crop text after this number of characters |
+| Append this characters                   | Add this characters after the cropped text            |
+| Choose a text for the "read more" button | Text for the read more button                         |
+| Render a teaser of this record(s)        | Choose some content elments that you want to teaser   |
+| Render a section menu before             | Check this for a automaticly build jump-menu          |
 
 <img src="../Images/documentation_newsletter_teaserplugin1.png" width="800" alt="teaser plugin 1" />
 <img src="../Images/documentation_newsletter_teaserplugin2.png" width="800" alt="teaser plugin 2" />
@@ -126,7 +126,7 @@ Of course you can overwrite template files in your extension:
 
 ```
 plugin {
-    tx_luxletter_fe {
+    tx_luxletter {
         view {
             templateRootPaths {
                 2 = EXT:yoursitepackage/Resources/Private/Templates/Extensions/Luxletter/
@@ -166,7 +166,7 @@ plugin {
         }
     }
 }
-module.tx_luxletter.view < plugin.tx_luxletter_fe.view
+module.tx_luxletter.view < plugin.tx_luxletter.view
 ```
 
 **Note:** If you change the path via TypoScript extension template, please take care that you are using the very first

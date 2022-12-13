@@ -3,7 +3,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
-use Doctrine\DBAL\Driver\Exception;
+use Doctrine\DBAL\Exception as ExceptionDbal;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\Queue;
 use In2code\Luxletter\Domain\Model\User;
@@ -12,9 +12,6 @@ use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
-/**
- * Class QueueRepository
- */
 class QueueRepository extends AbstractRepository
 {
     /**
@@ -38,17 +35,12 @@ class QueueRepository extends AbstractRepository
         if ($newsletterIdentifier > 0) {
             $and[] = $query->equals('newsletter.uid', $newsletterIdentifier);
         }
-        $query->matching($query->logicalAnd($and));
+        $query->matching($query->logicalAnd(...$and));
         $query->setLimit($limit);
         $query->setOrderings(['tstamp' => QueryInterface::ORDER_ASCENDING]);
         return $query->execute();
     }
 
-    /**
-     * @param Newsletter $newsletter
-     * @param bool $dispatched
-     * @return QueryResultInterface
-     */
     public function findAllByNewsletterAndDispatchedStatus(
         Newsletter $newsletter,
         bool $dispatched = false
@@ -58,14 +50,10 @@ class QueueRepository extends AbstractRepository
             $query->equals('sent', $dispatched),
             $query->equals('newsletter', $newsletter),
         ];
-        $query->matching($query->logicalAnd($and));
+        $query->matching($query->logicalAnd(...$and));
         return $query->execute();
     }
 
-    /**
-     * @param Newsletter $newsletter
-     * @return QueryResultInterface
-     */
     public function findAllByNewsletter(Newsletter $newsletter): QueryResultInterface
     {
         $query = $this->createQuery();
@@ -79,7 +67,7 @@ class QueueRepository extends AbstractRepository
      * @param User $user
      * @param Newsletter $newsletter
      * @return bool
-     * @throws Exception
+     * @throws ExceptionDbal
      */
     public function isUserAndNewsletterAlreadyAddedToQueue(User $user, Newsletter $newsletter): bool
     {
@@ -89,13 +77,10 @@ class QueueRepository extends AbstractRepository
             ->from(Queue::TABLE_NAME)
             ->where('newsletter=' . $newsletter->getUid() . ' and user=' . $user->getUid())
             ->setMaxResults(1)
-            ->execute()
+            ->executeQuery()
             ->fetchOne() > 0;
     }
 
-    /**
-     * @return void
-     */
     public function truncate(): void
     {
         $tables = [
