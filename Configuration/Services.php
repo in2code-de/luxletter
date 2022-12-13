@@ -90,7 +90,7 @@ return function (ContainerConfigurator $configurator, ContainerBuilder $containe
                 'icon' => 'luxletter-widget-receiver',
             ])
             ->tag('dashboard.widget', [
-                'identifier' => 'luxletterReceiver',
+                'identifier' => 'luxletterNewsletter',
                 'groupNames' => 'luxletter',
                 'title' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.newsletter.title',
                 'description' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:module.dashboard.widget.newsletter.description',
