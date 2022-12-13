@@ -85,9 +85,9 @@ define(['jquery'], function($) {
     var addWizardUserPreview = function() {
       wizardUserPreviewAction();
 
-      var checkboxes = document.querySelectorAll('input[data-luxletter-wizardpreviewevent="users"][type="checkbox"]');
-      for (var i = 0; i < checkboxes.length; i++) {
-        checkboxes[i].addEventListener('change', function(event) {
+      var receiverDropdown = document.querySelector('select[data-luxletter-wizardpreviewevent="users"]');
+      if (receiverDropdown !== null) {
+        receiverDropdown.addEventListener('change', function (event) {
           wizardUserPreviewAction();
         });
       }
@@ -97,13 +97,16 @@ define(['jquery'], function($) {
      * @returns {void}
      */
     var wizardUserPreviewAction = function() {
-      var checkboxes = document.querySelectorAll(
-        'input[data-luxletter-wizardpreviewevent="users"][type="checkbox"]:checked,' +
-        'input[data-luxletter-wizardpreviewevent="users"][type="hidden"]'
-      );
       var values = [];
-      for (var i = 0; i < checkboxes.length; i++) {
-        values.push(checkboxes[i].getAttribute('value'));
+      if (window.luxLetterReceiverChoice !== undefined) {
+        values = window.luxLetterReceiverChoice.getValue(true);
+      }
+
+      var checkboxes = document.querySelectorAll('input[data-luxletter-wizardpreviewevent="users"][type="hidden"]');
+      if (checkboxes.length > 0) {
+        for (var i = 0; i < checkboxes.length; i++) {
+          values.push(checkboxes[i].getAttribute('value'));
+        }
       }
 
       // Even send if values is empty, when checkboxes are dechecked again

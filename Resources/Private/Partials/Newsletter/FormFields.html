@@ -1,4 +1,4 @@
-<fieldset>
+<fieldset xmlns:f="http://www.w3.org/1999/html">
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
@@ -120,20 +120,12 @@
                         </f:for>
                     </f:then>
                     <f:else>
-                        <div style="max-height: 160px; overflow: auto;">
-                            <f:for each="{usergroups}" as="title" key="identifier" iteration="iteration">
-                                <div class="form-check form-switch">
-                                    <f:form.checkbox
-                                        property="receivers."
-                                        value="{identifier}"
-                                        id="receivers-{iteration.index}"
-                                        data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'users'}"
-                                        class="form-check-input"/>
-                                    <label class="form-check-label" for="receivers-{iteration.index}">
-                                        {title}
-                                    </label>
-                                </div>
-                            </f:for>
+                        <div>
+                            <f:form.select property="receivers" id="luxletter-receivers-dropdown" multiple="multiple" data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'users'}">
+                                <f:for each="{usergroups}" as="title" key="identifier" iteration="iteration">
+                                    <f:form.select.option value="{identifier}">{title}</f:form.select.option>
+                                </f:for>
+                            </f:form.select>
                         </div>
                     </f:else>
                 </f:if>
