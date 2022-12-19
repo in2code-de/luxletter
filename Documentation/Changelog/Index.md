@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                           |
 |------------|------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 17.4.1     | 2022.12.19 | Bugfix  | Remove unwanted "$" character in choices plugin                                                                                                                                       |
 | 17.4.0     | 2022.12.19 | Feature | Replace choices plugin with checkboxes for receiver selection for a better handling especially with a lot of receiver groups                                                          |
 | 17.3.0     | 2022.11.25 | Task    | Remove config.no_cache=1, small label change, fix typo in documentation                                                                                                               |
 | 17.2.0     | 2022.10.18 | Feature | Track open when a link is clicked (and there was no open log entry yet), Always show open rate by the already dispatched newsletters, enable multiLanguageMode per default            |
