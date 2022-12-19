@@ -9,7 +9,9 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                           |
 |------------|------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 19.0.0     | 2022.12.19 | Feature | Replace checkboxes with choices plugin for receiver selection for a better handling especially with a lot of receiver groups                                                          |
 | !!! 18.0.0 | 2022.12.13 | Task    | TYPO3 12 and 11 supported now, dropped support for TYPO3 10                                                                                                                           |
+| 17.4.0     | 2022.12.19 | Feature | Replace checkboxes with choices plugin for receiver selection for a better handling especially with a lot of receiver groups                                                          |
 | 17.3.0     | 2022.11.25 | Task    | Remove config.no_cache=1, small label change, fix typo in documentation                                                                                                               |
 | 17.2.0     | 2022.10.18 | Feature | Track open when a link is clicked (and there was no open log entry yet), Always show open rate by the already dispatched newsletters, enable multiLanguageMode per default            |
 | 17.1.0     | 2022.10.14 | Bugfix  | Enable sectionmenu switch in teaser element, fix users preview together with sql_mode=only_full_group_by                                                                              |
