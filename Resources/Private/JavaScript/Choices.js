@@ -25,6 +25,6 @@ define(['TYPO3/CMS/Luxletter/Vendor/Choices.min'], function() {
   /**
    * Init
    */
-  var LuxletterChoicesObject = new LuxletterChoices($);
+  var LuxletterChoicesObject = new LuxletterChoices();
   LuxletterChoicesObject.initialize();
 });
