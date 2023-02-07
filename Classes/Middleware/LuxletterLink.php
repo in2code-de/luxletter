@@ -57,15 +57,15 @@ class LuxletterLink implements MiddlewareInterface
             $linkRepository = GeneralUtility::makeInstance(LinkRepository::class);
             /** @var Link $link */
             $link = $linkRepository->findOneByHash($this->getHash());
-            /** @var LuxletterLinkProcessEvent $event */
-            $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
-                LuxletterLinkProcessEvent::class,
-                $link,
-                $request,
-                $handler
-            ));
-            $link = $event->getLink();
             if ($link !== null) {
+                /** @var LuxletterLinkProcessEvent $event */
+                $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
+                    LuxletterLinkProcessEvent::class,
+                    $link,
+                    $request,
+                    $handler
+                ));
+                $link = $event->getLink();
                 $this->luxIdentification($link);
                 $logService = GeneralUtility::makeInstance(LogService::class);
                 $logService->logLinkOpening($link);
@@ -109,7 +109,7 @@ class LuxletterLink implements MiddlewareInterface
         $event = $this->eventDispatcher->dispatch(
             GeneralUtility::makeInstance(LuxletterLinkLuxIdentificationEvent::class, $link)
         );
-        if (ExtensionUtility::isLuxAvailable('7.0.0') && $event->isIdentification()) {
+        if (ExtensionUtility::isLuxAvailable() && $event->isIdentification()) {
             CookieUtility::setCookie('luxletterlinkhash', $link->getHash());
         }
     }
