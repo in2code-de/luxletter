@@ -16,7 +16,6 @@ use TYPO3\CMS\Core\Utility\MathUtility;
 class PageRepository
 {
     const TABLE_NAME = 'pages';
-    const DOKTYPE_LUXLETTER = 11;
 
     /**
      * Like
