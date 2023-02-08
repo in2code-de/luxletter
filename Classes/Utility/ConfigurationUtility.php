@@ -187,8 +187,8 @@ class ConfigurationUtility
     public static function getMultilanguageNewsletterPageDoktype(): int
     {
         return (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
-                'luxletter',
-                'multiLanguageNewsletterPageDoktype'
-            );
+            'luxletter',
+            'multiLanguageNewsletterPageDoktype'
+        );
     }
 }
