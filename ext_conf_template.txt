@@ -15,3 +15,6 @@ receiverAction = 1
 
 # cat=basic//250; type=text; label= Limit mails in context: If you run testinstances beside production, you can limit mail sending to a defined context (empty = no limit). Example "Production" or "Development/Docker".
 limitToContext =
+
+# cat=basic//260; type=integer; label= Doktype used for Multilanguage Newsletter Pages: When there are already Newsletter Pages in the database, these entries must be migrated when the value is changed and cache must be cleared totally
+multiLanguageNewsletterPageDoktype = 11

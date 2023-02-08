@@ -183,4 +183,12 @@ class ConfigurationUtility
     {
         return VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version());
     }
+
+    public static function getMultilanguageNewsletterPageDoktype(): int
+    {
+        return (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
+                'luxletter',
+                'multiLanguageNewsletterPageDoktype'
+            );
+    }
 }
