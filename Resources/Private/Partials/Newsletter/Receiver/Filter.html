@@ -12,9 +12,9 @@
                             id="searchterm"
                             class="form-control"
                             placeholder="{f:translate(key:'LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:module.newsletter.receiver.filter.searchterm')}"/>
-                        <label class="btn btn-default" for="searchterm">
-                            <span class="fa fa-search"></span>
-                        </label>
+                        <button type="button" class="btn btn-default" data-global-event="click" data-action-focus="#searchterm">
+                            <core:icon identifier="actions-search" />
+                        </button>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -27,9 +27,9 @@
                             prependOptionValue="0"
                             value="{filter.usergroup}"
                             options="{usergroups}"/>
-                        <label class="btn btn-default" for="usergroup">
-                            <span class="fa fa-user"></span>
-                        </label>
+                        <button type="button" class="btn btn-default" data-global-event="click" data-action-focus="#usergroup">
+                            <core:icon identifier="actions-user" />
+                        </button>
                     </div>
                 </div>
             </div>
