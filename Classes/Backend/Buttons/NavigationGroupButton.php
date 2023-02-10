@@ -65,7 +65,7 @@ class NavigationGroupButton extends AbstractButton
 
         $icon = $this->iconFactory->getIcon('extension-luxletter-star', Icon::SIZE_SMALL);
         $content .= '<div style="padding-top: 5px;">';
-        $content .= '<a href="https://www.in2code.de/produkte/lux-typo3-marketing-automation/?utm_campaign=LUX+%2B+LUXletter+Community+Version&utm_id=llcv&utm_source=typo3&utm_medium=browser&utm_content=LUXletter" class="lux_poweredby" style="color:black; font-weight: bold;" target="_blank" rel="noopener">';
+        $content .= '<a href="https://www.in2code.de/produkte/lux-typo3-marketing-automation/?utm_campaign=LUXletter+Community+Version&utm_id=llcv&utm_source=typo3&utm_medium=browser&utm_content=go+enterprise" class="lux_poweredby" style="color:black; font-weight: bold;" target="_blank" rel="noopener">';
         $content .= $icon->render();
         $content .= 'Go enterprise</a></div>';
         return $content;
