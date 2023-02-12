@@ -196,7 +196,14 @@ Just add the TypoScript for Fluid Styled Mail Content in static template
 (but don't forget to add it at the root template)
 
 
-#### 3. The target URL can not be parsed by your webserver
+#### 3. No valid ssl certificate available
+
+E.g. on a local develop machine it could be possible to not have a valid SSL certificate. You could disable the ssl
+check for testing globally in TYPO3
+(see https://www.in2code.de/en/recent/php-ignore-ssl-certificates-in-curl-requests-in-typo3/).
+
+
+#### 4. The target URL can not be parsed by your webserver
 
 For some reasons your infrastructure does not allow your server to build request to it's own websites (htpasswd cover,
 no ssl certificate, page to parse is a "backend user section" application login would be needed, etc...).
