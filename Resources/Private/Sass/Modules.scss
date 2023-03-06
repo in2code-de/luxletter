@@ -40,6 +40,14 @@ label {
     }
 }
 
+.img-circle {
+    object-fit: cover;
+    border-radius: 50%;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+}
+
 /**
  * Bootstrap
  */
@@ -192,12 +200,17 @@ label {
 /**
  * Table classes
  */
+.table {
+    border: 1px solid $colorGreyBright;
+}
+
 .table-hover > tbody > tr:hover,
 .table-hover > tbody > tr.lux-action-detail {
     background-color: $colorMain;
 
     > td {
         color: $white;
+        background-color: transparent;
     }
 }
 

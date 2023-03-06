@@ -10,12 +10,12 @@ final class LuxletterLinkLuxIdentificationEvent
     /**
      * @var Link
      */
-    protected $link;
+    protected Link $link;
 
     /**
      * @var bool
      */
-    protected $identification = true;
+    protected bool $identification = true;
 
     /**
      * @param Link $link

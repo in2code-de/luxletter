@@ -4,8 +4,9 @@ declare(strict_types=1);
 namespace In2code\Luxletter\ViewHelpers\User;
 
 use In2code\Luxletter\Domain\Model\User;
-use In2code\Luxletter\Utility\FrontendUtility;
+use TYPO3\CMS\Core\Resource\Exception\InvalidFileException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Service\ImageService;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
@@ -18,14 +19,14 @@ class GetUserImageUrlViewHelper extends AbstractViewHelper
     /**
      * @var string
      */
-    protected $defaultFile = 'typo3conf/ext/luxletter/Resources/Public/Images/DummyUser.svg';
+    protected string $defaultFile = 'EXT:luxletter/Resources/Public/Images/DummyUser.svg';
 
     /**
      * Size in px
      *
      * @var int
      */
-    protected $size = 32;
+    protected int $size = 32;
 
     /**
      * @return void
@@ -38,6 +39,7 @@ class GetUserImageUrlViewHelper extends AbstractViewHelper
 
     /**
      * @return string
+     * @throws InvalidFileException
      */
     public function render(): string
     {
@@ -74,6 +76,7 @@ class GetUserImageUrlViewHelper extends AbstractViewHelper
     /**
      * @param string $url
      * @return string
+     * @throws InvalidFileException
      */
     protected function getImageUrlFromGravatar(string $url): string
     {
@@ -91,11 +94,12 @@ class GetUserImageUrlViewHelper extends AbstractViewHelper
     /**
      * @param string $url
      * @return string
+     * @throws InvalidFileException
      */
     protected function getDefaultUrl(string $url): string
     {
         if (empty($url)) {
-            $url = FrontendUtility::getCurrentUri() . $this->defaultFile;
+            $url = PathUtility::getPublicResourceWebPath($this->defaultFile);
         }
         return $url;
     }

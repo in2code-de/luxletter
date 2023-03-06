@@ -9,7 +9,8 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                           |
 |------------|------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 19.0.1     | 2022.02.07 | Bugfix  | Fix empty eval string in TCA configuration of sites.luxletterUnsubscribePid in TYPO3 12                                                                                               |
+| 19.1.0     | 2023.03.06 | Task    | Some smaller CSS changes for TYPO3 12, Update for chart.js to version 2.9.4 for security reasons                                                                                      |
+| 19.0.1     | 2023.02.07 | Bugfix  | Fix empty eval string in TCA configuration of sites.luxletterUnsubscribePid in TYPO3 12                                                                                               |
 | 19.0.0     | 2022.12.19 | Feature | Replace checkboxes with choices plugin for receiver selection for a better handling especially with a lot of receiver groups                                                          |
 | !!! 18.0.0 | 2022.12.13 | Task    | TYPO3 12 and 11 supported now, dropped support for TYPO3 10                                                                                                                           |
 | 17.4.0     | 2022.12.19 | Feature | Replace checkboxes with choices plugin for receiver selection for a better handling especially with a lot of receiver groups                                                          |
