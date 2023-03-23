@@ -13,11 +13,10 @@ use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 
-/**
- * Class ConfigurationUtility
- */
 class ConfigurationUtility
 {
+    const PAGE_TYPE_MULTILANGUAGEMODE_DEFAULT = 11;
+
     /**
      * Get TypoScript settings
      *
@@ -56,6 +55,23 @@ class ConfigurationUtility
             'luxletter',
             'multiLanguageMode'
         ) === '1';
+    }
+
+    /**
+     * @return int
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    public static function getMultilanguageNewsletterPageDoktype(): int
+    {
+        $pageType = (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
+            'luxletter',
+            'multiLanguageNewsletterPageDoktype'
+        );
+        if ($pageType === 0) {
+            $pageType = self::PAGE_TYPE_MULTILANGUAGEMODE_DEFAULT;
+        }
+        return $pageType;
     }
 
     /**
@@ -182,13 +198,5 @@ class ConfigurationUtility
     protected static function getCurrentTypo3Version(): int
     {
         return VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version());
-    }
-
-    public static function getMultilanguageNewsletterPageDoktype(): int
-    {
-        return (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
-            'luxletter',
-            'multiLanguageNewsletterPageDoktype'
-        );
     }
 }

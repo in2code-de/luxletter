@@ -22,12 +22,12 @@ TYPO3 10.4 or 11.5 is required. The free extension lux can be also installed for
 | Field                              | Default value | Description                                                                                                                                                                                                                                         |
 |------------------------------------|---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Multilanguage mode                 | 0             | This mode allows to parse pages with all localized versions. No external sources can be parsed in multilanguage mode - only internal pages.                                                                                                         |
+| multiLanguageNewsletterPageDoktype | 11            | The value is used for the pages doktype field in your instance, if the default value 11 is already used for other stuff, you can change it here.                                                                                                    |
 | Rewrite links in newsletter        | 1             | Rewrite links in newsletter: Absolute links in your newsletters can be rewritten automatically, to track all link clicks. If you disable this feature, clicks are not tracked.                                                                      |
 | Embed images                       | 0             | Images with absolute url can automatically be embedded into newsletter mails. File will be stored temporary under `uploads/tx_luxletter/` when newsletters are generated. Attention: This will slow down the sending process (about 10s per email). |
 | Add typenum                        | 1562349004    | Add typenum: Everytime you parse a html for a new newsletter, this type will be added (can be used in fluidStyledMailContent). This will work only for PID in origin, not for absolute URL.                                                         |
 | Show receiver action               | 1             | Show receiver action: Show link to receiver view in newsletter module. This view is maybe disturbing if you don't use extension lux in addition.                                                                                                    |
 | limitToContext                     |               | Limit mails in context: If you run testinstances beside production, you can limit mail sending to a defined context (empty = no limit). Example "Production" or "Development/Docker".                                                               |
-| multiLanguageNewsletterPageDoktype | 11            | The value is used for the pages doktype field in your instance, if the default value 11 is already used, you can change it here.                                                                                                                    |
 
 <img src="../Images/documentation_installation_settings.png" width="800" alt="extension settings" />
 
@@ -47,14 +47,14 @@ be defined in every site configuration.
 
 A sender configuration can be added via list module in every folder page in backend.
 
-| Field          | Description                                                                                                                                                                                 |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Title          | Your internal title for this sender configuration                                                                                                                                           |
-| Sender email   | Sender email address for newsletter email                                                                                                                                                   |
-| Sender name    | Sender name for newsletter email                                                                                                                                                            |
-| Reply to email | Email address when a receiver wants to send an answer to the newsletter                                                                                                                     |
-| Reply to name  | Name when a receiver wants to send an answer to the newsletter                                                                                                                              |
-| Site           | This defines your domain/site and is needed for the unsubscribe plugin and for building absolute URI                                                                                        |
+| Field          | Description                                                                                          |
+|----------------|------------------------------------------------------------------------------------------------------|
+| Title          | Your internal title for this sender configuration                                                    |
+| Sender email   | Sender email address for newsletter email                                                            |
+| Sender name    | Sender name for newsletter email                                                                     |
+| Reply to email | Email address when a receiver wants to send an answer to the newsletter                              |
+| Reply to name  | Name when a receiver wants to send an answer to the newsletter                                       |
+| Site           | This defines your domain/site and is needed for the unsubscribe plugin and for building absolute URI |
 
 <img src="../Images/documentation_installation_senderconfiguration.png" width="800" alt="Sender configuration" />
 

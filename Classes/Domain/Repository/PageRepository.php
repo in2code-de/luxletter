@@ -36,7 +36,10 @@ class PageRepository
         $results = $queryBuilder
             ->select('*')
             ->from(self::TABLE_NAME)
-            ->where('doktype=' . \In2code\Luxletter\Utility\ConfigurationUtility::getMultilanguageNewsletterPageDoktype() . ' and sys_language_uid=0')
+            ->where(
+                'doktype=' . \In2code\Luxletter\Utility\ConfigurationUtility::getMultilanguageNewsletterPageDoktype()
+                . ' and sys_language_uid=0'
+            )
             ->orderBy('title', 'desc')
             ->execute()
             ->fetchAllAssociative();
