@@ -3,7 +3,6 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
-use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\DatabaseUtility;
@@ -34,7 +33,10 @@ class PageRepository
             $results = $queryBuilder
                 ->select('*')
                 ->from(self::TABLE_NAME)
-                ->where('doktype=' . ConfigurationUtility::getMultilanguageNewsletterPageDoktype() . ' and sys_language_uid=0')
+                ->where(
+                    'doktype=' . ConfigurationUtility::getMultilanguageNewsletterPageDoktype()
+                    . ' and sys_language_uid=0'
+                )
                 ->orderBy('title', 'desc')
                 ->executeQuery()
                 ->fetchAllAssociative();
@@ -84,7 +86,6 @@ class PageRepository
      * @return array
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws ExceptionDbalDriver
      * @throws MisconfigurationException
      */
     public function getLanguagesFromOrigin(string $origin): array
@@ -105,7 +106,7 @@ class PageRepository
             $languages = $queryBuilder
                 ->select('sys_language_uid')
                 ->from(self::TABLE_NAME)
-                ->where('l10n_parent=' . (int)$pageIdentifier)
+                ->where('l10n_parent=' . $pageIdentifier)
                 ->executeQuery()
                 ->fetchFirstColumn();
             if ($this->isDefaultLanguageEnabled($pageIdentifier)) {

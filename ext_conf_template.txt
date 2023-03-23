@@ -1,20 +1,20 @@
 # cat=basic//200; type=boolean; label= Multilanguage mode: Multilanguage mode allows you to parse an internal TYPO3 page in all it's languages. Subject will be found in page settings with this. No external URL supported in this mode.
 multiLanguageMode = 1
 
-# cat=basic//210; type=boolean; label= Rewrite links in newsletter: Absolute links in your newsletters can be rewritten automatically, to track all link clicks. If you disable this feature, clicks are not tracked.
+# cat=basic//210; type=integer; label= Doktype used for Multilanguage Newsletter Pages: The value is used for the pages doktype field in your instance, if the default value 11 is already used for other stuff, you can change it here
+multiLanguageNewsletterPageDoktype = 11
+
+# cat=basic//220; type=boolean; label= Rewrite links in newsletter: Absolute links in your newsletters can be rewritten automatically, to track all link clicks. If you disable this feature, clicks are not tracked.
 rewriteLinksInNewsletter = 1
 
-# cat=basic//220; type=boolean; label= Embed images: Images can also be embedded automatically into newsletters. Useful if images are not public accessable (e.g. Intranet). Note: This will slow down the sending process!
+# cat=basic//230; type=boolean; label= Embed images: Images can also be embedded automatically into newsletters. Useful if images are not public accessable (e.g. Intranet). Note: This will slow down the sending process!
 embedImagesInNewsletter = 0
 
-# cat=basic//230; type=int+; label= Add typenum: Everytime you parse a html for a new newsletter, this type will be added (can be used in fluidStyledMailContent). This will work only for PID in origin, not for absolute URL.
+# cat=basic//240; type=int+; label= Add typenum: Everytime you parse a html for a new newsletter, this type will be added (can be used in fluidStyledMailContent). This will work only for PID in origin, not for absolute URL.
 addTypeNumToNumberLocation = 1562349004
 
-# cat=basic//240; type=boolean; label= Show receiver action: Show link to receiver view in newsletter module. This view is maybe disturbing if you don't use extension lux in addition.
+# cat=basic//250; type=boolean; label= Show receiver action: Show link to receiver view in newsletter module. This view is maybe disturbing if you don't use extension lux in addition.
 receiverAction = 1
 
-# cat=basic//250; type=text; label= Limit mails in context: If you run testinstances beside production, you can limit mail sending to a defined context (empty = no limit). Example "Production" or "Development/Docker".
+# cat=basic//260; type=text; label= Limit mails in context: If you run testinstances beside production, you can limit mail sending to a defined context (empty = no limit). Example "Production" or "Development/Docker".
 limitToContext =
-
-# cat=basic//260; type=integer; label= Doktype used for Multilanguage Newsletter Pages: When there are already Newsletter Pages in the database, these entries must be migrated when the value is changed and cache must be cleared totally
-multiLanguageNewsletterPageDoktype = 11
