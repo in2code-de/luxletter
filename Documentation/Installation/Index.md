@@ -27,6 +27,7 @@ TYPO3 11.5 or 12.4 is required. The free extension lux can be also installed for
 | Add typenum                 | 1562349004    | Add typenum: Everytime you parse a html for a new newsletter, this type will be added (can be used in fluidStyledMailContent). This will work only for PID in origin, not for absolute URL.                                                         |
 | Show receiver action        | 1             | Show receiver action: Show link to receiver view in newsletter module. This view is maybe disturbing if you don't use extension lux in addition.                                                                                                    |
 | limitToContext              |               | Limit mails in context: If you run testinstances beside production, you can limit mail sending to a defined context (empty = no limit). Example "Production" or "Development/Docker".                                                               |
+| multiLanguageNewsletterPageDoktype | 11            | The value is used for the pages doktype field in your instance, if the default value 11 is already used, you can change it here.                                                                                                                    |
 
 <img src="../Images/documentation_installation_settings.png" width="800" alt="extension settings" />
 
