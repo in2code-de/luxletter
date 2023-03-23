@@ -24,6 +24,7 @@ class UserRepository extends AbstractRepository
      * @param int $language -1 = all, otherwise only the users with the specific language are selected
      * @param int $limit
      * @return array
+     * @throws InvalidQueryException
      */
     public function getUsersFromGroups(array $groupIdentifiers, int $language, int $limit = 0): array
     {
@@ -32,26 +33,26 @@ class UserRepository extends AbstractRepository
         }
 
         $query = $this->createQuery();
-
-        $constraints = [];
-
+        $constraints = [
+            $query->like('email', '%@%'),
+        ];
         if ($language !== -1) {
-            $constraints[] = $query->equals('luxletter_language', (int)$language);
+            $constraints[] = $query->in('luxletter_language', [-1, $language]);
         }
+
         $subConstraints = [];
         foreach ($groupIdentifiers as $identifier) {
             $subConstraints[] = $query->contains('usergroup', $identifier);
         }
+        $constraints[] = $query->logicalOr(...$subConstraints);
 
-        $constraints[] = $query->logicalOr($subConstraints);
-        $constraints[] = $query->equals('deleted', 0);
-        $constraints[] = $query->equals('disable', 0);
-        $constraints[] = $query->like('email', '%@%');
         if ($limit > 0) {
             $query->setLimit($limit * 10);
         }
-        $query->matching($query->logicalAnd($constraints));
+        $query->matching($query->logicalAnd(...$constraints));
+        $query->setOrderings(['email' => QueryInterface::ORDER_ASCENDING]);
         $users = $query->execute()->toArray();
+
         return $this->groupResultByEmail($users, $limit);
     }
 
