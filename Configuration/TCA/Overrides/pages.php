@@ -10,7 +10,7 @@ call_user_func(
          * Add new page doktype
          */
         if (\In2code\Luxletter\Utility\ConfigurationUtility::isMultiLanguageModeActivated()) {
-            $doktype = \In2code\Luxletter\Domain\Repository\PageRepository::DOKTYPE_LUXLETTER;
+            $doktype = \In2code\Luxletter\Utility\ConfigurationUtility::getMultilanguageNewsletterPageDoktype();
             $doktypeDefault = \TYPO3\CMS\Core\Domain\Repository\PageRepository::DOKTYPE_DEFAULT;
 
             \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTcaSelectItem(
