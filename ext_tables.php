@@ -94,7 +94,7 @@ call_user_func(
          * Add new page doktype
          */
         if (\In2code\Luxletter\Utility\ConfigurationUtility::isMultiLanguageModeActivated()) {
-            $doktype = \In2code\Luxletter\Domain\Repository\PageRepository::DOKTYPE_LUXLETTER;
+            $doktype = \In2code\Luxletter\Utility\ConfigurationUtility::getMultilanguageNewsletterPageDoktype();
             $GLOBALS['PAGES_TYPES'][$doktype] = [
                 'type' => 'web',
                 'allowedTables' => '*',
