@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                           |
 |------------|------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 19.2.1     | 2023.04.03 | Bugfix  | Add setter to manipulate content in NewsletterUrlAfterParsingEvent                                                                                                                    |
 | 19.2.0     | 2023.03.23 | Feature | Doktype number is configurable for multilanguage mode, support to split tables via tablemapping if needed (e.g. with content publisher)                                               |
 | 19.1.0     | 2023.03.06 | Task    | Some smaller CSS changes for TYPO3 12, Update for chart.js to version 2.9.4 for security reasons                                                                                      |
 | 19.0.1     | 2023.02.07 | Bugfix  | Fix empty eval string in TCA configuration of sites.luxletterUnsubscribePid in TYPO3 12                                                                                               |
