@@ -17,27 +17,17 @@ final class NewsletterUrlAfterParsingEvent
      */
     protected $newsletterUrl;
 
-    /**
-     * @param string $content
-     * @param NewsletterUrl $newsletterUrl
-     */
     public function __construct(string $content, NewsletterUrl $newsletterUrl)
     {
         $this->content = $content;
         $this->newsletterUrl = $newsletterUrl;
     }
 
-    /**
-     * @return string
-     */
     public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * @return NewsletterUrl
-     */
     public function getNewsletterUrl(): NewsletterUrl
     {
         return $this->newsletterUrl;
