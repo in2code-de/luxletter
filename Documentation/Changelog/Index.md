@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                           |
 |------------|------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 17.5.1     | 2023.04.03 | Bugfix  | Add setter to manipulate content in NewsletterUrlAfterParsingEvent                                                                                                                    |
 | 17.5.0     | 2023.03.23 | Feature | Doktype number is configurable for multilanguage mode, support to split tables via tablemapping if needed (e.g. with content publisher)                                               |
 | 17.4.1     | 2022.12.19 | Bugfix  | Remove unwanted "$" character in choices plugin                                                                                                                                       |
 | 17.4.0     | 2022.12.19 | Feature | Replace choices plugin with checkboxes for receiver selection for a better handling especially with a lot of receiver groups                                                          |
