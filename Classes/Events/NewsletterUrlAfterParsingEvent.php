@@ -28,6 +28,12 @@ final class NewsletterUrlAfterParsingEvent
         return $this->content;
     }
 
+    public function setContent(string $content): self
+    {
+        $this->content = $content;
+        return $this;
+    }
+
     public function getNewsletterUrl(): NewsletterUrl
     {
         return $this->newsletterUrl;
