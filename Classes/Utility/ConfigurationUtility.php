@@ -59,20 +59,24 @@ class ConfigurationUtility
     }
 
     /**
-     * @return int
+     * @return bool
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      */
-    public static function getMultilanguageNewsletterPageDoktype(): int
+    public static function isReceiverActionActivated(): bool
     {
-        $pageType = (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
-            'luxletter',
-            'multiLanguageNewsletterPageDoktype'
-        );
-        if ($pageType === 0) {
-            $pageType = self::PAGE_TYPE_MULTILANGUAGEMODE_DEFAULT;
-        }
-        return $pageType;
+        return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'receiverAction') === '1';
+    }
+
+    /**
+     * @return bool
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    public static function isUnsubscribeUrlToMailHeaderActivated(): bool
+    {
+        return GeneralUtility::makeInstance(ExtensionConfiguration::class)
+                ->get('luxletter', 'addUnsubscribeUrlToMailHeader') !== '0';
     }
 
     /**
@@ -106,20 +110,27 @@ class ConfigurationUtility
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      */
+    public static function getMultilanguageNewsletterPageDoktype(): int
+    {
+        $pageType = (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
+            'luxletter',
+            'multiLanguageNewsletterPageDoktype'
+        );
+        if ($pageType === 0) {
+            $pageType = self::PAGE_TYPE_MULTILANGUAGEMODE_DEFAULT;
+        }
+        return $pageType;
+    }
+
+    /**
+     * @return int
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
     public static function getTypeNumToNumberLocation(): int
     {
         return (int)GeneralUtility::makeInstance(ExtensionConfiguration::class)
             ->get('luxletter', 'addTypeNumToNumberLocation');
-    }
-
-    /**
-     * @return bool
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     */
-    public static function isReceiverActionActivated(): bool
-    {
-        return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter', 'receiverAction') === '1';
     }
 
     /**
