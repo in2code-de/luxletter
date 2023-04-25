@@ -131,7 +131,9 @@ class ProgressQueue
                 SendMail::class,
                 $this->getSubject($queue),
                 $this->getBodyText($queue),
-                $queue->getNewsletter()->getConfiguration()
+                $queue->getNewsletter()->getConfiguration(),
+                $queue->getNewsletter(),
+                $queue->getUser()
             );
             $sendMail->sendNewsletter([$queue->getEmail() => $queue->getUser()->getReadableName()]);
             $logService = GeneralUtility::makeInstance(LogService::class);
@@ -143,7 +145,6 @@ class ProgressQueue
      * @param Queue $queue
      * @return string
      * @throws InvalidConfigurationTypeException
-     * @throws SiteNotFoundException
      */
     protected function getSubject(Queue $queue): string
     {

@@ -4,10 +4,14 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Mail;
 
 use In2code\Luxletter\Domain\Model\Configuration;
+use In2code\Luxletter\Domain\Model\Newsletter;
+use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding\Execution;
+use In2code\Luxletter\Domain\Service\UnsubscribeUrlService;
 use In2code\Luxletter\Events\SendMailSendNewsletterBeforeEvent;
 use In2code\Luxletter\Events\SendMailSendNewsletterBeforeMailMessageEvent;
 use In2code\Luxletter\Exception\MisconfigurationException;
+use In2code\Luxletter\Utility\ConfigurationUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
@@ -15,41 +19,30 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Class SendMail
- * is used for testmails and for final newsletter mails
+ * is used for testing and for final newsletter mails
  */
 class SendMail
 {
-    /**
-     * @var string
-     */
-    protected $subject = '';
+    protected string $subject = '';
+    protected string $bodytext = '';
 
-    /**
-     * @var string
-     */
-    protected $bodytext = '';
+    protected ?Configuration $configuration = null;
+    protected ?Newsletter $newsletter = null;
+    protected ?User $user = null;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var Configuration|null
-     */
-    protected $configuration = null;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * SendMail constructor.
-     * @param string $subject
-     * @param string $bodytext
-     * @param Configuration $configuration
-     */
-    public function __construct(string $subject, string $bodytext, Configuration $configuration)
-    {
+    public function __construct(
+        string $subject,
+        string $bodytext,
+        Configuration $configuration,
+        ?Newsletter $newsletter = null,
+        ?User $user = null
+    ) {
         $this->subject = $subject;
         $this->bodytext = $bodytext;
         $this->configuration = $configuration;
+        $this->newsletter = $newsletter;
+        $this->user = $user;
         $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
     }
 
@@ -76,6 +69,8 @@ class SendMail
                 ->setReplyTo([$this->configuration->getReplyEmail() => $this->configuration->getReplyName()])
                 ->setSubject($this->subject)
                 ->html($this->getBodytext($mailMessage));
+            $this->setUnsubscribeUrlInHeader($mailMessage);
+
             /** @var SendMailSendNewsletterBeforeMailMessageEvent $event */
             $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
                 SendMailSendNewsletterBeforeMailMessageEvent::class,
@@ -111,5 +106,27 @@ class SendMail
             return $imageEmbedding->getRewrittenContent();
         }
         return $this->bodytext;
+    }
+
+    /**
+     * @param MailMessage $mailMessage
+     * @return void
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws MisconfigurationException
+     */
+    protected function setUnsubscribeUrlInHeader(MailMessage $mailMessage): void
+    {
+        if (ConfigurationUtility::isUnsubscribeUrlToMailHeaderActivated()) {
+            $unsubscribeUrlService = GeneralUtility::makeInstance(
+                UnsubscribeUrlService::class,
+                $this->newsletter,
+                $this->user,
+                $this->configuration->getSiteConfiguration()
+            );
+            $headers = $mailMessage->getHeaders();
+            $headers->addHeader('List-Unsubscribe', '<' . $unsubscribeUrlService->get() . '>');
+            $headers->addHeader('List-Unsubscribe-Post', 'List-Unsubscribe=One-Click');
+        }
     }
 }
