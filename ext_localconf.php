@@ -35,6 +35,7 @@ call_user_func(
 
         /**
          * Add an absRefPrefix for FluidStyledMailContent to prefix images with absolute paths
+         * Todo: Can be removed if TYPO3 11 support is dropped and should be replaced with `fluidStyledMailContent.config.forceAbsoluteUrls = 1`
          */
         if (\TYPO3\CMS\Core\Core\Environment::isCli() === false) {
             \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
