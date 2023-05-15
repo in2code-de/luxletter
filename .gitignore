@@ -22,3 +22,5 @@ package-lock.json
 .php-cs-fixer.cache
 .phpunit.result.cache
 var/
+/docker-compose.yml
+/config/
