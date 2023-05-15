@@ -44,7 +44,7 @@ jobs:
       - name: "Install PHP"
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          php-version: 8.2
       - name: "Composer Install"
         run: "composer install"
       - name: "Run PHP CS Fixer"
@@ -70,4 +70,5 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - 7.4
+          - 8.1
+          - 8.2

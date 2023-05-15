@@ -1,15 +1,10 @@
 <?xml version="1.0"?>
 <phpunit
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.1/phpunit.xsd"
     backupGlobals="true"
-    backupStaticAttributes="false"
     colors="true"
-    bootstrap=".Build/vendor/nimut/testing-framework/res/Configuration/UnitTestsBootstrap.php"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
-    forceCoversAnnotation="true"
+    bootstrap="Tests/Unit/bootstrap.php"
     processIsolation="false"
     stopOnError="false"
     stopOnFailure="false"
@@ -19,21 +14,24 @@
     timeoutForSmallTests="1"
     timeoutForMediumTests="10"
     timeoutForLargeTests="60"
-    verbose="false">
-  <coverage includeUncoveredFiles="false" processUncoveredFiles="false">
-    <include>
-      <directory suffix=".php">Classes/</directory>
-    </include>
-  </coverage>
-  <php>
-    <ini name="error_reporting" value="-1"/>
-    <ini name="intl.default_locale" value="en"/>
-    <ini name="intl.error_level" value="0"/>
-    <ini name="memory_limit" value="-1"/>
-  </php>
-  <testsuites>
-    <testsuite name="lux Core Test Suite">
-      <directory>Tests/Unit/</directory>
-    </testsuite>
-  </testsuites>
+    cacheDirectory=".phpunit.cache"
+    backupStaticProperties="false"
+    requireCoverageMetadata="true">
+    <coverage includeUncoveredFiles="false"/>
+    <php>
+        <ini name="error_reporting" value="-1"/>
+        <ini name="intl.default_locale" value="en"/>
+        <ini name="intl.error_level" value="0"/>
+        <ini name="memory_limit" value="-1"/>
+    </php>
+    <testsuites>
+        <testsuite name="lux Core Test Suite">
+            <directory>Tests/Unit/</directory>
+        </testsuite>
+    </testsuites>
+    <source>
+        <include>
+            <directory suffix=".php">Classes/</directory>
+        </include>
+    </source>
 </phpunit>

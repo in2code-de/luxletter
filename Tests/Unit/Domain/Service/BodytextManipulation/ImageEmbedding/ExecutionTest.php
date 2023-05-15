@@ -7,25 +7,24 @@ use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service\BodytextManipulation\ImageEmbedding\ExecutionFixture;
 use In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service\BodytextManipulation\ImageEmbedding\PreparationFixture;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
+use Nimut\TestingFramework\MockObject\AccessibleMockObjectInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
- * Class ExecutionTest
  * @coversDefaultClass Execution
  */
 class ExecutionTest extends UnitTestCase
 {
     /**
-     * @var ExecutionFixture
+     * @var AccessibleMockObjectInterface|MockObject|ExecutionFixture
+     * Todo: Add typehints to variable when PHP 7.4 is dropped
      */
     protected $generalValidatorMock;
 
-    /**
-     * @var string[]
-     */
-    protected $bodytextExamples = [
+    protected array $bodytextExamples = [
         '<html>
             <body>
                 <div>
@@ -64,7 +63,7 @@ class ExecutionTest extends UnitTestCase
         </html>',
     ];
 
-    protected $imagesExamples = [
+    protected array $imagesExamples = [
         [
             'https://via.placeholder.com/300/09f/fff.png',
         ],
@@ -88,7 +87,7 @@ class ExecutionTest extends UnitTestCase
         ],
     ];
 
-    protected $pathExamples = [
+    protected array $pathExamples = [
         [
             '/path/absolute/uploads/tx_luxletter/166e41227ca179735b3e29ee363c4d6810a767d77fb5d37ed18e1b064e56faaa.png',
             '/path/absolute/uploads/tx_luxletter/dab5e6deb01f5264f07143a3b02f5082d17c21fdf362d8228d85d3c0c4c3ac4c.jpg',
@@ -96,12 +95,10 @@ class ExecutionTest extends UnitTestCase
         ],
     ];
 
-    /**
-     * @return void
-     */
     public function setUp(): void
     {
-        $this->generalValidatorMock = $this->getAccessibleMock(ExecutionFixture::class, ['dummy']);
+        parent::setUp();
+        $this->generalValidatorMock = $this->getAccessibleMock(ExecutionFixture::class, null);
     }
 
     /**
