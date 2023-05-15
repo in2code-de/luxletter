@@ -12,7 +12,7 @@
 }
 
 .wizard a {
-  padding: 20px 12px 18px;
+  padding: 19px 12px 19px;
   position: relative;
   display: inline-block;
   text-decoration: none;
@@ -109,12 +109,12 @@
   border-right-color: $colorMain;
 }
 
-.wizard .badge {
+.luxletter .wizard .badge {
   margin: 0 5px 0 18px;
   position: relative;
   top: -1px;
-  border-radius: 15px;
-  font-size: 20px;
+  border-radius: 20px;
+  font-size: 18px;
   background: $white;
   color: $colorGrey;
 
