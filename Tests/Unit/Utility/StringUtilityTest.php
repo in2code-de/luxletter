@@ -4,11 +4,9 @@ namespace In2code\Luxletter\Tests\Unit\Utility;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\StringUtility;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
-use TYPO3\CMS\Extbase\Object\Exception;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
- * Class FileUtilityTest
  * @coversDefaultClass \In2code\Luxletter\Utility\StringUtility
  */
 class StringUtilityTest extends UnitTestCase
@@ -49,10 +47,7 @@ class StringUtilityTest extends UnitTestCase
         self::assertFalse(StringUtility::isValidUrl('undefined'));
     }
 
-    /**
-     * @return array
-     */
-    public function startsWithDataProvider(): array
+    public static function startsWithDataProvider(): array
     {
         return [
             [
@@ -97,10 +92,7 @@ class StringUtilityTest extends UnitTestCase
         self::assertSame($expectedResult, StringUtility::startsWith($haystack, $needle));
     }
 
-    /**
-     * @return array
-     */
-    public function endsWithDataProvider(): array
+    public static function endsWithDataProvider(): array
     {
         return [
             [
@@ -158,7 +150,6 @@ class StringUtilityTest extends UnitTestCase
     /**
      * @return void
      * @throws MisconfigurationException
-     * @throws Exception
      * @covers ::getHashFromArguments
      */
     public function testGetHashFromArguments(): void

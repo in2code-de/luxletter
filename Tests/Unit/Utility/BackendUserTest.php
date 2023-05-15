@@ -3,10 +3,9 @@
 namespace In2code\Luxletter\Tests\Unit\Utility;
 
 use In2code\Luxletter\Utility\BackendUserUtility;
-use Nimut\TestingFramework\TestCase\UnitTestCase;
+use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 /**
- * Class BackendUserTest
  * @coversDefaultClass \In2code\Luxletter\Utility\BackendUserUtility
  */
 class BackendUserTest extends UnitTestCase
