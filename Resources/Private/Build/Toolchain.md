@@ -1,19 +1,8 @@
-# Frontend toolchain
+# How to start frontend toolchain
 
-To compress JS and CSS files, goto EXT:luxletter/Resources/Private/Build and fire this comands:
+## Small guide
 
-```
-nvm use
-npm i
-./node_modules/gulp/bin/gulp.js default
-```
-
-Or as an alternative
-
-```
-# Build JS
-./node_modules/gulp/bin/gulp.js js
-
-# Build CSS
-./node_modules/gulp/bin/gulp.js css
-```
+* Go to Recources/Private/Build
+* `nvm use` will change to needed npm version
+* `npm i` will install the node modules (if not yet installed)
+* Then start with `npm run build` or the watch task with `npm run watch`

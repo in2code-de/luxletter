@@ -1,14 +1,30 @@
 {
-  "name": "lux",
-  "description": "Living User Experience - LUX - the marketing automation tool for TYPO3.",
-  "author": "in2code",
-  "private": true,
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-plumber": "^1.0.1",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^5.1.0",
-    "gulp-uglify": "^1.5.1",
-    "sass": "^1.56.2"
-  }
+	"name": "luxletter",
+	"description": "Email marketing tool for TYPO3.",
+	"author": "in2code",
+	"private": true,
+	"devDependencies": {
+		"@babel/core": "^7.16.0",
+		"@babel/preset-env": "^7.16.4",
+		"@rollup/plugin-babel": "^5.3.0",
+		"@rollup/plugin-commonjs": "^21.0.1",
+		"@rollup/plugin-node-resolve": "^13.0.6",
+		"gulp": "^4.0.2",
+		"gulp-plumber": "^1.2.1",
+		"gulp-rename": "^2.0.0",
+		"gulp-sass": "^5.0.0",
+		"gulp-uglify": "^3.0.2",
+		"rollup": "^2.61.1",
+		"rollup-plugin-terser": "^7.0.2",
+		"sass": "^1.54.3"
+	},
+	"scripts": {
+		"build": "./node_modules/gulp/bin/gulp.js build",
+		"watch": "./node_modules/gulp/bin/gulp.js default"
+	},
+	"dependencies": {
+		"@fingerprintjs/fingerprintjs": "^2.1.0",
+		"basiclightbox": "^5.0.0",
+		"ua-parser-js": "^0.7.31"
+	}
 }
