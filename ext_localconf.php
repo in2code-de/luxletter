@@ -65,5 +65,10 @@ call_user_func(
             'constants',
             '@import "EXT:luxletter/Configuration/TypoScript/Basic/constants.typoscript"'
         );
+
+        /**
+         * CacheHash: Add LUX paramters to excluded variables
+         */
+        \In2code\Luxletter\Utility\CacheHashUtility::addArgumentsToExcludedVariables();
     }
 );
