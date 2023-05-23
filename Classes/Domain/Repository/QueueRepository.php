@@ -55,6 +55,19 @@ class QueueRepository extends AbstractRepository
         return $query->execute();
     }
 
+    public function findAllByNewsletterAndFailedStatus(
+        Newsletter $newsletter,
+        int $failures = 3
+    ): QueryResultInterface {
+        $query = $this->createQuery();
+        $and = [
+            $query->greaterThanOrEqual('failures', $failures),
+            $query->equals('newsletter', $newsletter),
+        ];
+        $query->matching($query->logicalAnd(...$and));
+        return $query->execute();
+    }
+
     public function findAllByNewsletter(Newsletter $newsletter): QueryResultInterface
     {
         $query = $this->createQuery();
