@@ -14,6 +14,8 @@ class Queue extends AbstractEntity
 
     protected bool $sent = false;
 
+    protected int $failures = 0;
+
     protected ?DateTime $datetime = null;
     protected ?Newsletter $newsletter = null;
     protected ?User $user = null;
@@ -70,6 +72,17 @@ class Queue extends AbstractEntity
     public function setSent(): self
     {
         $this->sent = true;
+        return $this;
+    }
+
+    public function getFailures(): int
+    {
+        return $this->failures;
+    }
+
+    public function setFailures(int $failures): self
+    {
+        $this->failures = $failures;
         return $this;
     }
 }

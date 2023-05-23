@@ -26,6 +26,7 @@ class QueueRepository extends AbstractRepository
         $and = [
             $query->lessThan('datetime', time()),
             $query->equals('sent', false),
+            $query->lessThan('failures', 3),
             $query->equals('newsletter.disabled', false),
             $query->greaterThan('newsletter.configuration', 0),
             $query->logicalNot($query->equals('newsletter.layout', '')),
