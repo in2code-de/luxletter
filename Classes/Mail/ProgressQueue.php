@@ -104,8 +104,7 @@ class ProgressQueue
                 try {
                     $this->sendNewsletterToReceiverInQueue($queue);
                     $this->markSent($queue);
-                }
-                catch (\Throwable $throwable) {
+                } catch (\Throwable $throwable) {
                     $this->increaseFailures($queue);
                 }
                 $progress->advance();
