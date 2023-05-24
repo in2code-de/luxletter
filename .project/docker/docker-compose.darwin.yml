@@ -56,4 +56,5 @@ services:
       VIRTUAL_HOST: ${MAIL}
 
 volumes:
+  typo3var:
   mysql:
