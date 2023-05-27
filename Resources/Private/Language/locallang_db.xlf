@@ -20,6 +20,9 @@
 			<trans-unit id="sys_category.luxletter_newsletter_category">
 				<source>Is Luxletter category?</source>
 			</trans-unit>
+			<trans-unit id="sys_category.luxletter_newsletter_category.description">
+				<source>This is a data set used for grouping newsletters by a category</source>
+			</trans-unit>
 
 			<trans-unit id="ctype.teaser">
 				<source>Teaser element</source>
