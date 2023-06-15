@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                                   |
 |------------|------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 22.0.0     | 2023.06.15 | Feature | Add a basic queue failure management for undispatchable mails (try to send 3 times from now on). Add a description text for LUXletter category in backend.                                    |
 | 21.0.0     | 2023.05.15 | Feature | Add local docker environment, update unit tests for newer PHP and TYPO3, fix problems with activated cachehash checks, some optical improvements in backend views, updated frontend toolchain |
 | 20.0.0     | 2023.04.25 | Feature | Add unsubscribe URL in header for unsubscribe automatism in email clients (new configuration option in extension manager available)                                                           |
 | 19.2.2     | 2023.04.14 | Bugfix  | Prevent exception in backend modules in TYPO3 12.3 or newer related to getTSFE() condition                                                                                                    |
