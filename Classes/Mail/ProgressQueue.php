@@ -16,6 +16,7 @@ use In2code\Luxletter\Utility\ConfigurationUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
@@ -101,8 +102,12 @@ class ProgressQueue
             ));
             /** @var Queue $queue */
             foreach ($queues as $queue) {
-                $this->sendNewsletterToReceiverInQueue($queue);
-                $this->markSent($queue);
+                try {
+                    $this->sendNewsletterToReceiverInQueue($queue);
+                    $this->markSent($queue);
+                } catch (Throwable $throwable) {
+                    $this->increaseFailures($queue);
+                }
                 $progress->advance();
             }
             $this->output->writeln('');
@@ -223,6 +228,19 @@ class ProgressQueue
     protected function markSent(Queue $queue)
     {
         $queue->setSent();
+        $this->queueRepository->update($queue);
+        $this->queueRepository->persistAll();
+    }
+
+    /**
+     * @param Queue $queue
+     * @return void
+     * @throws IllegalObjectTypeException
+     * @throws UnknownObjectException
+     */
+    protected function increaseFailures(Queue $queue)
+    {
+        $queue->setFailures($queue->getFailures() + 1);
         $this->queueRepository->update($queue);
         $this->queueRepository->persistAll();
     }

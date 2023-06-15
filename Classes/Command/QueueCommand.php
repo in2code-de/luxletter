@@ -73,7 +73,7 @@ class QueueCommand extends Command
             (int)$input->getArgument('newsletter')
         );
         if ($progressed > 0) {
-            $output->writeln('Successfully sent ' . $progressed . ' email(s) from the queue...');
+            $output->writeln('Processed ' . $progressed . ' email(s) from the queue...');
         } else {
             $output->writeln('No mails in queue found');
         }

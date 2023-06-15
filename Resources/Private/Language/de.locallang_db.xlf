@@ -25,6 +25,10 @@
 				<source>Is Luxletter category?</source>
 				<target state="translated">Ist eine Luxletter-Kategorie?</target>
 			</trans-unit>
+			<trans-unit id="sys_category.luxletter_newsletter_category.description">
+				<source>This is a data set used for grouping newsletters by a category</source>
+				<target state="translated">Es handelt sich hierbei um einen Datensatz, der zur Gruppierung von Newslettern dient</target>
+			</trans-unit>
 
 			<trans-unit id="ctype.teaser">
 				<source>Teaser element</source>
@@ -127,6 +131,10 @@
 			<trans-unit id="tx_luxletter_domain_model_queue.sent">
 				<source>Sent</source>
 				<target state="translated">Gesendet</target>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_queue.failures">
+				<source>Failures</source>
+				<target state="translated">Fehlschläge</target>
 			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_log">

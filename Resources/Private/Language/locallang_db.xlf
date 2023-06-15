@@ -20,6 +20,9 @@
 			<trans-unit id="sys_category.luxletter_newsletter_category">
 				<source>Is Luxletter category?</source>
 			</trans-unit>
+			<trans-unit id="sys_category.luxletter_newsletter_category.description">
+				<source>This is a data set used for grouping newsletters by a category</source>
+			</trans-unit>
 
 			<trans-unit id="ctype.teaser">
 				<source>Teaser element</source>
@@ -97,6 +100,9 @@
 			</trans-unit>
 			<trans-unit id="tx_luxletter_domain_model_queue.sent">
 				<source>Sent</source>
+			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_queue.failures">
+				<source>Failures</source>
 			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_log">
