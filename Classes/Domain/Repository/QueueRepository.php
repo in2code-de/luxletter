@@ -26,6 +26,7 @@ class QueueRepository extends AbstractRepository
         $and = [
             $query->lessThan('datetime', time()),
             $query->equals('sent', false),
+            $query->lessThan('failures', 3),
             $query->equals('newsletter.disabled', false),
             $query->greaterThan('newsletter.configuration', 0),
             $query->logicalNot($query->equals('newsletter.layout', '')),
@@ -48,6 +49,19 @@ class QueueRepository extends AbstractRepository
         $query = $this->createQuery();
         $and = [
             $query->equals('sent', $dispatched),
+            $query->equals('newsletter', $newsletter),
+        ];
+        $query->matching($query->logicalAnd(...$and));
+        return $query->execute();
+    }
+
+    public function findAllByNewsletterAndFailedStatus(
+        Newsletter $newsletter,
+        int $failures = 3
+    ): QueryResultInterface {
+        $query = $this->createQuery();
+        $and = [
+            $query->greaterThanOrEqual('failures', $failures),
             $query->equals('newsletter', $newsletter),
         ];
         $query->matching($query->logicalAnd(...$and));

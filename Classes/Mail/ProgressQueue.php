@@ -101,8 +101,12 @@ class ProgressQueue
             ));
             /** @var Queue $queue */
             foreach ($queues as $queue) {
-                $this->sendNewsletterToReceiverInQueue($queue);
-                $this->markSent($queue);
+                try {
+                    $this->sendNewsletterToReceiverInQueue($queue);
+                    $this->markSent($queue);
+                } catch (\Throwable $throwable) {
+                    $this->increaseFailures($queue);
+                }
                 $progress->advance();
             }
             $this->output->writeln('');
@@ -223,6 +227,19 @@ class ProgressQueue
     protected function markSent(Queue $queue)
     {
         $queue->setSent();
+        $this->queueRepository->update($queue);
+        $this->queueRepository->persistAll();
+    }
+
+    /**
+     * @param Queue $queue
+     * @return void
+     * @throws IllegalObjectTypeException
+     * @throws UnknownObjectException
+     */
+    protected function increaseFailures(Queue $queue)
+    {
+        $queue->setFailures($queue->getFailures() + 1);
         $this->queueRepository->update($queue);
         $this->queueRepository->persistAll();
     }

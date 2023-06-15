@@ -142,10 +142,15 @@
         <td>
             <div class="progress">
                 <div class="progress-bar" role="progressbar"
-                     title="{newsletter.dispatchProgress} %"
+                     title="{f:translate(key:'module.newsletter.list.progressbar.dispatched')} {newsletter.dispatchProgress} %"
                      style="width: {newsletter.dispatchProgress}%"
                      aria-valuenow="{newsletter.dispatchProgress}" aria-valuemin="0"
-                     aria-valuemax="100"></div>
+                     aria-valuemax="{100 - newsletter.failuredProgress}"></div>
+                <div class="progress-bar progress-bar-striped" role="progressbar"
+                     title="{f:translate(key:'module.newsletter.list.progressbar.failed')} {newsletter.failuredProgress} %"
+                     style="width: {newsletter.failuredProgress}%;"
+                     aria-valuenow="{newsletter.failuredProgress}" aria-valuemin="0"
+                     aria-valuemax="{100 - newsletter.dispatchProgress}"></div>
             </div>
         </td>
         <td>
