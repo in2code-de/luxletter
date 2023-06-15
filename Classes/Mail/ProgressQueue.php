@@ -16,6 +16,7 @@ use In2code\Luxletter\Utility\ConfigurationUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
+use Throwable;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
@@ -104,7 +105,7 @@ class ProgressQueue
                 try {
                     $this->sendNewsletterToReceiverInQueue($queue);
                     $this->markSent($queue);
-                } catch (\Throwable $throwable) {
+                } catch (Throwable $throwable) {
                     $this->increaseFailures($queue);
                 }
                 $progress->advance();

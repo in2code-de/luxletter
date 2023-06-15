@@ -15,6 +15,7 @@ use In2code\Luxletter\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 class Newsletter extends AbstractEntity
@@ -245,7 +246,7 @@ class Newsletter extends AbstractEntity
         if ($this->dispatchedProgress === null) {
             $queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
             $dispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, true)->count();
-            $notDispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, false)->count();
+            $notDispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this)->count();
             $overall = $dispatched + $notDispatched;
             $result = 0;
             if ($overall > 0) {
@@ -260,13 +261,14 @@ class Newsletter extends AbstractEntity
      * Checks the queue progress of this newsletter for failed part. 10 means 10% have failed to be sent.
      *
      * @return int
+     * @throws InvalidQueryException
      */
     public function getFailuredProgress(): int
     {
         if ($this->failuredProgress === null) {
             $queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
             $dispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, true)->count();
-            $notDispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, false)->count();
+            $notDispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this)->count();
             $failed = $queueRepository->findAllByNewsletterAndFailedStatus($this)->count();
             $overall = $dispatched + $notDispatched;
             $result = 0;
