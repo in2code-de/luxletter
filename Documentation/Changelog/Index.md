@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                           |
 |------------|------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 17.6.0     | 2023.06.19 | Feature | Add a basic queue failure management for undispatchable mails (try to send 3 times from now on).                                                                                      |
 | 17.5.1     | 2023.04.03 | Bugfix  | Add setter to manipulate content in NewsletterUrlAfterParsingEvent                                                                                                                    |
 | 17.5.0     | 2023.03.23 | Feature | Doktype number is configurable for multilanguage mode, support to split tables via tablemapping if needed (e.g. with content publisher)                                               |
 | 17.4.1     | 2022.12.19 | Bugfix  | Remove unwanted "$" character in choices plugin                                                                                                                                       |
