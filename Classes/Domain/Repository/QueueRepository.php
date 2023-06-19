@@ -52,7 +52,8 @@ class QueueRepository extends AbstractRepository
      * @return QueryResultInterface
      * @throws InvalidQueryException
      */
-    public function findAllByNewsletterAndDispatchedStatus(Newsletter $newsletter): QueryResultInterface {
+    public function findAllByNewsletterAndDispatchedStatus(Newsletter $newsletter): QueryResultInterface
+    {
         $query = $this->createQuery();
         $and = [
             $query->equals('sent', false),
@@ -68,7 +69,8 @@ class QueueRepository extends AbstractRepository
      * @return QueryResultInterface
      * @throws InvalidQueryException
      */
-    public function findAllByNewsletterAndFailedStatus(Newsletter $newsletter): QueryResultInterface {
+    public function findAllByNewsletterAndFailedStatus(Newsletter $newsletter): QueryResultInterface
+    {
         $query = $this->createQuery();
         $and = [
             $query->greaterThanOrEqual('failures', self::FAILURE_COUNT),
