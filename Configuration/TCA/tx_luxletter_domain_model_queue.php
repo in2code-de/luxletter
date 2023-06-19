@@ -26,7 +26,7 @@ return [
         'hideTable' => 1,
     ],
     'types' => [
-        '1' => ['showitem' => 'email,newsletter,user,datetime,sent'],
+        '1' => ['showitem' => 'email,newsletter,user,datetime,sent,failures'],
     ],
     'columns' => [
         'email' => [
@@ -91,6 +91,14 @@ return [
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:' . Queue::TABLE_NAME . '.sent',
             'config' => [
                 'type' => 'check',
+                'readOnly' => true,
+            ],
+        ],
+        'failures' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:' . Queue::TABLE_NAME . '.failures',
+            'config' => [
+                'type' => 'input',
                 'readOnly' => true,
             ],
         ],

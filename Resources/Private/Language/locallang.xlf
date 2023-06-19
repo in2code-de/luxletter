@@ -165,6 +165,12 @@
 			<trans-unit id="module.newsletter.list.filter.time.50">
 				<source>Show newsletters from the last year</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.list.progressbar.dispatched">
+				<source>Dispatched</source>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.progressbar.failed">
+				<source>Failed</source>
+			</trans-unit>
 
 			<trans-unit id="module.newsletter.new.title">
 				<source>Add new newsletter</source>

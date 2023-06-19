@@ -219,6 +219,14 @@
 				<source>Show newsletters from the last year</source>
 				<target state="translated">Zeige alle Newsletter des letzten Jahres</target>
 			</trans-unit>
+			<trans-unit id="module.newsletter.list.progressbar.dispatched">
+				<source>Dispatched</source>
+				<target state="translated">Gesendet</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.progressbar.failed">
+				<source>Failed</source>
+				<target state="translated">Fehlgeschlagen</target>
+			</trans-unit>
 
 			<trans-unit id="module.newsletter.new.title">
 				<source>Add new newsletter</source>

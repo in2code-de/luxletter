@@ -39,6 +39,11 @@ class Queue extends AbstractEntity
     protected $sent = false;
 
     /**
+     * @var int
+     */
+    protected $failures = 0;
+
+    /**
      * @return string
      */
     public function getEmail(): string
@@ -124,6 +129,24 @@ class Queue extends AbstractEntity
     public function setSent(): self
     {
         $this->sent = true;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFailures(): int
+    {
+        return $this->failures;
+    }
+
+    /**
+     * @param int $failures
+     * @return Queue
+     */
+    public function setFailures(int $failures): self
+    {
+        $this->failures = $failures;
         return $this;
     }
 }

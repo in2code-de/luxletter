@@ -17,6 +17,8 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
  */
 class QueueRepository extends AbstractRepository
 {
+    const FAILURE_COUNT = 3;
+
     /**
      * @param int $limit
      * @param int $newsletterIdentifier
@@ -29,6 +31,7 @@ class QueueRepository extends AbstractRepository
         $and = [
             $query->lessThan('datetime', time()),
             $query->equals('sent', false),
+            $query->lessThan('failures', self::FAILURE_COUNT),
             $query->equals('newsletter.disabled', false),
             $query->greaterThan('newsletter.configuration', 0),
             $query->logicalNot($query->equals('newsletter.layout', '')),
@@ -46,16 +49,29 @@ class QueueRepository extends AbstractRepository
 
     /**
      * @param Newsletter $newsletter
-     * @param bool $dispatched
      * @return QueryResultInterface
+     * @throws InvalidQueryException
      */
-    public function findAllByNewsletterAndDispatchedStatus(
-        Newsletter $newsletter,
-        bool $dispatched = false
-    ): QueryResultInterface {
+    public function findAllByNewsletterAndDispatchedStatus(Newsletter $newsletter): QueryResultInterface {
         $query = $this->createQuery();
         $and = [
-            $query->equals('sent', $dispatched),
+            $query->equals('sent', false),
+            $query->lessThan('failures', self::FAILURE_COUNT),
+            $query->equals('newsletter', $newsletter),
+        ];
+        $query->matching($query->logicalAnd($and));
+        return $query->execute();
+    }
+
+    /**
+     * @param Newsletter $newsletter
+     * @return QueryResultInterface
+     * @throws InvalidQueryException
+     */
+    public function findAllByNewsletterAndFailedStatus(Newsletter $newsletter): QueryResultInterface {
+        $query = $this->createQuery();
+        $and = [
+            $query->greaterThanOrEqual('failures', self::FAILURE_COUNT),
             $query->equals('newsletter', $newsletter),
         ];
         $query->matching($query->logicalAnd($and));

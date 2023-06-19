@@ -15,10 +15,11 @@ use In2code\Luxletter\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
- * Class User
+ * Class Newsletter
  */
 class Newsletter extends AbstractEntity
 {
@@ -85,6 +86,11 @@ class Newsletter extends AbstractEntity
      * @var int|null
      */
     protected $dispatchedProgress = null;
+
+    /**
+     * @vat int|null
+     */
+    protected $failuredProgress = null;
 
     /**
      * @var int
@@ -406,7 +412,7 @@ class Newsletter extends AbstractEntity
     {
         if ($this->dispatchedProgress === null) {
             $queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
-            $dispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, true)->count();
+            $dispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this)->count();
             $notDispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, false)->count();
             $overall = $dispatched + $notDispatched;
             $result = 0;
@@ -416,6 +422,29 @@ class Newsletter extends AbstractEntity
             $this->dispatchedProgress = $result;
         }
         return $this->dispatchedProgress;
+    }
+
+    /**
+     * Checks the queue progress of this newsletter for failed part. 10 means 10% have failed to be sent.
+     *
+     * @return int
+     * @throws InvalidQueryException
+     */
+    public function getFailuredProgress(): int
+    {
+        if ($this->failuredProgress === null) {
+            $queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
+            $dispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this)->count();
+            $notDispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, false)->count();
+            $failed = $queueRepository->findAllByNewsletterAndFailedStatus($this)->count();
+            $overall = $dispatched + $notDispatched;
+            $result = 0;
+            if ($overall > 0 && $failed > 0) {
+                $result = (int)(100 - ($failed / $overall * 100));
+            }
+            $this->failuredProgress = $result;
+        }
+        return $this->failuredProgress;
     }
 
     /**
