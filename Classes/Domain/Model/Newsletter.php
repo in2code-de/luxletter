@@ -88,7 +88,7 @@ class Newsletter extends AbstractEntity
     protected $dispatchedProgress = null;
 
     /**
-     * @vat int|null
+     * @var int|null
      */
     protected $failuredProgress = null;
 
