@@ -106,6 +106,8 @@ class ProgressQueue
                     $this->sendNewsletterToReceiverInQueue($queue);
                     $this->markSent($queue);
                 } catch (Throwable $throwable) {
+                    $logService = GeneralUtility::makeInstance(LogService::class);
+                    $logService->logNewsletterDispatchFailure($queue->getNewsletter(), $queue->getUser(), $throwable->getMessage());
                     $this->increaseFailures($queue);
                 }
                 $progress->advance();

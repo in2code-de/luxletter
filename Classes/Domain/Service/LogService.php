@@ -30,6 +30,17 @@ class LogService
     }
 
     /**
+     * @param Newsletter $newsletter
+     * @param User $user
+     * @return void
+     * @throws IllegalObjectTypeException
+     */
+    public function logNewsletterDispatchFailure(Newsletter $newsletter, User $user, string $message): void
+    {
+        $this->log($newsletter, $user, Log::STATUS_DISPATCH_FAILURE, ['exception' => $message]);
+    }
+
+    /**
      * Log the opening of a newsletter (via tracking pixel or when clicking a link) only once per newsletter and user
      *
      * @param Newsletter $newsletter
