@@ -440,7 +440,7 @@ class Newsletter extends AbstractEntity
             $overall = $dispatched + $notDispatched;
             $result = 0;
             if ($overall > 0 && $failed > 0) {
-                $result = (int)(($failed / $overall * 100));
+                $result = (int)($failed / $overall * 100);
             }
             $this->failuredProgress = $result;
         }
