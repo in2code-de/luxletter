@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                                   |
 |------------|------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 22.1.0     | 2023.07.16 | Feature | Show the number of already sent testmail for a better usability. Log email failures now. Bugfix of the wrong failure calculation.                                                             |
 | 22.0.0     | 2023.06.15 | Feature | Add a basic queue failure management for undispatchable mails (try to send 3 times from now on). Add a description text for LUXletter category in backend.                                    |
 | 21.0.0     | 2023.05.15 | Feature | Add local docker environment, update unit tests for newer PHP and TYPO3, fix problems with activated cachehash checks, some optical improvements in backend views, updated frontend toolchain |
 | 20.0.0     | 2023.04.25 | Feature | Add unsubscribe URL in header for unsubscribe automatism in email clients (new configuration option in extension manager available)                                                           |
@@ -19,6 +20,8 @@
 | 19.0.1     | 2023.02.07 | Bugfix  | Fix empty eval string in TCA configuration of sites.luxletterUnsubscribePid in TYPO3 12                                                                                                       |
 | 19.0.0     | 2022.12.19 | Feature | Replace checkboxes with choices plugin for receiver selection for a better handling especially with a lot of receiver groups                                                                  |
 | !!! 18.0.0 | 2022.12.13 | Task    | TYPO3 12 and 11 supported now, dropped support for TYPO3 10                                                                                                                                   |
+| 17.6.0     | 2023.06.19 | Feature | Add a basic queue failure management for undispatchable mails (try to send 3 times from now on).                                                                                              |
+| 17.5.1     | 2023.04.03 | Bugfix  | Add setter to manipulate content in NewsletterUrlAfterParsingEvent                                                                                                                            |
 | 17.5.0     | 2023.03.23 | Feature | Doktype number is configurable for multilanguage mode, support to split tables via tablemapping if needed (e.g. with content publisher)                                                       |
 | 17.4.0     | 2022.12.19 | Feature | Replace checkboxes with choices plugin for receiver selection for a better handling especially with a lot of receiver groups                                                                  |
 | 17.3.0     | 2022.11.25 | Task    | Remove config.no_cache=1, small label change, fix typo in documentation                                                                                                                       |

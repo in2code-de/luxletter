@@ -264,9 +264,14 @@ define(['jquery'], function($) {
      * @returns {void}
      */
     this.testMailListenerCallback = function(response) {
-      var messageElement = document.querySelector('[data-luxletter-testmail="message"]');
-      if (messageElement !== null) {
+      const messageElement = document.querySelector('[data-luxletter-testmail="message"]');
+      if (messageElement !== null && response.status === true) {
         showElement(messageElement);
+
+        const counterElement = messageElement.querySelector('p>span');
+        let counter = parseInt(counterElement.innerHTML);
+        counter++;
+        counterElement.innerHTML = counter.toString();
       }
     };
 
