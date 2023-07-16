@@ -154,7 +154,9 @@
             </div>
         </td>
         <td>
-            <span title="UID{newsletter.receiver.uid}">{newsletter.receiver.title}</span>
+            <f:for each="{newsletter.receivers}" as="receiver" iteration="iteration">
+                <span title="UID{receiver.uid}">{receiver.title}<f:if condition="!{iteration.isLast}">,</f:if></span>
+            </f:for>
             <span class="badge" title="Amount" style="margin-left:15px;">
                 <luxletter:queue.getNumberOfReceiversFromQueue newsletter="{newsletter}"/>
             </span>

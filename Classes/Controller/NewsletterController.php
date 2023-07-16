@@ -136,6 +136,8 @@ class NewsletterController extends AbstractNewsletterController
             $newsletterLanguage = clone $newsletter;
             $this->setBodytextInNewsletter($newsletterLanguage, $language);
             $newsletterLanguage->setLanguage($language);
+            $receivers = clone $newsletter->getReceivers();
+            $newsletterLanguage->setReceivers($receivers);
             if (ConfigurationUtility::isMultiLanguageModeActivated()) {
                 $newsletterLanguage->setSubject(
                     $this->pageRepository->getSubjectFromPageIdentifier(

@@ -13,7 +13,7 @@ class ClearCommand extends Command
 {
     public function configure()
     {
-        $this->setDescription('Remove all data of (newsletter, log, queue, link) luxletter!!!');
+        $this->setDescription('Be careful!!! Removes all data of (newsletter, log, queue, link) luxletter.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
