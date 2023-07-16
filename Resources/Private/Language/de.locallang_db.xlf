@@ -67,6 +67,10 @@
 				<source>Title</source>
 				<target state="translated">Bezeichnung</target>
 			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.queued">
+				<source>Queue records added</source>
+				<target state="translated">Queue Datensätze erzeugt</target>
+			</trans-unit>
 			<trans-unit id="tx_luxletter_domain_model_newsletter.category">
 				<source>Category</source>
 				<target state="translated">Kategorie</target>

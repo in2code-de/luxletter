@@ -18,3 +18,6 @@ receiverAction = 1
 
 # cat=basic//260; type=text; label= Limit mails in context: If you run testinstances beside production, you can limit mail sending to a defined context (empty = no limit). Example "Production" or "Development/Docker".
 limitToContext =
+
+# cat=mail//270; type=boolean; label= Build queue via cronjob: If you have a lot of recipients together with a small memory_limit, a white page or an error could occur when saving a newsletter in backend module. With this change, the queue must be build later via scheduler task.
+asynchronousQueueStorage = 0

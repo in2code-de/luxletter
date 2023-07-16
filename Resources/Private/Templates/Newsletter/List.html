@@ -136,24 +136,35 @@
             {f:format.date(date:newsletter.datetime,format:'{f:translate(key:\'date\')}')}
         </td>
         <td>
-            <div class="progress">
-                <div class="progress-bar" role="progressbar"
-                     title="{f:translate(key:'module.newsletter.list.progressbar.dispatched')}: {newsletter.dispatchProgress} %"
-                     style="width: {newsletter.dispatchProgress}%"
-                     aria-valuenow="{newsletter.dispatchProgress}" aria-valuemin="0"
-                     aria-valuemax="{100 - newsletter.failuredProgress}"></div>
-                <div class="progress-bar progress-bar-striped" role="progressbar"
-                     title="{f:translate(key:'module.newsletter.list.progressbar.failed')}: {newsletter.failuredProgress} %"
-                     style="width: {newsletter.failuredProgress}%;"
-                     aria-valuenow="{newsletter.failuredProgress}" aria-valuemin="0"
-                     aria-valuemax="{100 - newsletter.dispatchProgress}"></div>
-            </div>
+            <f:if condition="{newsletter.queued}">
+                <f:then>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar"
+                             title="{f:translate(key:'module.newsletter.list.progressbar.dispatched')}: {newsletter.dispatchProgress} %"
+                             style="width: {newsletter.dispatchProgress}%"
+                             aria-valuenow="{newsletter.dispatchProgress}" aria-valuemin="0"
+                             aria-valuemax="{100 - newsletter.failuredProgress}"></div>
+                        <div class="progress-bar progress-bar-striped" role="progressbar"
+                             title="{f:translate(key:'module.newsletter.list.progressbar.failed')}: {newsletter.failuredProgress} %"
+                             style="width: {newsletter.failuredProgress}%;"
+                             aria-valuenow="{newsletter.failuredProgress}" aria-valuemin="0"
+                             aria-valuemax="{100 - newsletter.dispatchProgress}"></div>
+                    </div>
+                </f:then>
+                <f:else>
+                    <f:translate key="module.newsletter.list.notyetqueued">building queue...</f:translate>
+                </f:else>
+            </f:if>
         </td>
         <td>
-            <span title="UID{newsletter.receiver.uid}">{newsletter.receiver.title}</span>
-            <span class="badge" title="Amount" style="margin-left:15px;">
-                <luxletter:queue.getNumberOfReceiversFromQueue newsletter="{newsletter}"/>
-            </span>
+            <f:for each="{newsletter.receivers}" as="receiver" iteration="iteration">
+                <span title="UID{receiver.uid}">{receiver.title}<f:if condition="!{iteration.isLast}">,</f:if></span>
+            </f:for>
+            <f:if condition="{newsletter.queued}">
+                <span class="badge" title="Amount" style="margin-left:15px;">
+                    <luxletter:queue.getNumberOfReceiversFromQueue newsletter="{newsletter}"/>
+                </span>
+            </f:if>
         </td>
         <td>
             <f:link.action action="edit" class="btn btn-default"

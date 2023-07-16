@@ -49,6 +49,9 @@
 			<trans-unit id="tx_luxletter_domain_model_newsletter">
 				<source>Newsletter</source>
 			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_newsletter.queued">
+				<source>Queue records added</source>
+			</trans-unit>
 			<trans-unit id="tx_luxletter_domain_model_newsletter.title">
 				<source>Title</source>
 			</trans-unit>
