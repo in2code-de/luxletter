@@ -18,7 +18,7 @@ class NewsletterRepository extends AbstractRepository
     public function findLatestNewsletter(): ?Newsletter
     {
         $query = $this->createQuery();
-        $query->setOrderings(['uid', QueryInterface::ORDER_DESCENDING]);
+        $query->setOrderings(['uid' => QueryInterface::ORDER_DESCENDING]);
         $query->setLimit(1);
         /** @var Newsletter $newsletter */
         $newsletter = $query->execute()->getFirst();
