@@ -29,7 +29,7 @@ class QueueCommand extends Command
 
     public function configure()
     {
-        $this->setDescription('Send a bunch of emails from the queue.');
+        $this->setDescription('Process queue: Sends a bunch of emails from the queue.');
         $this->addArgument('amount', InputArgument::OPTIONAL, 'How many mails should be send per wave?', 50);
         $this->addArgument(
             'newsletter',

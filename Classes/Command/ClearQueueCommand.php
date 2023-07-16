@@ -13,7 +13,7 @@ class ClearQueueCommand extends Command
 {
     public function configure()
     {
-        $this->setDescription('Remove all queued newsletters');
+        $this->setDescription('Be careful! Removes all queued newsletters.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
