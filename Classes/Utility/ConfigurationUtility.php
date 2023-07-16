@@ -106,6 +106,19 @@ class ConfigurationUtility
     }
 
     /**
+     * @return bool
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
+    public static function isAsynchronousQueueStorageActivated(): bool
+    {
+        return GeneralUtility::makeInstance(ExtensionConfiguration::class)->get(
+            'luxletter',
+            'asynchronousQueueStorage'
+        ) === '1';
+    }
+
+    /**
      * @return int
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException

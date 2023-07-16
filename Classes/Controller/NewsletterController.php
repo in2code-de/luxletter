@@ -148,9 +148,13 @@ class NewsletterController extends AbstractNewsletterController
             }
             $this->newsletterRepository->add($newsletterLanguage);
             $this->newsletterRepository->persistAll();
-            $queueService = GeneralUtility::makeInstance(QueueService::class);
-            $queueService->addMailReceiversToQueue($newsletterLanguage, $language);
+
+            if (ConfigurationUtility::isAsynchronousQueueStorageActivated() === false) {
+                $queueService = GeneralUtility::makeInstance(QueueService::class);
+                $queueService->addMailReceiversToQueue($newsletterLanguage, $language);
+            }
         }
+
         $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.create.message'));
         return $this->redirect('list');
     }

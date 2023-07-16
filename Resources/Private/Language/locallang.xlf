@@ -114,6 +114,9 @@
 			<trans-unit id="module.newsletter.list.tableheader.receiver">
 				<source>Receiver</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.list.notyetqueued">
+				<source>Building queue...</source>
+			</trans-unit>
 			<trans-unit id="module.newsletter.list.edit">
 				<source>Edit</source>
 			</trans-unit>

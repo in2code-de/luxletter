@@ -64,6 +64,7 @@ class QueueService
      */
     public function addMailReceiversToQueue(Newsletter $newsletter, int $language): int
     {
+        $newsletter->setQueued();
         $users = $this->userRepository->getUsersFromGroups($newsletter->getReceiverGroupIdentifiers(), $language);
         /** @var QueueServiceAddMailReceiversToQueueEvent $event */
         $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
@@ -106,6 +107,7 @@ class QueueService
         if ($newsletter === null) {
             throw new RecordInDatabaseNotFoundException('No newsletter found', 1585479408);
         }
+        $newsletter->setQueued();
         $this->addUserToQueue($newsletter, $user);
     }
 
@@ -141,6 +143,7 @@ class QueueService
                 1585479403
             );
         }
+        $newsletter->setQueued();
         $this->addUserToQueue($newsletter, $user);
     }
 

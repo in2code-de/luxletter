@@ -28,7 +28,7 @@ return [
     ],
     'types' => [
         '1' => [
-            'showitem' => 'disabled,title,category,description,datetime,subject,receivers,configuration,layout,' .
+            'showitem' => 'disabled,queued,title,category,description,datetime,subject,receivers,configuration,layout,' .
                 'origin,bodytext,language,crdate',
         ],
     ],
@@ -36,6 +36,15 @@ return [
         'disabled' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
+            'config' => [
+                'type' => 'check',
+                'default' => 0,
+            ],
+        ],
+        'queued' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
+                . Newsletter::TABLE_NAME . '.queued',
             'config' => [
                 'type' => 'check',
                 'default' => 0,

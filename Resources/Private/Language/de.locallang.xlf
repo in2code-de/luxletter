@@ -151,6 +151,10 @@
 				<source>Receiver</source>
 				<target state="translated">Empfänger</target>
 			</trans-unit>
+			<trans-unit id="module.newsletter.list.notyetqueued">
+				<source>Building queue...</source>
+				<target state="translated">Queue wird gebaut...</target>
+			</trans-unit>
 			<trans-unit id="module.newsletter.list.edit">
 				<source>Edit</source>
 				<target state="translated">Bearbeiten</target>
