@@ -41,6 +41,14 @@ class NewsletterRepository extends AbstractRepository
      * @throws DBALException
      * @throws IllegalObjectTypeException
      */
+    public function findOneNotQueued(): ?Newsletter
+    {
+        $query = $this->createQuery();
+        $query->matching($query->equals('queued', false));
+        $query->setOrderings(['uid' => QueryInterface::ORDER_ASCENDING]);
+        return $query->execute()->getFirst();
+    }
+
     public function removeNewsletterAndQueues(Newsletter $newsletter): void
     {
         $connection = DatabaseUtility::getConnectionForTable(Queue::TABLE_NAME);
