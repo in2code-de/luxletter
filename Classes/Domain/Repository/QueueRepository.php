@@ -49,18 +49,19 @@ class QueueRepository extends AbstractRepository
 
     /**
      * @param Newsletter $newsletter
+     * @param bool $dispatched
      * @return QueryResultInterface
-     * @throws InvalidQueryException
      */
-    public function findAllByNewsletterAndDispatchedStatus(Newsletter $newsletter): QueryResultInterface
-    {
+    public function findAllByNewsletterAndDispatchedStatus(
+        Newsletter $newsletter,
+        bool $dispatched = false
+    ): QueryResultInterface {
         $query = $this->createQuery();
         $and = [
-            $query->equals('sent', false),
-            $query->lessThan('failures', self::FAILURE_COUNT),
+            $query->equals('sent', $dispatched),
             $query->equals('newsletter', $newsletter),
         ];
-        $query->matching($query->logicalAnd($and));
+        $query->matching($query->logicalAnd(...$and));
         return $query->execute();
     }
 
@@ -76,7 +77,7 @@ class QueueRepository extends AbstractRepository
             $query->greaterThanOrEqual('failures', self::FAILURE_COUNT),
             $query->equals('newsletter', $newsletter),
         ];
-        $query->matching($query->logicalAnd($and));
+        $query->matching($query->logicalAnd(...$and));
         return $query->execute();
     }
 
