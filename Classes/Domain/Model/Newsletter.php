@@ -412,8 +412,8 @@ class Newsletter extends AbstractEntity
     {
         if ($this->dispatchedProgress === null) {
             $queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
-            $dispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this)->count();
-            $notDispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, false)->count();
+            $dispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, true)->count();
+            $notDispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this)->count();
             $overall = $dispatched + $notDispatched;
             $result = 0;
             if ($overall > 0) {
@@ -434,8 +434,8 @@ class Newsletter extends AbstractEntity
     {
         if ($this->failuredProgress === null) {
             $queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
-            $dispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this)->count();
-            $notDispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, false)->count();
+            $dispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this, true)->count();
+            $notDispatched = $queueRepository->findAllByNewsletterAndDispatchedStatus($this)->count();
             $failed = $queueRepository->findAllByNewsletterAndFailedStatus($this)->count();
             $overall = $dispatched + $notDispatched;
             $result = 0;
