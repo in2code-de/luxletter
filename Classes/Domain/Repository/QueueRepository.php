@@ -61,7 +61,7 @@ class QueueRepository extends AbstractRepository
             $query->equals('sent', $dispatched),
             $query->equals('newsletter', $newsletter),
         ];
-        $query->matching($query->logicalAnd(...$and));
+        $query->matching($query->logicalAnd($and));
         return $query->execute();
     }
 
@@ -77,7 +77,7 @@ class QueueRepository extends AbstractRepository
             $query->greaterThanOrEqual('failures', self::FAILURE_COUNT),
             $query->equals('newsletter', $newsletter),
         ];
-        $query->matching($query->logicalAnd(...$and));
+        $query->matching($query->logicalAnd($and));
         return $query->execute();
     }
 
