@@ -23,7 +23,6 @@ class BuildQueueCommand extends Command
         $newsletter = $newsletterRepository->findOneNotQueued();
 
         if ($newsletter !== null) {
-            $newsletter->setQueued();
             $newsletterRepository->update($newsletter);
             $newsletterRepository->persistAll();
 
