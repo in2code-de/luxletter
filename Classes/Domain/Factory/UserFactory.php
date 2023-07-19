@@ -55,7 +55,8 @@ class UserFactory
         }
         ObjectAccess::setProperty($user, 'crdate', new DateTime());
         $user->_setProperty('uid', 9999999999999);
-        $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(DummyUserEvent::class, $user));
-        return $user;
+        $dummyUserEvent = GeneralUtility::makeInstance(DummyUserEvent::class, $user);
+        $this->eventDispatcher->dispatch($dummyUserEvent);
+        return $dummyUserEvent->getUser();
     }
 }
