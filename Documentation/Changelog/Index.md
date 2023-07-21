@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                           |
 |------------|------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 17.6.3     | 2023.07.21 | Bugfix  | Prevent exception in newsletter preview (e.g. when RouteEnhancers are in use), Extend DummyUserEvent with a setter for manipulation possibilities                                     |
 | 17.6.2     | 2023.07.16 | Bugfix  | Fix calculation of failure percentage, log failures now                                                                                                                               |
 | 17.6.1     | 2023.06.20 | Bugfix  | Fix of an annotation line                                                                                                                                                             |
 | 17.6.0     | 2023.06.19 | Feature | Add a basic queue failure management for undispatchable mails (try to send 3 times from now on).                                                                                      |
