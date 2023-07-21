@@ -54,6 +54,7 @@ class UserFactory
             ObjectAccess::setProperty($user, $key, $value);
         }
         ObjectAccess::setProperty($user, 'crdate', new DateTime());
+        $user->_setProperty('uid', 9999999999999);
         $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(DummyUserEvent::class, $user));
         return $user;
     }
