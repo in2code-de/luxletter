@@ -186,7 +186,7 @@ class Newsletter extends AbstractEntity
         return $this->queued;
     }
 
-    public function setQueued(): self
+    public function setQueued(): Newsletter
     {
         $this->queued = true;
         return $this;
