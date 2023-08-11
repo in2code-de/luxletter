@@ -77,6 +77,12 @@ class QueueService
         foreach ($event->getUsers() as $user) {
             $this->addUserToQueue($newsletter, $user);
         }
+
+        // In case of activated MultiLanguageMode $newsletter of foreign languages is only a clone.
+        // Extbase handles only the original object, but does not care about our clone.
+        $this->newsletterRepository->update($newsletter);
+        $this->newsletterRepository->persistAll();
+
         return count($users);
     }
 
