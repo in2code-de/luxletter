@@ -42,7 +42,7 @@ define(['jquery', 'TYPO3/CMS/Luxletter/Vendor/Chart.min'], function($) {
 						data: element.getAttribute('data-chart-data').split(','),
 						backgroundColor: [
 							'rgba(221, 221, 221, 1)',
-							'rgba(77, 231, 255, 1)'
+							'rgba(2, 122, 202, 1)'
 						]
 					}],
 					labels: element.getAttribute('data-chart-labels').split(',')
@@ -70,7 +70,7 @@ define(['jquery', 'TYPO3/CMS/Luxletter/Vendor/Chart.min'], function($) {
 						label: element.getAttribute('data-chart-label'),
 						data: element.getAttribute('data-chart-data').split(','),
 						backgroundColor: [
-							'rgba(77, 231, 255, 1)',
+							'rgba(2, 122, 202, 1)',
 							'rgba(221, 221, 221, 1)'
 						]
 					}],
