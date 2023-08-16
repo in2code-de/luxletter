@@ -14,6 +14,9 @@ rewriteLinksInNewsletter = 1
 # cat=mail//1100; type=boolean; label= Embed images: Images can also be embedded automatically into newsletters. Useful if images are not public accessible (e.g. Intranet). Note: This will slow down the sending process and enlarge size of the emails!
 embedImagesInNewsletter = 0
 
+# cat=mail//1200; type=boolean; label= Build queue via cronjob: If you have a lot of recipients together with a small memory_limit, a white page or an error could occur when saving a newsletter in backend module. With this change, the queue must be build later via scheduler task.
+asynchronousQueueStorage = 0
+
 
 # cat=expert//2000; type=integer; label= Doktype used for Multilanguage Newsletter Pages: The value is used for the pages doktype field in your instance, if the default value 11 is already used for other stuff, you can change it here
 multiLanguageNewsletterPageDoktype = 11

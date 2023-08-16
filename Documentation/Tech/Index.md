@@ -234,3 +234,39 @@ when temp images are deleted - but this would have no negative effect im images 
 
 Embedding will slow down the mail sending process. The mail itself is - of course - a lot of bigger then sending mails
 without images.
+
+### Readable URL for unsubscribe links would be nice - any hints?
+
+You can use RouteEnhancers to rewrite the unsubscribe links. Example configuration would be:
+
+```
+routeEnhancers:
+  LuxletterUnsubscribe:
+    type: Extbase
+    extension: Luxletter
+    plugin: Fe
+    defaultController: 'Frontend::unsubscribe'
+    routes:
+      - routePath: '/u/{user}/{hash}/{newsletter}'
+        _controller: 'Frontend::unsubscribe'
+        _arguments:
+          user: 'user'
+          hash: 'hash'
+          newsletter: 'newsletter'
+        requirements:
+          hash: '^[a-zA-Z0-9]{64}$'
+          newsletter: '[0-9]{1,3}'
+          user: '[0-9]{1,5}'
+    aspects:
+      user:
+        type: PersistedAliasMapper
+        tableName: fe_users
+        routeFieldName: uid
+      hash:
+        type: StaticUnsubscribeHashMapper
+        routeFieldName: hash
+      newsletter:
+        type: PersistedAliasMapper
+        tableName: tx_luxletter_domain_model_newsletter
+        routeFieldName: uid
+```

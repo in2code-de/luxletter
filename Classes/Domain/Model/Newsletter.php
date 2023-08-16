@@ -29,6 +29,10 @@ class Newsletter extends AbstractEntity
     protected string $layout = '';
     protected string $bodytext = '';
 
+    /**
+     * @var bool is true if queue records are already been added to a newsletter
+     */
+    protected bool $queued = false;
     protected bool $disabled = false;
 
     protected int $queues = 0;
@@ -79,6 +83,17 @@ class Newsletter extends AbstractEntity
     public function setDescription(string $description): Newsletter
     {
         $this->description = $description;
+        return $this;
+    }
+
+    public function isQueued(): bool
+    {
+        return $this->queued;
+    }
+
+    public function setQueued(): self
+    {
+        $this->queued = true;
         return $this;
     }
 

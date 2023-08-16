@@ -27,4 +27,14 @@ final class DummyUserEvent
     {
         return $this->user;
     }
+
+    /**
+     * @param User $user
+     * @return $this
+     */
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+        return $this;
+    }
 }

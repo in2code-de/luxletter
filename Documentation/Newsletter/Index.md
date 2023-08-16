@@ -213,16 +213,16 @@ At the top of the list view there is a filter that can be used for filter by a s
 
 #### List view
 
-| Field                   | Description                                                                             |
-| ----------------------- | --------------------------------------------------------------------------------------- |
-| #                       | Newsletter number                                                                       |
-| Title                   | Newsletter title                                                                        |
-| Description             | Newsletter description                                                                  |
-| Sending time            | Time when the newsletter can be send                                                    |
-| Progress                | Sending progress of the newsletter                                                      |
-| Receiver                | Receiver frontenduser group with the number of receivers                                |
-| Disable                 | Disable this newsletter. The newsletter will not be sent any more when disabled.        |
-| Delete                  | Delete this newsletter and all related queue entries                                    |
+| Field        | Description                                                                      |
+|--------------|----------------------------------------------------------------------------------|
+| #            | Newsletter number                                                                |
+| Title        | Newsletter title                                                                 |
+| Description  | Newsletter description                                                           |
+| Sending time | Time when the newsletter can be send                                             |
+| Progress     | Sending progress of the newsletter                                               |
+| Receiver     | Receiver frontenduser group with the number of receivers                         |
+| Disable      | Disable this newsletter. The newsletter will not be sent any more when disabled. |
+| Delete       | Delete this newsletter and all related queue entries                             |
 
 <img src="../Images/documentation_newsletter_newslettermodule.png" width="800" alt="newsletter backend module" />
 
@@ -232,31 +232,31 @@ Clicking on `Add new newsletter` starts a process where you can create new newsl
 
 <img src="../Images/documentation_newnewsletter_step1.png" width="800" alt="create new newsletter - step 1" />
 
-| Field                   | Description                                                                             |
-| ----------------------- | --------------------------------------------------------------------------------------- |
-| Newsletter title        | Add a useful title to your newsletter                                                   |
-| Newsletter category     | Group this newsletter to this category (sys_category record must be added before)       |
-| Newsletter start        | If you select a start time (optional), newsletters will not be send before this time    |
-| Description             | Add a useful title to your newsletter                                                   |
+| Field               | Description                                                                          |
+|---------------------|--------------------------------------------------------------------------------------|
+| Newsletter title    | Add a useful title to your newsletter                                                |
+| Newsletter category | Group this newsletter to this category (sys_category record must be added before)    |
+| Newsletter start    | If you select a start time (optional), newsletters will not be send before this time |
+| Description         | Add a useful title to your newsletter                                                |
 
 <img src="../Images/documentation_newnewsletter_step2.png" width="800" alt="create new newsletter - step 2" />
 
-| Field                                       | Description                                                                             |
-| ------------------------------------------- | --------------------------------------------------------------------------------------- |
-| Sender                                      | Choose a sender record                                                                  |
-| Receiver                                    | Choose a receiver group (frontenduser groups that marked as luxletter groups)           |
-| Layout                                      | Choose a given layout (can be defined via TypoScript)                                   |
-| Newsletter location                         | Choose where your HTML for the newsletter is located. An absolute URL like https://domain.org/newsletter.html is possible. If you add a number (PID), the page will be parsed (typenum is automaticly added) |
-| Newsletter location (multilanguage mode)    | In multilanguage mode this field is rendered as select box. Now you can only select internal pages with doktype newsletter                                                                                   |
-| Mail subject                                | Mail subject (also variables and viewhelpers are allowed like {user.lastName}). **Note:** This field is not rendered in multilanguage mode (subject is set in pages settings)                                |
+| Field                                    | Description                                                                                                                                                                                                  |
+|------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Sender                                   | Choose a sender record                                                                                                                                                                                       |
+| Receiver                                 | Choose a receiver group (frontenduser groups that marked as luxletter groups)                                                                                                                                |
+| Layout                                   | Choose a given layout (can be defined via TypoScript)                                                                                                                                                        |
+| Newsletter location                      | Choose where your HTML for the newsletter is located. An absolute URL like https://domain.org/newsletter.html is possible. If you add a number (PID), the page will be parsed (typenum is automaticly added) |
+| Newsletter location (multilanguage mode) | In multilanguage mode this field is rendered as select box. Now you can only select internal pages with doktype newsletter                                                                                   |
+| Mail subject                             | Mail subject (also variables and viewhelpers are allowed like {user.lastName}). **Note:** This field is not rendered in multilanguage mode (subject is set in pages settings)                                |
 
 <img src="../Images/documentation_newnewsletter_step3.png" width="800" alt="create new newsletter - step 3" />
 
-| Field                   | Description                                                                                      |
-| ----------------------- | ------------------------------------------------------------------------------------------------ |
-| Test email address      | Send a quick testmail to an email (variables in the newsletter will be filled with dummy values) |
-| Receivers preview       | Add small preview of your receivers will help you to be sure you haven chosen the correct group  |
-| Newsletter preview      | You will see a newsletter preview (variables will be filled with dummy values)                   |
+| Field              | Description                                                                                      |
+|--------------------|--------------------------------------------------------------------------------------------------|
+| Test email address | Send a quick testmail to an email (variables in the newsletter will be filled with dummy values) |
+| Receivers preview  | Add small preview of your receivers will help you to be sure you haven chosen the correct group  |
+| Newsletter preview | You will see a newsletter preview (variables will be filled with dummy values)                   |
 
 As soon as you save the newsletter, it will be parsed and after that it's ready for the dispatch.
 
