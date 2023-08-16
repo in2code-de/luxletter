@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                                      |
 |------------|------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 23.0.0     | 2023.08.16 | Feature | Change main color for a better readability of LUXletter, Allow to build queue from CLI if for big newsletters, Allow to change user via event in UserFactory                                     |
 | 22.1.1     | 2023.07.16 | Bugfix  | Show name of receiver groups again in list view (broken since multilanguage support), fix a small typo for possible wrong orderings error, fix by adding receivers also to localized newsletters |
 | 22.1.0     | 2023.07.16 | Feature | Show the number of already sent testmail for a better usability. Log email failures now. Bugfix of the wrong failure calculation.                                                                |
 | 22.0.0     | 2023.06.15 | Feature | Add a basic queue failure management for undispatchable mails (try to send 3 times from now on). Add a description text for LUXletter category in backend.                                       |
