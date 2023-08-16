@@ -7,6 +7,11 @@ services:
   In2code\Luxletter\:
     resource: '../Classes/*'
 
+  In2code\Luxletter\Command\BuildQueueCommand:
+    tags:
+      - name: 'console.command'
+        command: 'luxletter:buildqueue'
+
   In2code\Luxletter\Command\ClearCommand:
     tags:
       - name: 'console.command'

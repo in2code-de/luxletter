@@ -64,6 +64,7 @@ class QueueService
      */
     public function addMailReceiversToQueue(Newsletter $newsletter, int $language): int
     {
+        $newsletter->setQueued();
         $users = $this->userRepository->getUsersFromGroups($newsletter->getReceiverGroupIdentifiers(), $language);
         /** @var QueueServiceAddMailReceiversToQueueEvent $event */
         $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
@@ -76,6 +77,12 @@ class QueueService
         foreach ($event->getUsers() as $user) {
             $this->addUserToQueue($newsletter, $user);
         }
+
+        // In case of activated MultiLanguageMode $newsletter of foreign languages is only a clone.
+        // Extbase handles only the original object, but does not care about our clone.
+        $this->newsletterRepository->update($newsletter);
+        $this->newsletterRepository->persistAll();
+
         return count($users);
     }
 
@@ -106,6 +113,7 @@ class QueueService
         if ($newsletter === null) {
             throw new RecordInDatabaseNotFoundException('No newsletter found', 1585479408);
         }
+        $newsletter->setQueued();
         $this->addUserToQueue($newsletter, $user);
     }
 
@@ -141,6 +149,7 @@ class QueueService
                 1585479403
             );
         }
+        $newsletter->setQueued();
         $this->addUserToQueue($newsletter, $user);
     }
 
