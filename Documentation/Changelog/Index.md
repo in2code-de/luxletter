@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                                      |
 |------------|------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 23.0.1     | 2023.08.19 | Bugfix  | Fix backend module configuration for TYPO3 12 (to set correct editor permissions)                                                                                                                |
 | 23.0.0     | 2023.08.16 | Feature | Change main color for a better readability of LUXletter, Allow to build queue from CLI if for big newsletters, Allow to change user via event in UserFactory                                     |
 | 22.1.1     | 2023.07.16 | Bugfix  | Show name of receiver groups again in list view (broken since multilanguage support), fix a small typo for possible wrong orderings error, fix by adding receivers also to localized newsletters |
 | 22.1.0     | 2023.07.16 | Feature | Show the number of already sent testmail for a better usability. Log email failures now. Bugfix of the wrong failure calculation.                                                                |
@@ -22,6 +23,7 @@
 | 19.0.1     | 2023.02.07 | Bugfix  | Fix empty eval string in TCA configuration of sites.luxletterUnsubscribePid in TYPO3 12                                                                                                          |
 | 19.0.0     | 2022.12.19 | Feature | Replace checkboxes with choices plugin for receiver selection for a better handling especially with a lot of receiver groups                                                                     |
 | !!! 18.0.0 | 2022.12.13 | Task    | TYPO3 12 and 11 supported now, dropped support for TYPO3 10                                                                                                                                      |
+| 17.7.0     | 2023.08.17 | Feature | Allow to build queue from CLI if for big newsletters; Change main color for a better readability of LUXletter                                                                                    |
 | 17.6.3     | 2023.07.21 | Bugfix  | Prevent exception in newsletter preview (e.g. when RouteEnhancers are in use), Extend DummyUserEvent with a setter for manipulation possibilities                                                |
 | 17.6.2     | 2023.07.16 | Bugfix  | Fix calculation of failure percentage, log failures now                                                                                                                                          |
 | 17.6.1     | 2023.06.20 | Bugfix  | Fix of an annotation line                                                                                                                                                                        |
