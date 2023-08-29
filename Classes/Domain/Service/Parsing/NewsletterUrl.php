@@ -268,7 +268,7 @@ class NewsletterUrl
         }
         $requestService = GeneralUtility::makeInstance(RequestService::class);
         try {
-            $string = $requestService->getContentFromUrl($this->url);
+            $string = $requestService->getContentFromUrl($this->url, $user->getUsergroup());
         } catch (Throwable $exception) {
             throw new MisconfigurationException(
                 'Given URL could not be parsed and accessed (Tried to read url: ' . $this->url

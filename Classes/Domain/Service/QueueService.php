@@ -10,9 +10,11 @@ use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\NewsletterRepository;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
 use In2code\Luxletter\Domain\Repository\UserRepository;
+use In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl;
 use In2code\Luxletter\Events\QueueServiceAddMailReceiversToQueueEvent;
 use In2code\Luxletter\Events\QueueServiceAddUserToQueueEvent;
 use In2code\Luxletter\Exception\RecordInDatabaseNotFoundException;
+use In2code\Luxletter\Utility\ConfigurationUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
@@ -184,7 +186,19 @@ class QueueService
                 $newsletter
             ));
 
-            $queueRepository->add($event->getQueue());
+            if (ConfigurationUtility::isIndividualMailBodiesActivated()) {
+                $parseService = GeneralUtility::makeInstance(
+                    NewsletterUrl::class,
+                    $newsletter->getOrigin(),
+                    $newsletter->getLayout(),
+                    $user->getLuxletterLanguage()
+                );
+                $bodytext = $parseService->getParsedContent($newsletter->getConfiguration()->getSiteConfiguration(), $user);
+                $queue = $event->getQueue();
+                $queue->setBodytext($bodytext);
+            }
+
+            $queueRepository->add($queue);
             $queueRepository->persistAll();
         }
     }

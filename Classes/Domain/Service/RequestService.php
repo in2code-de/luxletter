@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
 use In2code\Luxletter\Exception\RequestException;
+use In2code\Luxletter\Utility\ConfigurationUtility;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -30,8 +31,15 @@ class RequestService
      * @return string
      * @throws RequestException
      */
-    public function getContentFromUrl(string $uri): string
+    public function getContentFromUrl(string $uri, $feUserGroups = null): string
     {
+        if (ConfigurationUtility::isIndividualMailBodiesActivated() && $feUserGroups !== null){
+            $tmpUserGroupArray = [];
+            foreach ($feUserGroups as $feUserGroup){
+                $tmpUserGroupArray[] = $feUserGroup->getUid();
+            }
+            $uri = $uri .'&no_cache=1&groups='.implode(',', $tmpUserGroupArray);
+        }
         $response = $this->requestFactory->request($uri, 'GET', $this->getDefaultHeaders());
         if ($response->getStatusCode() !== 200) {
             throw new RequestException('Could not connect to: ' . $uri, 1645635195);

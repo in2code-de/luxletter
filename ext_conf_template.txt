@@ -21,3 +21,6 @@ limitToContext =
 
 # cat=mail//270; type=boolean; label= Build queue via cronjob: If you have a lot of recipients together with a small memory_limit, a white page or an error could occur when saving a newsletter in backend module. With this change, the queue must be build later via scheduler task.
 asynchronousQueueStorage = 0
+
+# cat=mail//280; type=boolean; label= Generate individual Mailbodies: When there is content that is restricted by usergroups, with this option all usergroups of the FE-User is handed over by GET Parameter and the bodytext is stored for each queue entry, only works with "asynchronousQueueStorage"
+individualMailBodies = 0
