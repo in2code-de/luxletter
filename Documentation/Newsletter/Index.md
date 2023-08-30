@@ -190,7 +190,7 @@ You can define local CSS files in this way (higher numbers are overwriting lower
 
 ```
 plugin {
-  tx_luxletter_fe {
+  tx_luxletter {
     settings {
       addInlineCss {
         0 = EXT:luxletter/Resources/Private/Css/ZurbFoundation.css

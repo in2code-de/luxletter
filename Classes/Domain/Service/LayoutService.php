@@ -156,7 +156,7 @@ class LayoutService
     /**
      * Get layout configuration from TypoScript setup
      *  plugin {
-     *      tx_luxletter_fe {
+     *      tx_luxletter {
      *          settings {
      *              containerHtml {
      *                  path = EXT:luxletter/Resources/Private/Templates/Mail/
