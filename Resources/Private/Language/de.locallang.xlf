@@ -45,6 +45,20 @@
 				<source>An error occured. Please try again later.</source>
 				<target state="translated">Unbekannter Fehler. Bitte versuchen Sie es später erneut.</target>
 			</trans-unit>
+
+			<trans-unit id="fe.unsubscribe2.title">
+				<source>Select your interests</source>
+				<target state="translated">Verwalten Sie Ihre Interessen</target>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe2.submit">
+				<source>Update interests</source>
+				<target state="translated">Interessen aktualisieren</target>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe2.message.success">
+				<source>We successfully updated your interests</source>
+				<target state="translated">Ihre Interessen wurden aktualisiert</target>
+			</trans-unit>
+
 			<trans-unit id="fe.ce.teaser.quickstart">
 				<source>Quickstart</source>
 				<target state="translated">Schnelleinstieg</target>

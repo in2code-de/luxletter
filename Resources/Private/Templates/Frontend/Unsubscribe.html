@@ -1,26 +1,30 @@
 <f:layout name="Frontend"/>
 
 Available variables:
-	{success}, {settings}, {user}, {hash}, {usergroupToRemove}
+    {success} (bool) if view could be rendered without problems (hash is correct, etc...)
+    {usergroupToRemove} (Usergroup) Usergroup that should be removed
+    {hash} (string) given hash
+    {data} (array) tt_content.* values from current plugin
+    {settings} (array) TypoScript and FlexForm settings
 
 <f:section name="content">
-	<f:render partial="Miscellaneous/FlashMessages" arguments="{_all}"/>
+    <f:render partial="Miscellaneous/FlashMessages" arguments="{_all}"/>
 
-	<f:if condition="{success}">
-		<f:then>
-			<div class="alert alert-success" role="alert">
-				<h4 class="alert-heading">
-					<f:translate key="fe.unsubscribe.message.success">You have successfully unsubscribed from our newsletter</f:translate>
-				</h4>
-			</div>
-		</f:then>
-		<f:else>
-			<div class="alert alert-danger" role="alert">
-				<h4 class="alert-heading">
-					<f:translate key="fe.unsubscribe.message.failed">Unknown error</f:translate>
-				</h4>
-			</div>
-		</f:else>
-	</f:if>
+    <f:if condition="{success}">
+        <f:then>
+            <div class="alert alert-success" role="alert">
+                <h4 class="alert-heading">
+                    <f:translate key="fe.unsubscribe.message.success">You have successfully unsubscribed from our newsletter</f:translate>
+                </h4>
+            </div>
+        </f:then>
+        <f:else>
+            <div class="alert alert-danger" role="alert">
+                <h4 class="alert-heading">
+                    <f:translate key="fe.unsubscribe.message.failed">Unknown error</f:translate>
+                </h4>
+            </div>
+        </f:else>
+    </f:if>
 </f:section>
 

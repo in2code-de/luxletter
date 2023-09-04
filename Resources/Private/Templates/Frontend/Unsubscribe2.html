@@ -1,0 +1,63 @@
+<f:layout name="Frontend"/>
+
+Available variables:
+    {success} (bool) if view could be rendered without problems (hash is correct, etc...)
+    {usergroups} (array) configured usergroups in plugin
+    {user} (User) Frontend User Object from email
+    {newsletter} (Newsletter) Newsletter object from email
+    {hash} (string) given hash
+    {data} (array) tt_content.* values from current plugin
+    {settings} (array) TypoScript and FlexForm settings
+
+<f:section name="content">
+    <f:render partial="Miscellaneous/FlashMessages" arguments="{_all}"/>
+
+    <f:if condition="{success}">
+        <f:then>
+            <f:render section="Form" arguments="{_all}" />
+        </f:then>
+        <f:else>
+            <f:render section="Error" arguments="{_all}" />
+        </f:else>
+    </f:if>
+</f:section>
+
+
+
+<f:section name="Form">
+    <p>
+        <f:translate key="fe.unsubscribe2.title">Manage your interests</f:translate>
+    </p>
+
+    <f:form action="unsubscribe2Update">
+        <div class="mb-3">
+            <f:for each="{usergroups}" as="usergroup">
+                <div class="form-check">
+                    <f:form.checkbox name="usergroups[]" value="{usergroup.uid}" id="luxletter_usergroup_id{usergroup.uid}" class="form-check-input" checked="{luxletter:condition.isUsergroupRelatedToUser(user:user,usergroup:usergroup,then:'checked')}" />
+
+                    <label for="luxletter_usergroup_id{usergroup.uid}" class="form-check-label">
+                        {usergroup.title}
+                    </label>
+                </div>
+            </f:for>
+        </div>
+
+        <div class="mb-3">
+            <f:form.hidden name="hash" value="{hash}"/>
+            <f:form.hidden name="user" value="{user.uid}"/>
+            <f:form.hidden name="newsletter" value="{newsletter.uid}"/>
+            <f:form.hidden name="contentIdentifier" value="{data.uid}"/>
+            <f:form.submit value="{f:translate(key:'fe.unsubscribe2.submit')}" class="btn btn-primpary"/>
+        </div>
+    </f:form>
+</f:section>
+
+
+
+<f:section name="Error">
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">
+            <f:translate key="fe.unsubscribe.message.failed">Unknown error</f:translate>
+        </h4>
+    </div>
+</f:section>

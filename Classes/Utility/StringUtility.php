@@ -5,15 +5,8 @@ namespace In2code\Luxletter\Utility;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
 
-/**
- * Class StringUtility
- */
 class StringUtility
 {
-    /**
-     * @param string $value
-     * @return bool
-     */
     public static function isAbsoluteImageUrl(string $value): bool
     {
         $imageExtensions = ['png', 'jpg', 'jpeg', 'gif', 'tif', 'tiff', 'webp', 'svg'];
@@ -32,11 +25,6 @@ class StringUtility
         return filter_var($value, FILTER_VALIDATE_URL) !== false;
     }
 
-    /**
-     * @param string $haystack
-     * @param string $needle
-     * @return bool
-     */
     public static function startsWith(string $haystack, string $needle): bool
     {
         return stristr($haystack, $needle) && strrpos($haystack, $needle, -strlen($haystack)) !== false;
@@ -68,11 +56,6 @@ class StringUtility
         return hash('sha256', implode('/', $arguments));
     }
 
-    /**
-     * @param string $string
-     * @param string $postfix
-     * @return string
-     */
     public static function removeStringPostfix(string $string, string $postfix): string
     {
         return preg_replace('~' . $postfix . '$~', '', $string);

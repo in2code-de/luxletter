@@ -26,57 +26,30 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
-use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
-/**
- * NewsletterFactory
- */
 class NewsletterFactory
 {
-    /**
-     * @var PageRepository
-     */
-    protected $pageRepository;
+    protected PageRepository $pageRepository;
+    protected ConfigurationRepository $configurationRepository;
+    protected NewsletterRepository $newsletterRepository;
+    protected UsergroupRepository $usergroupRepository;
+    protected CategoryRepository $categoryRepository;
+    protected UsergroupFactory $usergroupFactory;
 
-    /**
-     * @var ConfigurationRepository
-     */
-    protected $configurationRepository;
-
-    /**
-     * @var NewsletterRepository
-     */
-    protected $newsletterRepository;
-
-    /**
-     * @var UsergroupRepository
-     */
-    protected $usergroupRepository;
-
-    /**
-     * @var CategoryRepository
-     */
-    protected $categoryRepository;
-
-    /**
-     * @param PageRepository $pageRepository
-     * @param ConfigurationRepository $configurationRepository
-     * @param NewsletterRepository $newsletterRepository
-     * @param UsergroupRepository $usergroupRepository
-     * @param CategoryRepository $categoryRepository
-     */
     public function __construct(
         PageRepository $pageRepository,
         ConfigurationRepository $configurationRepository,
         NewsletterRepository $newsletterRepository,
         UsergroupRepository $usergroupRepository,
-        CategoryRepository $categoryRepository
+        CategoryRepository $categoryRepository,
+        UsergroupFactory $usergroupFactory
     ) {
         $this->pageRepository = $pageRepository;
         $this->configurationRepository = $configurationRepository;
         $this->newsletterRepository = $newsletterRepository;
         $this->usergroupRepository = $usergroupRepository;
         $this->categoryRepository = $categoryRepository;
+        $this->usergroupFactory = $usergroupFactory;
     }
 
     /**
@@ -127,7 +100,7 @@ class NewsletterFactory
             ->setTitle($title)
             ->setDescription($description)
             ->setSubject($subject)
-            ->setReceivers($this->getUsergroups($usergroupIdentifiers))
+            ->setReceivers($this->usergroupFactory->convertUsergroupIdentifiersToObjectStorage($usergroupIdentifiers))
             ->setConfiguration($configuration)
             ->setOrigin($origin)
             ->setLanguage($language)
@@ -154,24 +127,5 @@ class NewsletterFactory
         $this->newsletterRepository->add($newsletter);
         $this->newsletterRepository->persistAll();
         return $newsletter;
-    }
-
-    /**
-     * Convert queryresult to objectstorage
-     *
-     * @param array $usergroupIdentifiers
-     * @return ObjectStorage
-     * @throws InvalidQueryException
-     */
-    protected function getUsergroups(array $usergroupIdentifiers): ObjectStorage
-    {
-        $queryResult = $this->usergroupRepository->findByIdentifiers($usergroupIdentifiers);
-        $objectStorage = GeneralUtility::makeInstance(ObjectStorage::class);
-        if ($queryResult !== null) {
-            foreach ($queryResult as $object) {
-                $objectStorage->attach($object);
-            }
-        }
-        return $objectStorage;
     }
 }

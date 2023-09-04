@@ -34,6 +34,17 @@
 			<trans-unit id="fe.unsubscribe.message.failed">
 				<source>An error occured. Please try again later.</source>
 			</trans-unit>
+
+			<trans-unit id="fe.unsubscribe2.title">
+				<source>Select your interests</source>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe2.submit">
+				<source>Update interests</source>
+			</trans-unit>
+			<trans-unit id="fe.unsubscribe2.message.success">
+				<source>We successfully updated your interests</source>
+			</trans-unit>
+
 			<trans-unit id="fe.ce.teaser.quickstart">
 				<source>Quickstart</source>
 			</trans-unit>

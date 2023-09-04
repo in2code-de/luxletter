@@ -7,11 +7,9 @@ use Doctrine\DBAL\DBALException;
 use In2code\Luxletter\Domain\Model\Usergroup;
 use In2code\Luxletter\Utility\DatabaseUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
-/**
- * Class UsergroupRepository
- */
 class UsergroupRepository extends AbstractRepository
 {
     /**
@@ -23,6 +21,7 @@ class UsergroupRepository extends AbstractRepository
     {
         $query = $this->createQuery();
         $query->matching($query->in('uid', $usergroupIdentifiers));
+        $query->setOrderings(['title' => QueryInterface::ORDER_ASCENDING]);
         return $query->execute();
     }
 

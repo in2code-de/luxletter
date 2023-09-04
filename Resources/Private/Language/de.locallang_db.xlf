@@ -216,6 +216,10 @@
 				<target state="translated">Seitenbaum</target>
 			</trans-unit>
 
+			<trans-unit id="flexform.fe">
+				<source>LUXletter: Quick unsubscribe</source>
+				<target state="translated">LUXletter: Schnelle Newsletterabmeldung</target>
+			</trans-unit>
 			<trans-unit id="flexform.fe.removeusergroup">
 				<source>Select usergroup which should be removed on unsubscribe</source>
 				<target state="translated">Benutzergruppe auswählen, die bei einem Austragen aus dem Newsletter entfernt werden soll</target>
@@ -223,6 +227,15 @@
 			<trans-unit id="flexform.fe.text">
 				<source>Show text after unsubscribe</source>
 				<target state="translated">Text nach einem erfolgreichen Austragen anzeigen</target>
+			</trans-unit>
+
+			<trans-unit id="flexform.unsubscribe2">
+				<source>LUXletter: Unsubscribe with category selection</source>
+				<target state="translated">LUXletter: Newsletterabmeldung mit Kategorieauswahl</target>
+			</trans-unit>
+			<trans-unit id="flexform.unsubscribe2.usergroups">
+				<source>Usergroups that can be added or removed by the user</source>
+				<target state="translated">Benutzergruppen die vom Benutzer hinzugefügt oder entfernt werden können</target>
 			</trans-unit>
 
 			<trans-unit id="module.dashboard.preset.luxletter.title">

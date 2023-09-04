@@ -17,6 +17,12 @@ call_user_func(
         );
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
             'Luxletter',
+            'Unsubscribe2',
+            [\In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe2,unsubscribe2Update'],
+            [\In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe2,unsubscribe2Update'],
+        );
+        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+            'Luxletter',
             'Preview',
             [\In2code\Luxletter\Controller\FrontendController::class => 'preview'],
             [\In2code\Luxletter\Controller\FrontendController::class => 'preview'],

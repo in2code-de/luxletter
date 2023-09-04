@@ -5,9 +5,6 @@ namespace In2code\Luxletter\Exception;
 
 use Exception;
 
-/**
- * NotPaginatableException
- */
 class NotPaginatableException extends Exception
 {
 }
