@@ -9,23 +9,31 @@ call_user_func(
         $frontendLanguageFilePrefix = 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:';
 
         /**
-         * Register Plugins
+         * Register plugins
          */
-        ExtensionUtility::registerPlugin('luxletter', 'Fe', 'Luxletter: Unsubscribe');
+        ExtensionUtility::registerPlugin('luxletter', 'Fe', $languageFilePrefix . 'flexform.fe');
+        ExtensionUtility::registerPlugin('luxletter', 'Unsubscribe2', $languageFilePrefix . 'flexform.unsubscribe2');
 
         /**
          * Disable not needed fields in tt_content
          */
         $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['luxletter_fe']
             = 'select_key,pages,recursive';
+        $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['luxletter_unsubscribe2']
+            = 'select_key,pages,recursive';
 
         /**
-         * Include Flexform for plugin
+         * Include Flexform for plugins
          */
         $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['luxletter_fe'] = 'pi_flexform';
         ExtensionManagementUtility::addPiFlexFormValue(
             'luxletter_fe',
             'FILE:EXT:luxletter/Configuration/FlexForm/FlexFormFe.xml'
+        );
+        $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['luxletter_unsubscribe2'] = 'pi_flexform';
+        ExtensionManagementUtility::addPiFlexFormValue(
+            'luxletter_unsubscribe2',
+            'FILE:EXT:luxletter/Configuration/FlexForm/FlexFormUnsubscribe2.xml'
         );
 
         /**
@@ -56,7 +64,7 @@ call_user_func(
             'types' => [
                 'teaser' => [
                     'showitem' => '
-                        --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general, 
+                        --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
                         --palette--;;general,
                         header;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:header.ALT.html_formlabel,
                         pi_flexform,

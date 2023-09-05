@@ -165,11 +165,21 @@
 				<source>Site</source>
 			</trans-unit>
 
+			<trans-unit id="flexform.fe">
+				<source>LUXletter: Quick unsubscribe</source>
+			</trans-unit>
 			<trans-unit id="flexform.fe.removeusergroup">
 				<source>Select usergroup which should be removed on unsubscribe</source>
 			</trans-unit>
 			<trans-unit id="flexform.fe.text">
 				<source>Show text after unsubscribe</source>
+			</trans-unit>
+
+			<trans-unit id="flexform.unsubscribe2">
+				<source>LUXletter: Unsubscribe with category selection</source>
+			</trans-unit>
+			<trans-unit id="flexform.unsubscribe2.usergroups">
+				<source>Usergroups that can be added or removed by the user</source>
 			</trans-unit>
 
 			<trans-unit id="module.dashboard.preset.luxletter.title">

@@ -5,9 +5,6 @@ namespace In2code\Luxletter\Exception;
 
 use Exception;
 
-/**
- * Class DatabaseStructureException
- */
 class DatabaseStructureException extends Exception
 {
 }

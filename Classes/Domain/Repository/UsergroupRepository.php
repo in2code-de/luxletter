@@ -5,25 +5,28 @@ namespace In2code\Luxletter\Domain\Repository;
 
 use Doctrine\DBAL\DBALException;
 use In2code\Luxletter\Domain\Model\Usergroup;
+use In2code\Luxletter\Utility\ArrayUtility;
 use In2code\Luxletter\Utility\DatabaseUtility;
-use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
-/**
- * Class UsergroupRepository
- */
 class UsergroupRepository extends AbstractRepository
 {
-    /**
-     * @param array $usergroupIdentifiers
-     * @return QueryResultInterface
-     * @throws InvalidQueryException
-     */
-    public function findByIdentifiers(array $usergroupIdentifiers): QueryResultInterface
+    public function findByIdentifiersAndKeepOrderings(array $usergroupIdentifiers): array
     {
-        $query = $this->createQuery();
-        $query->matching($query->in('uid', $usergroupIdentifiers));
-        return $query->execute();
+        $result = [];
+        if ($usergroupIdentifiers !== []) {
+            $connection = DatabaseUtility::getConnectionForTable(Usergroup::TABLE_NAME);
+            $sql = 'select * from ' . Usergroup::TABLE_NAME
+                . ' where uid in (' . ArrayUtility::convertArrayToIntegerList($usergroupIdentifiers) . ')'
+                . ' order by FIELD(uid, ' . ArrayUtility::convertArrayToIntegerList($usergroupIdentifiers) . ')';
+            $records = $connection->executeQuery($sql)->fetchAllAssociative();
+            foreach ($records as $record) {
+                $user = $this->findByUid($record['uid']);
+                if ($user !== null) {
+                    $result[] = $user;
+                }
+            }
+        }
+        return $result;
     }
 
     /**

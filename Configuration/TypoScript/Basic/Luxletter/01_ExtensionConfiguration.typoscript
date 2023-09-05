@@ -5,7 +5,7 @@ plugin {
         0 = EXT:luxletter/Resources/Private/Templates/
 
         # If EXT:lux is installed, it must be possible to overrule templates for a better receiver module
-        # This is only needed for the backend module. Now plugin.tx_luxletter_fe can be copied into module.tx_luxletter
+        # This is only needed for the backend module. Now plugin.tx_luxletter can be copied into module.tx_luxletter
         1 = EXT:lux/Resources/Private/Templates/
       }
 

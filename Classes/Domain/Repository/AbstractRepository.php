@@ -9,21 +9,12 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
-/**
- * Class AbstractRepository
- */
 abstract class AbstractRepository extends Repository
 {
-    /**
-     * @var array
-     */
     protected $defaultOrderings = [
         'crdate' => QueryInterface::ORDER_DESCENDING,
     ];
 
-    /**
-     * @return void
-     */
     public function initializeObject(): void
     {
         $defaultQuerySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
@@ -31,9 +22,6 @@ abstract class AbstractRepository extends Repository
         $this->setDefaultQuerySettings($defaultQuerySettings);
     }
 
-    /**
-     * @return void
-     */
     public function persistAll(): void
     {
         $persistanceManager = GeneralUtility::makeInstance(PersistenceManager::class);

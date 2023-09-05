@@ -8,7 +8,7 @@ use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 class Usergroup extends AbstractEntity
 {
-    const TABLE_NAME = 'fe_groups';
+    public const TABLE_NAME = 'fe_groups';
 
     protected string $title = '';
     protected string $description = '';

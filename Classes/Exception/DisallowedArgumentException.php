@@ -5,6 +5,6 @@ namespace In2code\Luxletter\Exception;
 
 use Exception;
 
-class ArgumentMissingException extends Exception
+class DisallowedArgumentException extends Exception
 {
 }

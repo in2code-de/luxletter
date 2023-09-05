@@ -6,14 +6,8 @@ namespace In2code\Luxletter\Domain\Repository;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
-/**
- * Class CategoryRepository
- */
 class CategoryRepository extends AbstractRepository
 {
-    /**
-     * @return QueryResultInterface
-     */
     public function findAllLuxletterCategories(): QueryResultInterface
     {
         $query = $this->createQuery();

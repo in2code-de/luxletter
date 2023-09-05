@@ -222,7 +222,7 @@ class NewsletterUrl
      *
      *  Example TypoScript:
      *      plugin {
-     *          tx_luxletter_fe {
+     *          tx_luxletter {
      *              variables {
      *                  subject = TEXT
      *                  subject.value = My own Newsletter
