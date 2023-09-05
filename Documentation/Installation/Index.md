@@ -40,8 +40,8 @@ TYPO3 11.5 or 12.4 is required. The free extension lux can be also installed for
 
 ### Site configuration
 
-You must define one unsubscribe pid per site configuration. This is relevant the unsubscribe plugin of luxletter. You
-can also use a pid outside the site or simply use one unsubscribe page for multiple sites. Nevertheless the PID must
+You must define one unsubscribe pid per site configuration. This is relevant to the unsubscribe plugin of luxletter. You
+can also use a pid outside the site or simply use one unsubscribe page for multiple sites. Nevertheless, the PID must
 be defined in every site configuration.
 
 **Attention** Be aware to use a full domain name in base (Entry point) settings of your site configuration. Good: `https://www.domain.org/` - Bad: `/`
@@ -99,21 +99,40 @@ EXT:lux/Resources/Private/FluidStyledMailContent/ and overwrite the path in your
 
 ### Add page for a unsubscribe plugin
 
-Of course there is a unsubscribe plugin build in into luxletter. Create a new page that is accessable for
-normal website users (can be disabled in menus) and add a plugin of type `Luxletter: unsubscribe` on it.
+Of course there is an unsubscribe plugin build in into luxletter (in reality, there are two plugins for that).
+Create a new page that is accessible for normal website users (can be disabled in menus) and add a plugin of type
+- a) `LUXletter: Quick unsubscribe` or
+- b) `LUXletter: Unsubscribe with category selection`
+on it.
 
-Don't forget to add the page identifier to the main extension settings (see above) after that.
+**Note** Don't forget to add the page identifier to the main extension settings (see above) after that.
 
-<img src="../Images/documentation_installation_unsubscribeplugin.png" width="800" alt="unsubscribe plugin" />
-
-* In addition you can add a message that should appear if a user just unsubscribed.
-
-Technical note: if someone unsubscribes from a newsletter, luxletter will simply remove the receiver usergroup from
-this user. The user is not deleted from the system.
-
-**Note** Unsubscribing is only possible if a hash is added to the link call.
+**Note 2** Unsubscribing is only possible if a hash is added to the link call.
 See `{luxletter:mail.getUnsubscribeUrl(newsletter:newsletter,user:user,site:site)}` in the newsletter layout
 on EXT:lux/Resources/Private/Templates/Mail/NewsletterContainer.html
+
+#### a) Quick unsubscribe plugin
+
+<img src="../Images/documentation_installation_unsubscribeplugin.png" width="800" alt="quick unsubscribe plugin" />
+
+If someone unsubscribes from a newsletter, LUXletter will simply remove the receiver usergroup from
+this user (all other groups will be kept). The user will not be deleted from the system.
+
+Editors can add a message that should appear if a user just unsubscribed.
+
+#### b) Unsubscribe with category selection plugin
+
+<img src="../Images/documentation_installation_unsubscribeplugin2.png" width="800" alt="extended unsubscribe plugin backend" />
+
+<img src="../Images/documentation_installation_unsubscribeplugin2_frontend.png" alt="extended unsubscribe plugin frontend" />
+
+This plugin allows a newsletter receiver to choose between different usergroups. So, here is a chance that he will not
+remove all receiver groups at once.
+The editor chooses groups in the plugin that are shown in frontend. Only this groups can be selected
+(those groups are added to the user if not yet) or deselected (those groups are removed from the user if not yet) by
+the user in frontend.
+If the user has any other related groups that are not shown in frontend selection - they will be untouched and still
+there, even if the user deselects all groups.
 
 
 ### Define fe_groups records for receiver groups
