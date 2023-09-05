@@ -171,7 +171,7 @@ class FrontendController extends ActionController
     ): ResponseInterface {
         try {
             $this->checkArgumentsForUnsubscribe($user, $newsletter, $hash);
-            $usergroups = $this->usergroupRepository->findByIdentifiers(
+            $usergroups = $this->usergroupRepository->findByIdentifiersAndKeepOrderings(
                 GeneralUtility::intExplode(',', $this->settings['usergroups'] ?? '', true)
             );
             $this->view->assignMultiple([

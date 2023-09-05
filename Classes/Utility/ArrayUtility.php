@@ -12,4 +12,10 @@ class ArrayUtility
         }
         return $array;
     }
+
+    public static function convertArrayToIntegerList(array $array, string $glue = ','): string
+    {
+        $array = self::convertToIntegerArray($array);
+        return implode(',', $array);
+    }
 }

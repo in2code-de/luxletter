@@ -18,7 +18,7 @@ class UsergroupFactory
 
     public function convertUsergroupIdentifiersToObjectStorage(array $usergroupIdentifiers)
     {
-        $queryResult = $this->usergroupRepository->findByIdentifiers($usergroupIdentifiers);
+        $queryResult = $this->usergroupRepository->findByIdentifiersAndKeepOrderings($usergroupIdentifiers);
         $objectStorage = GeneralUtility::makeInstance(ObjectStorage::class);
         if ($queryResult !== null) {
             foreach ($queryResult as $object) {
