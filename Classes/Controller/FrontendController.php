@@ -185,7 +185,10 @@ class FrontendController extends ActionController
         } catch (Throwable $exception) {
             $languageKey = 'fe.unsubscribe.message.' . $exception->getCode();
             $message = LocalizationUtility::translate($languageKey);
-            $this->addFlashMessage(($languageKey !== $message) ? $message : $exception->getMessage());
+            if ($languageKey === $message) {
+                $message = 'Unknown error (' . $exception->getCode() . ')';
+            }
+            $this->addFlashMessage($message);
         }
         return $this->htmlResponse();
     }
@@ -223,7 +226,10 @@ class FrontendController extends ActionController
         } catch (Throwable $exception) {
             $languageKey = 'fe.unsubscribe.message.' . $exception->getCode();
             $message = LocalizationUtility::translate($languageKey);
-            $this->addFlashMessage(($languageKey !== $message) ? $message : $exception->getMessage());
+            if ($languageKey === $message) {
+                $message = 'Unknown error (' . $exception->getCode() . ')';
+            }
+            $this->addFlashMessage($message);
         }
         return $this->redirect(
             'unsubscribe2',
