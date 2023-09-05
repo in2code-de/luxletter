@@ -12,16 +12,18 @@ class UsergroupRepository extends AbstractRepository
 {
     public function findByIdentifiersAndKeepOrderings(array $usergroupIdentifiers): array
     {
-        $connection = DatabaseUtility::getConnectionForTable(Usergroup::TABLE_NAME);
-        $sql = 'select * from ' . Usergroup::TABLE_NAME
-            . ' where uid in (' . ArrayUtility::convertArrayToIntegerList($usergroupIdentifiers) . ')'
-            . ' order by FIELD(uid, ' . ArrayUtility::convertArrayToIntegerList($usergroupIdentifiers) . ')';
-        $records = $connection->executeQuery($sql)->fetchAllAssociative();
         $result = [];
-        foreach ($records as $record) {
-            $user = $this->findByUid($record['uid']);
-            if ($user !== null) {
-                $result[] = $user;
+        if ($usergroupIdentifiers !== []) {
+            $connection = DatabaseUtility::getConnectionForTable(Usergroup::TABLE_NAME);
+            $sql = 'select * from ' . Usergroup::TABLE_NAME
+                . ' where uid in (' . ArrayUtility::convertArrayToIntegerList($usergroupIdentifiers) . ')'
+                . ' order by FIELD(uid, ' . ArrayUtility::convertArrayToIntegerList($usergroupIdentifiers) . ')';
+            $records = $connection->executeQuery($sql)->fetchAllAssociative();
+            foreach ($records as $record) {
+                $user = $this->findByUid($record['uid']);
+                if ($user !== null) {
+                    $result[] = $user;
+                }
             }
         }
         return $result;
