@@ -206,10 +206,17 @@ class FrontendController extends ActionController
         int $contentIdentifier = 0
     ): ResponseInterface {
         try {
+            $usergroups = ArrayUtility::convertToIntegerArray($usergroups);
+            if ($contentIdentifier < 1) {
+                throw new ArgumentMissingException('Invalid content identifier', 1562050511);
+            }
+            $allowedGroups = $this->contentRepository->findConfiguredUsergroupIdentifiersByContentIdentifier(
+                $contentIdentifier
+            );
             $this->checkArgumentsForUnsubscribe($user, $newsletter, $hash);
-            $this->checkForAllowedUsergroups($usergroups, $contentIdentifier);
-            $usergroups = $this->usergroupFactory->convertUsergroupIdentifiersToObjectStorage($usergroups);
-            $user->setUsergroup($usergroups);
+            $this->checkForAllowedUsergroups($usergroups, $allowedGroups);
+
+            $this->usergroupFactory->updateUsergroupsInUser($user, $usergroups, $allowedGroups);
             $this->userRepository->update($user);
             $this->userRepository->persistAll();
             $this->addFlashMessage(LocalizationUtility::translate('fe.unsubscribe2.message.success'));
@@ -276,20 +283,12 @@ class FrontendController extends ActionController
 
     /**
      * @param array $givenUsergroups
-     * @param int $contentIdentifier
+     * @param array $allowedGroups
      * @return void
-     * @throws ArgumentMissingException
      * @throws DisallowedArgumentException
      */
-    protected function checkForAllowedUsergroups(array $givenUsergroups, int $contentIdentifier): void
+    protected function checkForAllowedUsergroups(array $givenUsergroups, array $allowedGroups): void
     {
-        $givenUsergroups = ArrayUtility::convertToIntegerArray($givenUsergroups);
-        if ($contentIdentifier < 1) {
-            throw new ArgumentMissingException('Invalid content identifier', 1562050511);
-        }
-        $allowedGroups = $this->contentRepository->findConfiguredUsergroupIdentifiersByContentIdentifier(
-            $contentIdentifier
-        );
         foreach ($givenUsergroups as $givenUsergroup) {
             if (in_array($givenUsergroup, $allowedGroups) === false) {
                 throw new DisallowedArgumentException('Usergroup is not allowed', 1693909396);
