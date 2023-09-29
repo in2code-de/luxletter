@@ -3,15 +3,26 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Mail;
 
+use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Mailer\Transport\TransportInterface;
+use TYPO3\CMS\Core\Exception as ExceptionCore;
 use TYPO3\CMS\Core\Mail\Mailer as MailerCore;
 
-/**
- * Class MailMessage overwrite the core Mail
- */
 class Mailer extends MailerCore
 {
     /**
-     * Use own mail settings and overrule TYPO3 mailsettings or if not set fallback to default values
+     * @param TransportInterface|null $transport
+     * @param EventDispatcherInterface|null $eventDispatcher
+     * @throws ExceptionCore
+     */
+    public function __construct(TransportInterface $transport = null, EventDispatcherInterface $eventDispatcher = null)
+    {
+        parent::__construct($transport, $eventDispatcher);
+        $this->transport = $this->getTransportFactory()->get($this->getMailSettings());
+    }
+
+    /**
+     * Use own mail settings and overrule TYPO3 mail configuration if available
      *
      *  Example configuration for luxletter only:
      *     $GLOBALS['TYPO3_CONF_VARS']['MAIL_LUXLETTER']['transport'] = 'smtp';
@@ -21,26 +32,13 @@ class Mailer extends MailerCore
      *     $GLOBALS['TYPO3_CONF_VARS']['MAIL_LUXLETTER']['transport_smtp_password'] = 'password';
      *     $GLOBALS['TYPO3_CONF_VARS']['MAIL_LUXLETTER']['transport_smtp_port'] = '465';
      *
-     * @param array|null $mailSettings
-     * @return void
-     */
-    public function injectMailSettings(array $mailSettings = null)
-    {
-        if (is_array($mailSettings)) {
-            $this->mailSettings = $mailSettings;
-        } else {
-            $this->mailSettings = $this->getMailSettings();
-        }
-    }
-
-    /**
      * @return array
      */
     protected function getMailSettings(): array
     {
         return array_merge(
-            (array)$GLOBALS['TYPO3_CONF_VARS']['MAIL'],
-            (array)$GLOBALS['TYPO3_CONF_VARS']['MAIL_LUXLETTER']
+            $GLOBALS['TYPO3_CONF_VARS']['MAIL'] ?? [],
+            $GLOBALS['TYPO3_CONF_VARS']['MAIL_LUXLETTER'] ?? []
         );
     }
 }
