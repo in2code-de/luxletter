@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                                      |
 |------------|------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 24.0.1     | 2023.09.29 | Bugfix  | Revive `$GLOBALS['TYPO3_CONF_VARS']['MAIL_LUXLETTER']` configuration for TYPO3 11 and 12                                                                                                         |
 | 24.0.0     | 2023.09.05 | Feature | Add another unsubscribe plugin where the receiver can select his preferences                                                                                                                     |
 | 23.0.1     | 2023.08.19 | Bugfix  | Fix backend module configuration for TYPO3 12 (to set correct editor permissions)                                                                                                                |
 | 23.0.0     | 2023.08.16 | Feature | Change main color for a better readability of LUXletter, Allow to build queue from CLI if for big newsletters, Allow to change user via event in UserFactory                                     |
