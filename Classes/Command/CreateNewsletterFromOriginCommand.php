@@ -9,6 +9,7 @@ use In2code\Luxletter\Domain\Factory\NewsletterFactory;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
+use In2code\Luxletter\Utility\ConfigurationUtility;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -67,9 +68,11 @@ class CreateNewsletterFromOriginCommand extends Command
         );
         $output->writeln('Newsletter with uid ' . $newsletter->getUid() . ' created');
 
-        $queueService = GeneralUtility::makeInstance(QueueService::class);
-        $queuedAmount = $queueService->addMailReceiversToQueue($newsletter, (int)$input->getArgument('language'));
-        $output->writeln('Added ' . $queuedAmount . ' queue records');
+        if (ConfigurationUtility::isAsynchronousQueueStorageActivated() === false) {
+            $queueService = GeneralUtility::makeInstance(QueueService::class);
+            $queuedAmount = $queueService->addMailReceiversToQueue($newsletter, (int)$input->getArgument('language'));
+            $output->writeln('Added ' . $queuedAmount . ' queue records');
+        }
         return parent::SUCCESS;
     }
 }
