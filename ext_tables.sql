@@ -41,6 +41,7 @@ CREATE TABLE tx_luxletter_domain_model_queue (
 
 	email varchar(255) DEFAULT '' NOT NULL,
 	newsletter int(11) DEFAULT '0' NOT NULL,
+	bodytext mediumtext,
 	user int(11) DEFAULT '0' NOT NULL,
 	datetime int(11) DEFAULT '0' NOT NULL,
 	sent tinyint(4) unsigned DEFAULT '0' NOT NULL,

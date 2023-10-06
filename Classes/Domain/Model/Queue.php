@@ -18,6 +18,7 @@ class Queue extends AbstractEntity
 
     protected ?DateTime $datetime = null;
     protected ?Newsletter $newsletter = null;
+    protected string $bodytext = '';
     protected ?User $user = null;
 
     public function getEmail(): string
@@ -39,6 +40,17 @@ class Queue extends AbstractEntity
     public function setNewsletter(Newsletter $newsletter): self
     {
         $this->newsletter = $newsletter;
+        return $this;
+    }
+
+    public function getBodytext(): string
+    {
+        return $this->bodytext;
+    }
+
+    public function setBodytext(string $bodytext): self
+    {
+        $this->bodytext = $bodytext;
         return $this;
     }
 

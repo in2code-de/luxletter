@@ -25,7 +25,7 @@ return [
         'hideTable' => 1,
     ],
     'types' => [
-        '1' => ['showitem' => 'email,newsletter,user,datetime,sent,failures'],
+        '1' => ['showitem' => 'email,newsletter,bodytext,user,datetime,sent,failures'],
     ],
     'columns' => [
         'email' => [
@@ -50,6 +50,18 @@ return [
                 'foreign_table_where' => 'AND sys_language_uid in (0,-1)',
                 'default' => 0,
                 'readOnly' => true,
+            ],
+        ],
+        'bodytext' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
+                . Newsletter::TABLE_NAME . '.bodytext',
+            'config' => [
+                'type' => 'text',
+                'cols' => 800,
+                'rows' => 3,
+                'readOnly' => true,
+                'default' => '',
             ],
         ],
         'user' => [

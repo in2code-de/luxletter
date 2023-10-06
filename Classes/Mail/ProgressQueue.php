@@ -182,7 +182,7 @@ class ProgressQueue
     protected function getBodyText(Queue $queue): string
     {
         $bodytext = $this->parseService->parseBodytext(
-            $queue->getNewsletter()->getBodytext(),
+            $queue->getBodytext() !== null ? $queue->getBodytext() : $queue->getNewsletter()->getBodytext(),
             [
                 'user' => $queue->getUser(),
                 'newsletter' => $queue->getNewsletter(),
