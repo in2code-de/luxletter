@@ -136,6 +136,10 @@
 				<source>Failures</source>
 				<target state="translated">Fehlschläge</target>
 			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_queue.bodytext">
+				<source>Bodytext</source>
+				<target state="translated">E-Mail Inhalt</target>
+			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_log">
 				<source>Log</source>

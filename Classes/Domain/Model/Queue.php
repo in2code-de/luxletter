@@ -24,6 +24,11 @@ class Queue extends AbstractEntity
     protected $newsletter = null;
 
     /**
+     * @var string
+     */
+    protected $bodytext = '';
+
+    /**
      * @var User
      */
     protected $user = null;
@@ -76,6 +81,24 @@ class Queue extends AbstractEntity
     public function setNewsletter(Newsletter $newsletter): self
     {
         $this->newsletter = $newsletter;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBodytext(): string
+    {
+        return $this->bodytext;
+    }
+
+    /**
+     * @param string $bodytext
+     * @return Queue
+     */
+    public function setBodytext(string $bodytext): Queue
+    {
+        $this->bodytext = $bodytext;
         return $this;
     }
 

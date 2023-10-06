@@ -104,6 +104,9 @@
 			<trans-unit id="tx_luxletter_domain_model_queue.failures">
 				<source>Failures</source>
 			</trans-unit>
+			<trans-unit id="tx_luxletter_domain_model_queue.bodytext">
+				<source>Bodytext</source>
+			</trans-unit>
 
 			<trans-unit id="tx_luxletter_domain_model_log">
 				<source>Log</source>
