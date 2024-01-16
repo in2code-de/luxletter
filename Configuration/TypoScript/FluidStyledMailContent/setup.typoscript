@@ -44,6 +44,7 @@ plugin.tx_news {
     }
   }
 }
+tt_content.news_pi1.templateName = List
 [end]
 
 fluidStyledMailContent = PAGE
