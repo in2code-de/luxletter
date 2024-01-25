@@ -11,6 +11,7 @@ use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\PreviewUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
+use In2code\Luxletter\Events\AfterTestMailButtonClickedEvent;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
 use In2code\Luxletter\Mail\TestMail;
 use In2code\Luxletter\Utility\BackendUserUtility;
@@ -225,16 +226,43 @@ class NewsletterController extends AbstractNewsletterController
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
             throw new AuthenticationFailedException('You are not authenticated to send mails', 1560872725);
         }
-        $testMail = GeneralUtility::makeInstance(TestMail::class);
-        $status = $testMail->preflight(
-            $request->getQueryParams()['origin'],
-            $request->getQueryParams()['layout'],
-            (int)$request->getQueryParams()['configuration'],
-            $request->getQueryParams()['subject'],
-            $request->getQueryParams()['email']
-        );
+        $status = null;
+
+        /**
+         * This event can be used for sending the Testemail with external logic
+         * @see Documentation/Tech/Events.md
+         */
+        /** @var AfterTestMailButtonClickedEvent $event */
+        $event = GeneralUtility::makeInstance(AfterTestMailButtonClickedEvent::class);
+        $event->setRequest($request);
+        $this->eventDispatcher->dispatch($event);
+
+        if (!$event->isTestMailIsSendExternal()) {
+            $testMail = GeneralUtility::makeInstance(TestMail::class);
+            $status = $testMail->preflight(
+                $request->getQueryParams()['origin'],
+                $request->getQueryParams()['layout'],
+                (int)$request->getQueryParams()['configuration'],
+                $request->getQueryParams()['subject'],
+                $request->getQueryParams()['email']
+            );
+        }
+        $event->setTestMailIsSendExternal(true);
         $response = ObjectUtility::getJsonResponse();
-        $response->getBody()->write(json_encode(['status' => $status]));
+        $responseData = [
+            'status' => $status ?? $event->getStatus(),
+        ];
+        if ($event->isTestMailIsSendExternal()){
+            $responseData = array_merge(
+                $responseData,
+                [
+                    'statusTitle' => $event->getStatusTitle(),
+                    'statusMessage' => $event->getStatusMessage(),
+                    'statusSeverity' => $event->getStatusSeverity(),
+                ]
+            );
+        }
+        $response->getBody()->write(json_encode($responseData, JSON_THROW_ON_ERROR));
         return $response;
     }
 
@@ -261,8 +289,10 @@ class NewsletterController extends AbstractNewsletterController
         $standaloneView->assignMultiple([
             'user' => $user,
             'visitor' => $visitorRepository->findOneByFrontenduser($user),
-            'logs' => $logRepository->findByUser($user),
         ]);
+        if ($user !== null) {
+            $standaloneView->assign('logs', $logRepository->findByUser($user));
+        }
         $response = ObjectUtility::getJsonResponse();
         $response->getBody()->write(json_encode(
             ['html' => $standaloneView->render()]

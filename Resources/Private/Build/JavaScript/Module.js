@@ -265,13 +265,19 @@ define(['jquery'], function($) {
      */
     this.testMailListenerCallback = function(response) {
       const messageElement = document.querySelector('[data-luxletter-testmail="message"]');
-      if (messageElement !== null && response.status === true) {
+      if (messageElement !== null && response.statusSeverity === undefined && response.status === true) {
         showElement(messageElement);
 
         const counterElement = messageElement.querySelector('p>span');
         let counter = parseInt(counterElement.innerHTML);
         counter++;
         counterElement.innerHTML = counter.toString();
+      } else if(messageElement !== null && response.statusSeverity !== '' && response.status === true) {
+        messageElement.classList.remove('alert-success');
+        messageElement.classList.add(response.statusSeverity);
+        messageElement.querySelector('.alert-heading').innerHTML = response.statusTitle;
+        messageElement.querySelector('p').innerHTML = response.statusMessage;
+        showElement(messageElement);
       }
     };
 
