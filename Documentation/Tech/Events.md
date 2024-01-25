@@ -41,3 +41,31 @@ final class DemoEventlistener
     }
 }
 ```
+
+### BeforeBodytextIsParsedEvent
+
+This event is executed before the body text for the individual newsletter is processed. The event can be used to change or reset the body text that is used for parsing.
+
+The `$queue` property is available in the event, which can be used to access all relevant data for the newsletter.
+If the `$bodytext` property is set via an event listener, the content of this property is used for further processing. If there is no content in the property, the standard text from the newsletter is used.
+
+Sample Eventlistener:
+
+```
+<?php
+
+declare(strict_types=1);
+namespace Vendor\Extension\EventListener;
+
+use In2code\Luxletter\Events\AfterTestMailButtonClickedEvent;
+use In2code\Luxletter\Events\BeforeBodytextIsParsedEvent;
+
+final class DemoEventlistener
+{
+    public function __invoke(BeforeBodytextIsParsedEvent $event): void
+    {
+        $event->setBodytext('<h1>I am the new body</h1>');
+    }
+}
+
+```
