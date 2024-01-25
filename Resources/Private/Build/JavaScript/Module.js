@@ -273,7 +273,8 @@ define(['jquery'], function($) {
         counter++;
         counterElement.innerHTML = counter.toString();
       } else if(messageElement !== null && response.statusSeverity !== '' && response.status === true) {
-        messageElement.classList.remove('alert-success');
+        messageElement.classList.remove(...messageElement.classList);
+        messageElement.classList.add('alert');
         messageElement.classList.add(response.statusSeverity);
         messageElement.querySelector('.alert-heading').innerHTML = response.statusTitle;
         messageElement.querySelector('p').innerHTML = response.statusMessage;

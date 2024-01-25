@@ -247,7 +247,7 @@ class NewsletterController extends AbstractNewsletterController
                 $request->getQueryParams()['email']
             );
         }
-        $event->setTestMailIsSendExternal(true);
+        
         $response = ObjectUtility::getJsonResponse();
         $responseData = [
             'status' => $status ?? $event->getStatus(),
