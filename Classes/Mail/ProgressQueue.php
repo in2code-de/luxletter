@@ -9,6 +9,7 @@ use In2code\Luxletter\Domain\Service\BodytextManipulation\CssInline;
 use In2code\Luxletter\Domain\Service\BodytextManipulation\LinkHashing;
 use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Domain\Service\Parsing\Newsletter;
+use In2code\Luxletter\Events\BeforeBodytextIsParsedEvent;
 use In2code\Luxletter\Events\ProgressQueueEvent;
 use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Exception\MisconfigurationException;
@@ -181,8 +182,11 @@ class ProgressQueue
      */
     protected function getBodyText(Queue $queue): string
     {
+        $event = GeneralUtility::makeInstance(BeforeBodytextIsParsedEvent::class, $queue);
+        $this->eventDispatcher->dispatch($event);
+
         $bodytext = $this->parseService->parseBodytext(
-            $queue->getNewsletter()->getBodytext(),
+            $event->getBodytext(),
             [
                 'user' => $queue->getUser(),
                 'newsletter' => $queue->getNewsletter(),
