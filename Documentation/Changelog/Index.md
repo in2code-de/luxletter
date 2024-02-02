@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                                      |
 |------------|------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 25.0.0     | 2024.02.02 | Feature | Add two new events for newsletter manipulation, update LUXletter for news 11, bugfix for unsubscribe action in TYPO3 12                                                                          |
 | 24.0.2     | 2023.10.05 | Bugfix  | Respect `asynchronousQueueStorage` configuration even if newsletters are generated from CLI now                                                                                                  |
 | 24.0.1     | 2023.09.29 | Bugfix  | Revive `$GLOBALS['TYPO3_CONF_VARS']['MAIL_LUXLETTER']` configuration for TYPO3 11 and 12                                                                                                         |
 | 24.0.0     | 2023.09.05 | Feature | Add another unsubscribe plugin where the receiver can select his preferences                                                                                                                     |
