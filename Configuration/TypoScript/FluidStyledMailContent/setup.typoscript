@@ -34,6 +34,11 @@ lib {
 }
 
 // Settings for EXT:news
+tt_content {
+  news_pi1.templateName = NewsList
+  news_newsliststicky.templateName = NewsList
+  news_newsselectedlist.templateName = NewsList
+}
 plugin.tx_news {
   view {
     templateRootPaths {

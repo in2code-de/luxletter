@@ -21,6 +21,7 @@ Send newsletters the easy way
 ### Tech corner and FAQ
 
 [Tech corner and FAQ](Tech/Index.md)
+[Events](Tech/Events.md)
 
 ### Changelog and breaking changes
 

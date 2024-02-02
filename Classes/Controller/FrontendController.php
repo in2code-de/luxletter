@@ -160,7 +160,7 @@ class FrontendController extends ActionController
     {
         $arguments = GeneralUtility::_GP('tx_luxletter_fe');
         if (is_array($arguments)) {
-            $this->request->setArguments($arguments);
+            $this->request = $this->request->withArguments($arguments);
         }
     }
 

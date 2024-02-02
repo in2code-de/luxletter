@@ -83,6 +83,9 @@
 		"helmich/typo3-typoscript-lint": "^3.1",
 		"helhum/typo3-console": "^8.0.x-dev"
 	},
+	"conflict": {
+		"georgringer/news": "< 11.0.0"
+	},
 	"config": {
 		"vendor-dir": ".Build/vendor",
 		"bin-dir": ".Build/bin",

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
+use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use In2code\Lux\Domain\Repository\VisitorRepository;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Newsletter;
@@ -11,15 +12,23 @@ use In2code\Luxletter\Domain\Repository\UserRepository;
 use In2code\Luxletter\Domain\Service\PreviewUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
+use In2code\Luxletter\Events\AfterTestMailButtonClickedEvent;
+use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
+use In2code\Luxletter\Exception\InvalidUrlException;
+use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Mail\TestMail;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
+use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class NewsletterController extends AbstractNewsletterController
@@ -220,36 +229,80 @@ class NewsletterController extends AbstractNewsletterController
         return $response;
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     * @throws AuthenticationFailedException
+     * @throws ExceptionDbalDriver
+     * @throws ApiConnectionException
+     * @throws InvalidUrlException
+     * @throws MisconfigurationException
+     * @throws JsonException
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws InvalidConfigurationTypeException
+     */
     public function testMailAjax(ServerRequestInterface $request): ResponseInterface
     {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
             throw new AuthenticationFailedException('You are not authenticated to send mails', 1560872725);
         }
-        $testMail = GeneralUtility::makeInstance(TestMail::class);
-        $status = $testMail->preflight(
-            $request->getQueryParams()['origin'],
-            $request->getQueryParams()['layout'],
-            (int)$request->getQueryParams()['configuration'],
-            $request->getQueryParams()['subject'],
-            $request->getQueryParams()['email']
-        );
+        $status = null;
+
+        /**
+         * This event can be used for sending the Test-email with external logic
+         * @see Documentation/Tech/Events.md
+         */
+        $event = GeneralUtility::makeInstance(AfterTestMailButtonClickedEvent::class, $request);
+        $this->eventDispatcher->dispatch($event);
+
+        if ($event->isTestMailIsSendExternal() === false) {
+            $testMail = GeneralUtility::makeInstance(TestMail::class);
+            $status = $testMail->preflight(
+                $request->getQueryParams()['origin'],
+                $request->getQueryParams()['layout'],
+                (int)$request->getQueryParams()['configuration'],
+                $request->getQueryParams()['subject'],
+                $request->getQueryParams()['email']
+            );
+        }
+        $responseData = [
+            'status' => $status ?? $event->getStatus(),
+        ];
+        if ($event->isTestMailIsSendExternal()) {
+            $responseData += $event->getStatusResponse();
+        }
         $response = ObjectUtility::getJsonResponse();
-        $response->getBody()->write(json_encode(['status' => $status]));
+        $response->getBody()->write(json_encode($responseData, JSON_THROW_ON_ERROR));
         return $response;
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     * @throws AuthenticationFailedException
+     * @throws ExceptionDbalDriver
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @throws InvalidConfigurationTypeException
+     * @throws MisconfigurationException
+     */
     public function previewSourcesAjax(ServerRequestInterface $request): ResponseInterface
     {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
             throw new AuthenticationFailedException('You are not authenticated to send mails', 1645707268);
         }
         $previewUrlService = GeneralUtility::makeInstance(PreviewUrlService::class);
-        $response = ObjectUtility::getJsonResponse();
         $content = $previewUrlService->get($request->getQueryParams()['origin'], $request->getQueryParams()['layout']);
+        $response = ObjectUtility::getJsonResponse();
         $response->getBody()->write(json_encode($content));
         return $response;
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @return ResponseInterface
+     */
     public function receiverDetailAjax(ServerRequestInterface $request): ResponseInterface
     {
         $userRepository = GeneralUtility::makeInstance(UserRepository::class);
@@ -270,6 +323,11 @@ class NewsletterController extends AbstractNewsletterController
         return $response;
     }
 
+    /**
+     * @return void
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     */
     protected function addDocumentHeaderForNewsletterController(): void
     {
         $menuConfiguration = [

@@ -245,11 +245,14 @@ class LogRepository extends AbstractRepository
     }
 
     /**
-     * @param User $user
-     * @return QueryResultInterface
+     * @param ?User $user
+     * @return ?QueryResultInterface
      */
-    public function findByUser(User $user): QueryResultInterface
+    public function findByUser(?User $user): ?QueryResultInterface
     {
+        if ($user === null) {
+            return null;
+        }
         $query = $this->createQuery();
         $query->matching($query->equals('user', $user));
         $query->setLimit(100);
