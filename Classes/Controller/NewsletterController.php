@@ -82,6 +82,17 @@ class NewsletterController extends AbstractNewsletterController
         return $this->redirect($redirectAction);
     }
 
+    public function analyseAction(Newsletter $newsletter): ResponseInterface
+    {
+        $this->view->assignMultiple([
+            'newsletter' => $newsletter,
+            'groupedLinksByHref' => $this->logRepository->getGroupedLinksByHref(100, $newsletter),
+        ]);
+
+        $this->addDocumentHeaderForNewsletterController();
+        return $this->defaultRendering();
+    }
+
     public function editAction(Newsletter $newsletter): ResponseInterface
     {
         $this->view->assignMultiple([

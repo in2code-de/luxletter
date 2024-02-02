@@ -169,6 +169,10 @@
 				<source>Building queue...</source>
 				<target state="translated">Queue wird gebaut...</target>
 			</trans-unit>
+			<trans-unit id="module.newsletter.list.analyse">
+				<source>Newsletter evaluation</source>
+				<target state="translated">Newsletter Auswertung</target>
+			</trans-unit>
 			<trans-unit id="module.newsletter.list.edit">
 				<source>Edit</source>
 				<target state="translated">Bearbeiten</target>
@@ -414,6 +418,11 @@
 			<trans-unit id="module.newsletter.edit.title">
 				<source>Edit newsletter</source>
 				<target state="translated">Newsletter bearbeiten</target>
+			</trans-unit>
+
+			<trans-unit id="module.newsletter.analyse.title">
+				<source>Newsletter evaluation</source>
+				<target state="translated">Newsletter Auswertung</target>
 			</trans-unit>
 
 			<trans-unit id="module.newsletter.update.message">

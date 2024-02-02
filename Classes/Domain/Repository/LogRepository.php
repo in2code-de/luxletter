@@ -43,17 +43,20 @@ class LogRepository extends AbstractRepository
      *  ]
      *
      * @param int $limit
+     * @param Newsletter|null $newsletter
      * @return array
-     * @throws DBALException
+     * @throws ExceptionDbal
      */
-    public function getGroupedLinksByHref(int $limit = 8): array
+    public function getGroupedLinksByHref(int $limit = 8, ?Newsletter $newsletter = null): array
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
-        $results = (array)$connection->executeQuery(
-            'select count(*) as count, properties, newsletter from ' . Log::TABLE_NAME .
-            ' where deleted=0 and status=' . Log::STATUS_LINKOPENING .
-            ' group by properties,newsletter order by count desc limit ' . $limit
-        )->fetchAll();
+        $sql = 'select count(*) as count, properties, newsletter from ' . Log::TABLE_NAME .
+            ' where deleted=0 and status=' . Log::STATUS_LINKOPENING;
+        if ($newsletter !== null) {
+            $sql .= ' and newsletter=' . $newsletter->getUid();
+        }
+        $sql .= ' group by properties,newsletter order by count desc limit ' . $limit;
+        $results = $connection->executeQuery($sql)->fetchAllAssociative();
         $nlRepository = GeneralUtility::makeInstance(NewsletterRepository::class);
         foreach ($results as &$result) {
             $result['target'] = json_decode($result['properties'], true)['target'];

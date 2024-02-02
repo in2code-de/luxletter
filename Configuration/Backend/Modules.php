@@ -18,6 +18,7 @@ return [
                 'dashboard',
                 'list',
                 'resetFilter',
+                'analyse',
                 'edit',
                 'update',
                 'new',

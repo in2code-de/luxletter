@@ -171,6 +171,12 @@
             </f:if>
         </td>
         <td>
+            <f:link.action action="analyse" class="btn btn-default"
+                           arguments="{newsletter:newsletter}"
+                           title="{f:translate(key:'module.newsletter.list.analyse')}">
+                <core:icon identifier="content-widget-chart-pie" />
+            </f:link.action>
+
             <f:link.action action="edit" class="btn btn-default"
                            arguments="{newsletter:newsletter}"
                            title="{f:translate(key:'module.newsletter.list.edit')}">

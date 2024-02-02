@@ -1,0 +1,119 @@
+{namespace be=TYPO3\CMS\Backend\ViewHelpers}
+<f:layout name="Backend"/>
+
+<f:section name="content">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>
+                {newsletter.title}<br />
+                <span style="font-size: 0.8em; color: #444;">
+                    <f:translate key="module.newsletter.analyse.title">newsletter evaluation</f:translate>
+                    <luxletter:condition.isMultiLanguageModeActivated>
+                        ({newsletter.languageLabel})
+                    </luxletter:condition.isMultiLanguageModeActivated>
+                </span>
+            </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="luxletter-panel-body">
+                        <span class="luxletter-panel-body-text luxletter-panel-body-text__larger">
+                            {newsletter.openers}
+                            <span class="luxletter-panel-body-text--addition">Openers</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="luxletter-panel-body">
+                        <span class="luxletter-panel-body-text luxletter-panel-body-text__larger">
+                            {newsletter.clickers}
+                            <span class="luxletter-panel-body-text--addition">Clickers</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="luxletter-panel-body">
+                        <span class="luxletter-panel-body-text luxletter-panel-body-text__larger">
+                            {newsletter.unsubscribers}
+                            <span class="luxletter-panel-body-text--addition">Unsubscribers</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Tracked links click
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        <f:for each="{groupedLinksByHref}" as="groupedLink">
+                            <li class="list-group-item">
+                                <span class="badge" style="float: right;" title="Overall">{groupedLink.count}</span>
+                                <f:link.external uri="{groupedLink.target}">{groupedLink.target}</f:link.external>
+                            </li>
+                        </f:for>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Receiver groups
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group">
+                        <f:for each="{newsletter.receivers}" as="receiver">
+                            <li class="list-group-item">
+                                {receiver.title}
+                            </li>
+                        </f:for>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <f:comment>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {newsletter.subject}
+            </h3>
+        </div>
+        <div class="panel-body">
+            <div class="luxletter-iframepreview-container">
+                <div class="luxletter-iframepreview-children">
+                    <iframe id="luxletter-preview"></iframe>
+                </div>
+
+                <div style="display:none;" id="luxletter-preview-container"><f:format.raw>{newsletter.bodytext}</f:format.raw></div>
+                <script>
+                    document.getElementById('luxletter-preview').contentDocument.write(document.getElementById('luxletter-preview-container').innerHTML);
+                </script>
+            </div>
+        </div>
+    </div>
+    </f:comment>
+</f:section>

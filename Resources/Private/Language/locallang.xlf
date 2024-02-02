@@ -128,6 +128,9 @@
 			<trans-unit id="module.newsletter.list.notyetqueued">
 				<source>Building queue...</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.list.analyse">
+				<source>Newsletter evaluation</source>
+			</trans-unit>
 			<trans-unit id="module.newsletter.list.edit">
 				<source>Edit</source>
 			</trans-unit>
@@ -312,6 +315,10 @@
 
 			<trans-unit id="module.newsletter.edit.title">
 				<source>Edit newsletter</source>
+			</trans-unit>
+
+			<trans-unit id="module.newsletter.analyse.title">
+				<source>Newsletter evaluation</source>
 			</trans-unit>
 
 			<trans-unit id="module.newsletter.update.message">
