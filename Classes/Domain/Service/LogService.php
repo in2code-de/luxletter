@@ -67,8 +67,10 @@ class LogService
      */
     public function logLinkOpening(Link $link): void
     {
-        $this->logNewsletterOpening($link->getNewsletter(), $link->getUser());
-        $this->log($link->getNewsletter(), $link->getUser(), Log::STATUS_LINKOPENING, ['target' => $link->getTarget()]);
+        if ($link->getUser() !== null) {
+            $this->logNewsletterOpening($link->getNewsletter(), $link->getUser());
+            $this->log($link->getNewsletter(), $link->getUser(), Log::STATUS_LINKOPENING, ['target' => $link->getTarget()]);
+        }
     }
 
     /**
