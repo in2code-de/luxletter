@@ -40,9 +40,7 @@ class PageRepository
                 ->orderBy('title', 'desc')
                 ->executeQuery()
                 ->fetchAllAssociative();
-            foreach ($results as $result) {
-                $pages[$result['uid']] = $result['title'];
-            }
+            $pages = $this->checkForUserAccess($results);
         } catch (Throwable $exception) {
             return $pages;
         }
@@ -97,6 +95,75 @@ class PageRepository
             return $this->getLanguagesFromPageIdentifier((int)$origin);
         }
         return [0];
+    }
+
+    /**
+     * @param array $pages
+     * @return array
+     */
+    private function checkForUserAccess(array $pages): array
+    {
+        $backendUser = $GLOBALS['BE_USER'];
+        if ($backendUser === null) {
+            return $pages;
+        }
+        $checkedPages = [];
+        foreach ($pages as $page) {
+            $pageAccess = $this->getPageAccess($page);
+            if ($pageAccess === 0 && !$backendUser->isAdmin()) {
+                continue;
+            }
+            if ($backendUser->isAdmin() || $backendUser->isMemberOfGroup($pageAccess)) {
+                $checkedPages[$page['uid']] = $page['title'];
+            }
+        }
+
+        return $checkedPages;
+    }
+
+    /**
+     * @param array $page
+     * @return int
+     */
+    private function getPageAccess(array $page): int
+    {
+        $permsGroup = $page['perms_groupid'] ?? 1;
+        if ($permsGroup !== 1) {
+            return (int)$permsGroup;
+        }
+        /** @var int|string $pid */
+        $pid = $page['pid'] ?? 0;
+        if ($pid === 0) {
+            return 0;
+        }
+        $page = $this->getPageByUid((int)$pid);
+
+        return $this->getPageAccess($page);
+    }
+
+    /**
+     * @param int $pid
+     * @return array
+     */
+    private function getPageByUid(int $pid): array
+    {
+        try {
+            $queryBuilder = DatabaseUtility::getQueryBuilderForTable(self::TABLE_NAME);
+            $result = $queryBuilder
+                ->select('*')
+                ->from(self::TABLE_NAME)
+                ->where('uid=' . $pid)
+                ->executeQuery()
+                ->fetchAllAssociative()
+            ;
+        } catch (Throwable $ex) {
+            return [];
+        }
+        if (array_key_exists(0, $result)) {
+            return $result[0];
+        }
+
+        return $result;
     }
 
     protected function getLanguagesFromPageIdentifier(int $pageIdentifier): array
