@@ -8,13 +8,26 @@ use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Model\Log;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\Queue;
+use In2code\Luxletter\Domain\Service\SiteService;
+use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\DatabaseUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class NewsletterRepository extends AbstractRepository
 {
+    public function findAllAuthorized(): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        if (BackendUserUtility::isAdministrator() === false) {
+            $siteService = GeneralUtility::makeInstance(SiteService::class);
+            $query->matching($query->in('configuration.site', array_keys($siteService->getAllowedSites())));
+        }
+        return $query->execute();
+    }
+
     public function findLatestNewsletter(): ?Newsletter
     {
         $query = $this->createQuery();
@@ -60,8 +73,8 @@ class NewsletterRepository extends AbstractRepository
     protected function findAllByFilter(Filter $filter): ?QueryResultInterface
     {
         $query = $this->createQuery();
+        $logicalAnd = [];
         if ($filter->isSet()) {
-            $logicalAnd = [$query->greaterThan('uid', 0)];
             if ($filter->getSearchterm() !== '') {
                 $logicalOr = [];
                 foreach ($filter->getSearchterms() as $searchterm) {
@@ -77,6 +90,15 @@ class NewsletterRepository extends AbstractRepository
             if ($filter->getTime() > 0) {
                 $logicalAnd[] = $query->greaterThanOrEqual('crdate', $filter->getTimeDateStart());
             }
+            if ($filter->isConfigurationSet()) {
+                $logicalAnd[] = $query->equals('configuration', $filter->getConfiguration());
+            }
+        }
+        if (BackendUserUtility::isAdministrator() === false) {
+            $siteService = GeneralUtility::makeInstance(SiteService::class);
+            $logicalAnd[] = $query->in('configuration.site', array_keys($siteService->getAllowedSites()));
+        }
+        if ($logicalAnd !== []) {
             $query->matching($query->logicalAnd(...$logicalAnd));
         }
         return $query->execute();

@@ -65,9 +65,9 @@ class NewsletterController extends AbstractNewsletterController
     public function listAction(Filter $filter): ResponseInterface
     {
         $this->view->assignMultiple([
-            'newsletters' => $this->newsletterRepository->findAll(),
+            'newsletters' => $this->newsletterRepository->findAllAuthorized(),
             'newslettersGrouped' => $this->newsletterRepository->findAllGroupedByCategories($filter),
-            'configurations' => $this->configurationRepository->findAll(),
+            'configurations' => $this->configurationRepository->findAllAuthorized(),
             'categories' => $this->categoryRepository->findAllLuxletterCategories(),
             'filter' => $filter,
         ]);

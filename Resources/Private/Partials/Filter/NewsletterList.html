@@ -7,7 +7,7 @@
         <div class="panel-body">
             <f:form name="filter" class="form" object="{filter}" action="list">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-xl-4 col-md-6 mb-3">
                         <h5><f:translate key="module.newsletter.list.filter.search.label">search</f:translate></h5>
 
                         <div class="input-group form-group">
@@ -24,33 +24,26 @@
                                 <core:icon identifier="actions-search" />
                             </button>
                         </div>
-                    </div>
-
-
-                    <div class="col-md-3">
-                        <h5><f:translate key="module.newsletter.list.filter.category.label">Category</f:translate></h5>
 
                         <div class="input-group form-group">
-                            <label for="categoryScoring" class="hidden">
-                                <f:translate key="module.newsletter.list.filter.category.label">Category</f:translate>
-                            </label>
                             <f:form.select
-                                property="category"
-                                options="{categories}"
-                                optionLabelField="title"
-                                optionValueField="uid"
-                                prependOptionValue=""
-                                prependOptionLabel=""
+                                id="configuration"
                                 class="form-control form-select"
-                                id="categoryScoring"/>
-                            <button type="button" class="btn btn-default" data-global-event="click" data-action-focus="#categoryScoring">
-                                <core:icon identifier="actions-tag" />
+                                property="configuration"
+                                options="{configurations}"
+                                prependOptionLabel=""
+                                prependOptionValue="0"
+                                optionValueField="uid"
+                                optionLabelField="title"
+                                value="{filter.configuration}" />
+                            <button type="button" class="btn btn-default" data-global-event="click" data-action-focus="#configuration">
+                                <core:icon identifier="actions-user" size="small" />
                             </button>
                         </div>
                     </div>
 
 
-                    <div class="col-md-3">
+                    <div class="col-xl-4 col-md-6 mb-3">
                         <h5><f:translate key="module.newsletter.list.filter.time.label">Time</f:translate></h5>
 
                         <div class="input-group form-group">
@@ -66,13 +59,29 @@
                                 <core:icon identifier="actions-calendar-alternative" />
                             </button>
                         </div>
+
+                        <div class="input-group form-group">
+                            <label for="categoryScoring" class="hidden">
+                                <f:translate key="module.newsletter.list.filter.category.label">Category</f:translate>
+                            </label>
+                            <f:form.select
+                                property="category"
+                                options="{categories}"
+                                optionLabelField="title"
+                                optionValueField="uid"
+                                prependOptionValue="0"
+                                prependOptionLabel=""
+                                class="form-control form-select"
+                                id="categoryScoring"/>
+                            <button type="button" class="btn btn-default" data-global-event="click" data-action-focus="#categoryScoring">
+                                <core:icon identifier="actions-tag" />
+                            </button>
+                        </div>
                     </div>
 
 
-                    <div class="col-md-3">
-                        <h5 style="visibility: hidden;">Submit</h5>
-
-                        <div style="display: flex; flex-direction: initial;">
+                    <div class="col-xl-4 col-md-6 mb-3" style="display: flex; flex-direction: column; justify-content: flex-end;">
+                        <div style="display: flex; justify-content: space-between;">
                             <f:comment>Clear filter</f:comment>
                             <f:if condition="{filter.set}">
                                 <f:link.action class="btn btn-default" style="flex: 50%; height: 32px; margin-top: auto; margin-right: 10px;" action="resetFilter" arguments="{redirectAction:view.action}">
