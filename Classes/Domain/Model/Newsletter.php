@@ -403,7 +403,7 @@ class Newsletter extends AbstractEntity
      *
      * @return bool
      */
-    private function canBeRead(): bool
+    public function canBeRead(): bool
     {
         if (BackendUserUtility::isAdministrator()) {
             return true;

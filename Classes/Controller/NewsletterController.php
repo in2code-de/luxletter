@@ -3,7 +3,6 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
-use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use In2code\Lux\Domain\Repository\VisitorRepository;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Newsletter;
@@ -13,22 +12,15 @@ use In2code\Luxletter\Domain\Service\PreviewUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
 use In2code\Luxletter\Events\AfterTestMailButtonClickedEvent;
-use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
-use In2code\Luxletter\Exception\InvalidUrlException;
-use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Mail\TestMail;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
-use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class NewsletterController extends AbstractNewsletterController
@@ -84,6 +76,10 @@ class NewsletterController extends AbstractNewsletterController
 
     public function editAction(Newsletter $newsletter): ResponseInterface
     {
+        if ($newsletter->canBeRead() === false) {
+            throw new AuthenticationFailedException('You are not allowed to see this record', 1709329205);
+        }
+
         $this->view->assignMultiple([
             'newsletter' => $newsletter,
             'configurations' => $this->configurationRepository->findAllAuthorized(),
@@ -104,6 +100,10 @@ class NewsletterController extends AbstractNewsletterController
 
     public function updateAction(Newsletter $newsletter): ResponseInterface
     {
+        if ($newsletter->canBeRead() === false) {
+            throw new AuthenticationFailedException('You are not allowed to see this record', 1709329247);
+        }
+
         $this->setBodytextInNewsletter($newsletter, $newsletter->getLanguage());
         if (ConfigurationUtility::isMultiLanguageModeActivated()) {
             $newsletter->setSubject(
@@ -140,6 +140,10 @@ class NewsletterController extends AbstractNewsletterController
 
     public function createAction(Newsletter $newsletter): ResponseInterface
     {
+        if ($newsletter->canBeRead() === false) {
+            throw new AuthenticationFailedException('You are not allowed to see this record', 1709329276);
+        }
+
         $languages = $this->pageRepository->getLanguagesFromOrigin($newsletter->getOrigin());
         foreach ($languages as $language) {
             $newsletterLanguage = clone $newsletter;
@@ -170,6 +174,10 @@ class NewsletterController extends AbstractNewsletterController
 
     public function disableAction(Newsletter $newsletter): ResponseInterface
     {
+        if ($newsletter->canBeRead() === false) {
+            throw new AuthenticationFailedException('You are not allowed to see this record', 1709329304);
+        }
+
         $newsletter->disable();
         $this->newsletterRepository->update($newsletter);
         return $this->redirect('list');
@@ -177,6 +185,10 @@ class NewsletterController extends AbstractNewsletterController
 
     public function enableAction(Newsletter $newsletter): ResponseInterface
     {
+        if ($newsletter->canBeRead() === false) {
+            throw new AuthenticationFailedException('You are not allowed to see this record', 1709329338);
+        }
+
         $newsletter->enable();
         $this->newsletterRepository->update($newsletter);
         return $this->redirect('list');
@@ -184,6 +196,10 @@ class NewsletterController extends AbstractNewsletterController
 
     public function deleteAction(Newsletter $newsletter): ResponseInterface
     {
+        if ($newsletter->canBeRead() === false) {
+            throw new AuthenticationFailedException('You are not allowed to see this record', 1709329345);
+        }
+
         $this->newsletterRepository->removeNewsletterAndQueues($newsletter);
         $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.delete.message'));
         return $this->redirect('list');
@@ -229,19 +245,6 @@ class NewsletterController extends AbstractNewsletterController
         return $response;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return ResponseInterface
-     * @throws AuthenticationFailedException
-     * @throws ExceptionDbalDriver
-     * @throws ApiConnectionException
-     * @throws InvalidUrlException
-     * @throws MisconfigurationException
-     * @throws JsonException
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws InvalidConfigurationTypeException
-     */
     public function testMailAjax(ServerRequestInterface $request): ResponseInterface
     {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
@@ -277,16 +280,6 @@ class NewsletterController extends AbstractNewsletterController
         return $response;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return ResponseInterface
-     * @throws AuthenticationFailedException
-     * @throws ExceptionDbalDriver
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws InvalidConfigurationTypeException
-     * @throws MisconfigurationException
-     */
     public function previewSourcesAjax(ServerRequestInterface $request): ResponseInterface
     {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
@@ -299,10 +292,6 @@ class NewsletterController extends AbstractNewsletterController
         return $response;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return ResponseInterface
-     */
     public function receiverDetailAjax(ServerRequestInterface $request): ResponseInterface
     {
         $userRepository = GeneralUtility::makeInstance(UserRepository::class);
@@ -323,11 +312,6 @@ class NewsletterController extends AbstractNewsletterController
         return $response;
     }
 
-    /**
-     * @return void
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     */
     protected function addDocumentHeaderForNewsletterController(): void
     {
         $menuConfiguration = [
