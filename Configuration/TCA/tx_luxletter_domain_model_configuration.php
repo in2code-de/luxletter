@@ -24,11 +24,20 @@ return [
         'rootLevel' => -1,
     ],
     'types' => [
-        '1' => ['showitem' => 'title,from_email,from_name,reply_email,reply_name,site'],
+        '1' => [
+            'showitem' => 'title,--palette--;;palette_from,,--palette--;;palette_reply,site'
+        ],
+    ],
+    'palettes' => [
+        'palette_from' => [
+            'showitem' => 'from_email,from_name,',
+        ],
+        'palette_reply' => [
+            'showitem' => 'reply_email,reply_name,',
+        ],
     ],
     'columns' => [
         'title' => [
-            'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Configuration::TABLE_NAME . '.title',
             'config' => [
@@ -39,7 +48,6 @@ return [
             ],
         ],
         'from_email' => [
-            'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Configuration::TABLE_NAME . '.from_email',
             'config' => [
@@ -50,7 +58,6 @@ return [
             ],
         ],
         'from_name' => [
-            'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Configuration::TABLE_NAME . '.from_name',
             'config' => [
@@ -61,7 +68,6 @@ return [
             ],
         ],
         'reply_email' => [
-            'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Configuration::TABLE_NAME . '.reply_email',
             'config' => [
@@ -72,7 +78,6 @@ return [
             ],
         ],
         'reply_name' => [
-            'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Configuration::TABLE_NAME . '.reply_name',
             'config' => [
@@ -83,7 +88,6 @@ return [
             ],
         ],
         'site' => [
-            'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Configuration::TABLE_NAME . '.site',
             'config' => [
