@@ -3,7 +3,9 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
+use In2code\Luxletter\Domain\Service\PermissionTrait;
 use In2code\Luxletter\Exception\MisconfigurationException;
+use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\DatabaseUtility;
 use PDO;
@@ -14,6 +16,8 @@ use TYPO3\CMS\Core\Utility\MathUtility;
 
 class PageRepository
 {
+    use PermissionTrait;
+
     const TABLE_NAME = 'pages';
 
     /**
@@ -30,21 +34,28 @@ class PageRepository
         $pages = [];
         try {
             $queryBuilder = DatabaseUtility::getQueryBuilderForTable(self::TABLE_NAME);
-            $results = $queryBuilder
+            $rows = $queryBuilder
                 ->select('*')
                 ->from(self::TABLE_NAME)
                 ->where(
                     'doktype=' . ConfigurationUtility::getMultilanguageNewsletterPageDoktype()
                     . ' and sys_language_uid=0'
                 )
-                ->orderBy('title', 'desc')
+                ->orderBy('title', 'asc')
                 ->executeQuery()
                 ->fetchAllAssociative();
-            foreach ($results as $result) {
-                $pages[$result['uid']] = $result['title'];
+            if (BackendUserUtility::isAdministrator() === false) {
+                foreach ($rows as $key => $row) {
+                    if ($this->isAuthenticated($row) === false) {
+                        unset($rows[$key]);
+                    }
+                }
+            }
+            foreach ($rows as $row) {
+                $pages[$row['uid']] = $row['title'];
             }
         } catch (Throwable $exception) {
-            return $pages;
+            unset($exception);
         }
         return $pages;
     }
