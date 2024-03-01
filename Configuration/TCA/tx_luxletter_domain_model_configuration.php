@@ -28,7 +28,6 @@ return [
     ],
     'columns' => [
         'title' => [
-            'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Configuration::TABLE_NAME . '.title',
             'config' => [
@@ -39,7 +38,6 @@ return [
             ],
         ],
         'from_email' => [
-            'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Configuration::TABLE_NAME . '.from_email',
             'config' => [
@@ -50,7 +48,6 @@ return [
             ],
         ],
         'from_name' => [
-            'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Configuration::TABLE_NAME . '.from_name',
             'config' => [
@@ -61,7 +58,6 @@ return [
             ],
         ],
         'reply_email' => [
-            'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Configuration::TABLE_NAME . '.reply_email',
             'config' => [
@@ -72,7 +68,6 @@ return [
             ],
         ],
         'reply_name' => [
-            'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Configuration::TABLE_NAME . '.reply_name',
             'config' => [
@@ -83,7 +78,6 @@ return [
             ],
         ],
         'site' => [
-            'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Configuration::TABLE_NAME . '.site',
             'config' => [
