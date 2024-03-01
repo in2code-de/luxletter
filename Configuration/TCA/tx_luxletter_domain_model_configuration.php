@@ -24,7 +24,17 @@ return [
         'rootLevel' => -1,
     ],
     'types' => [
-        '1' => ['showitem' => 'title,from_email,from_name,reply_email,reply_name,site'],
+        '1' => [
+            'showitem' => 'title,--palette--;;palette_from,,--palette--;;palette_reply,site'
+        ],
+    ],
+    'palettes' => [
+        'palette_from' => [
+            'showitem' => 'from_email,from_name,',
+        ],
+        'palette_reply' => [
+            'showitem' => 'reply_email,reply_name,',
+        ],
     ],
     'columns' => [
         'title' => [
