@@ -4,10 +4,13 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
 use Doctrine\DBAL\Exception as ExceptionDbal;
+use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 trait PermissionTrait
 {
@@ -18,6 +21,7 @@ trait PermissionTrait
      * @param string $table
      * @return array
      * @throws ExceptionDbal
+     * @throws MisconfigurationException
      */
     private function filterRecords(array $rows, string $table): array
     {
@@ -26,12 +30,32 @@ trait PermissionTrait
         }
 
         foreach ($rows as $key => $row) {
-            $identifier = is_array($row) ? $row['uid'] : $row->getUid();
+            $identifier = $this->getIdentifierFromArrayOrObject($row, $key);
             if ($this->isAuthenticatedForRecord($identifier, $table) === false) {
                 unset($rows[$key]);
             }
         }
         return $rows;
+    }
+
+    /**
+     * @param $object
+     * @param $key
+     * @return int
+     * @throws MisconfigurationException
+     */
+    protected function getIdentifierFromArrayOrObject($object, $key): int
+    {
+        if (is_array($object)) { // AllAssociative
+            if (array_key_exists('uid', $object)) {
+                return $object['uid'];
+            }
+        } elseif (is_string($object) || is_int($object)) { // KeyValue
+            return (int)$key;
+        } elseif (is_a($object, AbstractEntity::class)) { // DomainObject
+            return $object->getUid();
+        }
+        throw new MisconfigurationException('Object not supported in ' . __CLASS__, 1709566644);
     }
 
     /**
