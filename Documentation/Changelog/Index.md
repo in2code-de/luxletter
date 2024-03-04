@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                                      |
 |------------|------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 25.0.3     | 2024.03.04 | Bugfix  | Add "luxletterlink" to excluded chash configuration                                                                                                                                              |
 | 25.0.2     | 2024.03.01 | Bugfix  | Show fields of configuration table always for editors                                                                                                                                            |
 | 25.0.1     | 2024.02.07 | Bugfix  | Prevent exception on tracked links if a user is deleted/disabled                                                                                                                                 |
 | 25.0.0     | 2024.02.02 | Feature | Add two new events for newsletter manipulation, update LUXletter for news 11, bugfix for unsubscribe action in TYPO3 12                                                                          |
