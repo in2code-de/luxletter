@@ -7,7 +7,9 @@ use DateTime;
 use In2code\Luxletter\Domain\Model\Category;
 use In2code\Luxletter\Domain\Model\Configuration;
 use In2code\Luxletter\Domain\Model\Usergroup;
+use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Utility\LocalizationUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class Filter
 {
@@ -19,6 +21,7 @@ class Filter
     public const TIME_1_YEAR = 50;
 
     protected string $searchterm = '';
+    protected string $site = '';
 
     protected ?Usergroup $usergroup = null;
     protected ?Category $category = null;
@@ -51,6 +54,22 @@ class Filter
     public function setSearchterm(string $searchterm): self
     {
         $this->searchterm = $searchterm;
+        return $this;
+    }
+
+    public function getSite(): string
+    {
+        return $this->site;
+    }
+
+    public function isSiteSet(): bool
+    {
+        return $this->getSite() !== '';
+    }
+
+    public function setSite(string $site): self
+    {
+        $this->site = $site;
         return $this;
     }
 
@@ -155,6 +174,7 @@ class Filter
     public function isSet(): bool
     {
         return $this->isSearchtermSet()
+            || $this->isSiteSet()
             || $this->isConfigurationSet()
             || $this->isUsergroupSet()
             || $this->isCategorySet()
@@ -172,5 +192,29 @@ class Filter
             self::TIME_6_MONTHS => LocalizationUtility::translate($llPrefix . self::TIME_6_MONTHS),
             self::TIME_1_YEAR => LocalizationUtility::translate($llPrefix . self::TIME_1_YEAR),
         ];
+    }
+
+    /**
+     * Get all sites on which the current editor has reading access
+     *
+     * @return array
+     */
+    public function getAllowedSites(): array
+    {
+        $siteService = GeneralUtility::makeInstance(SiteService::class);
+        return $siteService->getAllowedSites();
+    }
+
+    /**
+     * Always return given site or all available sites, so this can be always used in sql queries even for admins
+     *
+     * @return array
+     */
+    public function getSitesForFilter(): array
+    {
+        if ($this->isSiteSet()) {
+            return [$this->getSite()];
+        }
+        return array_merge(array_keys($this->getAllowedSites()), ['']);
     }
 }

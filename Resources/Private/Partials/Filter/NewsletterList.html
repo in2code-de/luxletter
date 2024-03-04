@@ -27,15 +27,54 @@
 
                         <div class="input-group form-group">
                             <f:form.select
+                                id="site"
+                                class="form-control form-select"
+                                property="site"
+                                options="{filter.allowedSites}"
+                                prependOptionLabel="{f:translate(key:'module.newsletter.list.filter.sitesall.labelprepend')}"
+                                prependOptionValue=""
+                                optionValueField="identifier"
+                                optionLabelField="configuration.websiteTitle"
+                                value="{filter.site}" />
+                            <button type="button" class="btn btn-default" data-global-event="click" data-action-focus="#site">
+                                <core:icon identifier="actions-globe" size="small" />
+                            </button>
+                        </div>
+                    </div>
+
+
+                    <div class="col-xl-4 col-md-6 mb-3">
+                        <h5><f:translate key="module.newsletter.list.filter.category.label">Category</f:translate></h5>
+
+                        <div class="input-group form-group">
+                            <label for="categoryScoring" class="hidden">
+                                <f:translate key="module.newsletter.list.filter.category.label">Category</f:translate>
+                            </label>
+                            <f:form.select
+                                property="category"
+                                options="{categories}"
+                                optionLabelField="title"
+                                optionValueField="uid"
+                                prependOptionValue="0"
+                                prependOptionLabel="{f:translate(key:'module.newsletter.list.filter.category.labelprepend')}"
+                                class="form-control form-select"
+                                id="categoryScoring"/>
+                            <button type="button" class="btn btn-default" data-global-event="click" data-action-focus="#categoryScoring">
+                                <core:icon identifier="actions-tag" />
+                            </button>
+                        </div>
+
+                        <div class="input-group form-group">
+                            <f:form.select
                                 id="configuration"
                                 class="form-control form-select"
                                 property="configuration"
                                 options="{configurations}"
-                                prependOptionLabel=""
+                                prependOptionLabel="{f:translate(key:'module.newsletter.list.filter.configuration.labelprepend')}"
                                 prependOptionValue="0"
                                 optionValueField="uid"
                                 optionLabelField="title"
-                                value="{filter.configuration}" />
+                                value="{filter.configuration.uid}" />
                             <button type="button" class="btn btn-default" data-global-event="click" data-action-focus="#configuration">
                                 <core:icon identifier="actions-user" size="small" />
                             </button>
@@ -60,27 +99,6 @@
                             </button>
                         </div>
 
-                        <div class="input-group form-group">
-                            <label for="categoryScoring" class="hidden">
-                                <f:translate key="module.newsletter.list.filter.category.label">Category</f:translate>
-                            </label>
-                            <f:form.select
-                                property="category"
-                                options="{categories}"
-                                optionLabelField="title"
-                                optionValueField="uid"
-                                prependOptionValue="0"
-                                prependOptionLabel=""
-                                class="form-control form-select"
-                                id="categoryScoring"/>
-                            <button type="button" class="btn btn-default" data-global-event="click" data-action-focus="#categoryScoring">
-                                <core:icon identifier="actions-tag" />
-                            </button>
-                        </div>
-                    </div>
-
-
-                    <div class="col-xl-4 col-md-6 mb-3" style="display: flex; flex-direction: column; justify-content: flex-end;">
                         <div style="display: flex; justify-content: space-between;">
                             <f:comment>Clear filter</f:comment>
                             <f:if condition="{filter.set}">

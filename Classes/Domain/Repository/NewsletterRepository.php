@@ -12,13 +12,21 @@ use In2code\Luxletter\Domain\Service\SiteService;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class NewsletterRepository extends AbstractRepository
 {
-    public function findAllAuthorized(): QueryResultInterface
+    /**
+     * Find all newsletters, no matter what filter is set (to show "add new" button in output)
+     *
+     * @param Filter $filter
+     * @return QueryResultInterface
+     * @throws InvalidQueryException
+     */
+    public function findAllAuthorized(Filter $filter): QueryResultInterface
     {
         $query = $this->createQuery();
         if (BackendUserUtility::isAdministrator() === false) {
@@ -94,13 +102,8 @@ class NewsletterRepository extends AbstractRepository
                 $logicalAnd[] = $query->equals('configuration', $filter->getConfiguration());
             }
         }
-        if (BackendUserUtility::isAdministrator() === false) {
-            $siteService = GeneralUtility::makeInstance(SiteService::class);
-            $logicalAnd[] = $query->in('configuration.site', array_keys($siteService->getAllowedSites()));
-        }
-        if ($logicalAnd !== []) {
-            $query->matching($query->logicalAnd(...$logicalAnd));
-        }
+        $logicalAnd[] = $query->in('configuration.site', $filter->getSitesForFilter());
+        $query->matching($query->logicalAnd(...$logicalAnd));
         return $query->execute();
     }
 
