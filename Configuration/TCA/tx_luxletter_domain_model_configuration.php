@@ -25,7 +25,7 @@ return [
     ],
     'types' => [
         '1' => [
-            'showitem' => 'title,--palette--;;palette_from,,--palette--;;palette_reply,site'
+            'showitem' => 'title,--palette--;;palette_from,,--palette--;;palette_reply,site',
         ],
     ],
     'palettes' => [

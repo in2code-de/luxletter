@@ -11,6 +11,7 @@ class CacheHashUtility
      * @var array|string[]
      */
     protected static array $excludedVariables = [
+        'luxletterlink',
         'tx_luxletter_preview[origin]',
         'tx_luxletter_preview[layout]',
         'tx_luxletter_preview[language]',
