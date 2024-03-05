@@ -33,6 +33,9 @@ class NewsletterRepository extends AbstractRepository
             $siteService = GeneralUtility::makeInstance(SiteService::class);
             $query->matching($query->in('configuration.site', array_keys($siteService->getAllowedSites())));
         }
+        if ($filter->isLimitSet()) {
+            $query->setLimit($filter->getLimit());
+        }
         return $query->execute();
     }
 
@@ -104,6 +107,9 @@ class NewsletterRepository extends AbstractRepository
         }
         $logicalAnd[] = $query->in('configuration.site', $filter->getSitesForFilter());
         $query->matching($query->logicalAnd(...$logicalAnd));
+        if ($filter->isLimitSet()) {
+            $query->setLimit($filter->getLimit());
+        }
         return $query->execute();
     }
 

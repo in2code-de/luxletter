@@ -3,7 +3,8 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Widget\DataProvider;
 
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as ExceptionDbal;
+use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -16,10 +17,6 @@ use TYPO3\CMS\Dashboard\Widgets\ChartDataProviderInterface;
  */
 class ClickRateDataProvider implements ChartDataProviderInterface
 {
-    /**
-     * @return array
-     * @throws DBALException
-     */
     public function getChartData(): array
     {
         return [
@@ -51,15 +48,16 @@ class ClickRateDataProvider implements ChartDataProviderInterface
      *  ]
      *
      * @return array
-     * @throws DBALException
+     * @throws ExceptionDbal
      */
     protected function getData(): array
     {
         $logRepository = GeneralUtility::makeInstance(LogRepository::class);
+        $filter = GeneralUtility::makeInstance(Filter::class);
         return [
             'amounts' => [
-                $logRepository->getOpeningsByClickers(),
-                ($logRepository->getOverallOpenings() - $logRepository->getOpeningsByClickers()),
+                $logRepository->getOpeningsByClickers($filter),
+                ($logRepository->getOverallOpenings($filter) - $logRepository->getOpeningsByClickers($filter)),
             ],
             'titles' => [
                 $this->getWidgetLabel('clickrate.label.0'),

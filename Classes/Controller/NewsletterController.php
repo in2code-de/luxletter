@@ -25,23 +25,29 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class NewsletterController extends AbstractNewsletterController
 {
-    public function dashboardAction(): ResponseInterface
+    public function initializeDashboardAction(): void
+    {
+        $this->setFilter();
+    }
+
+    public function dashboardAction(Filter $filter): ResponseInterface
     {
         $this->view->assignMultiple(
             [
                 'statistic' => [
-                    'overallReceivers' => $this->logRepository->getNumberOfReceivers(),
-                    'overallOpenings' => $this->logRepository->getOverallOpenings(),
-                    'openingsByClickers' => $this->logRepository->getOpeningsByClickers(),
-                    'overallClicks' => $this->logRepository->getOverallClicks(),
-                    'overallUnsubscribes' => $this->logRepository->getOverallUnsubscribes(),
-                    'overallMailsSent' => $this->logRepository->getOverallMailsSent(),
-                    'overallOpenRate' => $this->logRepository->getOverallOpenRate(),
-                    'overallClickRate' => $this->logRepository->getOverallClickRate(),
-                    'overallUnsubscribeRate' => $this->logRepository->getOverallUnsubscribeRate(),
+                    'overallReceivers' => $this->logRepository->getNumberOfReceivers($filter),
+                    'overallOpenings' => $this->logRepository->getOverallOpenings($filter),
+                    'openingsByClickers' => $this->logRepository->getOpeningsByClickers($filter),
+                    'overallClicks' => $this->logRepository->getOverallClicks($filter),
+                    'overallUnsubscribes' => $this->logRepository->getOverallUnsubscribes($filter),
+                    'overallMailsSent' => $this->logRepository->getOverallMailsSent($filter),
+                    'overallOpenRate' => $this->logRepository->getOverallOpenRate($filter),
+                    'overallClickRate' => $this->logRepository->getOverallClickRate($filter),
+                    'overallUnsubscribeRate' => $this->logRepository->getOverallUnsubscribeRate($filter),
                 ],
-                'groupedLinksByHref' => $this->logRepository->getGroupedLinksByHref(),
-                'newsletters' => $this->newsletterRepository->findAll()->getQuery()->setLimit(10)->execute(),
+                'filter' => $filter,
+                'groupedLinksByHref' => $this->logRepository->getGroupedLinksByHref($filter->setLimit(8)),
+                'newsletters' => $this->newsletterRepository->findAllAuthorized($filter->setLimit(10)),
             ]
         );
 

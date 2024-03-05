@@ -28,6 +28,7 @@ class Filter
     protected ?Configuration $configuration = null;
 
     protected int $time = self::TIME_DEFAULT;
+    protected int $limit = 0;
 
     /**
      * This is just a dummy property, that helps to recognize if a filter is set and helps to save this to the session
@@ -157,6 +158,22 @@ class Filter
     public function setTime(int $time): Filter
     {
         $this->time = $time;
+        return $this;
+    }
+
+    public function getLimit(): int
+    {
+        return $this->limit;
+    }
+
+    public function isLimitSet(): bool
+    {
+        return $this->getLimit() > 0;
+    }
+
+    public function setLimit(int $limit): self
+    {
+        $this->limit = $limit;
         return $this;
     }
 
