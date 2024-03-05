@@ -75,7 +75,8 @@ class UnsubscribeUrlService
         } catch (Throwable $exception) {
             throw new MisconfigurationException(
                 'Could not build a valid URL to unsubscribe page to pid' . $this->getPidUnsubscribe()
-                . ' in site "' . $this->site->getIdentifier() . '"',
+                . ' in site "' . $this->site->getIdentifier() . '".'
+                . ' Message: ' . $exception->getMessage() . '(' . $exception->getCode() . ')',
                 1646380245
             );
         }
