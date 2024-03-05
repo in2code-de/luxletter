@@ -10,7 +10,6 @@ use In2code\Luxletter\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 trait PermissionTrait
 {
