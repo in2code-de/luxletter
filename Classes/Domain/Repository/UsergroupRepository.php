@@ -34,11 +34,13 @@ class UsergroupRepository extends AbstractRepository
     }
 
     /**
-     * Example return values like
-     *  [
-     *      123 => 'Usergroup title A',
-     *      234 => 'Usergroup title B',
-     *  ]
+     * Get authorized usergroups
+     *
+     *      Example return values like:
+     *      [
+     *          123 => 'Usergroup title A',
+     *          234 => 'Usergroup title B',
+     *      ]
      *
      * @return array
      * @throws ExceptionDbal

@@ -219,7 +219,7 @@ class NewsletterController extends AbstractNewsletterController
     public function receiverAction(Filter $filter): ResponseInterface
     {
         $receiverAnalysisService = GeneralUtility::makeInstance(ReceiverAnalysisService::class);
-        $users = $this->userRepository->getUsersByFilter($filter);
+        $users = $this->userRepository->getUsersByFilter($filter->setLimit(1000));
         $this->view->assignMultiple(
             [
                 'filter' => $filter,
@@ -230,8 +230,7 @@ class NewsletterController extends AbstractNewsletterController
         );
 
         $this->addDocumentHeaderForNewsletterController();
-        $this->moduleTemplate->setContent($this->view->render());
-        return $this->htmlResponse($this->moduleTemplate->renderContent());
+        return $this->defaultRendering();
     }
 
     public function wizardUserPreviewAjax(ServerRequestInterface $request): ResponseInterface
@@ -306,11 +305,18 @@ class NewsletterController extends AbstractNewsletterController
         $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
         $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->receiverDetailFile));
         $user = $userRepository->findByUid((int)$request->getQueryParams()['user']);
-        $standaloneView->assignMultiple([
+        $visitor = $visitorRepository->findOneByFrontenduser($user);
+        $variables = [
             'user' => $user,
-            'visitor' => $visitorRepository->findOneByFrontenduser($user),
-            'logs' => $logRepository->findByUser($user),
-        ]);
+        ];
+        if ($visitor !== null && $visitor->canBeRead()) {
+            $variables += [
+                'visitor' => $visitor,
+                'logs' => $logRepository->findByUser($user),
+            ];
+        }
+        $standaloneView->assignMultiple($variables);
+
         $response = ObjectUtility::getJsonResponse();
         $response->getBody()->write(json_encode(
             ['html' => $standaloneView->render()]
