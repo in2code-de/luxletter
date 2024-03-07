@@ -31,6 +31,7 @@ class LogRepository extends AbstractRepository
             . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
             . ' where l.deleted=0 and l.status=' . Log::STATUS_DISPATCH
             . ' and c.site in ("' . implode('","', $filter->getSitesForFilter()) . '")'
+            . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp()
             . ' limit 1';
         return (int)$connection->executeQuery($sql)->fetchOne();
     }
@@ -57,6 +58,7 @@ class LogRepository extends AbstractRepository
             . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
             . ' where l.deleted=0 and l.status=' . Log::STATUS_LINKOPENING
             . ' and c.site in ("' . implode('","', $filter->getSitesForFilter()) . '")'
+            . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp()
             . ' group by l.properties, l.newsletter, l.uid'
             . ' order by count desc'
             . ' limit ' . $filter->getLimit();
@@ -83,7 +85,8 @@ class LogRepository extends AbstractRepository
             . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
             . ' where l.deleted = 0'
             . ' and l.status IN (' . Log::STATUS_NEWSLETTEROPENING . ',' . Log::STATUS_LINKOPENING . ')'
-            . ' and c.site in ("' . implode('","', $filter->getSitesForFilter()) . '")';
+            . ' and c.site in ("' . implode('","', $filter->getSitesForFilter()) . '")'
+            . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp();
         return (int)$connection->executeQuery($sql)->fetchOne();
     }
 
@@ -100,7 +103,8 @@ class LogRepository extends AbstractRepository
             . ' left join ' . Newsletter::TABLE_NAME . ' nl on nl.uid=l.newsletter'
             . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
             . ' where l.deleted = 0 and l.status=' . Log::STATUS_LINKOPENING
-            . ' and c.site in ("' . implode('","', $filter->getSitesForFilter()) . '")';
+            . ' and c.site in ("' . implode('","', $filter->getSitesForFilter()) . '")'
+            . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp();
         return (int)$connection->executeQuery($sql)->fetchOne();
     }
 
@@ -148,7 +152,8 @@ class LogRepository extends AbstractRepository
             . ' left join ' . Newsletter::TABLE_NAME . ' nl on nl.uid=l.newsletter'
             . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
             . ' where l.deleted = 0 and l.status in (' . ArrayUtility::convertArrayToIntegerList($status) . ')'
-            . ' and c.site in ("' . implode('","', $filter->getSitesForFilter()) . '")';
+            . ' and c.site in ("' . implode('","', $filter->getSitesForFilter()) . '")'
+            . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp();
         return (int)$connection->executeQuery($sql)->fetchOne();
     }
 

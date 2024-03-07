@@ -8,10 +8,7 @@ use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Model\Log;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\Queue;
-use In2code\Luxletter\Domain\Service\SiteService;
-use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\DatabaseUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -29,10 +26,38 @@ class NewsletterRepository extends AbstractRepository
     public function findAllAuthorized(Filter $filter): QueryResultInterface
     {
         $query = $this->createQuery();
-        if (BackendUserUtility::isAdministrator() === false) {
-            $siteService = GeneralUtility::makeInstance(SiteService::class);
-            $query->matching($query->in('configuration.site', array_keys($siteService->getAllowedSites())));
+        $query->matching($query->in('configuration.site', $filter->getSitesForFilter()));
+        if ($filter->isLimitSet()) {
+            $query->setLimit($filter->getLimit());
         }
+        return $query->execute();
+    }
+
+    public function findAllByFilter(Filter $filter): ?QueryResultInterface
+    {
+        $query = $this->createQuery();
+        $logicalAnd = [
+            $query->in('configuration.site', $filter->getSitesForFilter()),
+        ];
+        if ($filter->isSearchtermSet()) {
+            $logicalOr = [];
+            foreach ($filter->getSearchterms() as $searchterm) {
+                $logicalOr[] = $query->like('title', '%' . $searchterm . '%');
+                $logicalOr[] = $query->like('description', '%' . $searchterm . '%');
+                $logicalOr[] = $query->like('subject', '%' . $searchterm . '%');
+            }
+            $logicalAnd[] = $query->logicalOr(...$logicalOr);
+        }
+        if ($filter->isCategorySet()) {
+            $logicalAnd[] = $query->equals('category', $filter->getCategory());
+        }
+        if ($filter->isTimeSet()) {
+            $logicalAnd[] = $query->greaterThanOrEqual('crdate', $filter->getTimeDateStart());
+        }
+        if ($filter->isConfigurationSet()) {
+            $logicalAnd[] = $query->equals('configuration', $filter->getConfiguration());
+        }
+        $query->matching($query->logicalAnd(...$logicalAnd));
         if ($filter->isLimitSet()) {
             $query->setLimit($filter->getLimit());
         }
@@ -79,38 +104,6 @@ class NewsletterRepository extends AbstractRepository
         }
         uksort($newslettersGrouped, [$this, 'sortByKeyAndIgnoreDefaultLabelCallback']);
         return $newslettersGrouped;
-    }
-
-    protected function findAllByFilter(Filter $filter): ?QueryResultInterface
-    {
-        $query = $this->createQuery();
-        $logicalAnd = [];
-        if ($filter->isSet()) {
-            if ($filter->getSearchterm() !== '') {
-                $logicalOr = [];
-                foreach ($filter->getSearchterms() as $searchterm) {
-                    $logicalOr[] = $query->like('title', '%' . $searchterm . '%');
-                    $logicalOr[] = $query->like('description', '%' . $searchterm . '%');
-                    $logicalOr[] = $query->like('subject', '%' . $searchterm . '%');
-                }
-                $logicalAnd[] = $query->logicalOr(...$logicalOr);
-            }
-            if ($filter->getCategory() !== null) {
-                $logicalAnd[] = $query->equals('category', $filter->getCategory());
-            }
-            if ($filter->getTime() > 0) {
-                $logicalAnd[] = $query->greaterThanOrEqual('crdate', $filter->getTimeDateStart());
-            }
-            if ($filter->isConfigurationSet()) {
-                $logicalAnd[] = $query->equals('configuration', $filter->getConfiguration());
-            }
-        }
-        $logicalAnd[] = $query->in('configuration.site', $filter->getSitesForFilter());
-        $query->matching($query->logicalAnd(...$logicalAnd));
-        if ($filter->isLimitSet()) {
-            $query->setLimit($filter->getLimit());
-        }
-        return $query->execute();
     }
 
     /**

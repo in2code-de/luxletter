@@ -151,6 +151,8 @@ class Filter
             case self::TIME_1_YEAR:
                 $date->modify('-1 year');
                 break;
+            case self::TIME_DEFAULT:
+                $date = new DateTime('2000-01-01T00:00:00+02:00');
         }
         return $date;
     }
