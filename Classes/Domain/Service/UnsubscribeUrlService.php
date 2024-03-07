@@ -88,7 +88,7 @@ class UnsubscribeUrlService
      */
     protected function getPidUnsubscribe(): int
     {
-        $unsubscribePid = (int)$this->site->getConfiguration()['luxletterUnsubscribePid'] ?? 0;
+        $unsubscribePid = (int)($this->site->getConfiguration()['luxletterUnsubscribePid'] ?? 0);
         if ($unsubscribePid === 0) {
             throw new MisconfigurationException(
                 'No unsubscribe page identifier found in site configuration',
