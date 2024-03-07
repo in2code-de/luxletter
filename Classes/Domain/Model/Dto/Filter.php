@@ -70,6 +70,10 @@ class Filter
 
     public function setSite(string $site): self
     {
+        // Don't allow to pass not allowed site in filter
+        if (array_key_exists($site, $this->getAllowedSites()) === false) {
+            $site = '';
+        }
         $this->site = $site;
         return $this;
     }
