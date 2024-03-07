@@ -46,7 +46,7 @@ class PageRepository
                 ->fetchAllAssociative();
             if (BackendUserUtility::isAdministrator() === false) {
                 foreach ($rows as $key => $row) {
-                    if ($this->isAuthenticated($row) === false) {
+                    if ($this->isAuthenticatedForPageRow($row) === false) {
                         unset($rows[$key]);
                     }
                 }
