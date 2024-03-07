@@ -332,7 +332,7 @@
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.receiver.description_alternative">
 				<source>Note: Recipient lists that have already been created cannot be changed later.</source>
-				<target state="translated">Hinweis: Bereits angelegt Empfängerlisten können nachträglich nicht mehr geändert werden.</target>
+				<target state="translated">Hinweis: Bereits angelegte Empfängerlisten können nachträglich nicht mehr geändert werden.</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.configuration">
 				<source>Sender</source>
