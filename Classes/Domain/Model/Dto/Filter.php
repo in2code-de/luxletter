@@ -228,6 +228,11 @@ class Filter
         return $siteService->getAllowedSites();
     }
 
+    public function hasAnyAllowedSites(): bool
+    {
+        return $this->getAllowedSites() !== [];
+    }
+
     /**
      * Always return given site or all available sites, so this can be always used in sql queries even for admins
      *

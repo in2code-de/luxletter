@@ -365,6 +365,10 @@
 				<source>Please choose...</source>
 				<target state="translated">Bitte wählen...</target>
 			</trans-unit>
+			<trans-unit id="nosites">
+				<source>Note: To view data in LUXletter, you need read access to at least one root page (site rootpage)</source>
+				<target state="translated">Hinweis: Um Daten in LUXletter sehen zu können, benötigen Sie Lesezugriff auf mindestens eine Root Seite (Rootpage in site)</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
