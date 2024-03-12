@@ -142,7 +142,7 @@ class UserRepository extends AbstractRepository
         if (BackendUserUtility::isAdministrator() === false) {
             $usergroupRepository = GeneralUtility::makeInstance(UsergroupRepository::class);
             $allowedUsergroupUids = array_keys($usergroupRepository->getReceiverGroups());
-            $logicalAnd[] = $query->in('usergroup', $allowedUsergroupUids);
+            $logicalAnd[] = $query->in('usergroup', $allowedUsergroupUids ?: [0]);
         }
         $constraint = $query->logicalAnd(...$logicalAnd);
         $query->matching($constraint);
