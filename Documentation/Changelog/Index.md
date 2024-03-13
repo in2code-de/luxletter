@@ -136,6 +136,13 @@ plugin {
 module.tx_luxletter < plugin.tx_luxletter
 ```
 
+### Upgrade to 26.x
+
+* Multiclient availability needs reading access for editors to rootpages of relevant sites
+  * **Todo:** Check permissions for your editors on some root pages - see [Editors configuration](../Editors/Index.md) for details
+* Also reading access to pages where relevant records are stored is needed now for editors
+  * **Todo:** Check permissions for your editors for some records - see [Editors configuration](../Editors/Index.md) for details
+
 ### Upgrade to 17.x
 
 * Multiple user groups can now be used for selecting receivers for newsletters
