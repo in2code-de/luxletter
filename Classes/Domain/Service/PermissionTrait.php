@@ -70,7 +70,10 @@ trait PermissionTrait
         }
 
         $pageIdentifier = $this->getPageIdentifierFromRecord($identifier, $table);
-        return $this->isAuthenticatedForPageRow($this->getPageRowFromPageIdentifier($pageIdentifier));
+        if ($pageIdentifier > 0) {
+            return $this->isAuthenticatedForPageRow($this->getPageRowFromPageIdentifier($pageIdentifier));
+        }
+        return false;
     }
 
     private function isAuthenticatedForPageRow(array $pageRecord): bool
