@@ -194,12 +194,63 @@ class LogRepository extends AbstractRepository
      */
     public function getOverallUnsubscribeRate(Filter $filter): float
     {
-        $overallOpenings = $this->getOverallOpenings($filter);
         $overallUnsubscribes = $this->getOverallUnsubscribes($filter);
-        if ($overallOpenings > 0) {
-            return $overallUnsubscribes / $overallOpenings;
+        $overallMailsSent = $this->getOverallMailsSent($filter);
+        if ($overallMailsSent > 0) {
+            $result = $overallUnsubscribes / $overallMailsSent;
+            if ($result > 1) {
+                return 1.0;
+            }
         }
         return 0.0;
+    }
+
+    /**
+     * @param Filter $filter
+     * @return int
+     * @throws ExceptionDbal
+     */
+    public function getOverallNonOpenings(Filter $filter): int
+    {
+        $mailsSent = $this->getOverallMailsSent($filter);
+        $openings = $this->getOverallOpenings($filter);
+        $result = $mailsSent - $openings;
+        if ($result > 0) {
+            return $result;
+        }
+        return 0;
+    }
+
+    /**
+     * @param Filter $filter
+     * @return int
+     * @throws ExceptionDbal
+     */
+    public function getOverallNonClicks(Filter $filter): int
+    {
+        $openings = $this->getOverallOpenings($filter);
+        $openingsByClickers = $this->getOpeningsByClickers($filter);
+        $result = $openings - $openingsByClickers;
+        if ($result > 0) {
+            return $result;
+        }
+        return 0;
+    }
+
+    /**
+     * @param Filter $filter
+     * @return int
+     * @throws ExceptionDbal
+     */
+    public function getOverallSubscribes(Filter $filter): int
+    {
+        $mailsSent = $this->getOverallMailsSent($filter);
+        $unsubscribes = $this->getOverallUnsubscribes($filter);
+        $result = $mailsSent - $unsubscribes;
+        if ($result > 0) {
+            return $result;
+        }
+        return 0;
     }
 
     /**

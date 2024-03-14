@@ -73,8 +73,8 @@
 				<target state="translated">Öffnungsrate</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallopenrate.0">
-				<source>All</source>
-				<target state="translated">Alle</target>
+				<source>Non Opener</source>
+				<target state="translated">Nicht-Öffner</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallopenrate.1">
 				<source>Opener</source>
@@ -85,8 +85,8 @@
 				<target state="translated">Klickrate</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallclickrate.0">
-				<source>All openers</source>
-				<target state="translated">Alle Öffner</target>
+				<source>All non clicks</source>
+				<target state="translated">Alle Nicht-Klicks</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallclickrate.1">
 				<source>All clicks</source>
@@ -97,8 +97,8 @@
 				<target state="translated">Abmelderate</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallunsubscriberate.0">
-				<source>All openers</source>
-				<target state="translated">Alle Öffner</target>
+				<source>All subscribers</source>
+				<target state="translated">Alle Angemeldeten</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallunsubscriberate.1">
 				<source>All unsubscribers</source>

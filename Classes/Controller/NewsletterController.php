@@ -32,24 +32,24 @@ class NewsletterController extends AbstractNewsletterController
 
     public function dashboardAction(Filter $filter): ResponseInterface
     {
-        $this->view->assignMultiple(
-            [
-                'filter' => $filter,
-                'newsletters' => $this->newsletterRepository->findAllByFilter($filter->setLimit(10)),
-                'groupedLinksByHref' => $this->logRepository->getGroupedLinksByHref($filter->setLimit(8)),
-                'statistic' => [
-                    'overallReceivers' => $this->logRepository->getNumberOfReceivers($filter),
-                    'overallOpenings' => $this->logRepository->getOverallOpenings($filter),
-                    'openingsByClickers' => $this->logRepository->getOpeningsByClickers($filter),
-                    'overallClicks' => $this->logRepository->getOverallClicks($filter),
-                    'overallUnsubscribes' => $this->logRepository->getOverallUnsubscribes($filter),
-                    'overallMailsSent' => $this->logRepository->getOverallMailsSent($filter),
-                    'overallOpenRate' => $this->logRepository->getOverallOpenRate($filter),
-                    'overallClickRate' => $this->logRepository->getOverallClickRate($filter),
-                    'overallUnsubscribeRate' => $this->logRepository->getOverallUnsubscribeRate($filter),
-                ],
-            ]
-        );
+        $this->view->assignMultiple([
+            'filter' => $filter,
+            'newsletters' => $this->newsletterRepository->findAllByFilter($filter->setLimit(10)),
+            'groupedLinksByHref' => $this->logRepository->getGroupedLinksByHref($filter->setLimit(8)),
+            'statistic' => [
+                'overallReceivers' => $this->logRepository->getNumberOfReceivers($filter),
+                'overallMailsSent' => $this->logRepository->getOverallMailsSent($filter),
+                'overallOpenings' => $this->logRepository->getOverallOpenings($filter),
+                'overallNonOpenings' => $this->logRepository->getOverallNonOpenings($filter),
+                'overallOpenRate' => $this->logRepository->getOverallOpenRate($filter),
+                'overallNonClicks' => $this->logRepository->getOverallNonClicks($filter),
+                'openingsByClickers' => $this->logRepository->getOpeningsByClickers($filter),
+                'overallClickRate' => $this->logRepository->getOverallClickRate($filter),
+                'overallUnsubscribeRate' => $this->logRepository->getOverallUnsubscribeRate($filter),
+                'overallUnsubscribes' => $this->logRepository->getOverallUnsubscribes($filter),
+                'overallSubscribes' => $this->logRepository->getOverallSubscribes($filter),
+            ],
+        ]);
 
         $this->addDocumentHeaderForNewsletterController();
         return $this->defaultRendering();

@@ -11,10 +11,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Dashboard\WidgetApi;
 use TYPO3\CMS\Dashboard\Widgets\ChartDataProviderInterface;
 
-/**
- * Class OpenRateDataProvider
- * @noinspection PhpUnused
- */
 class OpenRateDataProvider implements ChartDataProviderInterface
 {
     /**
@@ -61,7 +57,7 @@ class OpenRateDataProvider implements ChartDataProviderInterface
         return [
             'amounts' => [
                 $logRepository->getOverallOpenings($filter),
-                ($logRepository->getOverallMailsSent($filter) - $logRepository->getOverallOpenings($filter)),
+                $logRepository->getOverallNonOpenings($filter),
             ],
             'titles' => [
                 $this->getWidgetLabel('openingrate.label.0'),

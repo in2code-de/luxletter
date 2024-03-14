@@ -11,10 +11,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Dashboard\WidgetApi;
 use TYPO3\CMS\Dashboard\Widgets\ChartDataProviderInterface;
 
-/**
- * Class UnsubscribeRateDataProvider
- * @noinspection PhpUnused
- */
 class UnsubscribeRateDataProvider implements ChartDataProviderInterface
 {
     /**
@@ -61,7 +57,7 @@ class UnsubscribeRateDataProvider implements ChartDataProviderInterface
         return [
             'amounts' => [
                 $logRepository->getOverallUnsubscribes($filter),
-                ($logRepository->getOverallOpenings($filter) - $logRepository->getOverallUnsubscribes($filter)),
+                $logRepository->getOverallSubscribes($filter),
             ],
             'titles' => [
                 $this->getWidgetLabel('unsubscriberate.label.0'),

@@ -57,7 +57,7 @@ class ClickRateDataProvider implements ChartDataProviderInterface
         return [
             'amounts' => [
                 $logRepository->getOpeningsByClickers($filter),
-                ($logRepository->getOverallOpenings($filter) - $logRepository->getOpeningsByClickers($filter)),
+                $logRepository->getOverallNonClicks($filter),
             ],
             'titles' => [
                 $this->getWidgetLabel('clickrate.label.0'),
