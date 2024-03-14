@@ -1,0 +1,40 @@
+<div class="panel panel-default">
+    <div class="panel-body">
+        <f:form name="filter" class="form" action="{action}" object="{filter}">
+            <div class="row">
+                <div class="col-md-8"></div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <f:form.select
+                            id="site"
+                            class="form-control form-select"
+                            property="site"
+                            options="{filter.allowedSites}"
+                            prependOptionLabel="{f:translate(key:'LLL:EXT:lux/Resources/Private/Language/locallang_db.xlf:module.analysis.dashboard.filter.sitesall')}"
+                            prependOptionValue=""
+                            optionValueField="identifier"
+                            optionLabelField="configuration.websiteTitle"
+                            value="{filter.site}"
+                            additionalAttributes="{onchange:'this.form.submit();'}" />
+                        <button type="button" class="btn btn-default" data-global-event="click" data-action-focus="#site">
+                            <core:icon identifier="actions-globe" size="small" />
+                        </button>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="input-group">
+                        <f:form.select
+                            property="time"
+                            options="{filter.timeOptions}"
+                            class="form-control form-select"
+                            id="time"
+                            additionalAttributes="{onchange:'this.form.submit();'}" />
+                        <button type="button" class="btn btn-default" data-global-event="click" data-action-focus="#time">
+                            <core:icon identifier="actions-clock" size="small" />
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </f:form>
+    </div>
+</div>

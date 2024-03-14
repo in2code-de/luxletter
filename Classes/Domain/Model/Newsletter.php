@@ -4,13 +4,14 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Model;
 
 use DateTime;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Repository\LanguageRepository;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
 use In2code\Luxletter\Domain\Service\Parsing\Newsletter as NewsletterParsing;
+use In2code\Luxletter\Domain\Service\SiteService;
+use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
@@ -222,7 +223,6 @@ class Newsletter extends AbstractEntity
      * Get a readable language label
      *
      * @return string
-     * @throws ExceptionDbalDriver
      */
     public function getLanguageLabel(): string
     {
@@ -313,7 +313,6 @@ class Newsletter extends AbstractEntity
 
     /**
      * @return int
-     * @throws DBALException
      * @throws ExceptionDbalDriver
      */
     public function getOpeners(): int
@@ -331,7 +330,6 @@ class Newsletter extends AbstractEntity
 
     /**
      * @return int
-     * @throws DBALException
      * @throws ExceptionDbalDriver
      */
     public function getClickers(): int
@@ -346,7 +344,6 @@ class Newsletter extends AbstractEntity
 
     /**
      * @return int
-     * @throws DBALException
      * @throws ExceptionDbalDriver
      */
     public function getUnsubscribers(): int
@@ -361,7 +358,6 @@ class Newsletter extends AbstractEntity
 
     /**
      * @return float
-     * @throws DBALException
      * @throws ExceptionDbalDriver
      */
     public function getOpenRate(): float
@@ -376,7 +372,6 @@ class Newsletter extends AbstractEntity
 
     /**
      * @return float
-     * @throws DBALException
      * @throws ExceptionDbalDriver
      */
     public function getClickRate(): float
@@ -391,7 +386,6 @@ class Newsletter extends AbstractEntity
 
     /**
      * @return float
-     * @throws DBALException
      * @throws ExceptionDbalDriver
      */
     public function getUnsubscribeRate(): float
@@ -402,5 +396,26 @@ class Newsletter extends AbstractEntity
             return $unsubscribers / $openers;
         }
         return 0.0;
+    }
+
+    /**
+     * Check if this record can be viewed by current editor
+     *
+     * @return bool
+     */
+    public function canBeRead(): bool
+    {
+        if (BackendUserUtility::isAdministrator()) {
+            return true;
+        }
+        return $this->isSiteAllowed();
+    }
+
+    private function isSiteAllowed(): bool
+    {
+        $siteService = GeneralUtility::makeInstance(SiteService::class);
+        $site = $this->getConfiguration()->getSite();
+        $allowedSiteList = array_keys($siteService->getAllowedSites());
+        return in_array($site, $allowedSiteList);
     }
 }

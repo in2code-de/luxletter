@@ -4,16 +4,26 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
+use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\FrontendUtility;
 use In2code\Luxletter\Utility\StringUtility;
 use LogicException;
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Site\SiteFinder;
+use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class SiteService
 {
+    protected SiteFinder $siteFinder;
+
+    public function __construct(?SiteFinder $siteFinder = null)
+    {
+        $this->siteFinder = $siteFinder ?? GeneralUtility::makeInstance(SiteFinder::class);
+    }
+
     /**
      * Get a site from current page identifier. Works only in frontend context (so not when in CLI and BACKEND context)
      *
@@ -27,8 +37,7 @@ class SiteService
             $pageIdentifier = FrontendUtility::getCurrentPageIdentifier();
         }
         if ($pageIdentifier > 0) {
-            $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
-            return $siteFinder->getSiteByPageId($pageIdentifier);
+            return $this->siteFinder->getSiteByPageId($pageIdentifier);
         }
         throw new LogicException('No page identifier given. Maybe no frontend context?', 1622813408);
     }
@@ -46,8 +55,7 @@ class SiteService
 
     public function getFirstSite(): Site
     {
-        $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
-        $sites = $siteFinder->getAllSites();
+        $sites = $this->siteFinder->getAllSites();
         return current($sites);
     }
 
@@ -73,7 +81,7 @@ class SiteService
      */
     public function getPageUrlFromParameter(int $pageIdentifier, array $arguments = []): string
     {
-        $site = GeneralUtility::makeInstance(SiteFinder::class)->getSiteByPageId($pageIdentifier);
+        $site = $this->siteFinder->getSiteByPageId($pageIdentifier);
         $this->checkForValidSite($site);
         $uri = $site->getRouter()->generateUri($pageIdentifier, $arguments);
         return $uri->__tostring();
@@ -94,6 +102,26 @@ class SiteService
         $url = $siteService->getDomainFromSite($site);
         $url .= '?' . http_build_query($arguments);
         return $url;
+    }
+
+    public function getAllowedSites(): array
+    {
+        $sites = $this->siteFinder->getAllSites();
+        if (BackendUserUtility::isAdministrator()) {
+            return $sites;
+        }
+
+        $sanitziedSites = [];
+        foreach ($sites as $site) {
+            $beuserAuthentication = BackendUserUtility::getBackendUserAuthentication();
+            if ($beuserAuthentication !== null) {
+                $row = BackendUtility::getRecord('pages', $site->getRootPageId());
+                if ($beuserAuthentication->doesUserHaveAccess($row, Permission::PAGE_SHOW)) {
+                    $sanitziedSites[$site->getIdentifier()] = $site;
+                }
+            }
+        }
+        return $sanitziedSites;
     }
 
     /**

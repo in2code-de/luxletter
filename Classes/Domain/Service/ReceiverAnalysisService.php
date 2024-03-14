@@ -3,16 +3,12 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
+use Doctrine\DBAL\Exception as ExceptionDbal;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
-/**
- * Class ReceiverAnalysisService
- */
 class ReceiverAnalysisService
 {
     /**
@@ -29,8 +25,7 @@ class ReceiverAnalysisService
      *  ]
      * @param QueryResultInterface $users
      * @return array
-     * @throws DBALException
-     * @throws ExceptionDbalDriver
+     * @throws ExceptionDbal
      */
     public function getActivitiesStatistic(QueryResultInterface $users): array
     {

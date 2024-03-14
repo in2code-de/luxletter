@@ -3,7 +3,6 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
-use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use In2code\Lux\Domain\Repository\VisitorRepository;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Newsletter;
@@ -13,45 +12,44 @@ use In2code\Luxletter\Domain\Service\PreviewUrlService;
 use In2code\Luxletter\Domain\Service\QueueService;
 use In2code\Luxletter\Domain\Service\ReceiverAnalysisService;
 use In2code\Luxletter\Events\AfterTestMailButtonClickedEvent;
-use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\AuthenticationFailedException;
-use In2code\Luxletter\Exception\InvalidUrlException;
-use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Mail\TestMail;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\LocalizationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
-use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
-use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class NewsletterController extends AbstractNewsletterController
 {
-    public function dashboardAction(): ResponseInterface
+    public function initializeDashboardAction(): void
     {
-        $this->view->assignMultiple(
-            [
-                'statistic' => [
-                    'overallReceivers' => $this->logRepository->getNumberOfReceivers(),
-                    'overallOpenings' => $this->logRepository->getOverallOpenings(),
-                    'openingsByClickers' => $this->logRepository->getOpeningsByClickers(),
-                    'overallClicks' => $this->logRepository->getOverallClicks(),
-                    'overallUnsubscribes' => $this->logRepository->getOverallUnsubscribes(),
-                    'overallMailsSent' => $this->logRepository->getOverallMailsSent(),
-                    'overallOpenRate' => $this->logRepository->getOverallOpenRate(),
-                    'overallClickRate' => $this->logRepository->getOverallClickRate(),
-                    'overallUnsubscribeRate' => $this->logRepository->getOverallUnsubscribeRate(),
-                ],
-                'groupedLinksByHref' => $this->logRepository->getGroupedLinksByHref(),
-                'newsletters' => $this->newsletterRepository->findAll()->getQuery()->setLimit(10)->execute(),
-            ]
-        );
+        $this->setFilter();
+    }
+
+    public function dashboardAction(Filter $filter): ResponseInterface
+    {
+        $this->view->assignMultiple([
+            'filter' => $filter,
+            'newsletters' => $this->newsletterRepository->findAllByFilter($filter->setLimit(10)),
+            'groupedLinksByHref' => $this->logRepository->getGroupedLinksByHref($filter->setLimit(8)),
+            'statistic' => [
+                'overallReceivers' => $this->logRepository->getNumberOfReceivers($filter),
+                'overallMailsSent' => $this->logRepository->getOverallMailsSent($filter),
+                'overallOpenings' => $this->logRepository->getOverallOpenings($filter),
+                'overallNonOpenings' => $this->logRepository->getOverallNonOpenings($filter),
+                'overallOpenRate' => $this->logRepository->getOverallOpenRate($filter),
+                'overallNonClicks' => $this->logRepository->getOverallNonClicks($filter),
+                'openingsByClickers' => $this->logRepository->getOpeningsByClickers($filter),
+                'overallClickRate' => $this->logRepository->getOverallClickRate($filter),
+                'overallUnsubscribeRate' => $this->logRepository->getOverallUnsubscribeRate($filter),
+                'overallUnsubscribes' => $this->logRepository->getOverallUnsubscribes($filter),
+                'overallSubscribes' => $this->logRepository->getOverallSubscribes($filter),
+            ],
+        ]);
 
         $this->addDocumentHeaderForNewsletterController();
         return $this->defaultRendering();
@@ -65,11 +63,11 @@ class NewsletterController extends AbstractNewsletterController
     public function listAction(Filter $filter): ResponseInterface
     {
         $this->view->assignMultiple([
-            'newsletters' => $this->newsletterRepository->findAll(),
-            'newslettersGrouped' => $this->newsletterRepository->findAllGroupedByCategories($filter),
-            'configurations' => $this->configurationRepository->findAll(),
-            'categories' => $this->categoryRepository->findAllLuxletterCategories(),
             'filter' => $filter,
+            'newsletters' => $this->newsletterRepository->findAllAuthorized($filter),
+            'newslettersGrouped' => $this->newsletterRepository->findAllGroupedByCategories($filter),
+            'configurations' => $this->configurationRepository->findAllAuthorized(),
+            'categories' => $this->categoryRepository->findAllLuxletterCategories(),
         ]);
 
         $this->addDocumentHeaderForNewsletterController();
@@ -84,9 +82,13 @@ class NewsletterController extends AbstractNewsletterController
 
     public function editAction(Newsletter $newsletter): ResponseInterface
     {
+        if ($newsletter->canBeRead() === false) {
+            throw new AuthenticationFailedException('You are not allowed to see this record', 1709329205);
+        }
+
         $this->view->assignMultiple([
             'newsletter' => $newsletter,
-            'configurations' => $this->configurationRepository->findAll(),
+            'configurations' => $this->configurationRepository->findAllAuthorized(),
             'layouts' => $this->layoutService->getLayouts(),
             'newsletterpages' => $this->pageRepository->findAllNewsletterPages(),
             'categories' => $this->categoryRepository->findAllLuxletterCategories(),
@@ -104,6 +106,10 @@ class NewsletterController extends AbstractNewsletterController
 
     public function updateAction(Newsletter $newsletter): ResponseInterface
     {
+        if ($newsletter->canBeRead() === false) {
+            throw new AuthenticationFailedException('You are not allowed to see this record', 1709329247);
+        }
+
         $this->setBodytextInNewsletter($newsletter, $newsletter->getLanguage());
         if (ConfigurationUtility::isMultiLanguageModeActivated()) {
             $newsletter->setSubject(
@@ -122,7 +128,7 @@ class NewsletterController extends AbstractNewsletterController
     public function newAction(): ResponseInterface
     {
         $this->view->assignMultiple([
-            'configurations' => $this->configurationRepository->findAll(),
+            'configurations' => $this->configurationRepository->findAllAuthorized(),
             'layouts' => $this->layoutService->getLayouts(),
             'newsletterpages' => $this->pageRepository->findAllNewsletterPages(),
             'categories' => $this->categoryRepository->findAllLuxletterCategories(),
@@ -140,6 +146,10 @@ class NewsletterController extends AbstractNewsletterController
 
     public function createAction(Newsletter $newsletter): ResponseInterface
     {
+        if ($newsletter->canBeRead() === false) {
+            throw new AuthenticationFailedException('You are not allowed to see this record', 1709329276);
+        }
+
         $languages = $this->pageRepository->getLanguagesFromOrigin($newsletter->getOrigin());
         foreach ($languages as $language) {
             $newsletterLanguage = clone $newsletter;
@@ -170,6 +180,10 @@ class NewsletterController extends AbstractNewsletterController
 
     public function disableAction(Newsletter $newsletter): ResponseInterface
     {
+        if ($newsletter->canBeRead() === false) {
+            throw new AuthenticationFailedException('You are not allowed to see this record', 1709329304);
+        }
+
         $newsletter->disable();
         $this->newsletterRepository->update($newsletter);
         return $this->redirect('list');
@@ -177,6 +191,10 @@ class NewsletterController extends AbstractNewsletterController
 
     public function enableAction(Newsletter $newsletter): ResponseInterface
     {
+        if ($newsletter->canBeRead() === false) {
+            throw new AuthenticationFailedException('You are not allowed to see this record', 1709329338);
+        }
+
         $newsletter->enable();
         $this->newsletterRepository->update($newsletter);
         return $this->redirect('list');
@@ -184,6 +202,10 @@ class NewsletterController extends AbstractNewsletterController
 
     public function deleteAction(Newsletter $newsletter): ResponseInterface
     {
+        if ($newsletter->canBeRead() === false) {
+            throw new AuthenticationFailedException('You are not allowed to see this record', 1709329345);
+        }
+
         $this->newsletterRepository->removeNewsletterAndQueues($newsletter);
         $this->addFlashMessage(LocalizationUtility::translate('module.newsletter.delete.message'));
         return $this->redirect('list');
@@ -197,7 +219,7 @@ class NewsletterController extends AbstractNewsletterController
     public function receiverAction(Filter $filter): ResponseInterface
     {
         $receiverAnalysisService = GeneralUtility::makeInstance(ReceiverAnalysisService::class);
-        $users = $this->userRepository->getUsersByFilter($filter);
+        $users = $this->userRepository->getUsersByFilter($filter->setLimit(1000));
         $this->view->assignMultiple(
             [
                 'filter' => $filter,
@@ -208,8 +230,7 @@ class NewsletterController extends AbstractNewsletterController
         );
 
         $this->addDocumentHeaderForNewsletterController();
-        $this->moduleTemplate->setContent($this->view->render());
-        return $this->htmlResponse($this->moduleTemplate->renderContent());
+        return $this->defaultRendering();
     }
 
     public function wizardUserPreviewAjax(ServerRequestInterface $request): ResponseInterface
@@ -229,19 +250,6 @@ class NewsletterController extends AbstractNewsletterController
         return $response;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return ResponseInterface
-     * @throws AuthenticationFailedException
-     * @throws ExceptionDbalDriver
-     * @throws ApiConnectionException
-     * @throws InvalidUrlException
-     * @throws MisconfigurationException
-     * @throws JsonException
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws InvalidConfigurationTypeException
-     */
     public function testMailAjax(ServerRequestInterface $request): ResponseInterface
     {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
@@ -277,16 +285,6 @@ class NewsletterController extends AbstractNewsletterController
         return $response;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return ResponseInterface
-     * @throws AuthenticationFailedException
-     * @throws ExceptionDbalDriver
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     * @throws InvalidConfigurationTypeException
-     * @throws MisconfigurationException
-     */
     public function previewSourcesAjax(ServerRequestInterface $request): ResponseInterface
     {
         if (BackendUserUtility::isBackendUserAuthenticated() === false) {
@@ -299,10 +297,6 @@ class NewsletterController extends AbstractNewsletterController
         return $response;
     }
 
-    /**
-     * @param ServerRequestInterface $request
-     * @return ResponseInterface
-     */
     public function receiverDetailAjax(ServerRequestInterface $request): ResponseInterface
     {
         $userRepository = GeneralUtility::makeInstance(UserRepository::class);
@@ -311,11 +305,18 @@ class NewsletterController extends AbstractNewsletterController
         $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
         $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->receiverDetailFile));
         $user = $userRepository->findByUid((int)$request->getQueryParams()['user']);
-        $standaloneView->assignMultiple([
+        $visitor = $visitorRepository->findOneByFrontenduser($user);
+        $variables = [
             'user' => $user,
-            'visitor' => $visitorRepository->findOneByFrontenduser($user),
-            'logs' => $logRepository->findByUser($user),
-        ]);
+        ];
+        if ($visitor !== null && $visitor->canBeRead()) {
+            $variables += [
+                'visitor' => $visitor,
+                'logs' => $logRepository->findByUser($user),
+            ];
+        }
+        $standaloneView->assignMultiple($variables);
+
         $response = ObjectUtility::getJsonResponse();
         $response->getBody()->write(json_encode(
             ['html' => $standaloneView->render()]
@@ -323,11 +324,6 @@ class NewsletterController extends AbstractNewsletterController
         return $response;
     }
 
-    /**
-     * @return void
-     * @throws ExtensionConfigurationExtensionNotConfiguredException
-     * @throws ExtensionConfigurationPathDoesNotExistException
-     */
     protected function addDocumentHeaderForNewsletterController(): void
     {
         $menuConfiguration = [

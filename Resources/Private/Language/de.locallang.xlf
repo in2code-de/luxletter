@@ -73,8 +73,8 @@
 				<target state="translated">Öffnungsrate</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallopenrate.0">
-				<source>All</source>
-				<target state="translated">Alle</target>
+				<source>Non Opener</source>
+				<target state="translated">Nicht-Öffner</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallopenrate.1">
 				<source>Opener</source>
@@ -85,8 +85,8 @@
 				<target state="translated">Klickrate</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallclickrate.0">
-				<source>All openers</source>
-				<target state="translated">Alle Öffner</target>
+				<source>All non clicks</source>
+				<target state="translated">Alle Nicht-Klicks</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallclickrate.1">
 				<source>All clicks</source>
@@ -97,8 +97,8 @@
 				<target state="translated">Abmelderate</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallunsubscriberate.0">
-				<source>All openers</source>
-				<target state="translated">Alle Öffner</target>
+				<source>All subscribers</source>
+				<target state="translated">Alle Angemeldeten</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.dashboard.label.overallunsubscriberate.1">
 				<source>All unsubscribers</source>
@@ -197,9 +197,21 @@
 				<source>Searchterm</source>
 				<target state="translated">Suchbegriff</target>
 			</trans-unit>
+			<trans-unit id="module.newsletter.list.filter.sitesall.labelprepend">
+				<source>All sites</source>
+				<target state="translated">Alle Sites</target>
+			</trans-unit>
 			<trans-unit id="module.newsletter.list.filter.category.label">
 				<source>Category</source>
 				<target state="translated">Kategorie</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.filter.category.labelprepend">
+				<source>All categories</source>
+				<target state="translated">Alle Kategorien</target>
+			</trans-unit>
+			<trans-unit id="module.newsletter.list.filter.configuration.labelprepend">
+				<source>All senders</source>
+				<target state="translated">Alle Absender</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.list.filter.submit">
 				<source>Filter now</source>
@@ -214,8 +226,8 @@
 				<target state="translated">Zeitpunkt</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.list.filter.time.0">
-				<source>Show all newsletters</source>
-				<target state="translated">Zeige alle Newsletter</target>
+				<source>All newsletters</source>
+				<target state="translated">Alle Newsletter</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.list.filter.time.10">
 				<source>Show newsletters from the last week</source>
@@ -320,7 +332,7 @@
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.receiver.description_alternative">
 				<source>Note: Recipient lists that have already been created cannot be changed later.</source>
-				<target state="translated">Hinweis: Bereits angelegt Empfängerlisten können nachträglich nicht mehr geändert werden.</target>
+				<target state="translated">Hinweis: Bereits angelegte Empfängerlisten können nachträglich nicht mehr geändert werden.</target>
 			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.configuration">
 				<source>Sender</source>
