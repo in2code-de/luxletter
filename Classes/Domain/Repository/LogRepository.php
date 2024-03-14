@@ -167,7 +167,11 @@ class LogRepository extends AbstractRepository
         $overallSent = $this->getOverallMailsSent($filter);
         $overallOpenings = $this->getOverallOpenings($filter);
         if ($overallSent > 0) {
-            return $overallOpenings / $overallSent;
+            $result = $overallOpenings / $overallSent;
+            if ($result > 1) {
+                return 1.0;
+            }
+            return $result;
         }
         return 0.0;
     }
@@ -182,7 +186,11 @@ class LogRepository extends AbstractRepository
         $overallOpenings = $this->getOverallOpenings($filter);
         $openingsByClickers = $this->getOpeningsByClickers($filter);
         if ($overallOpenings > 0) {
-            return $openingsByClickers / $overallOpenings;
+            $result = $openingsByClickers / $overallOpenings;
+            if ($result > 1) {
+                return 1.0;
+            }
+            return $result;
         }
         return 0.0;
     }
@@ -201,6 +209,7 @@ class LogRepository extends AbstractRepository
             if ($result > 1) {
                 return 1.0;
             }
+            return $result;
         }
         return 0.0;
     }
