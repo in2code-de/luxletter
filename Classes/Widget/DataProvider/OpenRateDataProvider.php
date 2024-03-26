@@ -3,22 +3,19 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Widget\DataProvider;
 
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception as ExceptionDbal;
+use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Dashboard\WidgetApi;
 use TYPO3\CMS\Dashboard\Widgets\ChartDataProviderInterface;
 
-/**
- * Class OpenRateDataProvider
- * @noinspection PhpUnused
- */
 class OpenRateDataProvider implements ChartDataProviderInterface
 {
     /**
      * @return array
-     * @throws DBALException
+     * @throws ExceptionDbal
      */
     public function getChartData(): array
     {
@@ -51,15 +48,16 @@ class OpenRateDataProvider implements ChartDataProviderInterface
      *  ]
      *
      * @return array
-     * @throws DBALException
+     * @throws ExceptionDbal
      */
     protected function getData(): array
     {
         $logRepository = GeneralUtility::makeInstance(LogRepository::class);
+        $filter = GeneralUtility::makeInstance(Filter::class);
         return [
             'amounts' => [
-                $logRepository->getOverallOpenings(),
-                ($logRepository->getOverallMailsSent() - $logRepository->getOverallOpenings()),
+                $logRepository->getOverallOpenings($filter),
+                $logRepository->getOverallNonOpenings($filter),
             ],
             'titles' => [
                 $this->getWidgetLabel('openingrate.label.0'),

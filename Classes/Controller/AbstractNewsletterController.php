@@ -98,11 +98,11 @@ abstract class AbstractNewsletterController extends ActionController
                 $filter
             );
         }
-        if (isset($filter['usergroup']['__identity']) && $filter['usergroup']['__identity'] === '0') {
-            unset($filter['usergroup']);
-        }
-        if (array_key_exists('category', $filter) && (is_array($filter['category']) || $filter['category'] === '')) {
-            $filter['category'] = 0;
+        $clearFields = ['usergroup', 'configuration', 'category'];
+        foreach ($clearFields as $clearField) {
+            if (($filter[$clearField] ?? '0') === '0' || is_array($filter[$clearField])) {
+                unset($filter[$clearField]);
+            }
         }
         $this->request = $this->request->withArgument('filter', $filter);
     }

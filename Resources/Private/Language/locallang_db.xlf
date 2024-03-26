@@ -278,6 +278,9 @@
 			<trans-unit id="pleasechoose">
 				<source>Please choose...</source>
 			</trans-unit>
+			<trans-unit id="nosites">
+				<source>Note: To view data in LUXletter, you need read access to at least one root page (site rootpage)</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

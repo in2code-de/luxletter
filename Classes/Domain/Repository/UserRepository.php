@@ -3,15 +3,23 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
+use Doctrine\DBAL\Exception;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\User;
+use In2code\Luxletter\Domain\Model\Usergroup;
+use In2code\Luxletter\Domain\Service\PermissionTrait;
+use In2code\Luxletter\Exception\AuthenticationFailedException;
+use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\DatabaseUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
 class UserRepository extends AbstractRepository
 {
+    use PermissionTrait;
+
     protected $defaultOrderings = [
         'lastName' => QueryInterface::ORDER_ASCENDING,
     ];
@@ -24,7 +32,9 @@ class UserRepository extends AbstractRepository
      * @param int $language -1 = all, otherwise only the users with the specific language are selected
      * @param int $limit
      * @return array
+     * @throws AuthenticationFailedException
      * @throws InvalidQueryException
+     * @throws Exception
      */
     public function getUsersFromGroups(array $groupIdentifiers, int $language, int $limit = 0): array
     {
@@ -42,6 +52,9 @@ class UserRepository extends AbstractRepository
 
         $subConstraints = [];
         foreach ($groupIdentifiers as $identifier) {
+            if ($this->isAuthenticatedForRecord($identifier, Usergroup::TABLE_NAME) === false) {
+                throw new AuthenticationFailedException('Permission denied for this usergroup', 1709808068);
+            }
             $subConstraints[] = $query->contains('usergroup', $identifier);
         }
         $constraints[] = $query->logicalOr(...$subConstraints);
@@ -94,7 +107,6 @@ class UserRepository extends AbstractRepository
      *
      * @param Filter $filter
      * @return QueryResultInterface
-     * @throws InvalidQueryException
      */
     public function getUsersByFilter(Filter $filter): QueryResultInterface
     {
@@ -105,12 +117,12 @@ class UserRepository extends AbstractRepository
 
     protected function buildQueryForFilter(Filter $filter, QueryInterface $query): void
     {
-        $and = [
+        $logicalAnd = [
             $query->equals('usergroup.luxletterReceiver', true),
         ];
-        if ($filter->getSearchterms() !== []) {
+        if ($filter->isSearchtermSet()) {
             foreach ($filter->getSearchterms() as $searchterm) {
-                $or = [
+                $logicalOr = [
                     $query->like('username', '%' . $searchterm . '%'),
                     $query->like('email', '%' . $searchterm . '%'),
                     $query->like('name', '%' . $searchterm . '%'),
@@ -121,15 +133,20 @@ class UserRepository extends AbstractRepository
                     $query->like('title', '%' . $searchterm . '%'),
                     $query->like('company', '%' . $searchterm . '%'),
                 ];
-                $and[] = $query->logicalOr(...$or);
+                $logicalAnd[] = $query->logicalOr(...$logicalOr);
             }
         }
-        if ($filter->getUsergroup() !== null) {
-            $and[] = $query->contains('usergroup', $filter->getUsergroup());
+        if ($filter->isUsergroupSet()) {
+            $logicalAnd[] = $query->contains('usergroup', $filter->getUsergroup());
         }
-        $constraint = $query->logicalAnd(...$and);
+        if (BackendUserUtility::isAdministrator() === false) {
+            $usergroupRepository = GeneralUtility::makeInstance(UsergroupRepository::class);
+            $allowedUsergroupUids = array_keys($usergroupRepository->getReceiverGroups());
+            $logicalAnd[] = $query->in('usergroup', $allowedUsergroupUids ?: [0]);
+        }
+        $constraint = $query->logicalAnd(...$logicalAnd);
         $query->matching($constraint);
 
-        $query->setLimit(1000);
+        $query->setLimit($filter->getLimit());
     }
 }

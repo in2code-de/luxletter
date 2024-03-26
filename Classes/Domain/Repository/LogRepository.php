@@ -4,33 +4,36 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\Exception;
 use Doctrine\DBAL\Exception as ExceptionDbal;
+use In2code\Luxletter\Domain\Model\Configuration;
+use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Log;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
+use In2code\Luxletter\Utility\ArrayUtility;
 use In2code\Luxletter\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 
-/**
- * Class LogRepository
- */
 class LogRepository extends AbstractRepository
 {
     /**
+     * @param Filter $filter
      * @return int
-     * @throws Exception
      * @throws ExceptionDbal
      */
-    public function getNumberOfReceivers(): int
+    public function getNumberOfReceivers(Filter $filter): int
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
-        return (int)$connection->executeQuery(
-            'select count(DISTINCT user) from ' . Log::TABLE_NAME .
-            ' where deleted=0 and status=' . Log::STATUS_DISPATCH . ';'
-        )->fetchOne();
+        $sql = 'select count(distinct user) '
+            . ' from ' . Log::TABLE_NAME . ' l'
+            . ' left join ' . Newsletter::TABLE_NAME . ' nl on nl.uid=l.newsletter'
+            . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
+            . ' where l.deleted=0 and l.status=' . Log::STATUS_DISPATCH
+            . ' and c.site in ("' . implode('","', $filter->getSitesForFilter()) . '")'
+            . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp()
+            . ' limit 1';
+        return (int)$connection->executeQuery($sql)->fetchOne();
     }
 
     /**
@@ -42,18 +45,24 @@ class LogRepository extends AbstractRepository
      *      'target' => 'https://de.wikipedia.org/wiki/Haushund'
      *  ]
      *
-     * @param int $limit
+     * @param Filter $filter
      * @return array
-     * @throws DBALException
+     * @throws ExceptionDbal
      */
-    public function getGroupedLinksByHref(int $limit = 8): array
+    public function getGroupedLinksByHref(Filter $filter): array
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
-        $results = (array)$connection->executeQuery(
-            'select count(*) as count, properties, newsletter from ' . Log::TABLE_NAME .
-            ' where deleted=0 and status=' . Log::STATUS_LINKOPENING .
-            ' group by properties,newsletter order by count desc limit ' . $limit
-        )->fetchAll();
+        $sql = 'select count(*) as count, l.properties, l.newsletter, l.uid'
+            . ' from ' . Log::TABLE_NAME . ' l'
+            . ' left join ' . Newsletter::TABLE_NAME . ' nl on nl.uid=l.newsletter'
+            . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
+            . ' where l.deleted=0 and l.status=' . Log::STATUS_LINKOPENING
+            . ' and c.site in ("' . implode('","', $filter->getSitesForFilter()) . '")'
+            . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp()
+            . ' group by l.properties, l.newsletter, l.uid'
+            . ' order by count desc'
+            . ' limit ' . $filter->getLimit();
+        $results = $connection->executeQuery($sql)->fetchAllAssociative();
         $nlRepository = GeneralUtility::makeInstance(NewsletterRepository::class);
         foreach ($results as &$result) {
             $result['target'] = json_decode($result['properties'], true)['target'];
@@ -63,122 +72,194 @@ class LogRepository extends AbstractRepository
     }
 
     /**
+     * @param Filter $filter
      * @return int
-     * @throws Exception
      * @throws ExceptionDbal
      */
-    public function getOverallOpenings(): int
+    public function getOverallOpenings(Filter $filter): int
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
-        return (int)$connection->executeQuery(
-            'select count(distinct newsletter, user) from ' . Log::TABLE_NAME .
-            ' where deleted = 0' .
-            ' and status IN (' . Log::STATUS_NEWSLETTEROPENING . ',' . Log::STATUS_LINKOPENING . ')' . ';'
-        )->fetchOne();
+        $sql = 'select count(distinct newsletter, user)'
+            . ' from ' . Log::TABLE_NAME . ' l'
+            . ' left join ' . Newsletter::TABLE_NAME . ' nl on nl.uid=l.newsletter'
+            . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
+            . ' where l.deleted = 0'
+            . ' and l.status IN (' . Log::STATUS_NEWSLETTEROPENING . ',' . Log::STATUS_LINKOPENING . ')'
+            . ' and c.site in ("' . implode('","', $filter->getSitesForFilter()) . '")'
+            . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp();
+        return (int)$connection->executeQuery($sql)->fetchOne();
     }
 
     /**
+     * @param Filter $filter
      * @return int
-     * @throws DBALException
-     * @throws Exception
-     */
-    public function getOpeningsByClickers(): int
-    {
-        $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
-        return (int)$connection->executeQuery(
-            'select count(distinct newsletter, user) from ' . Log::TABLE_NAME .
-            ' where deleted = 0 and status=' . Log::STATUS_LINKOPENING . ';'
-        )->fetchOne();
-    }
-
-    /**
-     * @return int
-     * @throws Exception
      * @throws ExceptionDbal
      */
-    public function getOverallClicks(): int
+    public function getOpeningsByClickers(Filter $filter): int
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
-        return (int)$connection->executeQuery(
-            'select count(uid) from ' . Log::TABLE_NAME .
-            ' where deleted = 0 and status=' . Log::STATUS_LINKOPENING . ';'
-        )->fetchOne();
+        $sql = 'select count(distinct newsletter, user)'
+            . ' from ' . Log::TABLE_NAME . ' l'
+            . ' left join ' . Newsletter::TABLE_NAME . ' nl on nl.uid=l.newsletter'
+            . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
+            . ' where l.deleted = 0 and l.status=' . Log::STATUS_LINKOPENING
+            . ' and c.site in ("' . implode('","', $filter->getSitesForFilter()) . '")'
+            . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp();
+        return (int)$connection->executeQuery($sql)->fetchOne();
     }
 
     /**
+     * @param Filter $filter
      * @return int
-     * @throws Exception
      * @throws ExceptionDbal
      */
-    public function getOverallUnsubscribes(): int
+    public function getOverallClicks(Filter $filter): int
     {
-        $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
-        return (int)$connection->executeQuery(
-            'select count(uid) from ' . Log::TABLE_NAME .
-            ' where deleted = 0 and status=' . Log::STATUS_UNSUBSCRIBE . ';'
-        )->fetchOne();
+        return $this->getOverallAmountByLogStatus([Log::STATUS_LINKOPENING], $filter);
     }
 
     /**
+     * @param Filter $filter
      * @return int
-     * @throws Exception
      * @throws ExceptionDbal
      */
-    public function getOverallMailsSent(): int
+    public function getOverallUnsubscribes(Filter $filter): int
     {
-        $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
-        return (int)$connection->executeQuery(
-            'select count(uid) from ' . Log::TABLE_NAME .
-            ' where deleted = 0 and status=' . Log::STATUS_DISPATCH . ';'
-        )->fetchOne();
+        return $this->getOverallAmountByLogStatus([Log::STATUS_UNSUBSCRIBE], $filter);
     }
 
     /**
+     * @param Filter $filter
+     * @return int
+     * @throws ExceptionDbal
+     */
+    public function getOverallMailsSent(Filter $filter): int
+    {
+        return $this->getOverallAmountByLogStatus([Log::STATUS_DISPATCH], $filter);
+    }
+
+    /**
+     * @param array $status
+     * @param Filter $filter
+     * @return int
+     * @throws ExceptionDbal
+     */
+    protected function getOverallAmountByLogStatus(array $status, Filter $filter): int
+    {
+        $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
+        $sql = 'select count(l.uid)'
+            . ' from ' . Log::TABLE_NAME . ' l'
+            . ' left join ' . Newsletter::TABLE_NAME . ' nl on nl.uid=l.newsletter'
+            . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
+            . ' where l.deleted = 0 and l.status in (' . ArrayUtility::convertArrayToIntegerList($status) . ')'
+            . ' and c.site in ("' . implode('","', $filter->getSitesForFilter()) . '")'
+            . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp();
+        return (int)$connection->executeQuery($sql)->fetchOne();
+    }
+
+    /**
+     * @param Filter $filter
      * @return float
-     * @throws DBALException
-     * @throws Exception
      * @throws ExceptionDbal
      */
-    public function getOverallOpenRate(): float
+    public function getOverallOpenRate(Filter $filter): float
     {
-        $overallSent = $this->getOverallMailsSent();
-        $overallOpenings = $this->getOverallOpenings();
+        $overallSent = $this->getOverallMailsSent($filter);
+        $overallOpenings = $this->getOverallOpenings($filter);
         if ($overallSent > 0) {
-            return $overallOpenings / $overallSent;
+            $result = $overallOpenings / $overallSent;
+            if ($result > 1) {
+                return 1.0;
+            }
+            return $result;
         }
         return 0.0;
     }
 
     /**
+     * @param Filter $filter
      * @return float
-     * @throws DBALException
-     * @throws Exception
      * @throws ExceptionDbal
      */
-    public function getOverallClickRate(): float
+    public function getOverallClickRate(Filter $filter): float
     {
-        $overallOpenings = $this->getOverallOpenings();
-        $openingsByClickers = $this->getOpeningsByClickers();
+        $overallOpenings = $this->getOverallOpenings($filter);
+        $openingsByClickers = $this->getOpeningsByClickers($filter);
         if ($overallOpenings > 0) {
-            return $openingsByClickers / $overallOpenings;
+            $result = $openingsByClickers / $overallOpenings;
+            if ($result > 1) {
+                return 1.0;
+            }
+            return $result;
         }
         return 0.0;
     }
 
     /**
+     * @param Filter $filter
      * @return float
-     * @throws DBALException
-     * @throws Exception
      * @throws ExceptionDbal
      */
-    public function getOverallUnsubscribeRate(): float
+    public function getOverallUnsubscribeRate(Filter $filter): float
     {
-        $overallOpenings = $this->getOverallOpenings();
-        $overallUnsubscribes = $this->getOverallUnsubscribes();
-        if ($overallOpenings > 0) {
-            return $overallUnsubscribes / $overallOpenings;
+        $overallUnsubscribes = $this->getOverallUnsubscribes($filter);
+        $overallMailsSent = $this->getOverallMailsSent($filter);
+        if ($overallMailsSent > 0) {
+            $result = $overallUnsubscribes / $overallMailsSent;
+            if ($result > 1) {
+                return 1.0;
+            }
+            return $result;
         }
         return 0.0;
+    }
+
+    /**
+     * @param Filter $filter
+     * @return int
+     * @throws ExceptionDbal
+     */
+    public function getOverallNonOpenings(Filter $filter): int
+    {
+        $mailsSent = $this->getOverallMailsSent($filter);
+        $openings = $this->getOverallOpenings($filter);
+        $result = $mailsSent - $openings;
+        if ($result > 0) {
+            return $result;
+        }
+        return 0;
+    }
+
+    /**
+     * @param Filter $filter
+     * @return int
+     * @throws ExceptionDbal
+     */
+    public function getOverallNonClicks(Filter $filter): int
+    {
+        $openings = $this->getOverallOpenings($filter);
+        $openingsByClickers = $this->getOpeningsByClickers($filter);
+        $result = $openings - $openingsByClickers;
+        if ($result > 0) {
+            return $result;
+        }
+        return 0;
+    }
+
+    /**
+     * @param Filter $filter
+     * @return int
+     * @throws ExceptionDbal
+     */
+    public function getOverallSubscribes(Filter $filter): int
+    {
+        $mailsSent = $this->getOverallMailsSent($filter);
+        $unsubscribes = $this->getOverallUnsubscribes($filter);
+        $result = $mailsSent - $unsubscribes;
+        if ($result > 0) {
+            return $result;
+        }
+        return 0;
     }
 
     /**
@@ -186,8 +267,7 @@ class LogRepository extends AbstractRepository
      * @param User $user
      * @param int $status
      * @return bool
-     * @throws Exception
-     * @throws DBALException
+     * @throws ExceptionDbal
      */
     public function isLogRecordExisting(Newsletter $newsletter, User $user, int $status): bool
     {
@@ -197,7 +277,7 @@ class LogRepository extends AbstractRepository
             ->from(Log::TABLE_NAME)
             ->where('newsletter=' . $newsletter->getUid() . ' and user=' . $user->getUid() . ' and status=' . $status)
             ->setMaxResults(1)
-            ->execute()
+            ->executeQuery()
             ->fetchOne();
         return $uid > 0;
     }
@@ -207,8 +287,7 @@ class LogRepository extends AbstractRepository
      * @param int[] $status
      * @param bool $distinctMails
      * @return array
-     * @throws DBALException
-     * @throws Exception
+     * @throws ExceptionDbal
      */
     public function findByNewsletterAndStatus(Newsletter $newsletter, array $status, bool $distinctMails = true): array
     {
@@ -217,7 +296,7 @@ class LogRepository extends AbstractRepository
         if ($distinctMails === true) {
             $sqlSelectColumns = 'distinct newsletter, user';
         }
-        return (array)$connection->executeQuery(
+        return $connection->executeQuery(
             'select ' . $sqlSelectColumns . ' from ' . Log::TABLE_NAME .
             ' where deleted=0 and status in (' . implode(',', $status) . ') and newsletter=' . $newsletter->getUid()
         )->fetchAllAssociative();
@@ -228,8 +307,7 @@ class LogRepository extends AbstractRepository
      * @param array $statusWhitelist only want logs with this status (overrules any values from $statusBlacklist)
      * @param array $statusBlacklist ignore logs with this status
      * @return array
-     * @throws DBALException
-     * @throws Exception
+     * @throws ExceptionDbal
      */
     public function findRawByUser(User $user, array $statusWhitelist = [], array $statusBlacklist = []): array
     {

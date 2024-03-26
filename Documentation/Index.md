@@ -18,6 +18,10 @@ Send newsletters the easy way
 
 [Analysis of your Receivers](Analysis/Index.md)
 
+### Configuration for editors
+
+[Configuration for editors](Editors/Index.md)
+
 ### Tech corner and FAQ
 
 [Tech corner and FAQ](Tech/Index.md)

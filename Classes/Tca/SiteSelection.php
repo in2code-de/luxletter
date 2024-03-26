@@ -3,32 +3,22 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Tca;
 
-use TYPO3\CMS\Core\Site\Entity\Site;
-use TYPO3\CMS\Core\Site\SiteFinder;
+use In2code\Luxletter\Domain\Service\SiteService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * Class SiteSelection
- */
 class SiteSelection
 {
-    /**
-     * @param array $configuration
-     * @return void
-     */
-    public function getAll(array &$configuration): void
+    protected SiteService $siteService;
+
+    public function __construct()
     {
-        foreach ($this->getAllSites() as $site) {
-            $configuration['items'][] = [$site->getIdentifier(), $site->getIdentifier()];
-        }
+        $this->siteService = GeneralUtility::makeInstance(SiteService::class);
     }
 
-    /**
-     * @return Site[]
-     */
-    protected function getAllSites(): array
+    public function getAll(array &$configuration): void
     {
-        $siteFinder = GeneralUtility::makeInstance(SiteFinder::class);
-        return $siteFinder->getAllSites();
+        foreach ($this->siteService->getAllowedSites() as $site) {
+            $configuration['items'][] = [$site->getIdentifier(), $site->getIdentifier()];
+        }
     }
 }

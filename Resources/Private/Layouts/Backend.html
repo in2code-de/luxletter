@@ -8,5 +8,12 @@
 
 
 <div class="luxletter">
-    <f:render section="content" />
+    <f:if condition="{filter} && !{filter.anyAllowedSites}">
+        <f:then>
+            <f:render partial="Miscellaneous/NoSites" arguments="{_all}"/>
+        </f:then>
+        <f:else>
+            <f:render section="content" />
+        </f:else>
+    </f:if>
 </div>

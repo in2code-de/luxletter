@@ -1,25 +1,25 @@
 <div class="panel panel-default">
-	<div class="panel-body">
-		<div class="luxletter-panel-body">
-			<div class="row">
-				<div class="col-md-6 vcenter">
-					<canvas
-							id="luxletter-dashboard-overallopenrate"
-							width="150"
-							height="150"
-							data-chart="doughnut"
-							data-chart-data="{statistic.overallMailsSent - statistic.overallOpenings},{statistic.overallOpenings}"
-							data-chart-labels="{f:translate(key:'module.newsletter.dashboard.label.overallopenrate.0')},{f:translate(key:'module.newsletter.dashboard.label.overallopenrate.1')}"></canvas>
-				</div><!--
+    <div class="panel-body">
+        <div class="luxletter-panel-body">
+            <div class="row">
+                <div class="col-md-6 vcenter">
+                    <canvas
+                            id="luxletter-dashboard-overallopenrate"
+                            width="150"
+                            height="150"
+                            data-chart="doughnut"
+                            data-chart-data="{statistic.overallNonOpenings},{statistic.overallOpenings}"
+                            data-chart-labels="{f:translate(key:'module.newsletter.dashboard.label.overallopenrate.0')},{f:translate(key:'module.newsletter.dashboard.label.overallopenrate.1')}"></canvas>
+                </div><!--
 
 
-				--><div class="col-md-6 vcenter">
-					<span class="luxletter-panel-body-text">
-						<luxletter:format.percent number="{statistic.overallOpenRate}">13 %</luxletter:format.percent>
-						<span class="luxletter-panel-body-text--addition"><f:translate key="module.newsletter.dashboard.label.overallopenrate">Open rate</f:translate></span>
-					</span>
-				</div>
-			</div>
-		</div>
-	</div>
+                --><div class="col-md-6 vcenter">
+                    <span class="luxletter-panel-body-text">
+                        <luxletter:format.percent number="{statistic.overallOpenRate}">13 %</luxletter:format.percent>
+                        <span class="luxletter-panel-body-text--addition"><f:translate key="module.newsletter.dashboard.label.overallopenrate">Open rate</f:translate></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
