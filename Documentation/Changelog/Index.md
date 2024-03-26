@@ -9,7 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                                      |
 |------------|------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 26.0.0     | 2024.03.26 | Feature | Add multiclient feature, fix outdated link in backend for TYPO3 12, Prevent values over 100% for ClickRate, OpenRate or UnsubscribeRate                                                          |
+| !!! 26.0.0 | 2024.03.26 | Feature | Add multiclient feature, fix outdated link in backend for TYPO3 12, Prevent values over 100% for ClickRate, OpenRate or UnsubscribeRate                                                          |
 | 25.0.4     | 2024.03.07 | Bugfix  | Prevent undefined array key exception if luxletterUnsubscribePid was not set                                                                                                                     |
 | 25.0.3     | 2024.03.04 | Bugfix  | Add "luxletterlink" to excluded chash configuration                                                                                                                                              |
 | 25.0.2     | 2024.03.01 | Bugfix  | Show fields of configuration table always for editors                                                                                                                                            |
