@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                                      |
 |------------|------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 26.0.0     | 2024.03.26 | Feature | Add multiclient feature, fix outdated link in backend for TYPO3 12, Prevent values over 100% for ClickRate, OpenRate or UnsubscribeRate                                                          |
 | 25.0.4     | 2024.03.07 | Bugfix  | Prevent undefined array key exception if luxletterUnsubscribePid was not set                                                                                                                     |
 | 25.0.3     | 2024.03.04 | Bugfix  | Add "luxletterlink" to excluded chash configuration                                                                                                                                              |
 | 25.0.2     | 2024.03.01 | Bugfix  | Show fields of configuration table always for editors                                                                                                                                            |
@@ -107,6 +108,13 @@
 
 ## Breaking changes !!!
 
+### Upgrade to 26.x
+
+* Multiclient availability needs reading access for editors to rootpages of relevant sites
+    * **Todo:** Check permissions for your editors on some root pages - see [Editors configuration](../Editors/Index.md) for details
+* Also reading access to pages where relevant records are stored is needed now for editors
+    * **Todo:** Check permissions for your editors for some records - see [Editors configuration](../Editors/Index.md) for details
+
 ### Upgrade to 18.x
 
 * Some TypoScript changes were necessary for the TYPO3 12 update (because switchableControllerActions were removed)
@@ -135,13 +143,6 @@ plugin {
 # Former: module.tx_luxletter < plugin.tx_luxletter_fe
 module.tx_luxletter < plugin.tx_luxletter
 ```
-
-### Upgrade to 26.x
-
-* Multiclient availability needs reading access for editors to rootpages of relevant sites
-  * **Todo:** Check permissions for your editors on some root pages - see [Editors configuration](../Editors/Index.md) for details
-* Also reading access to pages where relevant records are stored is needed now for editors
-  * **Todo:** Check permissions for your editors for some records - see [Editors configuration](../Editors/Index.md) for details
 
 ### Upgrade to 17.x
 
