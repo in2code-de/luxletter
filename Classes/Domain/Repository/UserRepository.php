@@ -31,12 +31,12 @@ class UserRepository extends AbstractRepository
      * @param int[] $groupIdentifiers
      * @param int $language -1 = all, otherwise only the users with the specific language are selected
      * @param int $limit
-     * @return array
+     * @return iterable
      * @throws AuthenticationFailedException
      * @throws InvalidQueryException
      * @throws Exception
      */
-    public function getUsersFromGroups(array $groupIdentifiers, int $language, int $limit = 0): array
+    public function getUsersFromGroups(array $groupIdentifiers, int $language, int $limit = 0): iterable
     {
         if ($groupIdentifiers === []) {
             return [];
@@ -64,9 +64,7 @@ class UserRepository extends AbstractRepository
         }
         $query->matching($query->logicalAnd(...$constraints));
         $query->setOrderings(['email' => QueryInterface::ORDER_ASCENDING]);
-        $users = $query->execute()->toArray();
-
-        return $this->groupResultByEmail($users, $limit);
+        return $query->execute();
     }
 
     protected function groupResultByEmail(array $users, int $limit): array

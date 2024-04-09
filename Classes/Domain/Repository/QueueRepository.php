@@ -8,6 +8,7 @@ use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\Queue;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Utility\DatabaseUtility;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -94,7 +95,16 @@ class QueueRepository extends AbstractRepository
         return (int)$queryBuilder
             ->select('uid')
             ->from(Queue::TABLE_NAME)
-            ->where('newsletter=' . $newsletter->getUid() . ' and user=' . $user->getUid())
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'newsletter',
+                    $queryBuilder->createNamedParameter($newsletter->getUid(), Connection::PARAM_INT)
+                ),
+                $queryBuilder->expr()->eq(
+                    'user',
+                    $queryBuilder->createNamedParameter($user->getUid(), Connection::PARAM_INT)
+                )
+            )
             ->setMaxResults(1)
             ->executeQuery()
             ->fetchOne() > 0;

@@ -62,7 +62,8 @@ CREATE TABLE tx_luxletter_domain_model_queue (
 	KEY parent (pid),
 	KEY language (l10n_parent,sys_language_uid),
 	KEY newsletter (newsletter),
-	KEY user (user)
+	KEY user (user),
+	KEY newsletter_user (newsletter, user)
 );
 
 CREATE TABLE tx_luxletter_domain_model_log (

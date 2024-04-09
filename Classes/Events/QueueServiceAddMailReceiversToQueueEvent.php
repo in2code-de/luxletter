@@ -8,7 +8,7 @@ use In2code\Luxletter\Domain\Model\Newsletter;
 final class QueueServiceAddMailReceiversToQueueEvent
 {
     /**
-     * @var array
+     * @var iterable
      */
     protected $users = [];
 
@@ -23,11 +23,11 @@ final class QueueServiceAddMailReceiversToQueueEvent
     protected $language;
 
     /**
-     * @param array $users
+     * @param iterable $users
      * @param Newsletter $newsletter
      * @param int $language
      */
-    public function __construct(array $users, Newsletter $newsletter, int $language)
+    public function __construct(iterable $users, Newsletter $newsletter, int $language)
     {
         $this->users = $users;
         $this->newsletter = $newsletter;
@@ -35,18 +35,18 @@ final class QueueServiceAddMailReceiversToQueueEvent
     }
 
     /**
-     * @return array
+     * @return iterable
      */
-    public function getUsers(): array
+    public function getUsers(): iterable
     {
         return $this->users;
     }
 
     /**
-     * @param array $users
+     * @param iterable $users
      * @return QueueServiceAddMailReceiversToQueueEvent
      */
-    public function setUsers(array $users): QueueServiceAddMailReceiversToQueueEvent
+    public function setUsers(iterable $users): QueueServiceAddMailReceiversToQueueEvent
     {
         $this->users = $users;
         return $this;

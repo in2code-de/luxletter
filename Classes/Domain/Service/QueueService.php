@@ -34,6 +34,11 @@ class QueueService
     protected $newsletterRepository = null;
 
     /**
+     * @var QueueRepository
+     */
+    protected $queueRepository = null;
+
+    /**
      * @var EventDispatcherInterface
      */
     private $eventDispatcher;
@@ -46,10 +51,12 @@ class QueueService
     public function __construct(
         UserRepository $userRepository,
         NewsletterRepository $newsletterRepository,
+        QueueRepository $queueRepository,
         EventDispatcherInterface $eventDispatcher
     ) {
         $this->userRepository = $userRepository;
         $this->newsletterRepository = $newsletterRepository;
+        $this->queueRepository = $queueRepository;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -73,10 +80,21 @@ class QueueService
             $newsletter,
             $language
         ));
+        
+        $batchSize = 0;
+        $batchSizeMax = 100;
+
         /** @var User $user */
         foreach ($event->getUsers() as $user) {
-            $this->addUserToQueue($newsletter, $user);
+            $this->addUserToQueue($newsletter, $user, false);
+            $batchSize++;
+
+            if ($batchSize >= $batchSizeMax) {
+                $this->queueRepository->persistAll();
+                $batchSize = 0;
+            }
         }
+        $this->queueRepository->persistAll();
 
         // In case of activated MultiLanguageMode $newsletter of foreign languages is only a clone.
         // Extbase handles only the original object, but does not care about our clone.
@@ -160,15 +178,15 @@ class QueueService
      *
      * @param Newsletter $newsletter
      * @param User $user
+     * @param bool $persist
      * @return void
      * @throws IllegalObjectTypeException
      * @throws ExceptionDbalDriver
      */
-    protected function addUserToQueue(Newsletter $newsletter, User $user): void
+    protected function addUserToQueue(Newsletter $newsletter, User $user, bool $persist = true): void
     {
-        $queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
         if ($user->isValidEmail()
-            && $queueRepository->isUserAndNewsletterAlreadyAddedToQueue($user, $newsletter) === false) {
+            && $this->queueRepository->isUserAndNewsletterAlreadyAddedToQueue($user, $newsletter) === false) {
             $queue = GeneralUtility::makeInstance(Queue::class);
             $queue
                 ->setEmail($user->getEmail())
@@ -184,8 +202,10 @@ class QueueService
                 $newsletter
             ));
 
-            $queueRepository->add($event->getQueue());
-            $queueRepository->persistAll();
+            $this->queueRepository->add($event->getQueue());
+            if ($persist === true) {
+                $this->queueRepository->persistAll();
+            }
         }
     }
 }
