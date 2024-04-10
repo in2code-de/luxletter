@@ -21,12 +21,13 @@ class LogService
     /**
      * @param Newsletter $newsletter
      * @param User $user
+     * @param bool $persist
      * @return void
      * @throws IllegalObjectTypeException
      */
-    public function logNewsletterDispatch(Newsletter $newsletter, User $user): void
+    public function logNewsletterDispatch(Newsletter $newsletter, User $user, bool $persist = true): void
     {
-        $this->log($newsletter, $user, Log::STATUS_DISPATCH);
+        $this->log($newsletter, $user, Log::STATUS_DISPATCH, [], $persist);
     }
 
     /**
@@ -88,11 +89,12 @@ class LogService
      * @param Newsletter $newsletter
      * @param User $user
      * @param int $status
+     * @param bool $persist
      * @param array $properties
      * @return void
      * @throws IllegalObjectTypeException
      */
-    protected function log(Newsletter $newsletter, User $user, int $status, array $properties = []): void
+    protected function log(Newsletter $newsletter, User $user, int $status, array $properties = [], bool $persist = true): void
     {
         $logRepository = GeneralUtility::makeInstance(LogRepository::class);
         $log = GeneralUtility::makeInstance(Log::class)
@@ -101,6 +103,8 @@ class LogService
             ->setNewsletter($newsletter)
             ->setUser($user);
         $logRepository->add($log);
-        $logRepository->persistAll();
+        if ($persist) {
+            $logRepository->persistAll();
+        }
     }
 }

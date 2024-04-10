@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Mail;
 
 use In2code\Luxletter\Domain\Model\Queue;
+use In2code\Luxletter\Domain\Repository\LogRepository;
 use In2code\Luxletter\Domain\Repository\QueueRepository;
 use In2code\Luxletter\Domain\Service\BodytextManipulation\CssInline;
 use In2code\Luxletter\Domain\Service\BodytextManipulation\LinkHashing;
@@ -41,6 +42,11 @@ class ProgressQueue
     protected $queueRepository = null;
 
     /**
+     * @var LogRepository|null
+     */
+    protected $logRepository = null;
+
+    /**
      * @var Newsletter|null
      */
     protected $parseService = null;
@@ -67,6 +73,7 @@ class ProgressQueue
     public function __construct(OutputInterface $output)
     {
         $this->queueRepository = GeneralUtility::makeInstance(QueueRepository::class);
+        $this->logRepository = GeneralUtility::makeInstance(LogRepository::class);
         $this->parseService = GeneralUtility::makeInstance(Newsletter::class);
         $this->cssInline = GeneralUtility::makeInstance(CssInline::class);
         $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
@@ -101,11 +108,22 @@ class ProgressQueue
                 $queues,
                 $newsletterIdentifier
             ));
+
+            $batchLimit = 100;
+            $batchSize = 0;
+
             /** @var Queue $queue */
             foreach ($queues as $queue) {
-                try {
-                    $this->sendNewsletterToReceiverInQueue($queue);
-                    $this->markSent($queue);
+                try {                    
+                    $this->sendNewsletterToReceiverInQueue($queue, false);
+                    $this->markSent($queue, false);
+
+                    $batchSize++;
+                    if ($batchSize >= $batchLimit) {
+                        $this->queueRepository->persistAll();
+                        $this->logRepository->persistAll();
+                        $batchSize = 0;
+                    }
                 } catch (Throwable $throwable) {
                     $logService = GeneralUtility::makeInstance(LogService::class);
                     $logService->logNewsletterDispatchFailure($queue->getNewsletter(), $queue->getUser(), $throwable->getMessage());
@@ -120,6 +138,7 @@ class ProgressQueue
 
     /**
      * @param Queue $queue
+     * @param bool $persist
      * @return void
      * @throws ArgumentMissingException
      * @throws Exception
@@ -132,7 +151,7 @@ class ProgressQueue
      * @throws MisconfigurationException
      * @throws SiteNotFoundException
      */
-    protected function sendNewsletterToReceiverInQueue(Queue $queue): void
+    protected function sendNewsletterToReceiverInQueue(Queue $queue, bool $persist = true): void
     {
         if ($queue->getUser() !== null) {
             $sendMail = GeneralUtility::makeInstance(
@@ -145,7 +164,7 @@ class ProgressQueue
             );
             $sendMail->sendNewsletter([$queue->getEmail() => $queue->getUser()->getReadableName()]);
             $logService = GeneralUtility::makeInstance(LogService::class);
-            $logService->logNewsletterDispatch($queue->getNewsletter(), $queue->getUser());
+            $logService->logNewsletterDispatch($queue->getNewsletter(), $queue->getUser(), $persist);
         }
     }
 
@@ -227,15 +246,18 @@ class ProgressQueue
 
     /**
      * @param Queue $queue
+     * @param bool $persist
      * @return void
      * @throws IllegalObjectTypeException
      * @throws UnknownObjectException
      */
-    protected function markSent(Queue $queue)
+    protected function markSent(Queue $queue, bool $persist = true)
     {
         $queue->setSent();
         $this->queueRepository->update($queue);
-        $this->queueRepository->persistAll();
+        if ($persist) {
+            $this->queueRepository->persistAll();
+        }
     }
 
     /**
