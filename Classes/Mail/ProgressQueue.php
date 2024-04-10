@@ -131,6 +131,9 @@ class ProgressQueue
                 }
                 $progress->advance();
             }
+
+            $this->queueRepository->persistAll();
+            $this->logRepository->persistAll();
             $this->output->writeln('');
         }
         return $queues->count();
