@@ -14,39 +14,14 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExis
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 
-/**
- * Class PreviewUrlService
- */
 class PreviewUrlService
 {
-    /**
-     * @var string
-     */
-    protected $origin = '';
+    protected string $origin = '';
+    protected string $layout = '';
+    protected ?PageRepository $pageRepository = null;
+    protected ?NewsletterParsing $parseService = null;
+    protected ?UserFactory $userFactory = null;
 
-    /**
-     * @var string
-     */
-    protected $layout = '';
-
-    /**
-     * @var PageRepository
-     */
-    protected $pageRepository;
-
-    /**
-     * @var NewsletterParsing
-     */
-    protected $parseService;
-
-    /**
-     * @var UserFactory
-     */
-    protected $userFactory;
-
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->pageRepository = GeneralUtility::makeInstance(PageRepository::class);
@@ -76,7 +51,6 @@ class PreviewUrlService
      * @param string $origin
      * @param string $layout
      * @return array
-     * @throws ExceptionDbalDriver
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws MisconfigurationException
@@ -98,11 +72,6 @@ class PreviewUrlService
         return $urls;
     }
 
-    /**
-     * @param string $origin
-     * @param string $layout
-     * @return array
-     */
     protected function getUrlInDefaultInstallation(string $origin, string $layout): array
     {
         return [
@@ -113,12 +82,6 @@ class PreviewUrlService
         ];
     }
 
-    /**
-     * @param string $origin
-     * @param string $layout
-     * @param int $language
-     * @return string
-     */
     protected function getUrl(string $origin, string $layout, int $language = 0): string
     {
         $url = '//' . GeneralUtility::getIndpEnv('HTTP_HOST') . '?type=1560777975';
