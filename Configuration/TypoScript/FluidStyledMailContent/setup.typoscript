@@ -18,7 +18,7 @@ lib {
 
   // Use absolute URL for all kind of links within fluidStyledMailContent
   // (absRefPrefix is also used for absolute images paths - see ext_localconf.php)
-  // Todo: Remove this and part in ext_localconf.php and replace with `fluidStyledMailContent.config.forceAbsoluteUrls = 1` when TYPO3 11 support is dropped
+  // Todo: Remove this part when TYPO3 11 support is dropped (fluidStyledMailContent.config.forceAbsoluteUrls=1 is used in TYPO3 12)
   parseFunc {
     tags {
       a.typolink.forceAbsoluteUrl = 1
@@ -62,6 +62,7 @@ fluidStyledMailContent {
     admPanel = 0
     debug = 0
     linkVars =
+    forceAbsoluteUrls = 1
   }
 
   # Add some css for frontend view
