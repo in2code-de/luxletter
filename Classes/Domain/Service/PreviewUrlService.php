@@ -12,46 +12,24 @@ use In2code\Luxletter\Utility\ConfigurationUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 
-/**
- * Class PreviewUrlService
- */
 class PreviewUrlService
 {
-    /**
-     * @var string
-     */
-    protected $origin = '';
+    protected string $origin = '';
+    protected string $layout = '';
+    protected ?PageRepository $pageRepository = null;
+    protected ?NewsletterParsing $parseService = null;
+    protected ?UserFactory $userFactory = null;
+    protected ?SiteService $siteService = null;
 
-    /**
-     * @var string
-     */
-    protected $layout = '';
-
-    /**
-     * @var PageRepository
-     */
-    protected $pageRepository;
-
-    /**
-     * @var NewsletterParsing
-     */
-    protected $parseService;
-
-    /**
-     * @var UserFactory
-     */
-    protected $userFactory;
-
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->pageRepository = GeneralUtility::makeInstance(PageRepository::class);
         $this->parseService = GeneralUtility::makeInstance(NewsletterParsing::class);
         $this->userFactory = GeneralUtility::makeInstance(UserFactory::class);
+        $this->siteService = GeneralUtility::makeInstance(SiteService::class);
     }
 
     /**
@@ -76,7 +54,6 @@ class PreviewUrlService
      * @param string $origin
      * @param string $layout
      * @return array
-     * @throws ExceptionDbalDriver
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws MisconfigurationException
@@ -98,11 +75,6 @@ class PreviewUrlService
         return $urls;
     }
 
-    /**
-     * @param string $origin
-     * @param string $layout
-     * @return array
-     */
     protected function getUrlInDefaultInstallation(string $origin, string $layout): array
     {
         return [
@@ -113,18 +85,31 @@ class PreviewUrlService
         ];
     }
 
-    /**
-     * @param string $origin
-     * @param string $layout
-     * @param int $language
-     * @return string
-     */
     protected function getUrl(string $origin, string $layout, int $language = 0): string
     {
+        if (MathUtility::canBeInterpretedAsInteger($origin)) {
+            return $this->getUrlFromPageIdentifier((int)$origin, $layout, $language);
+        }
+
         $url = '//' . GeneralUtility::getIndpEnv('HTTP_HOST') . '?type=1560777975';
         $url .= '&tx_luxletter_preview[origin]=' . htmlspecialchars($origin);
         $url .= '&tx_luxletter_preview[layout]=' . htmlspecialchars($layout);
         $url .= '&tx_luxletter_preview[language]=' . $language;
         return $url;
+    }
+
+    protected function getUrlFromPageIdentifier(int $origin, string $layout, int $language): string
+    {
+        return $this->siteService->getPageUrlFromParameter(
+            $origin,
+            [
+                'type' => 1560777975,
+                'tx_luxletter_preview' => [
+                    'origin' => $origin,
+                    'layout' => $layout,
+                    'language' => $language,
+                ],
+            ]
+        );
     }
 }

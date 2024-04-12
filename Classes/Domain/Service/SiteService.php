@@ -98,8 +98,7 @@ class SiteService
     public function getFrontendUrlFromParameter(array $arguments, Site $site): string
     {
         $this->checkForValidSite($site);
-        $siteService = GeneralUtility::makeInstance(SiteService::class);
-        $url = $siteService->getDomainFromSite($site);
+        $url = $this->getDomainFromSite($site);
         $url .= '?' . http_build_query($arguments);
         return $url;
     }
@@ -141,15 +140,14 @@ class SiteService
     }
 
     /**
-     * Get current base domain with a trailing slash
+     * Get current base domain with a trailing slash and support also path postfix for default language
      *
      * @param Site $site
-     * @return string
+     * @return string e.g. "https://domain.org/" or "https://domain.org/en/"
      */
     protected function getCurrentBaseDomain(Site $site): string
     {
-        $base = (string)$site->getBase();
-        $base .= (substr($base, -1) === '/' ? '' : '/');
-        return $base;
+        $uri = $site->getRouter()->generateUri($site->getRootPageId());
+        return $uri->__tostring();
     }
 }

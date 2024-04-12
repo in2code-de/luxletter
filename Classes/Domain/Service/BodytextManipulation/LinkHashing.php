@@ -18,41 +18,18 @@ use In2code\Luxletter\Utility\StringUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * Class LinkHashing to rewrite links in newsletter to be able to track link clicks
  */
 class LinkHashing
 {
-    /**
-     * @var Newsletter
-     */
-    protected $newsletter = null;
+    protected ?Newsletter $newsletter = null;
+    protected ?User $user = null;
+    protected ?LinkRepository $linkRepository = null;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /**
-     * @var User
-     */
-    protected $user = null;
-
-    /**
-     * @var LinkRepository
-     */
-    protected $linkRepository = null;
-
-    /**
-     * @var EventDispatcherInterface
-     */
-    private $eventDispatcher;
-
-    /**
-     * LinkHashing constructor.
-     * @param Newsletter $newsletter
-     * @param User $user
-     */
     public function __construct(Newsletter $newsletter, User $user)
     {
         $this->newsletter = $newsletter;
@@ -65,10 +42,7 @@ class LinkHashing
      * @param string $content
      * @return string
      * @throws ArgumentMissingException
-     * @throws Exception
      * @throws IllegalObjectTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
      * @throws SiteNotFoundException
      */
@@ -90,11 +64,8 @@ class LinkHashing
      * @param DOMElement $aTag
      * @return void
      * @throws IllegalObjectTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
      * @throws ArgumentMissingException
-     * @throws Exception
      * @throws SiteNotFoundException
      */
     protected function hashLink(DOMElement $aTag): void
@@ -122,7 +93,6 @@ class LinkHashing
      * @param string $href
      * @return string
      * @throws MisconfigurationException
-     * @throws SiteNotFoundException
      */
     protected function convertToAbsoluteHref(string $href): string
     {
