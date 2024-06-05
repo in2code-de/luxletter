@@ -23,6 +23,7 @@ use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Exception\RecordInDatabaseNotFoundException;
+use In2code\Luxletter\Exception\RequestException;
 use In2code\Luxletter\Exception\UnvalidFilenameException;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
@@ -269,6 +270,8 @@ class NewsletterUrl
         $requestService = GeneralUtility::makeInstance(RequestService::class);
         try {
             $string = $requestService->getContentFromUrl($this->url);
+        } catch (RequestException $exception) {
+            throw $exception;
         } catch (Throwable $exception) {
             throw new MisconfigurationException(
                 'Given URL could not be parsed and accessed (Tried to read url: ' . $this->url
