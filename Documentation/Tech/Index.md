@@ -237,7 +237,7 @@ without images.
 
 ### Readable URL for unsubscribe links would be nice - any hints?
 
-You can use RouteEnhancers to rewrite the unsubscribe links. Example configuration would be:
+You can use RouteEnhancers to rewrite the unsubscribe links. An example configuration would be:
 
 ```
 routeEnhancers:
@@ -269,4 +269,52 @@ routeEnhancers:
         type: PersistedAliasMapper
         tableName: tx_luxletter_domain_model_newsletter
         routeFieldName: uid
+```
+
+As aspect an own one is used:
+```
+<?php
+namespace YourVendorname\YourSitepackage\\Routing\Aspect;
+
+use TYPO3\CMS\Core\Routing\Aspect\StaticMappableAspectInterface;
+
+class StaticUnsubscribeHashMapper implements StaticMappableAspectInterface
+{
+    /**
+     * @param string $value
+     * @return string|null
+     */
+    public function generate(string $value): ?string
+    {
+        return $this->respondWhenValidSha256Hash($value);
+    }
+
+    /**
+     * @param string $value
+     * @return string|null
+     */
+    public function resolve(string $value): ?string
+    {
+        return $this->respondWhenValidSha256Hash($value);
+    }
+
+    /**
+     * @param string $value
+     * @return null|string
+     */
+    protected function respondWhenValidSha256Hash(string $value): ?string
+    {
+        if (preg_match('/^[a-fA-F0-9]{64}$/', $value)) {
+            return $value;
+        }
+
+        return null;
+    }
+}
+```
+
+...and registered via `ext_localconf.php`:
+```
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['aspects']['StaticUnsubscribeHashMapper'] =
+    \YourVendorname\YourSitepackage\Routing\Aspect\StaticUnsubscribeHashMapper::class;
 ```

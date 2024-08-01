@@ -6,6 +6,7 @@ namespace In2code\Luxletter\Domain\Service\Parsing;
 use DOMDocument;
 use DOMXpath;
 use Exception;
+use GuzzleHttp\Exception\RequestException;
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Service\BodytextManipulation\CssInline;
@@ -269,6 +270,8 @@ class NewsletterUrl
         $requestService = GeneralUtility::makeInstance(RequestService::class);
         try {
             $string = $requestService->getContentFromUrl($this->url);
+        } catch (RequestException $exception) {
+            throw $exception;
         } catch (Throwable $exception) {
             throw new MisconfigurationException(
                 'Given URL could not be parsed and accessed (Tried to read url: ' . $this->url

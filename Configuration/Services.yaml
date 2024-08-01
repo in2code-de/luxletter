@@ -46,3 +46,6 @@ services:
 
   In2code\Luxletter\Middleware\LuxletterLink:
     public: true
+
+  In2code\Luxletter\Tca\SiteSelection:
+    public: true

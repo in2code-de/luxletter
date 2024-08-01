@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                                      |
 |------------|------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 26.2.0     | 2024-08-01 | Task    | Use a better error message on requestExceptions for preview now, use site.identifier instead of websiteTitle (to prevent empty filter options), small documentation fix                          |
 | 26.1.0     | 2024-04-12 | Bugfix  | Support path postfix for default language in siteconfiguration, enforce news links to be absolute in TYPO3 12                                                                                    |
 | !!! 26.0.0 | 2024-03-26 | Feature | Add multiclient feature, fix outdated link in backend for TYPO3 12, Prevent values over 100% for ClickRate, OpenRate or UnsubscribeRate                                                          |
 | 25.0.4     | 2024-03-07 | Bugfix  | Prevent undefined array key exception if luxletterUnsubscribePid was not set                                                                                                                     |
