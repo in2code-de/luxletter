@@ -4,15 +4,14 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Tca;
 
 use In2code\Luxletter\Domain\Service\SiteService;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class SiteSelection
 {
     protected SiteService $siteService;
 
-    public function __construct()
+    public function __construct(SiteService $siteService)
     {
-        $this->siteService = GeneralUtility::makeInstance(SiteService::class);
+        $this->siteService = $siteService;
     }
 
     public function getAll(array &$configuration): void
