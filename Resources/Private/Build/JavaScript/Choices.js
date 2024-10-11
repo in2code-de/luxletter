@@ -17,7 +17,8 @@ define(['TYPO3/CMS/Luxletter/Vendor/Choices.min'], function() {
       const luxletterReceiversElement = document.querySelector(luxletterReceiversIdentifier);
       if (luxletterReceiversElement === null) return;
       window.luxLetterReceiverChoice = new Choices(luxletterReceiversIdentifier, {
-        allowHTML: true
+        allowHTML: true,
+        searchResultLimit: 100
       });
     };
   }
