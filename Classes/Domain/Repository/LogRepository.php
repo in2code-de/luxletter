@@ -52,14 +52,14 @@ class LogRepository extends AbstractRepository
     public function getGroupedLinksByHref(Filter $filter): array
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
-        $sql = 'select count(*) as count, l.properties, l.newsletter, l.uid'
+        $sql = 'select count(*) as count, l.properties, l.newsletter, MAX(l.uid) uid'
             . ' from ' . Log::TABLE_NAME . ' l'
             . ' left join ' . Newsletter::TABLE_NAME . ' nl on nl.uid=l.newsletter'
             . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
             . ' where l.deleted=0 and l.status=' . Log::STATUS_LINKOPENING
             . ' and c.site in ("' . implode('","', $filter->getSitesForFilter()) . '")'
             . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp()
-            . ' group by l.properties, l.newsletter, l.uid'
+            . ' group by l.properties, l.newsletter'
             . ' order by count desc'
             . ' limit ' . $filter->getLimit();
         $results = $connection->executeQuery($sql)->fetchAllAssociative();
