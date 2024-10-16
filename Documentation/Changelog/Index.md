@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                                      |
 |------------|------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 26.3.1     | 2024-10-16 | Bugfix  | Show correct number of links in dashboard, fix newsletter filter by usergroup                                                                                                                    |
 | 26.3.0     | 2024-10-11 | Feature | Increase number of frontend groups options when searching for a string when adding a new newsletter in backend module                                                                            |
 | 26.2.0     | 2024-08-01 | Task    | Use a better error message on requestExceptions for preview now, use site.identifier instead of websiteTitle (to prevent empty filter options), small documentation fix                          |
 | 26.1.0     | 2024-04-12 | Bugfix  | Support path postfix for default language in siteconfiguration, enforce news links to be absolute in TYPO3 12                                                                                    |
