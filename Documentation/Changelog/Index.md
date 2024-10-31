@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                           |
 |------------|------------|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 17.8.1     | 2024.10.31 | Bugfix  | Fix type comparison in getBodyText() function, remove leftover in global configuration                                                                                                |
 | 17.8.0     | 2023.10.06 | Feature | Allow to overwrite the bodytext for certain queue entries via events                                                                                                                  |
 | 17.7.0     | 2023.08.17 | Feature | Allow to build queue from CLI if for big newsletters; Change main color for a better readability of LUXletter                                                                         |
 | 17.6.4     | 2023.07.25 | Bugfix  | Correction of backport (v17.6.0), Prevent exception in newsletter preview when a RouteEnhancer is used, fix receivers in Multilanguagemode                                            |
