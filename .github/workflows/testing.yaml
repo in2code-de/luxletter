@@ -4,7 +4,7 @@ on: [push, pull_request]
 jobs:
   php-lint:
     name: "PHP linter"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: "Checkout"
         uses: actions/checkout@v2
@@ -20,12 +20,12 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - 7.4
-          - 8.0
           - 8.1
+          - 8.2
+          - 8.3
   typoscript-lint:
     name: "TypoScript linter"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     steps:
       - name: "Checkout"
         uses: actions/checkout@v2
@@ -36,7 +36,7 @@ jobs:
           config_file: ".project/tests/typoscript-lint.yml"
   php-cs-fixer:
     name: "PHP CS Fixer"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     needs: php-lint
     steps:
       - name: "Checkout"
@@ -51,7 +51,7 @@ jobs:
         run: "composer test:php:cs"
   unit-tests:
     name: "PHP Unit Tests"
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-24.04
     needs: php-lint
     steps:
       - name: Checkout
@@ -70,5 +70,5 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - 8.1
           - 8.2
+          - 8.3

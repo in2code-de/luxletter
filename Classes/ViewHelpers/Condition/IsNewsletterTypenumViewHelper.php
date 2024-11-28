@@ -5,7 +5,6 @@ namespace In2code\Luxletter\ViewHelpers\Condition;
 
 use Exception;
 use In2code\Luxletter\Utility\ConfigurationUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
 /**
