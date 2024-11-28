@@ -9,8 +9,8 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotCon
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 
@@ -196,32 +196,8 @@ class ConfigurationUtility
         return $encryptionKey;
     }
 
-    /**
-     * Todo: Can be removed if TYPO3 11 support is dropped
-     *
-     * @return bool
-     */
     public static function isTypo3Version12(): bool
     {
-        return self::isVersionToCompareSameOrLowerThenCurrentTypo3Version('11.5.99');
-    }
-
-    /**
-     * @param string $versionToCompare like "1.2.3"
-     * @return bool
-     */
-    public static function isVersionToCompareSameOrLowerThenCurrentTypo3Version(string $versionToCompare): bool
-    {
-        return VersionNumberUtility::convertVersionNumberToInteger($versionToCompare) <= self::getCurrentTypo3Version();
-    }
-
-    /**
-     * Return current TYPO3 version as integer - e.g. 10003000 (10.3.0) or 9005014 (9.5.14)
-     *
-     * @return int
-     */
-    protected static function getCurrentTypo3Version(): int
-    {
-        return VersionNumberUtility::convertVersionNumberToInteger(VersionNumberUtility::getNumericTypo3Version());
+        return (new Typo3Version())->getMajorVersion() === 12;
     }
 }

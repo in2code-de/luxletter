@@ -76,7 +76,7 @@ class LuxletterLink implements MiddlewareInterface
 
     protected function getHash(): ?string
     {
-        $hash = GeneralUtility::_GP('luxletterlink');
+        $hash = $_REQUEST['luxletterlink'] ?? '';
         /** @var LuxletterLinkGetHashEvent $event */
         $event = $this->eventDispatcher->dispatch(
             GeneralUtility::makeInstance(LuxletterLinkGetHashEvent::class, $hash)

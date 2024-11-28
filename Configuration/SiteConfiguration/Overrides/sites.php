@@ -9,12 +9,6 @@ $configuration = [
     ],
 ];
 
-// Todo: Can be removed if TYPO3 11 support is dropped
-if (\In2code\Luxletter\Utility\ConfigurationUtility::isTypo3Version12() === false) {
-    $configuration['config']['type'] = 'input';
-    $configuration['config']['eval'] = 'required,int';
-}
-
 $GLOBALS['SiteConfiguration']['site']['columns']['luxletterUnsubscribePid'] = $configuration;
 
 $GLOBALS['SiteConfiguration']['site']['types']['0']['showitem'] .= ', --div--;Luxletter, luxletterUnsubscribePid';

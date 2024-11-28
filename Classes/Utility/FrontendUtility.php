@@ -21,7 +21,7 @@ class FrontendUtility
     {
         $action = '';
         $plugin = self::getPluginName();
-        $arguments = GeneralUtility::_GPmerged($plugin);
+        $arguments = $_REQUEST[$plugin] ?? [];
         if (!empty($arguments['action'])) {
             $action = $arguments['action'];
         }
@@ -31,7 +31,7 @@ class FrontendUtility
     public static function getModuleName(): string
     {
         $module = '';
-        $route = GeneralUtility::_GP('route');
+        $route = $_REQUEST['route'] ?? '';
         if (!empty($route)) {
             $module = rtrim(ltrim($route, '/lux/Luxletter'), '/');
         }

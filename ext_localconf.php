@@ -38,19 +38,6 @@ defined('TYPO3') || die();
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['luxletter'][] = 'In2code\Luxletter\ViewHelpers';
 
 /**
- * Add an absRefPrefix for FluidStyledMailContent to prefix images with absolute paths
- * Todo: Can be removed if TYPO3 11 support is dropped and should be replaced with `fluidStyledMailContent.config.forceAbsoluteUrls = 1`
- */
-if (\TYPO3\CMS\Core\Core\Environment::isCli() === false) {
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
-        'luxletterFluidStyledMailContent',
-        'setup',
-        'fluidStyledMailContent.config.absRefPrefix = '
-        . \In2code\Luxletter\Utility\ConfigurationUtility::getCurrentDomain()
-    );
-}
-
-/**
  * Update Wizards
  */
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['luxletterReceiversUpdateWizard']

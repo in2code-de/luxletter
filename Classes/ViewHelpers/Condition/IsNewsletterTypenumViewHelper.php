@@ -21,6 +21,6 @@ class IsNewsletterTypenumViewHelper extends AbstractConditionViewHelper
      */
     protected static function evaluateCondition($arguments = null): bool
     {
-        return ConfigurationUtility::getTypeNumToNumberLocation() === (int)GeneralUtility::_GP('type');
+        return ConfigurationUtility::getTypeNumToNumberLocation() === (int)($_REQUEST['type'] ?? 0);
     }
 }

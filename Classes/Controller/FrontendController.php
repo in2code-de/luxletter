@@ -56,12 +56,11 @@ class FrontendController extends ActionController
     }
 
     /**
-     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view (Todo: Param is only needed in TYPO3 11)
      * @return void
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      */
-    public function initializeView($view)
+    public function initializeView()
     {
         $contentObject = $this->configurationManager->getContentObject();
         $this->view->assignMultiple([
@@ -158,7 +157,7 @@ class FrontendController extends ActionController
      */
     public function initializeUnsubscribe2Action(): void
     {
-        $arguments = GeneralUtility::_GP('tx_luxletter_fe');
+        $arguments = $_REQUEST['tx_luxletter_fe'] ?? [];
         if (is_array($arguments)) {
             $this->request = $this->request->withArguments($arguments);
         }

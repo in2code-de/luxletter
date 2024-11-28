@@ -1,19 +1,22 @@
-<f:be.pageRenderer includeRequireJsModules="{
-    0: 'TYPO3/CMS/Luxletter/Luxletter/Module.min',
-    1: 'TYPO3/CMS/Luxletter/Luxletter/Diagram.min',
-    2: 'TYPO3/CMS/Luxletter/Luxletter/Choices.min'
+<f:be.pageRenderer includeJavaScriptModules="{
+    0: '@in2code/luxletter/Module.min.js',
+    1: '@in2code/luxletter/Diagram.min.js',
+    2: '@in2code/luxletter/Choices.min.js'
 }" includeCssFiles="{
     0: '{f:uri.resource(path:\'Css/Modules.min.css\')}'
 }"/>
 
+<div class="module">
+    <f:render partial="DocHeader" arguments="{docHeader:docHeader}" />
 
-<div class="luxletter">
-    <f:if condition="{filter} && !{filter.anyAllowedSites}">
-        <f:then>
-            <f:render partial="Miscellaneous/NoSites" arguments="{_all}"/>
-        </f:then>
-        <f:else>
-            <f:render section="content" />
-        </f:else>
-    </f:if>
+    <div class="module-body luxletter{luxletter:condition.isTypo3Twelve(then:' luxletter--typo3-12')}">
+        <f:if condition="{filter} && !{filter.anyAllowedSites}">
+            <f:then>
+                <f:render partial="Miscellaneous/NoSites" arguments="{_all}"/>
+            </f:then>
+            <f:else>
+                <f:render section="content" />
+            </f:else>
+        </f:if>
+    </div>
 </div>
