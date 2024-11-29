@@ -82,7 +82,8 @@
 		"friendsofphp/php-cs-fixer": "^3.10",
 		"helmich/typo3-typoscript-lint": "^3.1",
 		"helhum/typo3-console": "^8.2",
-		"georgringer/news": "^12.0"
+		"georgringer/news": "^12.0",
+		"in2code/lux": "^38.0 || dev-develop"
 	},
 	"conflict": {
 		"georgringer/news": "< 11.0.0"
