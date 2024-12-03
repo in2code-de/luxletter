@@ -121,7 +121,12 @@
                     </f:then>
                     <f:else>
                         <div>
-                            <f:form.select property="receivers" id="luxletter-receivers-dropdown" multiple="multiple" data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'users'}">
+                            <f:form.select
+                                property="receivers"
+                                id="luxletter-receivers-dropdown"
+                                multiple="multiple"
+                                data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'users'}"
+                                class="form-control form-select">
                                 <f:for each="{usergroups}" as="title" key="identifier" iteration="iteration">
                                     <f:form.select.option value="{identifier}">{title}</f:form.select.option>
                                 </f:for>

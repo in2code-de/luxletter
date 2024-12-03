@@ -33,7 +33,7 @@
                     <luxletter:pagination.paginate objects="{newslettersGrouped}" as="newslettersGroupedPages" itemsPerPage="10">
                         <f:for each="{newslettersGroupedPages.paginator.paginatedItems}" as="newslettersGroupedPage" iteration="iteration" key="categoryLabel">
                             <div class="recordlist my-4">
-                                <div style="background-color: #dddddd; border-top: 1px solid #cccccc; border-left: 1px solid #cccccc; border-right: 1px solid #cccccc; color: #5a5a5a; font-weight: bold; padding: 10px;">
+                                <div class="table-title">
                                     {categoryLabel} ({newslettersGroupedPage -> f:count()})
                                 </div>
                                 <div class="table-fit mb-0">
