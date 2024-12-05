@@ -1,6 +1,6 @@
 # Fluid Styled Mail Content (needs fluid_styled_content loaded before) for rendering content elements for newsletters
 
-[getTSFE() && getTSFE().type == 1562349004]
+[request && traverse(request.getQueryParams(), 'type') == 1562349004]
 lib {
   contentElement {
     templateRootPaths {
