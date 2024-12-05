@@ -83,11 +83,11 @@ class TeaserProcessor implements DataProcessorInterface
     protected function getDataFromTeaserElement(int $identifier): array
     {
         $queryBuilder = DatabaseUtility::getQueryBuilderForTable('tt_content');
-        $rows = (array)$queryBuilder
+        $rows = $queryBuilder
             ->select('*')
             ->from('tt_content')
-            ->where('uid=' . (int)$identifier)
-            ->execute()
+            ->where('uid=' . $identifier)
+            ->executeQuery()
             ->fetchAllAssociative();
         if (!empty($rows[0])) {
             return $rows[0];
