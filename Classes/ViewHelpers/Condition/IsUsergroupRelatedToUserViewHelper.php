@@ -5,6 +5,7 @@ namespace In2code\Luxletter\ViewHelpers\Condition;
 
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Model\Usergroup;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
 class IsUsergroupRelatedToUserViewHelper extends AbstractConditionViewHelper
@@ -16,7 +17,7 @@ class IsUsergroupRelatedToUserViewHelper extends AbstractConditionViewHelper
         $this->registerArgument('usergroup', Usergroup::class, 'Usergroup to check for', true);
     }
 
-    protected static function evaluateCondition($arguments = null): bool
+    public static function verdict(array $arguments, RenderingContextInterface $renderingContext)
     {
         /** @var User $user */
         $user = $arguments['user'];

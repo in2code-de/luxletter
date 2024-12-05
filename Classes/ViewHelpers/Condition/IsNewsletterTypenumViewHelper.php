@@ -3,22 +3,13 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\ViewHelpers\Condition;
 
-use Exception;
 use In2code\Luxletter\Utility\ConfigurationUtility;
+use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
-/**
- * Class IsNewsletterTypenumViewHelper
- * @noinspection PhpUnused
- */
 class IsNewsletterTypenumViewHelper extends AbstractConditionViewHelper
 {
-    /**
-     * @param null $arguments
-     * @return bool
-     * @throws Exception
-     */
-    protected static function evaluateCondition($arguments = null): bool
+    public static function verdict(array $arguments, RenderingContextInterface $renderingContext)
     {
         return ConfigurationUtility::getTypeNumToNumberLocation() === (int)($_REQUEST['type'] ?? 0);
     }
