@@ -23,7 +23,7 @@ class LanguageRepository
     {
         $siteLanguage = $this->getSiteLanguage($languageIdentifier, $origin);
         if ($siteLanguage !== null) {
-            return $siteLanguage->getTwoLetterIsoCode();
+            return $siteLanguage->getLocale()->getLanguageCode();
         }
         return '';
     }
