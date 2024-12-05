@@ -87,9 +87,9 @@ class PreviewUrlService
 
     protected function getUrl(string $origin, string $layout, int $language = 0): string
     {
-        if (MathUtility::canBeInterpretedAsInteger($origin)) {
-            return $this->getUrlFromPageIdentifier((int)$origin, $layout, $language);
-        }
+//        if (MathUtility::canBeInterpretedAsInteger($origin)) {
+//            return $this->getUrlFromPageIdentifier((int)$origin, $layout, $language);
+//        }
 
         $url = '//' . GeneralUtility::getIndpEnv('HTTP_HOST') . '?type=1560777975';
         $url .= '&tx_luxletter_preview[origin]=' . htmlspecialchars($origin);
