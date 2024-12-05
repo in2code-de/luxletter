@@ -7,9 +7,6 @@ use In2code\Luxletter\Exception\ArgumentMissingException;
 use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
-/**
- * Class LinkRepository
- */
 class LinkRepository extends AbstractRepository
 {
     /**

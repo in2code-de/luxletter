@@ -29,11 +29,10 @@ use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
  */
 class LuxletterLink implements MiddlewareInterface
 {
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        readonly private EventDispatcherInterface $eventDispatcher,
+        readonly private LinkRepository $linkRepository
+    ) {
     }
 
     /**
@@ -48,9 +47,8 @@ class LuxletterLink implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if ($this->isLuxletterLink()) {
-            $linkRepository = GeneralUtility::makeInstance(LinkRepository::class);
             /** @var Link $link */
-            $link = $linkRepository->findOneByHash($this->getHash());
+            $link = $this->linkRepository->findOneByHash($this->getHash());
             if ($link !== null) {
                 /** @var LuxletterLinkProcessEvent $event */
                 $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
@@ -71,16 +69,15 @@ class LuxletterLink implements MiddlewareInterface
 
     protected function isLuxletterLink(): bool
     {
-        return $this->getHash() !== null;
+        /** @var LuxletterLinkGetHashEvent $event */
+        $event = $this->eventDispatcher->dispatch(new LuxletterLinkGetHashEvent($_REQUEST['luxletterlink'] ?? null));
+        return $event->isHashGiven();
     }
 
     protected function getHash(): ?string
     {
-        $hash = $_REQUEST['luxletterlink'] ?? '';
         /** @var LuxletterLinkGetHashEvent $event */
-        $event = $this->eventDispatcher->dispatch(
-            GeneralUtility::makeInstance(LuxletterLinkGetHashEvent::class, $hash)
-        );
+        $event = $this->eventDispatcher->dispatch(new LuxletterLinkGetHashEvent($_REQUEST['luxletterlink'] ?? null));
         return $event->getHash();
     }
 
@@ -94,9 +91,7 @@ class LuxletterLink implements MiddlewareInterface
     protected function luxIdentification(Link $link): void
     {
         /** @var LuxletterLinkLuxIdentificationEvent $event */
-        $event = $this->eventDispatcher->dispatch(
-            GeneralUtility::makeInstance(LuxletterLinkLuxIdentificationEvent::class, $link)
-        );
+        $event = $this->eventDispatcher->dispatch(new LuxletterLinkLuxIdentificationEvent($link));
         if (ExtensionUtility::isLuxAvailable() && $event->isIdentification()) {
             CookieUtility::setCookie('luxletterlinkhash', $link->getHash());
         }
