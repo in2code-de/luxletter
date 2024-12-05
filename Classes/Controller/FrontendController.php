@@ -62,9 +62,8 @@ class FrontendController extends ActionController
      */
     public function initializeView()
     {
-        $contentObject = $this->configurationManager->getContentObject();
         $this->view->assignMultiple([
-            'data' => $contentObject->data,
+            'data' => $this->request->getAttribute('currentContentObject')->data,
             'extensionConfiguration' => GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter'),
         ]);
     }
