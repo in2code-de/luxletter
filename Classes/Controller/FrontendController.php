@@ -35,24 +35,13 @@ use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
 class FrontendController extends ActionController
 {
-    protected ?UserRepository $userRepository;
-    protected UsergroupRepository $usergroupRepository;
-    protected ContentRepository $contentRepository;
-    protected LogService $logService;
-    protected UsergroupFactory $usergroupFactory;
-
     public function __construct(
-        UserRepository $userRepository,
-        UsergroupRepository $usergroupRepository,
-        ContentRepository $contentRepository,
-        LogService $logService,
-        UsergroupFactory $usergroupFactory
+        readonly protected UserRepository $userRepository,
+        readonly protected UsergroupRepository $usergroupRepository,
+        readonly protected ContentRepository $contentRepository,
+        readonly protected LogService $logService,
+        readonly protected UsergroupFactory $usergroupFactory
     ) {
-        $this->userRepository = $userRepository;
-        $this->usergroupRepository = $usergroupRepository;
-        $this->contentRepository = $contentRepository;
-        $this->logService = $logService;
-        $this->usergroupFactory = $usergroupFactory;
     }
 
     /**
