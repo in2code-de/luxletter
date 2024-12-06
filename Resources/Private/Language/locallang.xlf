@@ -252,6 +252,9 @@
 			<trans-unit id="module.newsletter.new.field.receiver.description_alternative">
 				<source>Note: Recipient lists that have already been created cannot be changed later.</source>
 			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.origin.nonewsletters">
+				<source>Please first create a page of the type "Newsletter" in the page tree.</source>
+			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.configuration">
 				<source>Sender</source>
 			</trans-unit>
