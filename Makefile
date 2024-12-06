@@ -186,9 +186,6 @@ urls:
 	printf "  %-$${LONGEST}s %s\n" "Frontend2:" "https://$(HOST2)/"; \
 	printf "  %-$${LONGEST}s %s\n" "Backend:" "https://$(HOST)/typo3/"; \
 	printf "  %-$${LONGEST}s %s\n" "Mail:" "https://$(MAIL)/"; \
-	for service in $$SERVICES; do \
-		printf "  %-$${LONGEST}s %s\n" "$$service:" "https://$$service.$$PROJECT.docker/"; \
-	done;
 
 ## Create the hosts entry for the custom project URL (non-dinghy convention)
 .add-hosts-entry:
