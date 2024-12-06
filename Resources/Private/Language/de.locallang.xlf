@@ -532,6 +532,10 @@
 				<source>Are you sure to delete this record?</source>
 				<target state="translated">Wollen Sie diesen Datensatz wirklich löschen?</target>
 			</trans-unit>
+			<trans-unit id="deletenewsletter">
+				<source>Deleted newsletter</source>
+				<target state="translated">Gelöschter Newsletter</target>
+			</trans-unit>
 			<trans-unit id="defaultLanguage">
 				<source>Default</source>
 				<target state="translated">Standard</target>

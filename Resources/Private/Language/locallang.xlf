@@ -403,6 +403,9 @@
 			<trans-unit id="deleteconfirm">
 				<source>Are you sure to delete this record?</source>
 			</trans-unit>
+			<trans-unit id="deletenewsletter">
+				<source>Deleted newsletter</source>
+			</trans-unit>
 			<trans-unit id="defaultLanguage">
 				<source>Default</source>
 			</trans-unit>

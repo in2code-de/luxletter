@@ -1,18 +1,26 @@
 <div class="panel panel-default">
-	<div class="panel-heading">
-		<h3 class="panel-title">
-			Links
-		</h3>
-	</div>
-	<div class="panel-body">
-		<ul class="list-group">
-			<f:for each="{groupedLinksByHref}" as="groupedLink">
-				<li class="list-group-item">
-					<span class="badge" style="float: right;" title="Overall">{groupedLink.count}</span>
-					<f:link.external uri="{groupedLink.target}">{groupedLink.target}</f:link.external>
-					<br>({groupedLink.newsletter.title})
-				</li>
-			</f:for>
-		</ul>
-	</div>
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            Links
+        </h3>
+    </div>
+    <div class="panel-body">
+        <ul class="list-group">
+            <f:for each="{groupedLinksByHref}" as="groupedLink">
+                <li class="list-group-item">
+                    <span class="badge" style="float: right;" title="Overall">{groupedLink.count}</span>
+                    <f:link.external uri="{groupedLink.target}">{groupedLink.target}</f:link.external>
+                    <br>
+                    <f:if condition="{groupedLink.newsletter}">
+                        <f:then>
+                            {groupedLink.newsletter.title}
+                        </f:then>
+                        <f:else>
+                            (<f:translate key="LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:deletednewsletter">Deleted Newsletter</f:translate>)
+                        </f:else>
+                    </f:if>
+                </li>
+            </f:for>
+        </ul>
+    </div>
 </div>
