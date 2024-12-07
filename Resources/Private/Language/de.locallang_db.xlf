@@ -220,6 +220,10 @@
 				<source>LUXletter: Quick unsubscribe</source>
 				<target state="translated">LUXletter: Schnelle Newsletterabmeldung</target>
 			</trans-unit>
+			<trans-unit id="flexform.fe.description">
+				<source>A simple plugin that removes the LUXletter category from Frontend User when it's used via Newsletter unsubscribe link</source>
+				<target state="translated">Ein einfaches Plugin, dass die LUXletter Kategorie vom Frontend Benutzer entfernt, wenn der Unsubscribe-Link im Newsletter gewählt wurde</target>
+			</trans-unit>
 			<trans-unit id="flexform.fe.removeusergroup">
 				<source>Select usergroup which should be removed on unsubscribe</source>
 				<target state="translated">Benutzergruppe auswählen, die bei einem Austragen aus dem Newsletter entfernt werden soll</target>
@@ -232,6 +236,10 @@
 			<trans-unit id="flexform.unsubscribe2">
 				<source>LUXletter: Unsubscribe with category selection</source>
 				<target state="translated">LUXletter: Newsletterabmeldung mit Kategorieauswahl</target>
+			</trans-unit>
+			<trans-unit id="flexform.unsubscribe2.description">
+				<source>Show some categories for the unsubscribers that can be selected or removed when clicking the unsubscribe link in the Newsletter</source>
+				<target state="translated">Biete Kategorien zum Auswählen oder Entfernen an, wenn der Unsubscribe-Link im Newsletter gewählt wurde</target>
 			</trans-unit>
 			<trans-unit id="flexform.unsubscribe2.usergroups">
 				<source>Usergroups that can be added or removed by the user</source>
