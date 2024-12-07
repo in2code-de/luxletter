@@ -70,6 +70,7 @@ $additional = [
                 'msclkid',
             ],
         ],
+        'passwordPolicy' => 'simpleLuxletter',
     ],
     'GFX' => [
         'colorspace' => 'sRGB',
@@ -102,3 +103,19 @@ $additional = [
     ]
 ];
 $GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive($GLOBALS['TYPO3_CONF_VARS'], $additional);
+
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['passwordPolicies'] = [
+    'simpleLuxletter' => [
+        'validators' => [
+            \TYPO3\CMS\Core\PasswordPolicy\Validator\CorePasswordValidator::class => [
+                'options' => [
+                    'minimumLength' => 3,
+                    'upperCaseCharacterRequired' => false,
+                    'lowerCaseCharacterRequired' => false,
+                    'digitCharacterRequired' => false,
+                    'specialCharacterRequired' => false,
+                ],
+            ],
+        ],
+    ],
+];
