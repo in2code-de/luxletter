@@ -3,8 +3,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
+use Doctrine\DBAL\Exception as ExceptionDbal;
 use Exception;
 use In2code\Luxletter\Domain\Factory\UsergroupFactory;
 use In2code\Luxletter\Domain\Model\Newsletter;
@@ -31,7 +30,6 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExis
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
 class FrontendController extends ActionController
 {
@@ -85,14 +83,12 @@ class FrontendController extends ActionController
      * @param Newsletter|null $newsletter
      * @param User|null $user
      * @return ResponseInterface
-     * @throws IllegalObjectTypeException
-     * @throws ExceptionDbalDriver
-     * @throws DBALException
+     * @throws ExceptionDbal
      */
     public function trackingPixelAction(Newsletter $newsletter = null, User $user = null): ResponseInterface
     {
         if ($newsletter !== null && $user !== null) {
-            $this->logService->logNewsletterOpening($newsletter, $user);
+            $this->logService->logNewsletterOpening($newsletter->getUid(), $user->getUid());
         }
         $content = base64_decode('R0lGODlhAQABAJAAAP8AAAAAACH5BAUQAAAALAAAAAABAAEAAAICBAEAOw==');
         return $this->htmlResponse($content);

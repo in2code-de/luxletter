@@ -263,19 +263,19 @@ class LogRepository extends AbstractRepository
     }
 
     /**
-     * @param Newsletter $newsletter
-     * @param User $user
+     * @param int $newsletterIdentifier
+     * @param int $userIdentifier
      * @param int $status
      * @return bool
      * @throws ExceptionDbal
      */
-    public function isLogRecordExisting(Newsletter $newsletter, User $user, int $status): bool
+    public function isLogRecordExisting(int $newsletterIdentifier, int $userIdentifier, int $status): bool
     {
         $queryBuilder = DatabaseUtility::getQueryBuilderForTable(Log::TABLE_NAME);
         $uid = (int)$queryBuilder
             ->select('uid')
             ->from(Log::TABLE_NAME)
-            ->where('newsletter=' . $newsletter->getUid() . ' and user=' . $user->getUid() . ' and status=' . $status)
+            ->where('newsletter=' . $newsletterIdentifier . ' and user=' . $userIdentifier . ' and status=' . $status)
             ->setMaxResults(1)
             ->executeQuery()
             ->fetchOne();

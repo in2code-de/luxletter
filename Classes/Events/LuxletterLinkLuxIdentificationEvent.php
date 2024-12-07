@@ -3,24 +3,20 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Events;
 
-use In2code\Luxletter\Domain\Model\Link;
-
 final class LuxletterLinkLuxIdentificationEvent
 {
-    protected Link $link;
     protected bool $identification = true;
 
-    public function __construct(Link $link)
+    public function __construct(protected array $link)
     {
-        $this->link = $link;
     }
 
-    public function getLink(): Link
+    public function getLink(): array
     {
         return $this->link;
     }
 
-    public function setLink(Link $link): LuxletterLinkLuxIdentificationEvent
+    public function setLink(array $link): LuxletterLinkLuxIdentificationEvent
     {
         $this->link = $link;
         return $this;
