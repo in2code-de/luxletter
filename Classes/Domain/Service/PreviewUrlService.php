@@ -3,7 +3,6 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
-use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
 use In2code\Luxletter\Domain\Factory\UserFactory;
 use In2code\Luxletter\Domain\Repository\PageRepository;
 use In2code\Luxletter\Domain\Service\Parsing\Newsletter as NewsletterParsing;
@@ -12,7 +11,6 @@ use In2code\Luxletter\Utility\ConfigurationUtility;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 
 class PreviewUrlService
@@ -36,7 +34,6 @@ class PreviewUrlService
      * @param string $origin
      * @param string $layout
      * @return array|string[]
-     * @throws ExceptionDbalDriver
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws MisconfigurationException
@@ -87,9 +84,9 @@ class PreviewUrlService
 
     protected function getUrl(string $origin, string $layout, int $language = 0): string
     {
-//        if (MathUtility::canBeInterpretedAsInteger($origin)) {
-//            return $this->getUrlFromPageIdentifier((int)$origin, $layout, $language);
-//        }
+        // if (MathUtility::canBeInterpretedAsInteger($origin)) {
+        //     return $this->getUrlFromPageIdentifier((int)$origin, $layout, $language);
+        // }
 
         $url = '//' . GeneralUtility::getIndpEnv('HTTP_HOST') . '?type=1560777975';
         $url .= '&tx_luxletter_preview[origin]=' . htmlspecialchars($origin);
