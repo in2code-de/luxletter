@@ -5,72 +5,60 @@
     <sheets>
         <main>
             <ROOT>
-                <TCEforms>
-                    <sheetTitle>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.flexform</sheetTitle>
-                </TCEforms>
+                <sheetTitle>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.flexform</sheetTitle>
 
                 <el>
                     <limit>
-                        <TCEforms>
-                            <label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.flexform.limit</label>
-                            <config>
-                                <type>input</type>
-                                <size>40</size>
-                                <max>9</max>
-                                <default>240</default>
-                                <eval>int,required</eval>
-                            </config>
-                        </TCEforms>
+                        <label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.flexform.limit</label>
+                        <config>
+                            <type>input</type>
+                            <size>40</size>
+                            <max>9</max>
+                            <default>240</default>
+                            <eval>int,required</eval>
+                        </config>
                     </limit>
                     <append>
-                        <TCEforms>
-                            <label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.flexform.append</label>
-                            <config>
-                                <type>input</type>
-                                <size>40</size>
-                                <max>200</max>
-                                <default> ...</default>
-                            </config>
-                        </TCEforms>
+                        <label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.flexform.append</label>
+                        <config>
+                            <type>input</type>
+                            <size>40</size>
+                            <max>200</max>
+                            <default> ...</default>
+                        </config>
                     </append>
                     <buttontext>
-                        <TCEforms>
-                            <label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.flexform.buttontext</label>
-                            <config>
-                                <type>input</type>
-                                <size>40</size>
-                                <max>200</max>
-                                <default>read more</default>
-                                <eval>required</eval>
-                            </config>
-                        </TCEforms>
+                        <label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.flexform.buttontext</label>
+                        <config>
+                            <type>input</type>
+                            <size>40</size>
+                            <max>200</max>
+                            <default>read more</default>
+                            <eval>required</eval>
+                        </config>
                     </buttontext>
                     <records>
-                        <TCEforms>
-                            <label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.flexform.records</label>
-                            <config>
-                                <type>group</type>
-                                <internal_type>db</internal_type>
-                                <allowed>tt_content</allowed>
-                                <size>10</size>
-                                <maxitems>10</maxitems>
-                                <minitems>1</minitems>
-                                <wizards>
-                                    <suggest>
-                                        <type>suggest</type>
-                                    </suggest>
-                                </wizards>
-                            </config>
-                        </TCEforms>
+                        <label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.flexform.records</label>
+                        <config>
+                            <type>group</type>
+                            <internal_type>db</internal_type>
+                            <allowed>tt_content</allowed>
+                            <size>10</size>
+                            <maxitems>10</maxitems>
+                            <minitems>1</minitems>
+                            <wizards>
+                                <suggest>
+                                    <type>suggest</type>
+                                </suggest>
+                            </wizards>
+                        </config>
                     </records>
                     <sectionmenu>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.flexform.sectionmenu</label>
-                            <config>
-                                <type>check</type>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.flexform.sectionmenu</label>
+                        <config>
+                            <type>check</type>
+                        </config>
                     </sectionmenu>
                 </el>
             </ROOT>
