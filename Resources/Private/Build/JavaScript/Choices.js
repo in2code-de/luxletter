@@ -14,3 +14,17 @@ function LuxletterChoices() {
 
 var LuxletterChoicesObject = new LuxletterChoices();
 LuxletterChoicesObject.initialize();
+
+window.setTimeout(() => {
+  const choisesEls = document.querySelectorAll('.choices__inner');
+  const choisesListEls = document.querySelectorAll('.choices__list--dropdown');
+
+  choisesEls.forEach((choisesEl) => {
+    choisesEl.classList.add('form-control');
+    choisesEl.classList.add('form-select');
+  });
+
+  choisesListEls.forEach((choisesEl) => {
+    choisesEl.classList.add('form-control');
+  });
+}, 1000);
