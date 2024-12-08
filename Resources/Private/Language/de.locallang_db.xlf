@@ -222,7 +222,7 @@
 			</trans-unit>
 			<trans-unit id="flexform.fe.description">
 				<source>A simple plugin that removes the LUXletter category from Frontend User when it's used via Newsletter unsubscribe link</source>
-				<target state="translated">Ein einfaches Plugin, dass die LUXletter Kategorie vom Frontend Benutzer entfernt, wenn der Unsubscribe-Link im Newsletter gewählt wurde</target>
+				<target state="translated">Ein einfaches Plugin, das die LUXletter Kategorie vom Frontend Benutzer entfernt, wenn der Unsubscribe-Link im Newsletter gewählt wurde</target>
 			</trans-unit>
 			<trans-unit id="flexform.fe.removeusergroup">
 				<source>Select usergroup which should be removed on unsubscribe</source>
