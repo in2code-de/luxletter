@@ -32,7 +32,7 @@ services:
       - host.docker.internal:host-gateway
 
   mysql:
-    image: in2code/mysql:5.7
+    image: in2code/mysql:8.0
     env_file:
       - .env
     volumes:

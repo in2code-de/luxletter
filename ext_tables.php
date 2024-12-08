@@ -1,125 +1,90 @@
 <?php
-if (!defined('TYPO3')) {
-    die('Access denied.');
-}
 
-call_user_func(
-    function () {
+declare(strict_types=1);
 
-        /**
-         * Register Icons
-         */
-        $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
-            \TYPO3\CMS\Core\Imaging\IconRegistry::class
-        );
-        $iconRegistry->registerIcon(
-            'extension-lux',
-            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-            ['source' => 'EXT:luxletter/Resources/Public/Icons/lux.svg']
-        );
-        $iconRegistry->registerIcon(
-            'extension-luxletter',
-            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-            ['source' => 'EXT:luxletter/Resources/Public/Icons/Extension.svg']
-        );
-        $iconRegistry->registerIcon(
-            'extension-lux-module',
-            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-            ['source' => 'EXT:luxletter/Resources/Public/Icons/lux_white.svg']
-        );
-        $iconRegistry->registerIcon(
-            'extension-luxletter-module',
-            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-            ['source' => 'EXT:luxletter/Resources/Public/Icons/lux_module_newsletter.svg']
-        );
-        $iconRegistry->registerIcon(
-            'extension-luxletter-star',
-            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-            ['source' => 'EXT:luxletter/Resources/Public/Icons/star.svg']
-        );
-        $iconRegistry->registerIcon(
-            'teaser',
-            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-            ['source' => 'EXT:luxletter/Resources/Public/Icons/ctype-teaser.svg']
-        );
-        $iconRegistry->registerIcon(
-            'luxletter-widget-receiver',
-            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-            ['source' => 'EXT:luxletter/Resources/Public/Icons/widget_receiver.svg']
-        );
-        $iconRegistry->registerIcon(
-            'luxletter-widget-newsletter',
-            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-            ['source' => 'EXT:luxletter/Resources/Public/Icons/widget_newsletter.svg']
-        );
-        $iconRegistry->registerIcon(
-            'apps-pagetree-luxletter',
-            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-            ['source' => 'EXT:luxletter/Resources/Public/Icons/luxletter_doktype.svg']
-        );
-        $iconRegistry->registerIcon(
-            'apps-pagetree-luxletter-contentFromPid',
-            \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
-            ['source' => 'EXT:luxletter/Resources/Public/Icons/luxletter_doktype.svg']
-        );
+use In2code\Luxletter\Utility\ConfigurationUtility;
+use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
+use TYPO3\CMS\Core\Imaging\IconRegistry;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-        /**
-         * Include Modules
-         */
-        // Add Main module "LUX" - shared with EXT:lux and EXT:luxenterprise (if installed)
-        // Acces to a main module is implicit, as soon as a user has access to at least one of its submodules.
-        // Todo: Can be removed, if TYPO3 11 support is dropped
-        if (empty($GLOBALS['TBE_MODULES']['lux'])) {
-            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModule(
-                'lux',
-                '',
-                '',
-                null,
-                [
-                    'name' => 'lux',
-                    'labels' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_mod.xlf',
-                    'iconIdentifier' => 'extension-lux-module'
-                ]
-            );
-        }
-        // Add module for analysis
-        // Todo: Can be removed, if TYPO3 11 support is dropped
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-            'Luxletter',
-            'lux',
-            'luxletter',
-            '',
-            [
-                \In2code\Luxletter\Controller\NewsletterController::class =>
-                    'dashboard, list, resetFilter, edit, update, new, create, enable, disable, delete, receiver',
-            ],
-            [
-                'access' => 'user,group',
-                'icon' => 'EXT:luxletter/Resources/Public/Icons/lux_module_newsletter.svg',
-                'labels' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_mod_newsletter.xlf',
-            ]
-        );
+defined('TYPO3') || die();
 
-        /**
-         * Add static page TSconfig
-         */
-        \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-            '@import "EXT:luxletter/Configuration/PageTSConfig/ContentElements.typoscript"'
-        );
-
-        /**
-         * Add new page doktype
-         */
-        if (\In2code\Luxletter\Utility\ConfigurationUtility::isMultiLanguageModeActivated()) {
-            $doktype = \In2code\Luxletter\Utility\ConfigurationUtility::getMultilanguageNewsletterPageDoktype();
-            $GLOBALS['PAGES_TYPES'][$doktype] = [
-                'type' => 'web',
-                'allowedTables' => '*',
-            ];
-            // Allow backend users to drag and drop the new page type:
-            \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addUserTSConfig(
-                'options.pageTree.doktypesToShowInNewPageDragArea := addToList(' . $doktype . ')'
-            );
-        }
-    }
+/**
+ * Register Icons
+ */
+$iconRegistry = GeneralUtility::makeInstance(
+    IconRegistry::class
 );
+$iconRegistry->registerIcon(
+    'extension-lux',
+    SvgIconProvider::class,
+    ['source' => 'EXT:luxletter/Resources/Public/Icons/lux.svg']
+);
+$iconRegistry->registerIcon(
+    'extension-luxletter',
+    SvgIconProvider::class,
+    ['source' => 'EXT:luxletter/Resources/Public/Icons/Extension.svg']
+);
+$iconRegistry->registerIcon(
+    'extension-lux-module',
+    SvgIconProvider::class,
+    ['source' => 'EXT:luxletter/Resources/Public/Icons/lux_white.svg']
+);
+$iconRegistry->registerIcon(
+    'extension-luxletter-module',
+    SvgIconProvider::class,
+    ['source' => 'EXT:luxletter/Resources/Public/Icons/lux_module_newsletter.svg']
+);
+$iconRegistry->registerIcon(
+    'extension-luxletter-star',
+    SvgIconProvider::class,
+    ['source' => 'EXT:luxletter/Resources/Public/Icons/star.svg']
+);
+$iconRegistry->registerIcon(
+    'teaser',
+    SvgIconProvider::class,
+    ['source' => 'EXT:luxletter/Resources/Public/Icons/ctype-teaser.svg']
+);
+$iconRegistry->registerIcon(
+    'luxletter-widget-receiver',
+    SvgIconProvider::class,
+    ['source' => 'EXT:luxletter/Resources/Public/Icons/widget_receiver.svg']
+);
+$iconRegistry->registerIcon(
+    'luxletter-widget-newsletter',
+    SvgIconProvider::class,
+    ['source' => 'EXT:luxletter/Resources/Public/Icons/widget_newsletter.svg']
+);
+$iconRegistry->registerIcon(
+    'apps-pagetree-luxletter',
+    SvgIconProvider::class,
+    ['source' => 'EXT:luxletter/Resources/Public/Icons/luxletter_doktype.svg']
+);
+$iconRegistry->registerIcon(
+    'apps-pagetree-luxletter-contentFromPid',
+    SvgIconProvider::class,
+    ['source' => 'EXT:luxletter/Resources/Public/Icons/luxletter_doktype.svg']
+);
+
+/**
+ * Add static page TSconfig
+ */
+ExtensionManagementUtility::addPageTSConfig(
+    '@import "EXT:luxletter/Configuration/PageTSConfig/ContentElements.typoscript"'
+);
+
+/**
+ * Add new page doktype
+ */
+if (ConfigurationUtility::isMultiLanguageModeActivated()) {
+    $doktype = ConfigurationUtility::getMultilanguageNewsletterPageDoktype();
+    $GLOBALS['PAGES_TYPES'][$doktype] = [
+        'type' => 'web',
+        'allowedTables' => '*',
+    ];
+    // Allow backend users to drag and drop the new page type:
+    ExtensionManagementUtility::addUserTSConfig(
+        'options.pageTree.doktypesToShowInNewPageDragArea := addToList(' . $doktype . ')'
+    );
+}

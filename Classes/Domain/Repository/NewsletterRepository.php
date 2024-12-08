@@ -26,7 +26,7 @@ class NewsletterRepository extends AbstractRepository
     public function findAllAuthorized(Filter $filter): QueryResultInterface
     {
         $query = $this->createQuery();
-        $query->matching($query->in('configuration.site', $filter->getSitesForFilter()));
+        $query->matching($query->in('configuration.site', $filter->getSitesForFilter(true)));
         if ($filter->isLimitSet()) {
             $query->setLimit($filter->getLimit());
         }

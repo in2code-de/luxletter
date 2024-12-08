@@ -3,7 +3,6 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Utility;
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 class FrontendUtility
@@ -21,7 +20,7 @@ class FrontendUtility
     {
         $action = '';
         $plugin = self::getPluginName();
-        $arguments = GeneralUtility::_GPmerged($plugin);
+        $arguments = $_REQUEST[$plugin] ?? [];
         if (!empty($arguments['action'])) {
             $action = $arguments['action'];
         }
@@ -31,7 +30,7 @@ class FrontendUtility
     public static function getModuleName(): string
     {
         $module = '';
-        $route = GeneralUtility::_GP('route');
+        $route = $_REQUEST['route'] ?? '';
         if (!empty($route)) {
             $module = rtrim(ltrim($route, '/lux/Luxletter'), '/');
         }

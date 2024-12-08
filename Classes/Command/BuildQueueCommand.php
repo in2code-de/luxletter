@@ -12,6 +12,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class BuildQueueCommand extends Command
 {
+    use FakeRequestTrait;
+
     public function configure()
     {
         $this->setDescription('Build a queue to a newsletter. Normally used together with "asynchronousQueueStorage"');
@@ -19,6 +21,7 @@ class BuildQueueCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $this->fakeRequest();
         $newsletterRepository = GeneralUtility::makeInstance(NewsletterRepository::class);
         $newsletter = $newsletterRepository->findOneNotQueued();
 

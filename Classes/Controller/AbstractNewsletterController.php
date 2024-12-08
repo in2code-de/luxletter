@@ -30,46 +30,25 @@ abstract class AbstractNewsletterController extends ActionController
     protected string $wizardUserPreviewFile =
         'EXT:luxletter/Resources/Private/Templates/Newsletter/WizardUserPreview.html';
     protected string $receiverDetailFile = 'EXT:luxletter/Resources/Private/Templates/Newsletter/ReceiverDetail.html';
-
-    protected ModuleTemplateFactory $moduleTemplateFactory;
-    protected IconFactory $iconFactory;
     protected ModuleTemplate $moduleTemplate;
-    protected NewsletterRepository $newsletterRepository;
-    protected UserRepository $userRepository;
-    protected UsergroupRepository $usergroupRepository;
-    protected LogRepository $logRepository;
-    protected ConfigurationRepository $configurationRepository;
-    protected PageRepository $pageRepository;
-    protected LayoutService $layoutService;
-    protected CategoryRepository $categoryRepository;
 
     public function __construct(
-        ModuleTemplateFactory $moduleTemplateFactory,
-        IconFactory $iconFactory,
-        NewsletterRepository $newsletterRepository,
-        UserRepository $userRepository,
-        UsergroupRepository $usergroupRepository,
-        LogRepository $logRepository,
-        ConfigurationRepository $configurationRepository,
-        PageRepository $pageRepository,
-        LayoutService $layoutService,
-        CategoryRepository $categoryRepository
+        readonly protected ModuleTemplateFactory $moduleTemplateFactory,
+        readonly protected IconFactory $iconFactory,
+        readonly protected NewsletterRepository $newsletterRepository,
+        readonly protected UserRepository $userRepository,
+        readonly protected UsergroupRepository $usergroupRepository,
+        readonly protected LogRepository $logRepository,
+        readonly protected ConfigurationRepository $configurationRepository,
+        readonly protected PageRepository $pageRepository,
+        readonly protected LayoutService $layoutService,
+        readonly protected CategoryRepository $categoryRepository
     ) {
-        $this->moduleTemplateFactory = $moduleTemplateFactory;
-        $this->iconFactory = $iconFactory;
-        $this->newsletterRepository = $newsletterRepository;
-        $this->userRepository = $userRepository;
-        $this->usergroupRepository = $usergroupRepository;
-        $this->logRepository = $logRepository;
-        $this->configurationRepository = $configurationRepository;
-        $this->pageRepository = $pageRepository;
-        $this->layoutService = $layoutService;
-        $this->categoryRepository = $categoryRepository;
     }
 
-    public function initializeView($view)
+    public function initializeView()
     {
-        $this->view->assignMultiple([
+        $this->moduleTemplate->assignMultiple([
             'view' => [
                 'controller' => $this->getControllerName(),
                 'action' => $this->getActionName(),
@@ -77,7 +56,7 @@ abstract class AbstractNewsletterController extends ActionController
         ]);
     }
 
-    public function initializeAction()
+    public function initializeAction(): void
     {
         $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
     }
@@ -163,8 +142,7 @@ abstract class AbstractNewsletterController extends ActionController
 
     protected function defaultRendering(): ResponseInterface
     {
-        $this->moduleTemplate->setContent($this->view->render());
-        return $this->htmlResponse($this->moduleTemplate->renderContent());
+        return $this->moduleTemplate->renderResponse($this->getControllerName() . '/' . ucfirst($this->getActionName()));
     }
 
     protected function addDocumentHeader(array $configuration): void

@@ -95,9 +95,21 @@ label {
     background-color: $colorMain;
 }
 
-.badge {
-    background-color: #5a5a5a;
-    color: white;
+.luxletter {
+
+
+
+    .badge {
+        background-color: #5a5a5a;
+        color: white;
+        border-radius: 10px;
+        font-size: 11px;
+        padding: 3px 7px;
+
+        &.badge-primary {
+            background-color: $colorMain;
+        }
+    }
 }
 
 .alert-lux {
@@ -107,10 +119,6 @@ label {
 .form-select.form-control-lg {
     font-size: 0.9375rem;
     padding: 0.5rem 1rem;
-}
-
-.form-control {
-    border: 1px solid $colorGrey;
 }
 
 .progress {
@@ -187,7 +195,7 @@ label {
     margin-top: 15px;
     margin-left: 15px;
     display: inline-block;
-    color: #5A5A5A;
+    color: light-dark($colorGreyDark, #AAAAAA);
 
     &__code {
         list-style-type: none;
@@ -212,8 +220,26 @@ label {
 /**
  * Table classes
  */
+.table-title {
+    background-color: var(--typo3-component-border-color);
+    border-top: 1px solid var(--typo3-component-border-color);
+    border-left: 1px solid var(--typo3-component-border-color);
+    border-right: 1px solid var(--typo3-component-border-color);
+    color: var(--typo3-table-color);
+    font-weight: bold;
+    padding: 10px;
+}
+
 .table {
-    border: 1px solid $colorGreyBright;
+    border: 1px solid var(--typo3-component-border-color);
+}
+
+.luxletter--typo3-12 {
+
+    & .table-title,
+    & .table {
+        --typo3-component-border-color: #dddddd;
+    }
 }
 
 .table-hover > tbody > tr:hover,
@@ -295,7 +321,7 @@ label {
 
     &--addition {
         font-size: 1vw;
-        color: $colorGreyDark;
+        color: light-dark($colorGreyDark, #AAAAAA);
         display: block;
     }
 

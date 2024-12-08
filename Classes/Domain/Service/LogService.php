@@ -3,104 +3,71 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service;
 
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
-use In2code\Luxletter\Domain\Model\Link;
+use Doctrine\DBAL\Exception as ExceptionDbal;
 use In2code\Luxletter\Domain\Model\Log;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\LogRepository;
+use In2code\Luxletter\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
-/**
- * Class LogService
- */
 class LogService
 {
-    /**
-     * @param Newsletter $newsletter
-     * @param User $user
-     * @return void
-     * @throws IllegalObjectTypeException
-     */
     public function logNewsletterDispatch(Newsletter $newsletter, User $user): void
     {
-        $this->log($newsletter, $user, Log::STATUS_DISPATCH);
+        $this->log($newsletter->getUid(), $user->getUid(), Log::STATUS_DISPATCH);
     }
 
-    /**
-     * @param Newsletter $newsletter
-     * @param User $user
-     * @return void
-     * @throws IllegalObjectTypeException
-     */
     public function logNewsletterDispatchFailure(Newsletter $newsletter, User $user, string $message): void
     {
-        $this->log($newsletter, $user, Log::STATUS_DISPATCH_FAILURE, ['exception' => $message]);
+        $this->log($newsletter->getUid(), $user->getUid(), Log::STATUS_DISPATCH_FAILURE, ['exception' => $message]);
     }
 
     /**
      * Log the opening of a newsletter (via tracking pixel or when clicking a link) only once per newsletter and user
      *
-     * @param Newsletter $newsletter
-     * @param User $user
+     * @param int $newsletterIdentifier
+     * @param int $userIdentifier
      * @return void
-     * @throws IllegalObjectTypeException
-     * @throws ExceptionDbalDriver
-     * @throws DBALException
+     * @throws ExceptionDbal
      */
-    public function logNewsletterOpening(Newsletter $newsletter, User $user): void
+    public function logNewsletterOpening(int $newsletterIdentifier, int $userIdentifier): void
     {
         $logRepository = GeneralUtility::makeInstance(LogRepository::class);
-        if ($logRepository->isLogRecordExisting($newsletter, $user, Log::STATUS_NEWSLETTEROPENING) === false) {
-            $this->log($newsletter, $user, Log::STATUS_NEWSLETTEROPENING);
+        if ($logRepository->isLogRecordExisting($newsletterIdentifier, $userIdentifier, Log::STATUS_NEWSLETTEROPENING) === false) {
+            $this->log($newsletterIdentifier, $userIdentifier, Log::STATUS_NEWSLETTEROPENING);
         }
     }
 
     /**
-     * @param Link $link
+     * @param array $link
      * @return void
-     * @throws ExceptionDbalDriver
-     * @throws IllegalObjectTypeException
-     * @throws DBALException
+     * @throws ExceptionDbal
      */
-    public function logLinkOpening(Link $link): void
+    public function logLinkOpening(array $link): void
     {
-        if ($link->getUser() !== null) {
-            $this->logNewsletterOpening($link->getNewsletter(), $link->getUser());
-            $this->log($link->getNewsletter(), $link->getUser(), Log::STATUS_LINKOPENING, ['target' => $link->getTarget()]);
+        if (($link['user'] ?? 0) > 0 && ($link['newsletter'] ?? 0) > 0) {
+            $this->logNewsletterOpening($link['newsletter'], $link['user']);
+            $this->log($link['newsletter'], $link['user'], Log::STATUS_LINKOPENING, ['target' => $link['target']]);
         }
     }
 
-    /**
-     * @param Newsletter $newsletter
-     * @param User $user
-     * @return void
-     * @throws IllegalObjectTypeException
-     */
     public function logUnsubscribe(Newsletter $newsletter, User $user): void
     {
-        $this->log($newsletter, $user, Log::STATUS_UNSUBSCRIBE);
+        $this->log($newsletter->getUid(), $user->getUid(), Log::STATUS_UNSUBSCRIBE);
     }
 
-    /**
-     * @param Newsletter $newsletter
-     * @param User $user
-     * @param int $status
-     * @param array $properties
-     * @return void
-     * @throws IllegalObjectTypeException
-     */
-    protected function log(Newsletter $newsletter, User $user, int $status, array $properties = []): void
+    protected function log(int $newsletterIdentifier, int $userIdentifier, int $status, array $properties = []): void
     {
-        $logRepository = GeneralUtility::makeInstance(LogRepository::class);
-        $log = GeneralUtility::makeInstance(Log::class)
-            ->setStatus($status)
-            ->setProperties($properties)
-            ->setNewsletter($newsletter)
-            ->setUser($user);
-        $logRepository->add($log);
-        $logRepository->persistAll();
+        $queryBuilder = DatabaseUtility::getQueryBuilderForTable(Log::TABLE_NAME);
+        $queryBuilder
+            ->insert(Log::TABLE_NAME)
+            ->values([
+                'status' => $status,
+                'properties' => json_encode($properties),
+                'user' => $userIdentifier,
+                'newsletter' => $newsletterIdentifier,
+            ])
+            ->executeStatement();
     }
 }
