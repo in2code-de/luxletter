@@ -6,6 +6,7 @@ namespace In2code\Luxletter\Domain\Service;
 use Doctrine\DBAL\Exception as ExceptionDbal;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\BackendUserUtility;
+use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
@@ -65,7 +66,7 @@ trait PermissionTrait
      */
     private function isAuthenticatedForRecord(int $identifier, string $table): bool
     {
-        if (BackendUserUtility::isAdministrator()) {
+        if (ConfigurationUtility::isCli() || BackendUserUtility::isAdministrator()) {
             return true;
         }
 

@@ -11,7 +11,6 @@ use In2code\Luxletter\Exception\UnvalidFilenameException;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
 use In2code\Luxletter\Utility\StringUtility;
-use Throwable;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
 
@@ -93,7 +92,6 @@ class LayoutService
      * @return string
      * @throws InvalidConfigurationTypeException
      * @throws MisconfigurationException
-     * @throws RecordInDatabaseNotFoundException
      */
     protected function getPathAndFilenameFromLayoutForSpecificLanguage(
         string $layout,
@@ -101,14 +99,7 @@ class LayoutService
         string $origin
     ): string {
         $languageRepository = GeneralUtility::makeInstance(LanguageRepository::class);
-        try {
-            $isocode = $languageRepository->getIsocodeFromIdentifier($language, $origin);
-        } catch (Throwable $exception) {
-            throw new RecordInDatabaseNotFoundException(
-                'No isocode found found in table sys_language for language with uid ' . $language,
-                1646250413
-            );
-        }
+        $isocode = $languageRepository->getIsocodeFromIdentifier($language, $origin);
         $filename = $this->getLayoutPath() . $layout . '_' . $isocode . '.html';
         if (is_file(GeneralUtility::getFileAbsFileName($filename))) {
             return $filename;

@@ -4,7 +4,6 @@ $linewidth: 3px;
 
 .timeline {
   position: relative;
-  background: $white;
 
   &:before {
     content: '';
@@ -116,10 +115,14 @@ $linewidth: 3px;
   }
 
   &__item {
-    margin: 0 0 1rem 0;
+    margin: 0;
     max-width: 300px;
     padding: 0.5rem;
     position: relative;
+
+    &:not(:last-child) {
+        margin: 0 0 1rem 0;
+    }
 
     &:before {
       content: '';
@@ -134,23 +137,18 @@ $linewidth: 3px;
       left: calc(-#{$bulletsize} - #{$bulletlinespacing});
     }
 
-    &:first-child {
-
-      &:after {
-        content: '';
-        display: block;
-        background-color: $white;
-        position: absolute;
-      }
-    }
-
+    &:first-child,
     &:last-child {
 
-      &:after {
+      &::after {
+        background-color: var(--typo3-component-bg);
         content: '';
         display: block;
-        background-color: $white;
         position: absolute;
+
+        .luxletter--typo3-12 & {
+            background-color: var(--panel-bg);
+        }
       }
     }
   }

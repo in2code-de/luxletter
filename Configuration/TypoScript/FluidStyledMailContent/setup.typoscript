@@ -1,6 +1,6 @@
 # Fluid Styled Mail Content (needs fluid_styled_content loaded before) for rendering content elements for newsletters
 
-[getTSFE() && getTSFE().type == 1562349004]
+[request && traverse(request.getQueryParams(), 'type') == 1562349004]
 lib {
   contentElement {
     templateRootPaths {
@@ -13,22 +13,6 @@ lib {
 
     layoutRootPaths {
       100 = EXT:luxletter/Resources/Private/FluidStyledMailContent/Layouts/
-    }
-  }
-
-  // Use absolute URL for all kind of links within fluidStyledMailContent
-  // (absRefPrefix is also used for absolute images paths - see ext_localconf.php)
-  // Todo: Remove this part when TYPO3 11 support is dropped (fluidStyledMailContent.config.forceAbsoluteUrls=1 is used in TYPO3 12)
-  parseFunc {
-    tags {
-      a.typolink.forceAbsoluteUrl = 1
-      link.typolink.forceAbsoluteUrl = 1
-    }
-  }
-  parseFunc_RTE {
-    tags {
-      a.typolink.forceAbsoluteUrl = 1
-      link.typolink.forceAbsoluteUrl = 1
     }
   }
 }

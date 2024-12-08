@@ -5,31 +5,23 @@ namespace In2code\Luxletter\Events;
 
 final class LuxletterLinkGetHashEvent
 {
-    /**
-     * @var string|null
-     */
-    protected $hash;
+    protected ?string $hash = null;
 
-    /**
-     * @param string|null $hash
-     */
     public function __construct(string $hash = null)
     {
         $this->hash = $hash;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getHash()
+    public function getHash(): ?string
     {
         return $this->hash;
     }
 
-    /**
-     * @param string|null $hash
-     * @return LuxletterLinkGetHashEvent
-     */
+    public function isHashGiven(): bool
+    {
+        return $this->getHash() !== null;
+    }
+
     public function setHash(string $hash = null): LuxletterLinkGetHashEvent
     {
         $this->hash = $hash;

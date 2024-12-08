@@ -32,7 +32,7 @@ class NewsletterController extends AbstractNewsletterController
 
     public function dashboardAction(Filter $filter): ResponseInterface
     {
-        $this->view->assignMultiple([
+        $this->moduleTemplate->assignMultiple([
             'filter' => $filter,
             'newsletters' => $this->newsletterRepository->findAllByFilter($filter->setLimit(10)),
             'groupedLinksByHref' => $this->logRepository->getGroupedLinksByHref($filter->setLimit(8)),
@@ -62,7 +62,7 @@ class NewsletterController extends AbstractNewsletterController
 
     public function listAction(Filter $filter): ResponseInterface
     {
-        $this->view->assignMultiple([
+        $this->moduleTemplate->assignMultiple([
             'filter' => $filter,
             'newsletters' => $this->newsletterRepository->findAllAuthorized($filter),
             'newslettersGrouped' => $this->newsletterRepository->findAllGroupedByCategories($filter),
@@ -86,7 +86,7 @@ class NewsletterController extends AbstractNewsletterController
             throw new AuthenticationFailedException('You are not allowed to see this record', 1709329205);
         }
 
-        $this->view->assignMultiple([
+        $this->moduleTemplate->assignMultiple([
             'newsletter' => $newsletter,
             'configurations' => $this->configurationRepository->findAllAuthorized(),
             'layouts' => $this->layoutService->getLayouts(),
@@ -127,7 +127,7 @@ class NewsletterController extends AbstractNewsletterController
 
     public function newAction(): ResponseInterface
     {
-        $this->view->assignMultiple([
+        $this->moduleTemplate->assignMultiple([
             'configurations' => $this->configurationRepository->findAllAuthorized(),
             'layouts' => $this->layoutService->getLayouts(),
             'newsletterpages' => $this->pageRepository->findAllNewsletterPages(),
@@ -220,7 +220,7 @@ class NewsletterController extends AbstractNewsletterController
     {
         $receiverAnalysisService = GeneralUtility::makeInstance(ReceiverAnalysisService::class);
         $users = $this->userRepository->getUsersByFilter($filter->setLimit(1000));
-        $this->view->assignMultiple(
+        $this->moduleTemplate->assignMultiple(
             [
                 'filter' => $filter,
                 'users' => $users,

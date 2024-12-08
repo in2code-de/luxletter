@@ -362,6 +362,10 @@
 				<source>Please select a newsletter page that should be parsed and then sent</source>
 				<target state="translated">Bitte wähle eine Newsletterseite aus, die geparst und anschließend versendet werden soll</target>
 			</trans-unit>
+			<trans-unit id="module.newsletter.new.field.origin.nonewsletters">
+				<source>Please first create a page of the type "Newsletter" in the page tree.</source>
+				<target state="translated">Bitte zuerst eine Seite vom Typ "Newsletter" im Seitenbaum anlegen.</target>
+			</trans-unit>
 			<trans-unit id="module.newsletter.new.field.testmail">
 				<source>Send a test mail to yourself</source>
 				<target state="translated">Newsletter testweise versenden</target>
@@ -531,6 +535,10 @@
 			<trans-unit id="deleteconfirm">
 				<source>Are you sure to delete this record?</source>
 				<target state="translated">Wollen Sie diesen Datensatz wirklich löschen?</target>
+			</trans-unit>
+			<trans-unit id="deletenewsletter">
+				<source>Deleted newsletter</source>
+				<target state="translated">Gelöschter Newsletter</target>
 			</trans-unit>
 			<trans-unit id="defaultLanguage">
 				<source>Default</source>

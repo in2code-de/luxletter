@@ -11,8 +11,22 @@ call_user_func(
         /**
          * Register plugins
          */
-        ExtensionUtility::registerPlugin('luxletter', 'Fe', $languageFilePrefix . 'flexform.fe');
-        ExtensionUtility::registerPlugin('luxletter', 'Unsubscribe2', $languageFilePrefix . 'flexform.unsubscribe2');
+        ExtensionUtility::registerPlugin(
+            'luxletter',
+            'Fe',
+            $languageFilePrefix . 'flexform.fe',
+            'extension-lux',
+            'plugins',
+            $languageFilePrefix . 'flexform.fe.description'
+        );
+        ExtensionUtility::registerPlugin(
+            'luxletter',
+            'Unsubscribe2',
+            $languageFilePrefix . 'flexform.unsubscribe2',
+            'extension-lux',
+            'plugins',
+            $languageFilePrefix . 'flexform.unsubscribe2.description'
+        );
 
         /**
          * Disable not needed fields in tt_content

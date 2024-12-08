@@ -5,23 +5,19 @@
     <sheets>
         <main>
             <ROOT>
-                <TCEforms>
-                    <sheetTitle>Luxletter</sheetTitle>
-                </TCEforms>
+                <sheetTitle>Luxletter</sheetTitle>
                 <type>array</type>
                 <el>
                     <settings.usergroups>
-                        <TCEforms>
-                            <exclude>1</exclude>
-                            <label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:flexform.unsubscribe2.usergroups</label>
-                            <config>
-                                <type>select</type>
-                                <foreign_table>fe_groups</foreign_table>
-                                <minitems>1</minitems>
-                                <renderType>selectMultipleSideBySide</renderType>
-                                <size>6</size>
-                            </config>
-                        </TCEforms>
+                        <exclude>1</exclude>
+                        <label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:flexform.unsubscribe2.usergroups</label>
+                        <config>
+                            <type>select</type>
+                            <foreign_table>fe_groups</foreign_table>
+                            <minitems>1</minitems>
+                            <renderType>selectMultipleSideBySide</renderType>
+                            <size>6</size>
+                        </config>
                     </settings.usergroups>
                 </el>
             </ROOT>

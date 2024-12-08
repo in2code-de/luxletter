@@ -16,7 +16,6 @@
 .choices.is-open {
     overflow: visible;
 }
-.choices.is-disabled .choices__inner,
 .choices.is-disabled .choices__input {
     background-color: #eaeaea;
     cursor: not-allowed;
@@ -41,7 +40,6 @@
     width: 100%;
     padding: 10px;
     border-bottom: 1px solid #ddd;
-    background-color: #fff;
     margin: 0;
 }
 .choices[data-type*=select-one] .choices__button {
@@ -123,19 +121,7 @@
 }
 
 .choices__inner {
-    display: inline-block;
-    vertical-align: top;
-    width: 100%;
-    background-color: white;
-    padding: 5px 7.5px 0;
-    border: 1px solid rgb(187,187,187);
-    border-radius: 2.5px;
-    font-size: 14px;
-    min-height: 40px;
     overflow: hidden;
-}
-.is-focused .choices__inner, .is-open .choices__inner {
-    border-color: #b7b7b7;
 }
 .is-open .choices__inner {
     border-radius: 2.5px 2.5px 0 0;
@@ -197,25 +183,22 @@
 }
 
 .choices__list--dropdown, .choices__list[aria-expanded] {
-    visibility: hidden;
-    z-index: 1;
-    position: absolute;
-    width: 100%;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    top: 100%;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    border-top: 0;
     margin-top: -1px;
-    border-bottom-left-radius: 2.5px;
-    border-bottom-right-radius: 2.5px;
     overflow: hidden;
-    word-break: break-all;
+    padding-right: 0;
+    position: absolute;
+    top: 100%;
+    visibility: hidden;
+    width: 100%;
     will-change: visibility;
+    word-break: break-all;
+    z-index: 12;
 }
 .is-active.choices__list--dropdown, .is-active.choices__list[aria-expanded] {
     visibility: visible;
-}
-.is-open .choices__list--dropdown, .is-open .choices__list[aria-expanded] {
-    border-color: #b7b7b7;
 }
 .is-flipped .choices__list--dropdown, .is-flipped .choices__list[aria-expanded] {
     top: auto;
@@ -263,7 +246,8 @@
     }
 }
 .choices__list--dropdown .choices__item--selectable.is-highlighted, .choices__list[aria-expanded] .choices__item--selectable.is-highlighted {
-    background-color: #f2f2f2;
+    background-color: $colorMain;
+    color: #fff;
 }
 .choices__list--dropdown .choices__item--selectable.is-highlighted::after, .choices__list[aria-expanded] .choices__item--selectable.is-highlighted::after {
     opacity: 0.5;
@@ -309,13 +293,12 @@
 .choices__input {
     display: inline-block;
     vertical-align: baseline;
-    background-color: white;
-    font-size: 14px;
-    margin-bottom: 5px;
+    background-color: transparent;
+    color: inherit;
     border: 0;
     border-radius: 0;
     max-width: 100%;
-    padding: 4px 0 4px 2px;
+    padding: 0 0 0 2px;
 }
 .choices__input:focus {
     outline: 0;

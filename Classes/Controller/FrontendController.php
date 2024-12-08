@@ -3,8 +3,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
+use Doctrine\DBAL\Exception as ExceptionDbal;
 use Exception;
 use In2code\Luxletter\Domain\Factory\UsergroupFactory;
 use In2code\Luxletter\Domain\Model\Newsletter;
@@ -31,41 +30,27 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExis
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
 class FrontendController extends ActionController
 {
-    protected ?UserRepository $userRepository;
-    protected UsergroupRepository $usergroupRepository;
-    protected ContentRepository $contentRepository;
-    protected LogService $logService;
-    protected UsergroupFactory $usergroupFactory;
-
     public function __construct(
-        UserRepository $userRepository,
-        UsergroupRepository $usergroupRepository,
-        ContentRepository $contentRepository,
-        LogService $logService,
-        UsergroupFactory $usergroupFactory
+        readonly protected UserRepository $userRepository,
+        readonly protected UsergroupRepository $usergroupRepository,
+        readonly protected ContentRepository $contentRepository,
+        readonly protected LogService $logService,
+        readonly protected UsergroupFactory $usergroupFactory
     ) {
-        $this->userRepository = $userRepository;
-        $this->usergroupRepository = $usergroupRepository;
-        $this->contentRepository = $contentRepository;
-        $this->logService = $logService;
-        $this->usergroupFactory = $usergroupFactory;
     }
 
     /**
-     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view (Todo: Param is only needed in TYPO3 11)
      * @return void
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      */
-    public function initializeView($view)
+    public function initializeView()
     {
-        $contentObject = $this->configurationManager->getContentObject();
         $this->view->assignMultiple([
-            'data' => $contentObject->data,
+            'data' => $this->request->getAttribute('currentContentObject')->data,
             'extensionConfiguration' => GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('luxletter'),
         ]);
     }
@@ -98,14 +83,12 @@ class FrontendController extends ActionController
      * @param Newsletter|null $newsletter
      * @param User|null $user
      * @return ResponseInterface
-     * @throws IllegalObjectTypeException
-     * @throws ExceptionDbalDriver
-     * @throws DBALException
+     * @throws ExceptionDbal
      */
     public function trackingPixelAction(Newsletter $newsletter = null, User $user = null): ResponseInterface
     {
         if ($newsletter !== null && $user !== null) {
-            $this->logService->logNewsletterOpening($newsletter, $user);
+            $this->logService->logNewsletterOpening($newsletter->getUid(), $user->getUid());
         }
         $content = base64_decode('R0lGODlhAQABAJAAAP8AAAAAACH5BAUQAAAALAAAAAABAAEAAAICBAEAOw==');
         return $this->htmlResponse($content);
@@ -151,14 +134,10 @@ class FrontendController extends ActionController
      * Use same arguments as from default unsubscribe plugin
      *
      * @return void
-     * @throws ArgumentMissingException
-     * @throws AuthenticationFailedException
-     * @throws MisconfigurationException
-     * @throws UserValuesAreMissingException
      */
     public function initializeUnsubscribe2Action(): void
     {
-        $arguments = GeneralUtility::_GP('tx_luxletter_fe');
+        $arguments = $_REQUEST['tx_luxletter_fe'] ?? null;
         if (is_array($arguments)) {
             $this->request = $this->request->withArguments($arguments);
         }

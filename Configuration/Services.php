@@ -22,7 +22,7 @@ return function (ContainerConfigurator $configurator, ContainerBuilder $containe
     $services = $configurator->services();
 
     if ($containerBuilder->hasDefinition(Dashboard::class)) {
-        $configuration = $services->set('dashboard.widgets.OpenRateWidget')
+        $services->set('dashboard.widgets.OpenRateWidget')
             ->class(DoughnutChartWidget::class)
             ->tag('dashboard.widget', [
                 'identifier' => 'luxletterOpenRate',
@@ -33,16 +33,10 @@ return function (ContainerConfigurator $configurator, ContainerBuilder $containe
                 'height' => 'medium',
                 'width' => 'small',
             ])
-            ->arg('$dataProvider', new Reference(OpenRateDataProvider::class));
-        if ($containerBuilder->hasDefinition(BackendViewFactory::class)) {
-            // TYPO3 12
-            $configuration->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
-        } else {
-            // Todo: Can be removed when TYPO3 11 support will be dropped
-            $configuration->arg('$view', new Reference('dashboard.views.widget'));
-        }
+            ->arg('$dataProvider', new Reference(OpenRateDataProvider::class))
+            ->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
 
-        $configuration = $services->set('dashboard.widgets.ClickRateWidget')
+        $services->set('dashboard.widgets.ClickRateWidget')
             ->class(DoughnutChartWidget::class)
             ->tag('dashboard.widget', [
                 'identifier' => 'luxletterClickRate',
@@ -53,16 +47,10 @@ return function (ContainerConfigurator $configurator, ContainerBuilder $containe
                 'height' => 'medium',
                 'width' => 'small',
             ])
-            ->arg('$dataProvider', new Reference(ClickRateDataProvider::class));
-        if ($containerBuilder->hasDefinition(BackendViewFactory::class)) {
-            // TYPO3 12
-            $configuration->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
-        } else {
-            // Todo: Can be removed when TYPO3 11 support will be dropped
-            $configuration->arg('$view', new Reference('dashboard.views.widget'));
-        }
+            ->arg('$dataProvider', new Reference(ClickRateDataProvider::class))
+            ->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
 
-        $configuration = $services->set('dashboard.widgets.UnsubscribeRateWidget')
+        $services->set('dashboard.widgets.UnsubscribeRateWidget')
             ->class(DoughnutChartWidget::class)
             ->tag('dashboard.widget', [
                 'identifier' => 'luxletterUnsubscribeRate',
@@ -73,14 +61,8 @@ return function (ContainerConfigurator $configurator, ContainerBuilder $containe
                 'height' => 'medium',
                 'width' => 'small',
             ])
-            ->arg('$dataProvider', new Reference(UnsubscribeRateDataProvider::class));
-        if ($containerBuilder->hasDefinition(BackendViewFactory::class)) {
-            // TYPO3 12
-            $configuration->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
-        } else {
-            // Todo: Can be removed when TYPO3 11 support will be dropped
-            $configuration->arg('$view', new Reference('dashboard.views.widget'));
-        }
+            ->arg('$dataProvider', new Reference(UnsubscribeRateDataProvider::class))
+            ->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
 
         $configuration = $services->set('dashboard.widgets.ReceiverWidget')
             ->class(NumberWithIconWidget::class)
@@ -97,13 +79,13 @@ return function (ContainerConfigurator $configurator, ContainerBuilder $containe
                 'icon' => 'luxletter-widget-receiver',
             ])
             ->arg('$dataProvider', new Reference(ReceiverDataProvider::class))
-            ->arg('$view', new Reference('dashboard.views.widget'));
-        if ($containerBuilder->hasDefinition(BackendViewFactory::class)) {
-            // TYPO3 12
-            $configuration->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
+            ->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
+        // Todo: Can be removed when TYPO3 12 support is dropped
+        if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() === 12) {
+            $configuration->arg('$view', new Reference('dashboard.views.widget'));
         }
 
-        $configuration = $services->set('dashboard.widgets.NewsletterWidget')
+        $services->set('dashboard.widgets.NewsletterWidget')
             ->class(NumberWithIconWidget::class)
             ->tag('dashboard.widget', [
                 'identifier' => 'luxletterNewsletter',
@@ -118,13 +100,9 @@ return function (ContainerConfigurator $configurator, ContainerBuilder $containe
                 'icon' => 'luxletter-widget-receiver',
             ])
             ->arg('$dataProvider', new Reference(NewsletterDataProvider::class))
-            ->arg('$view', new Reference('dashboard.views.widget'));
-        if ($containerBuilder->hasDefinition(BackendViewFactory::class)) {
-            // TYPO3 12
-            $configuration->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
-        }
+            ->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
 
-        $configuration = $services->set('dashboard.widgets.LastNewslettersOpenRateWidget')
+        $services->set('dashboard.widgets.LastNewslettersOpenRateWidget')
             ->class(BarChartWidget::class)
             ->tag('dashboard.widget', [
                 'identifier' => 'luxletterLastNewslettersOpenRate',
@@ -135,16 +113,10 @@ return function (ContainerConfigurator $configurator, ContainerBuilder $containe
                 'height' => 'medium',
                 'width' => 'medium',
             ])
-            ->arg('$dataProvider', new Reference(LastNewslettersOpenRateDataProvider::class));
-        if ($containerBuilder->hasDefinition(BackendViewFactory::class)) {
-            // TYPO3 12
-            $configuration->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
-        } else {
-            // Todo: Can be removed when TYPO3 11 support will be dropped
-            $configuration->arg('$view', new Reference('dashboard.views.widget'));
-        }
+            ->arg('$dataProvider', new Reference(LastNewslettersOpenRateDataProvider::class))
+            ->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
 
-        $configuration = $services->set('dashboard.widgets.LastNewslettersClickRateWidget')
+        $services->set('dashboard.widgets.LastNewslettersClickRateWidget')
             ->class(BarChartWidget::class)
             ->tag('dashboard.widget', [
                 'identifier' => 'luxletterLastNewslettersClickRate',
@@ -155,13 +127,7 @@ return function (ContainerConfigurator $configurator, ContainerBuilder $containe
                 'height' => 'medium',
                 'width' => 'medium',
             ])
-            ->arg('$dataProvider', new Reference(LastNewslettersClickRateDataProvider::class));
-        if ($containerBuilder->hasDefinition(BackendViewFactory::class)) {
-            // TYPO3 12
-            $configuration->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
-        } else {
-            // Todo: Can be removed when TYPO3 11 support will be dropped
-            $configuration->arg('$view', new Reference('dashboard.views.widget'));
-        }
+            ->arg('$dataProvider', new Reference(LastNewslettersClickRateDataProvider::class))
+            ->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
     }
 };

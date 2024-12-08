@@ -3,15 +3,32 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Repository;
 
+use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Exception\ArgumentMissingException;
+use In2code\Luxletter\Utility\DatabaseUtility;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
-/**
- * Class LinkRepository
- */
 class LinkRepository extends AbstractRepository
 {
+    public function findOneByHashRaw(string $hash): array
+    {
+        $queryBuilder = DatabaseUtility::getQueryBuilderForTable(Link::TABLE_NAME);
+        $row = $queryBuilder
+            ->select('*')
+            ->from(Link::TABLE_NAME)
+            ->where(
+                $queryBuilder->expr()->eq('hash', $queryBuilder->createNamedParameter($hash, Connection::PARAM_STR))
+            )
+            ->orderBy('uid', 'desc')
+            ->executeQuery()
+            ->fetchAssociative();
+        if ($row === false) {
+            $row = [];
+        }
+        return $row;
+    }
     /**
      * @param string $hash
      * @return bool

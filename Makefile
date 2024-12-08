@@ -33,7 +33,7 @@ destroy: stop
 	echo "$(EMOJI_litter) Removing the project"
 	docker-compose down -v --remove-orphans
 	git clean -dfx
-	make link-compose-file
+	make .link-compose-file
 
 ## Starts docker-compose up -d
 start:
@@ -67,19 +67,14 @@ composer-install:
 	docker-compose exec php composer install
 
 ## Create necessary directories
-create-dirs:
+.create-dirs:
 	echo "$(EMOJI_dividers) Creating required directories"
 	mkdir -p $(TYPO3_CACHE_DIR)
 	mkdir -p $(SQLDUMPSDIR)
 	mkdir -p $(WEBROOT)/$(TYPO3_CACHE_DIR)
 
-## Starts composer-install
-composer-install-production:
-	echo "$(EMOJI_package) Installing composer dependencies (without dev)"
-	docker-compose exec php composer install --no-dev -ao
-
 ## Install mkcert on this computer, skips installation if already present
-install-mkcert:
+.install-mkcert:
 	if [[ "$$OSTYPE" == "linux-gnu" ]]; then \
 		if [[ "$$(command -v certutil > /dev/null; echo $$?)" -ne 0 ]]; then sudo apt install libnss3-tools; fi; \
 		if [[ "$$(command -v mkcert > /dev/null; echo $$?)" -ne 0 ]]; then sudo curl -L https://github.com/FiloSottile/mkcert/releases/download/v1.4.1/mkcert-v1.4.1-linux-amd64 -o /usr/local/bin/mkcert; sudo chmod +x /usr/local/bin/mkcert; fi; \
@@ -91,7 +86,7 @@ install-mkcert:
 	mkcert -install > /dev/null
 
 ## Create SSL certificates for dinghy and starting project
-create-certificate: install-mkcert
+.create-certificate: .install-mkcert
 	echo "$(EMOJI_secure) Creating SSL certificates for dinghy http proxy"
 	mkdir -p $(HOME)/.dinghy/certs/
 	PROJECT=$$(echo "$${PWD##*/}" | tr -d '.'); \
@@ -100,7 +95,7 @@ create-certificate: install-mkcert
 	if [[ ! -f $(HOME)/.dinghy/certs/${MAIL}.key ]]; then mkcert -cert-file $(HOME)/.dinghy/certs/${MAIL}.crt -key-file $(HOME)/.dinghy/certs/${MAIL}.key ${MAIL}; fi;
 
 ## Choose the right docker-compose file for your environment
-link-compose-file:
+.link-compose-file:
 	echo "$(EMOJI_triangular_ruler) Linking the OS specific compose file"
 ifeq ($(shell uname -s), Darwin)
 	ln -snf .project/docker/docker-compose.darwin.yml docker-compose.yml
@@ -122,14 +117,14 @@ npm-stop:
 	docker-compose stop node
 
 ## Initialize the docker setup
-init-docker: create-dirs create-certificate
+.init-docker: .create-dirs .create-certificate
 	echo "$(EMOJI_rocket) Initializing docker environment"
 	docker-compose pull
 	docker-compose up -d --build
 	docker-compose exec -u root php chown -R app:app /app/$(WEBROOT)/$(TYPO3_CACHE_DIR)/;
 
 ## Copies the TYPO3 site configuration
-typo3-add-site:
+.typo3-add-site:
 	echo "$(EMOJI_triangular_flag) Copying the TYPO3 site configuration"
 	mkdir -p config/sites/main/
 	cp -f .project/TYPO3/host1.yaml config/sites/main/config.yaml
@@ -137,7 +132,7 @@ typo3-add-site:
 	cp -f .project/TYPO3/host2.yaml config/sites/second/config.yaml
 
 ## Copies the Additional/DockerConfiguration.php to the correct directory
-typo3-add-dockerconfig:
+.typo3-add-dockerconfig:
 	echo "$(EMOJI_plug) Copying the docker specific configuration for TYPO3"
 	mkdir -p ./config/system
 	cp -f .project/TYPO3/additional.php ./config/system/additional.php
@@ -148,7 +143,7 @@ typo3-comparedb:
 	docker-compose exec php ./.Build/bin/typo3 database:updateschema
 
 ## Starts the TYPO3 setup process
-typo3-setupinstall:
+.typo3-setupinstall:
 	echo "$(EMOJI_upright) Running install:setup"
 	docker-compose exec php ./.Build/bin/typo3 install:setup
 
@@ -164,13 +159,13 @@ lfs-fetch:
 	git lfs checkout
 
 ## Provision fileadmin with necessary files
-provision-fileadmin:
+.provision-fileadmin:
 	echo "$(EMOJI_package) Provision fileadmin with necessary files from git lfs"
 	cd .Build/public; \
 	tar xvfz ../../.project/data/fileadmin.tar.gz
 
 ## To start an existing project incl. rsync from fileadmin, uploads and database dump
-install-project: lfs-fetch link-compose-file destroy add-hosts-entry init-docker .fix-mount-perms composer-install typo3-add-site typo3-add-dockerconfig typo3-setupinstall provision-fileadmin mysql-restore typo3-clearcache typo3-comparedb
+install-project: lfs-fetch .link-compose-file destroy .add-hosts-entry .init-docker .fix-mount-perms composer-install .typo3-add-site .typo3-add-dockerconfig .provision-fileadmin mysql-restore typo3-comparedb typo3-clearcache .typo3-setupinstall
 	echo "---------------------"
 	echo ""
 	echo "The project is online $(EMOJI_thumbsup)"
@@ -191,12 +186,9 @@ urls:
 	printf "  %-$${LONGEST}s %s\n" "Frontend2:" "https://$(HOST2)/"; \
 	printf "  %-$${LONGEST}s %s\n" "Backend:" "https://$(HOST)/typo3/"; \
 	printf "  %-$${LONGEST}s %s\n" "Mail:" "https://$(MAIL)/"; \
-	for service in $$SERVICES; do \
-		printf "  %-$${LONGEST}s %s\n" "$$service:" "https://$$service.$$PROJECT.docker/"; \
-	done;
 
 ## Create the hosts entry for the custom project URL (non-dinghy convention)
-add-hosts-entry:
+.add-hosts-entry:
 	echo "$(EMOJI_monkey) Creating Hosts Entry (if not set yet)"
 	SERVICES=$$(command -v getent > /dev/null && echo "getent ahostsv4" || echo "dscacheutil -q host -a name"); \
 	if [ ! "$$($$SERVICES $(HOST) | grep 127.0.0.1 > /dev/null; echo $$?)" -eq 0 ]; then sudo bash -c 'echo "127.0.0.1 $(HOST)" >> /etc/hosts; echo "Entry was added"'; else echo 'Entry already exists'; fi;\

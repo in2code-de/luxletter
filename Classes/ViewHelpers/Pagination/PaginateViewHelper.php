@@ -114,7 +114,7 @@ class PaginateViewHelper extends AbstractViewHelper
         $pluginName = $renderingContext->getRequest()->getPluginName();
         $extensionService = GeneralUtility::makeInstance(ExtensionService::class);
         $pluginNamespace = $extensionService->getPluginNamespace($extensionName, $pluginName);
-        $variables = GeneralUtility::_GP($pluginNamespace);
+        $variables = $_REQUEST[$pluginNamespace] ?? [];
         if ($variables !== null) {
             if (!empty($variables[self::getName($arguments)]['currentPage'])) {
                 return (int)$variables[self::getName($arguments)]['currentPage'];

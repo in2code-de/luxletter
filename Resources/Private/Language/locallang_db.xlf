@@ -168,6 +168,9 @@
 			<trans-unit id="flexform.fe">
 				<source>LUXletter: Quick unsubscribe</source>
 			</trans-unit>
+			<trans-unit id="flexform.fe.description">
+				<source>A simple plugin that removes the LUXletter category from Frontend User when it's used via Newsletter unsubscribe link</source>
+			</trans-unit>
 			<trans-unit id="flexform.fe.removeusergroup">
 				<source>Select usergroup which should be removed on unsubscribe</source>
 			</trans-unit>
@@ -177,6 +180,9 @@
 
 			<trans-unit id="flexform.unsubscribe2">
 				<source>LUXletter: Unsubscribe with category selection</source>
+			</trans-unit>
+			<trans-unit id="flexform.unsubscribe2.description">
+				<source>Show some categories for the unsubscribers that can be selected or removed when clicking the unsubscribe link in the Newsletter</source>
 			</trans-unit>
 			<trans-unit id="flexform.unsubscribe2.usergroups">
 				<source>Usergroups that can be added or removed by the user</source>

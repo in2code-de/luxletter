@@ -121,7 +121,12 @@
                     </f:then>
                     <f:else>
                         <div>
-                            <f:form.select property="receivers" id="luxletter-receivers-dropdown" multiple="multiple" data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'users'}">
+                            <f:form.select
+                                property="receivers"
+                                id="luxletter-receivers-dropdown"
+                                multiple="multiple"
+                                data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'users'}"
+                                class="form-control form-select">
                                 <f:for each="{usergroups}" as="title" key="identifier" iteration="iteration">
                                     <f:form.select.option value="{identifier}">{title}</f:form.select.option>
                                 </f:for>
@@ -169,17 +174,27 @@
                 </label>
                 <luxletter:condition.isMultiLanguageModeActivated>
                     <f:then>
-                        <f:form.select
-                            class="form-control form-select input-lg"
-                            property="origin"
-                            id="origin"
-                            options="{newsletterpages}"
-                            data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'newsletter'}"
-                            prependOptionValue=""
-                            prependOptionLabel="Please choose..."/>
-                        <span class="help-block">
-                            <f:translate key="module.newsletter.new.field.origin.description_alternative">Choose an origin</f:translate>
-                        </span>
+                        <f:if condition="{newsletterpages}">
+                            <f:then>
+                                <f:form.select
+                                    class="form-control form-select input-lg"
+                                    property="origin"
+                                    id="origin"
+                                    options="{newsletterpages}"
+                                    data="{luxletter-mandatory:'1',luxletter-wizardpreviewevent:'newsletter'}"
+                                    prependOptionValue=""
+                                    prependOptionLabel="Please choose..."/>
+                                <span class="help-block">
+                                    <f:translate key="module.newsletter.new.field.origin.description_alternative">Choose an origin</f:translate>
+                                </span>
+                            </f:then>
+                            <f:else>
+                                <p class="alert alert-primary">
+                                    <f:translate key="module.newsletter.new.field.origin.nonewsletters">No newsletter pages</f:translate>
+                                </p>
+                            </f:else>
+                        </f:if>
+
                     </f:then>
                     <f:else>
                         <f:form.textfield

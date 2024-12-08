@@ -1,4 +1,4 @@
-<f:layout name="Backend"/>
+<f:layout name="BackendLuxLetter"/>
 
 
 <f:section name="content">
@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <f:render partial="Miscellaneous/FlashMessages" arguments="{_all}"/>
+    <f:render partial="Miscellaneous/FlashMessagesLuxLetter" arguments="{_all}"/>
 
     <f:if condition="{newsletters}">
         <f:then>
@@ -33,7 +33,7 @@
                     <luxletter:pagination.paginate objects="{newslettersGrouped}" as="newslettersGroupedPages" itemsPerPage="10">
                         <f:for each="{newslettersGroupedPages.paginator.paginatedItems}" as="newslettersGroupedPage" iteration="iteration" key="categoryLabel">
                             <div class="recordlist my-4">
-                                <div style="background-color: #dddddd; border-top: 1px solid #cccccc; border-left: 1px solid #cccccc; border-right: 1px solid #cccccc; color: #5a5a5a; font-weight: bold; padding: 10px;">
+                                <div class="table-title">
                                     {categoryLabel} ({newslettersGroupedPage -> f:count()})
                                 </div>
                                 <div class="table-fit mb-0">
@@ -58,7 +58,7 @@
                             <f:translate key="module.newsletter.list.norecordsfoundfiltered">No newsletters found</f:translate>
                         </h4>
                         <p>
-                            <f:link.action action="resetFilter" arguments="{redirectAction:view.action}">
+                            <f:link.action action="resetFilter" arguments="{redirectAction:view.action}" class="btn btn-warning" style="text-decoration:none;">
                                 <f:translate key="module.newsletter.list.filter.reset">reset</f:translate>
                             </f:link.action>
                         </p>

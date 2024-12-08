@@ -3,10 +3,8 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Middleware;
 
-use Doctrine\DBAL\DBALException;
-use Doctrine\DBAL\Driver\Exception as ExceptionDbalDriver;
+use Doctrine\DBAL\Exception as ExceptionDbal;
 use In2code\Lux\Utility\CookieUtility;
-use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Domain\Repository\LinkRepository;
 use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Events\LuxletterLinkGetHashEvent;
@@ -19,9 +17,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use TYPO3\CMS\Core\Http\RedirectResponse;
-use TYPO3\CMS\Core\Package\Exception;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Core\Package\Exception as ExceptionPackage;
 
 /**
  * Class LuxletterLink
@@ -29,41 +25,31 @@ use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
  */
 class LuxletterLink implements MiddlewareInterface
 {
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(EventDispatcherInterface $eventDispatcher)
-    {
-        $this->eventDispatcher = $eventDispatcher;
+    public function __construct(
+        readonly private EventDispatcherInterface $eventDispatcher,
+        readonly private LinkRepository $linkRepository,
+        readonly private LogService $logService
+    ) {
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param RequestHandlerInterface $handler
      * @return ResponseInterface
-     * @throws Exception
-     * @throws IllegalObjectTypeException
-     * @throws DBALException
-     * @throws ExceptionDbalDriver
+     * @throws ExceptionPackage
+     * @throws ExceptionDbal
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         if ($this->isLuxletterLink()) {
-            $linkRepository = GeneralUtility::makeInstance(LinkRepository::class);
-            /** @var Link $link */
-            $link = $linkRepository->findOneByHash($this->getHash());
-            if ($link !== null) {
+            $link = $this->linkRepository->findOneByHashRaw($this->getHash());
+            if ($link !== []) {
                 /** @var LuxletterLinkProcessEvent $event */
-                $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
-                    LuxletterLinkProcessEvent::class,
-                    $link,
-                    $request,
-                    $handler
-                ));
+                $event = $this->eventDispatcher->dispatch(new LuxletterLinkProcessEvent($link, $request, $handler));
                 $link = $event->getLink();
                 $this->luxIdentification($link);
-                $logService = GeneralUtility::makeInstance(LogService::class);
-                $logService->logLinkOpening($link);
-                return new RedirectResponse($link->getTarget(), 302);
+                $this->logService->logLinkOpening($link);
+                return new RedirectResponse($link['target'], 302);
             }
         }
         return $handler->handle($request);
@@ -71,34 +57,32 @@ class LuxletterLink implements MiddlewareInterface
 
     protected function isLuxletterLink(): bool
     {
-        return $this->getHash() !== null;
+        /** @var LuxletterLinkGetHashEvent $event */
+        $event = $this->eventDispatcher->dispatch(new LuxletterLinkGetHashEvent($_REQUEST['luxletterlink'] ?? null));
+        return $event->isHashGiven();
     }
 
     protected function getHash(): ?string
     {
-        $hash = GeneralUtility::_GP('luxletterlink');
         /** @var LuxletterLinkGetHashEvent $event */
-        $event = $this->eventDispatcher->dispatch(
-            GeneralUtility::makeInstance(LuxletterLinkGetHashEvent::class, $hash)
-        );
+        $event = $this->eventDispatcher->dispatch(new LuxletterLinkGetHashEvent($_REQUEST['luxletterlink'] ?? null));
         return $event->getHash();
     }
 
     /**
      * Identification of user in EXT:lux: Set a session cookie that can be removed once it was read by lux
      *
-     * @param Link $link
+     * @param array $link
      * @return void
-     * @throws Exception
+     * @throws ExceptionPackage
      */
-    protected function luxIdentification(Link $link): void
+    protected function luxIdentification(array $link): void
     {
         /** @var LuxletterLinkLuxIdentificationEvent $event */
-        $event = $this->eventDispatcher->dispatch(
-            GeneralUtility::makeInstance(LuxletterLinkLuxIdentificationEvent::class, $link)
-        );
+        $event = $this->eventDispatcher->dispatch(new LuxletterLinkLuxIdentificationEvent($link));
         if (ExtensionUtility::isLuxAvailable() && $event->isIdentification()) {
-            CookieUtility::setCookie('luxletterlinkhash', $link->getHash());
+            $link = $event->getLink();
+            CookieUtility::setCookie('luxletterlinkhash', $link['hash']);
         }
     }
 }

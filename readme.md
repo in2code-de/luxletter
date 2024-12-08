@@ -19,7 +19,7 @@ it.
 ### The upside
 
 * A useful and nice **dashboard** shows you the relevant information in the backend
-* Modern newsletter extension for TYPO3 11 or 12
+* Modern newsletter extension for TYPO3 12 or 13
 * Tracking of clicks via **PSR-15 interface** in TYPO3
 * Sending mails in queue via **symfony command controller**
 * Records for **fe_groups** (and there related fe_users) are used to send mails to
@@ -82,7 +82,7 @@ See the full [documentation](Documentation/Index.md) (installation, configuratio
 
 ## Technical requirements
 
-* TYPO3 11 or 12 LTS is the basic CMS for this newsletter tool.
+* TYPO3 12 or 13 LTS is the basic CMS for this newsletter tool.
 * EXT:lux is **not needed** to run luxletter but both extensions can work together to show more relevant information.
 * This extension needs to be **installed with composer** (classic installation could work but is not supported and tested).
 * fe_users in fe_groups is used to send newsletter emails to.

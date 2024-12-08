@@ -14,7 +14,7 @@ composer require "in2code/luxletter"
 
 **Note:** TYPO3 in composer mode is needed
 
-TYPO3 11.5 or 12.4 is required. The free extension lux can be also installed for more analysis but is not necessary.
+TYPO3 12.4 or 13.4 is required. The free extension lux can be also installed for more analysis but is not necessary.
 
 
 ### Basic settings in extension configuration
@@ -68,14 +68,12 @@ A sender configuration can be added via list module in every folder page in back
 
 ### TypoScript
 
-Basicly there are two different TypoScripts that should be included in static templates in your root template
+Basically there are two different TypoScripts from LUXletter. One should be included manually in static templates in
+your root template:
 
-* Static template `Basic TypoScript` must be included for basic settings
-* In addition `FluidStyledMailContent` static template can also be added for rendering content in an email way (with html from the hell for outlook & co.)
+* `FluidStyledMailContent` static template helps to render content in a way email needs (with html from the hell for outlook & co.)
 
 <img src="../Images/documentation_installation_statictyposcript.png" width="800" alt="add static typoscript" />
-
-**Important** Please do not include those templates in an extension template deep in your website but on the root template. Otherwise the backend module can't read the TypoScript.
 
 #### Basic
 

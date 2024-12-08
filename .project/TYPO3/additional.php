@@ -19,6 +19,38 @@ $additional = [
             ],
         ],
     ],
+    'EXTENSIONS' => [
+        'lux' => [
+            'anonymizeIp' => '1',
+            'categoryScoringAddDownload' => '20',
+            'categoryScoringAddNewsVisit' => '10',
+            'categoryScoringAddPageVisit' => '10',
+            'categoryScoringLinkListenerClick' => '20',
+            'disableAnalysisModule' => '0',
+            'disableCkEditorConfiguration' => '0',
+            'disableIpLogging' => '0',
+            'disableLeadModule' => '0',
+            'disablePageOverview' => '0',
+            'disableWorkflowModule' => '0',
+            'enableExceptionLogging' => '1',
+            'leadImageFromExternalSources' => 'all',
+            'pageOverviewView' => 'analysis',
+            'scoringCalculation' => '(10 * numberOfSiteVisits) + (1 * numberOfPageVisits) + (20 * downloads) - (1 * lastVisitDaysAgo)',
+            'showRenderTimes' => '1',
+            'useCacheLayer' => '0',
+        ],
+        'luxletter' => [
+            'addTypeNumToNumberLocation' => '1562349004',
+            'addUnsubscribeUrlToMailHeader' => '1',
+            'asynchronousQueueStorage' => '0',
+            'embedImagesInNewsletter' => '1',
+            'limitToContext' => '',
+            'multiLanguageMode' => '1',
+            'multiLanguageNewsletterPageDoktype' => '11',
+            'receiverAction' => '1',
+            'rewriteLinksInNewsletter' => '1',
+        ],
+    ],
     'FE' => [
         'cacheHash' => [
             'enforceValidation' => true,
@@ -38,6 +70,7 @@ $additional = [
                 'msclkid',
             ],
         ],
+        'passwordPolicy' => 'simpleLuxletter',
     ],
     'GFX' => [
         'colorspace' => 'sRGB',
@@ -70,3 +103,19 @@ $additional = [
     ]
 ];
 $GLOBALS['TYPO3_CONF_VARS'] = array_replace_recursive($GLOBALS['TYPO3_CONF_VARS'], $additional);
+
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['passwordPolicies'] = [
+    'simpleLuxletter' => [
+        'validators' => [
+            \TYPO3\CMS\Core\PasswordPolicy\Validator\CorePasswordValidator::class => [
+                'options' => [
+                    'minimumLength' => 3,
+                    'upperCaseCharacterRequired' => false,
+                    'lowerCaseCharacterRequired' => false,
+                    'digitCharacterRequired' => false,
+                    'specialCharacterRequired' => false,
+                ],
+            ],
+        ],
+    ],
+];
