@@ -200,4 +200,9 @@ class ConfigurationUtility
     {
         return (new Typo3Version())->getMajorVersion() === 12;
     }
+
+    public static function isCli(): bool
+    {
+        return Environment::isCli();
+    }
 }

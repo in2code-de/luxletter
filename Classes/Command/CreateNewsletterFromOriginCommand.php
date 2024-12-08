@@ -53,6 +53,7 @@ class CreateNewsletterFromOriginCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->fakeRequest();
+        /** @var NewsletterFactory $newsletterFactory */
         $newsletterFactory = GeneralUtility::makeInstance(NewsletterFactory::class);
         $newsletter = $newsletterFactory->get(
             $input->getArgument('title'),
@@ -69,6 +70,7 @@ class CreateNewsletterFromOriginCommand extends Command
         $output->writeln('Newsletter with uid ' . $newsletter->getUid() . ' created');
 
         if (ConfigurationUtility::isAsynchronousQueueStorageActivated() === false) {
+            /** @var QueueService $queueService */
             $queueService = GeneralUtility::makeInstance(QueueService::class);
             $queuedAmount = $queueService->addMailReceiversToQueue($newsletter, (int)$input->getArgument('language'));
             $output->writeln('Added ' . $queuedAmount . ' queue records');
