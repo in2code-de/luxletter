@@ -8,10 +8,10 @@ use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\BackendUserUtility;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use In2code\Luxletter\Utility\DatabaseUtility;
-use PDO;
 use Throwable;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Utility\MathUtility;
 
 class PageRepository
@@ -74,11 +74,11 @@ class PageRepository
                 ->where(
                     $queryBuilder->expr()->eq(
                         $fieldname,
-                        $queryBuilder->createNamedParameter($pageIdentifier, PDO::PARAM_INT)
+                        $queryBuilder->createNamedParameter($pageIdentifier, Connection::PARAM_INT)
                     ),
                     $queryBuilder->expr()->eq(
                         'sys_language_uid',
-                        $queryBuilder->createNamedParameter($language, PDO::PARAM_INT)
+                        $queryBuilder->createNamedParameter($language, Connection::PARAM_INT)
                     )
                 )
                 ->executeQuery()
