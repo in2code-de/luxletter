@@ -134,14 +134,10 @@ class FrontendController extends ActionController
      * Use same arguments as from default unsubscribe plugin
      *
      * @return void
-     * @throws ArgumentMissingException
-     * @throws AuthenticationFailedException
-     * @throws MisconfigurationException
-     * @throws UserValuesAreMissingException
      */
     public function initializeUnsubscribe2Action(): void
     {
-        $arguments = $_REQUEST['tx_luxletter_fe'] ?? [];
+        $arguments = $_REQUEST['tx_luxletter_fe'] ?? null;
         if (is_array($arguments)) {
             $this->request = $this->request->withArguments($arguments);
         }
