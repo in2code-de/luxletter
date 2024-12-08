@@ -7,8 +7,8 @@ use TYPO3\CMS\Core\Core\SystemEnvironmentBuilder;
 use TYPO3\CMS\Core\Http\ServerRequest;
 
 /**
- * For whatever reason it seems not possible to create an instance of an extbase repository in a symfony command
- * in TYPO3 12. So now we have to fake a request.
+ * It is not possible to create an instance of an extbase repository in a symfony command anymore in TYPO3 12 or newer
+ * So we have to fake a request, to get this running again.
  */
 trait FakeRequestTrait
 {
