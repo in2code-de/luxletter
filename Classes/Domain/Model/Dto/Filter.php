@@ -236,11 +236,12 @@ class Filter
     /**
      * Always return given site or all available sites, so this can be always used in sql queries even for admins
      *
+     * @param bool $allAvailableSites If true, don't look into filter settings
      * @return array
      */
-    public function getSitesForFilter(): array
+    public function getSitesForFilter(bool $allAvailableSites = false): array
     {
-        if ($this->isSiteSet()) {
+        if ($allAvailableSites === false && $this->isSiteSet()) {
             return [$this->getSite()];
         }
         return array_merge(array_keys($this->getAllowedSites()), ['']);
