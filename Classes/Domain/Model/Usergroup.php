@@ -17,7 +17,7 @@ class Usergroup extends AbstractEntity
     /**
      * @var ObjectStorage<Usergroup>
      */
-    protected ObjectStorage $subgroup;
+    protected ?ObjectStorage $subgroup = null;
 
     public function __construct(string $title = '')
     {
@@ -67,6 +67,9 @@ class Usergroup extends AbstractEntity
 
     public function getSubgroup(): ObjectStorage
     {
+        if ($this->subgroup === null) {
+            $this->subgroup = new ObjectStorage();
+        }
         return $this->subgroup;
     }
 

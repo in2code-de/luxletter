@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                                      |
 |------------|------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 27.0.1     | 2024-12-12 | Bugfix  | Prevent type exception in UserGroup model                                                                                                                                                        |
 | 27.0.0     | 2024-12-08 | Task    | Support TYPO3 13 (and 12 and drop support for 11), some small bugfixes                                                                                                                           |
 | 26.3.1     | 2024-10-16 | Bugfix  | Show correct number of links in dashboard, fix newsletter filter by usergroup                                                                                                                    |
 | 26.3.0     | 2024-10-11 | Feature | Increase number of frontend groups options when searching for a string when adding a new newsletter in backend module                                                                            |
