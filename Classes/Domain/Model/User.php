@@ -35,6 +35,7 @@ class User extends AbstractEntity
     protected ?DateTime $lastlogin = null;
     protected ?DateTime $crdate = null;
     protected int $luxletterLanguage = 0;
+    protected int $gender = 99;
 
     /**
      * @var ObjectStorage<Usergroup>
@@ -350,6 +351,24 @@ class User extends AbstractEntity
     public function setLuxletterLanguage(int $luxletterLanguage): User
     {
         $this->luxletterLanguage = $luxletterLanguage;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGender(): int
+    {
+        return $this->gender;
+    }
+
+    /**
+     * @param int $gender
+     * @return User
+     */
+    public function setGender(int $gender): User
+    {
+        $this->gender = $gender;
         return $this;
     }
 

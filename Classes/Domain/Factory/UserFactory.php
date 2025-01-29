@@ -32,6 +32,7 @@ class UserFactory
      * @var array
      */
     protected static $dummyProperties = [
+        'gender' => 0,
         'title' => 'Prof. Dr.',
         'firstName' => 'Max',
         'lastName' => 'Muster',
