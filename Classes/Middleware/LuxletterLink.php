@@ -4,13 +4,11 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Middleware;
 
 use Doctrine\DBAL\Exception as ExceptionDbal;
-use In2code\Lux\Utility\CookieUtility;
 use In2code\Luxletter\Domain\Repository\LinkRepository;
 use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Events\LuxletterLinkGetHashEvent;
 use In2code\Luxletter\Events\LuxletterLinkLuxIdentificationEvent;
 use In2code\Luxletter\Events\LuxletterLinkProcessEvent;
-use In2code\Luxletter\Utility\ExtensionUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -47,7 +45,7 @@ class LuxletterLink implements MiddlewareInterface
                 /** @var LuxletterLinkProcessEvent $event */
                 $event = $this->eventDispatcher->dispatch(new LuxletterLinkProcessEvent($link, $request, $handler));
                 $link = $event->getLink();
-                $this->luxIdentification($link);
+                $this->eventDispatcher->dispatch(new LuxletterLinkLuxIdentificationEvent($link));
                 $this->logService->logLinkOpening($link);
                 return new RedirectResponse($link['target'], 302);
             }
@@ -67,22 +65,5 @@ class LuxletterLink implements MiddlewareInterface
         /** @var LuxletterLinkGetHashEvent $event */
         $event = $this->eventDispatcher->dispatch(new LuxletterLinkGetHashEvent($_REQUEST['luxletterlink'] ?? null));
         return $event->getHash();
-    }
-
-    /**
-     * Identification of user in EXT:lux: Set a session cookie that can be removed once it was read by lux
-     *
-     * @param array $link
-     * @return void
-     * @throws ExceptionPackage
-     */
-    protected function luxIdentification(array $link): void
-    {
-        /** @var LuxletterLinkLuxIdentificationEvent $event */
-        $event = $this->eventDispatcher->dispatch(new LuxletterLinkLuxIdentificationEvent($link));
-        if (ExtensionUtility::isLuxAvailable() && $event->isIdentification()) {
-            $link = $event->getLink();
-            CookieUtility::setCookie('luxletterlinkhash', $link['hash']);
-        }
     }
 }
