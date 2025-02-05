@@ -46,13 +46,15 @@ class UnsubscribeUrlService
         }
 
         /** @var UnsubscribeUrlEvent $event */
-        $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
-            UnsubscribeUrlEvent::class,
-            $url,
-            $this->newsletter,
-            $this->user,
-            $this->site
-        ));
+        $event = $this->eventDispatcher->dispatch(
+            new UnsubscribeUrlEvent(
+                $url,
+                $this->newsletter,
+                $this->user,
+                $this->site,
+                $this->language
+            )
+        );
 
         return $event->getUrl();
     }

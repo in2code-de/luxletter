@@ -14,13 +14,15 @@ final class UnsubscribeUrlEvent
     protected ?Newsletter $newsletter;
     protected ?User $user;
     protected Site $site;
+    protected int $language;
 
-    public function __construct(string $url, ?Newsletter $newsletter, ?User $user, Site $site)
+    public function __construct(string $url, ?Newsletter $newsletter, ?User $user, Site $site, int $language)
     {
         $this->url = $url;
         $this->newsletter = $newsletter;
         $this->user = $user;
         $this->site = $site;
+        $this->language = $language;
     }
 
     public function getUrl(): string
@@ -47,5 +49,10 @@ final class UnsubscribeUrlEvent
     public function getSite(): Site
     {
         return $this->site;
+    }
+
+    public function getLanguage(): int
+    {
+        return $this->language;
     }
 }
