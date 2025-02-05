@@ -16,9 +16,10 @@ class GetUnsubscribeUrlViewHelper extends AbstractViewHelper
     public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerArgument('newsletter', Newsletter::class, 'Newsletter object', false);
-        $this->registerArgument('user', User::class, 'User object', false);
+        $this->registerArgument('newsletter', Newsletter::class, 'Newsletter object', true);
+        $this->registerArgument('user', User::class, 'User object', true);
         $this->registerArgument('site', Site::class, 'Site object', true);
+        $this->registerArgument('language', 'int', 'Language identifier', false, 0);
     }
 
     /**
@@ -31,7 +32,8 @@ class GetUnsubscribeUrlViewHelper extends AbstractViewHelper
             UnsubscribeUrlService::class,
             $this->arguments['newsletter'],
             $this->arguments['user'],
-            $this->arguments['site']
+            $this->arguments['site'],
+            $this->arguments['language']
         );
         return $unsubscribeUrlService->get();
     }

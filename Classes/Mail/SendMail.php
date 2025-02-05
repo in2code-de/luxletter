@@ -122,7 +122,8 @@ class SendMail
                 UnsubscribeUrlService::class,
                 $this->newsletter,
                 $this->user,
-                $this->configuration->getSiteConfiguration()
+                $this->configuration->getSiteConfiguration(),
+                $this->newsletter->getLanguage()
             );
             $headers = $mailMessage->getHeaders();
             $headers->addHeader('List-Unsubscribe', '<' . $unsubscribeUrlService->get() . '>');

@@ -191,6 +191,7 @@ class ProgressQueue
                 'user' => $queue->getUser(),
                 'newsletter' => $queue->getNewsletter(),
                 'site' => $queue->getNewsletter()->getConfiguration()->getSiteConfiguration(),
+                'language' => $queue->getNewsletter()->getLanguage(),
             ]
         );
         $bodytext = $this->hashLinksInBodytext($queue, $bodytext);
