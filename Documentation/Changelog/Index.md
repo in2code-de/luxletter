@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                                      |
 |------------|------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 27.1.0     | 2025-02-05 | Feature | Support localized unsubscribe links, support additionalArguments for unsubscribe viewhelper                                                                                                      |
 | 27.0.1     | 2024-12-12 | Bugfix  | Prevent type exception in UserGroup model                                                                                                                                                        |
 | 27.0.0     | 2024-12-08 | Task    | Support TYPO3 13 (and 12 and drop support for 11), some small bugfixes                                                                                                                           |
 | 26.3.1     | 2024-10-16 | Bugfix  | Show correct number of links in dashboard, fix newsletter filter by usergroup                                                                                                                    |
