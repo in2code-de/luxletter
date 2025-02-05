@@ -188,6 +188,7 @@ class NewsletterUrl
                     'user' => $user,
                     'site' => $site,
                     'settings' => (array)$this->configuration['settings'],
+                    'language' => $this->getLanguage(),
                 ]
             );
             $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(

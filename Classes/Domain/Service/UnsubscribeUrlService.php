@@ -18,14 +18,23 @@ class UnsubscribeUrlService
     protected ?Newsletter $newsletter;
     protected ?User $user;
     protected Site $site;
+    protected int $language;
+    protected array $additionalArguments;
     protected SiteService $siteService;
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(?Newsletter $newsletter, ?User $user, Site $site)
-    {
+    public function __construct(
+        ?Newsletter $newsletter,
+        ?User $user,
+        Site $site,
+        int $language,
+        array $additionalArguments = []
+    ) {
         $this->newsletter = $newsletter;
         $this->user = $user;
         $this->site = $site;
+        $this->language = $language;
+        $this->additionalArguments = $additionalArguments;
         $this->siteService = GeneralUtility::makeInstance(SiteService::class);
         $this->eventDispatcher = GeneralUtility::makeInstance(EventDispatcherInterface::class);
     }
@@ -44,13 +53,15 @@ class UnsubscribeUrlService
         }
 
         /** @var UnsubscribeUrlEvent $event */
-        $event = $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
-            UnsubscribeUrlEvent::class,
-            $url,
-            $this->newsletter,
-            $this->user,
-            $this->site
-        ));
+        $event = $this->eventDispatcher->dispatch(
+            new UnsubscribeUrlEvent(
+                $url,
+                $this->newsletter,
+                $this->user,
+                $this->site,
+                $this->language
+            )
+        );
 
         return $event->getUrl();
     }
@@ -64,12 +75,13 @@ class UnsubscribeUrlService
         try {
             return $this->siteService->getPageUrlFromParameter(
                 $this->getPidUnsubscribe(),
-                [
+                $this->additionalArguments + [
                     'tx_luxletter_fe' => [
                         'user' => $this->user->getUid(),
                         'newsletter' => $this->newsletter->getUid(),
                         'hash' => $this->user->getUnsubscribeHash(),
                     ],
+                    '_language' => $this->language,
                 ]
             );
         } catch (Throwable $exception) {
