@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | Description                                                                                                                                                                                      |
 |------------|------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 27.2.3     | 2025-07-16 | Task    | Remove PHP 8.4 deprecation warnings                                                                                                                                                              |
 | 27.2.2     | 2025-07-16 | Bugfix  | Prevent exception in backend related to some internal images                                                                                                                                     |
 | 27.2.1     | 2025-06-03 | Bugfix  | Show users in preview again in step 3 when creating new newsletters                                                                                                                              |
 | 27.2.0     | 2025-02-18 | Task    | Improvement in cooperation with LUX (please also update LUX to the latest version)                                                                                                               |
