@@ -34,11 +34,11 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 class FrontendController extends ActionController
 {
     public function __construct(
-        readonly protected UserRepository $userRepository,
-        readonly protected UsergroupRepository $usergroupRepository,
-        readonly protected ContentRepository $contentRepository,
-        readonly protected LogService $logService,
-        readonly protected UsergroupFactory $usergroupFactory
+        protected readonly UserRepository $userRepository,
+        protected readonly UsergroupRepository $usergroupRepository,
+        protected readonly ContentRepository $contentRepository,
+        protected readonly LogService $logService,
+        protected readonly UsergroupFactory $usergroupFactory
     ) {
     }
 

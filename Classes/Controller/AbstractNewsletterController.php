@@ -33,16 +33,16 @@ abstract class AbstractNewsletterController extends ActionController
     protected ModuleTemplate $moduleTemplate;
 
     public function __construct(
-        readonly protected ModuleTemplateFactory $moduleTemplateFactory,
-        readonly protected IconFactory $iconFactory,
-        readonly protected NewsletterRepository $newsletterRepository,
-        readonly protected UserRepository $userRepository,
-        readonly protected UsergroupRepository $usergroupRepository,
-        readonly protected LogRepository $logRepository,
-        readonly protected ConfigurationRepository $configurationRepository,
-        readonly protected PageRepository $pageRepository,
-        readonly protected LayoutService $layoutService,
-        readonly protected CategoryRepository $categoryRepository
+        protected readonly ModuleTemplateFactory $moduleTemplateFactory,
+        protected readonly IconFactory $iconFactory,
+        protected readonly NewsletterRepository $newsletterRepository,
+        protected readonly UserRepository $userRepository,
+        protected readonly UsergroupRepository $usergroupRepository,
+        protected readonly LogRepository $logRepository,
+        protected readonly ConfigurationRepository $configurationRepository,
+        protected readonly PageRepository $pageRepository,
+        protected readonly LayoutService $layoutService,
+        protected readonly CategoryRepository $categoryRepository
     ) {
     }
 
