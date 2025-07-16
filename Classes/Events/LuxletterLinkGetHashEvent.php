@@ -7,7 +7,7 @@ final class LuxletterLinkGetHashEvent
 {
     protected ?string $hash = null;
 
-    public function __construct(string $hash = null)
+    public function __construct(?string $hash = null)
     {
         $this->hash = $hash;
     }
@@ -22,7 +22,7 @@ final class LuxletterLinkGetHashEvent
         return $this->getHash() !== null;
     }
 
-    public function setHash(string $hash = null): LuxletterLinkGetHashEvent
+    public function setHash(?string $hash = null): LuxletterLinkGetHashEvent
     {
         $this->hash = $hash;
         return $this;

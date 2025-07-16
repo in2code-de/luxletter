@@ -144,7 +144,7 @@ class NewsletterUrl
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      */
-    public function getParsedContent(Site $site, User $user = null): string
+    public function getParsedContent(Site $site, ?User $user = null): string
     {
         if ($user === null) {
             $userFactory = GeneralUtility::makeInstance(UserFactory::class);
