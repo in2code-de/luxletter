@@ -212,6 +212,26 @@ ifeq ($(shell uname -s), Darwin)
 	docker-compose exec -u root php chown -R app:app /app/$(TYPO3_CACHE_DIR)/;
 endif
 
+## Test: PHP CS Fixer
+test-phpcs:
+	echo "$(EMOJI_robot) Test: Start PHP CS Fixer tests"
+	docker compose exec php composer test:php:cs
+
+## Test: PHP Linter
+test-phplint:
+	echo "$(EMOJI_robot) Test: Start PHP Linter tests"
+	docker compose exec php composer test:php:lint
+
+## Test: TypoScript Linter
+test-tslint:
+	echo "$(EMOJI_robot) Test: Start TypoScript Linter tests"
+	docker compose exec php composer test:ts:lint
+
+## Test: Unit
+test-unit:
+	echo "$(EMOJI_robot) Test: Start unit tests"
+	docker compose exec php composer test:unit
+
 include .env
 
 # SETTINGS
