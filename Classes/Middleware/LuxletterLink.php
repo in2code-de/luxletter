@@ -24,9 +24,9 @@ use TYPO3\CMS\Core\Package\Exception as ExceptionPackage;
 class LuxletterLink implements MiddlewareInterface
 {
     public function __construct(
-        readonly private EventDispatcherInterface $eventDispatcher,
-        readonly private LinkRepository $linkRepository,
-        readonly private LogService $logService
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly LinkRepository $linkRepository,
+        private readonly LogService $logService
     ) {
     }
 
