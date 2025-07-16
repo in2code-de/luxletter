@@ -85,7 +85,7 @@ class FrontendController extends ActionController
      * @return ResponseInterface
      * @throws ExceptionDbal
      */
-    public function trackingPixelAction(Newsletter $newsletter = null, User $user = null): ResponseInterface
+    public function trackingPixelAction(?Newsletter $newsletter = null, ?User $user = null): ResponseInterface
     {
         if ($newsletter !== null && $user !== null) {
             $this->logService->logNewsletterOpening($newsletter->getUid(), $user->getUid());
@@ -103,8 +103,8 @@ class FrontendController extends ActionController
      * @return ResponseInterface
      */
     public function unsubscribeAction(
-        User $user = null,
-        Newsletter $newsletter = null,
+        ?User $user = null,
+        ?Newsletter $newsletter = null,
         string $hash = ''
     ): ResponseInterface {
         try {
@@ -144,8 +144,8 @@ class FrontendController extends ActionController
     }
 
     public function unsubscribe2Action(
-        User $user = null,
-        Newsletter $newsletter = null,
+        ?User $user = null,
+        ?Newsletter $newsletter = null,
         string $hash = ''
     ): ResponseInterface {
         try {
@@ -181,8 +181,8 @@ class FrontendController extends ActionController
      * @return ResponseInterface
      */
     public function unsubscribe2UpdateAction(
-        User $user = null,
-        Newsletter $newsletter = null,
+        ?User $user = null,
+        ?Newsletter $newsletter = null,
         string $hash = '',
         array $usergroups = [],
         int $contentIdentifier = 0
@@ -229,8 +229,8 @@ class FrontendController extends ActionController
      * @throws MisconfigurationException
      */
     protected function checkArgumentsForUnsubscribe(
-        User $user = null,
-        Newsletter $newsletter = null,
+        ?User $user = null,
+        ?Newsletter $newsletter = null,
         string $hash = ''
     ): void {
         if ($user === null) {
@@ -253,7 +253,7 @@ class FrontendController extends ActionController
      * @return void
      * @throws MissingRelationException
      */
-    protected function checkForUsergroups(User $user = null, Newsletter $newsletter = null): void
+    protected function checkForUsergroups(?User $user = null, ?Newsletter $newsletter = null): void
     {
         $match = false;
         foreach ($newsletter->getReceivers() as $group) {

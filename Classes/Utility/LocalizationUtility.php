@@ -16,7 +16,7 @@ class LocalizationUtility
      * @param array|null $arguments
      * @return string|null
      */
-    public static function translate(string $key, string $extensionName = 'Luxletter', array $arguments = null)
+    public static function translate(string $key, string $extensionName = 'Luxletter', ?array $arguments = null)
     {
         $label = LocalizationUtilityExtbase::translate($key, $extensionName, $arguments);
         if (empty($label)) {
@@ -30,7 +30,7 @@ class LocalizationUtility
      * @param array|null $arguments
      * @return string|null
      */
-    public static function translateByKey(string $key, array $arguments = null)
+    public static function translateByKey(string $key, ?array $arguments = null)
     {
         $locallangPrefix = 'LLL:EXT:luxletter/Resources/Private/Language/locallang.xlf:';
         try {

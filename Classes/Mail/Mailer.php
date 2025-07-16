@@ -15,7 +15,7 @@ class Mailer extends MailerCore
      * @param EventDispatcherInterface|null $eventDispatcher
      * @throws ExceptionCore
      */
-    public function __construct(TransportInterface $transport = null, EventDispatcherInterface $eventDispatcher = null)
+    public function __construct(?TransportInterface $transport = null, ?EventDispatcherInterface $eventDispatcher = null)
     {
         parent::__construct($transport, $eventDispatcher);
         $this->transport = $this->getTransportFactory()->get($this->getMailSettings());
