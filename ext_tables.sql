@@ -87,7 +87,7 @@ CREATE TABLE tx_luxletter_domain_model_log (
 	PRIMARY KEY (uid),
 	KEY parent (pid),
 	KEY language (l10n_parent,sys_language_uid),
-	KEY newsletter (newsletter),
+	KEY newsletter (newsletter,deleted,status,user),
 	KEY user (user)
 );
 
