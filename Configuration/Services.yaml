@@ -32,6 +32,11 @@ services:
       - name: 'console.command'
         command: 'luxletter:queue'
 
+  In2code\Luxletter\EventListener\ExcludeTablesFromReferenceIndex:
+    tags:
+      - name: 'event.listener'
+        identifier: 'luxletter/exclude-tables-from-reference-index'
+
   In2code\Luxletter\Domain\Factory\NewsletterFactory:
     public: true
 
