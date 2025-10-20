@@ -17,6 +17,7 @@ use In2code\Luxletter\Utility\ConfigurationUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Throwable;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
@@ -131,6 +132,7 @@ class ProgressQueue
      * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
      * @throws SiteNotFoundException
+     * @throws TransportExceptionInterface
      */
     protected function sendNewsletterToReceiverInQueue(Queue $queue): void
     {

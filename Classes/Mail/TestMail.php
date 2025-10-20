@@ -13,6 +13,7 @@ use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\InvalidUrlException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\ConfigurationUtility;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -69,6 +70,7 @@ class TestMail
      * @throws InvalidUrlException
      * @throws MisconfigurationException
      * @throws ExceptionDbalDriver
+     * @throws TransportExceptionInterface
      */
     public function preflight(string $origin, string $layout, int $configuration, string $subject, string $email): bool
     {
