@@ -23,12 +23,9 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExis
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 /**
  * Class ProgressQueue
@@ -78,14 +75,11 @@ class ProgressQueue
      * @param int $newsletterIdentifier
      * @return int Number of progressed queued mails
      * @throws ArgumentMissingException
-     * @throws Exception
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
      * @throws InvalidConfigurationTypeException
      * @throws InvalidQueryException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
      * @throws SiteNotFoundException
      * @throws UnknownObjectException
@@ -122,13 +116,10 @@ class ProgressQueue
      * @param Queue $queue
      * @return void
      * @throws ArgumentMissingException
-     * @throws Exception
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
      * @throws InvalidConfigurationTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
      * @throws SiteNotFoundException
      */
@@ -170,13 +161,10 @@ class ProgressQueue
      * @param Queue $queue
      * @return string
      * @throws ArgumentMissingException
-     * @throws Exception
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
      * @throws InvalidConfigurationTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
      * @throws SiteNotFoundException
      */
@@ -204,12 +192,9 @@ class ProgressQueue
      * @param string $bodytext
      * @return string
      * @throws ArgumentMissingException
-     * @throws Exception
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws IllegalObjectTypeException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws MisconfigurationException
      * @throws SiteNotFoundException
      */
