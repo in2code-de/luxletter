@@ -7,7 +7,6 @@ use In2code\Luxletter\Domain\Model\Link;
 use In2code\Luxletter\Exception\ArgumentMissingException;
 use In2code\Luxletter\Utility\DatabaseUtility;
 use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 
 class LinkRepository extends AbstractRepository
@@ -47,7 +46,6 @@ class LinkRepository extends AbstractRepository
      * @return void
      * @throws IllegalObjectTypeException
      * @throws ArgumentMissingException
-     * @throws Exception
      */
     public function add($object)
     {

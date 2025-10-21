@@ -8,7 +8,6 @@ use DOMNode;
 use DomXPath;
 use In2code\Luxletter\Utility\DomDocumentUtility;
 use In2code\Luxletter\Utility\ObjectUtility;
-use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
@@ -40,7 +39,6 @@ class CropBySelectionViewHelper extends AbstractViewHelper
 
     /**
      * @return string
-     * @throws Exception
      */
     public function render(): string
     {
@@ -77,7 +75,6 @@ class CropBySelectionViewHelper extends AbstractViewHelper
     /**
      * @param string $string
      * @return string
-     * @throws Exception
      */
     protected function cropText(string $string): string
     {
