@@ -7,24 +7,28 @@
 }
 
 .wizard {
-  padding: 0.2em 0em 0.2em 0.2em;
+  display: flex;
 }
 
 .wizard a {
+  align-items: center;
+  background: light-dark($colorGreyBright, $colorGreyDark);
+  color: $white;
+  cursor: pointer;
+  display: flex;
+  flex: 1;
+  font-size: 18px;
+  font-weight: bold;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+  margin-left: 3px;
+  min-height: 68px;
   padding: 19px 12px 19px;
   position: relative;
-  display: inline-block;
-  text-decoration: none;
-  min-width: 33.00%;
-  margin-left: 3px;
   text-align: center;
-  font-size: 18px;
-  color: $white;
-  font-weight: bold;
-  background: light-dark($colorGreyBright, $colorGreyDark);
+  text-decoration: none;
   text-transform: uppercase;
-  cursor: pointer;
-  margin-bottom: 20px;
 }
 
 .wizard a:hover {
@@ -113,9 +117,7 @@
 }
 
 .luxletter .wizard .badge {
-  margin: 0 5px 0 18px;
   position: relative;
-  top: -1px;
   border-radius: 20px;
   font-size: 18px;
   background: $white;
@@ -123,6 +125,20 @@
   color: light-dark($colorGreyBright, $colorGreyDark);
 
   .number {
+    display: inline-block;
+  }
+}
+
+.wizard a:not(:first-child) .badge {
+  @media (max-width: 1000px) {
+    transform: translateX(17px);
+  }
+}
+
+.luxletter .wizard .badge-text {
+  display: none;
+
+  @media (min-width: 1000px) {
     display: inline-block;
   }
 }
