@@ -72,7 +72,11 @@ trait PermissionTrait
 
         $pageIdentifier = $this->getPageIdentifierFromRecord($identifier, $table);
         if ($pageIdentifier > 0) {
-            return $this->isAuthenticatedForPageRow($this->getPageRowFromPageIdentifier($pageIdentifier));
+            $pageRecord = $this->getPageRowFromPageIdentifier($pageIdentifier);
+            if ($pageRecord === []) {
+                return false;
+            }
+            return $this->isAuthenticatedForPageRow($pageRecord);
         }
         return false;
     }
@@ -110,13 +114,13 @@ trait PermissionTrait
 
     /**
      * @param int $identifier
-     * @return array|int
+     * @return array
      * @throws ExceptionDbal
      */
     protected function getPageRowFromPageIdentifier(int $identifier): array
     {
         $queryBuilder = DatabaseUtility::getQueryBuilderForTable('pages');
-        return (array)$queryBuilder
+        $row = $queryBuilder
             ->select('*')
             ->from('pages')
             ->where(
@@ -125,5 +129,6 @@ trait PermissionTrait
             ->setMaxResults(1)
             ->executeQuery()
             ->fetchAssociative();
+        return $row ?: [];
     }
 }
