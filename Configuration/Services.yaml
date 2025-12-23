@@ -32,6 +32,11 @@ services:
       - name: 'console.command'
         command: 'luxletter:queue'
 
+  In2code\Luxletter\TCA\PreventReferenceIndex:
+    tags:
+      - name: 'event.listener'
+        identifier: 'luxletter/preventReferenceIndex'
+
   In2code\Luxletter\Domain\Factory\NewsletterFactory:
     public: true
 

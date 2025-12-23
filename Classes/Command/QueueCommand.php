@@ -16,12 +16,9 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExis
 use TYPO3\CMS\Core\Exception\SiteNotFoundException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Extbase\Object\Exception;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotException;
-use TYPO3\CMS\Extbase\SignalSlot\Exception\InvalidSlotReturnException;
 
 class QueueCommand extends Command
 {
@@ -50,12 +47,9 @@ class QueueCommand extends Command
      * @throws IllegalObjectTypeException
      * @throws InvalidConfigurationTypeException
      * @throws InvalidQueryException
-     * @throws InvalidSlotException
-     * @throws InvalidSlotReturnException
      * @throws UnknownObjectException
      * @throws ArgumentMissingException
      * @throws MisconfigurationException
-     * @throws Exception
      * @throws SiteNotFoundException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int

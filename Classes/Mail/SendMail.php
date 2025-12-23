@@ -13,6 +13,7 @@ use In2code\Luxletter\Events\SendMailSendNewsletterBeforeMailMessageEvent;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\ConfigurationUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -52,6 +53,7 @@ class SendMail
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
      * @throws MisconfigurationException
+     * @throws TransportExceptionInterface
      */
     public function sendNewsletter(array $receiver): bool
     {

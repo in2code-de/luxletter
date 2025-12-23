@@ -24,21 +24,21 @@ help:
 ## Stop all containers
 stop:
 	echo "$(EMOJI_stop) Shutting down"
-	docker-compose stop
+	docker compose stop
 	sleep 0.4
-	docker-compose down --remove-orphans
+	docker compose down --remove-orphans
 
 ## Removes all containers and volumes
 destroy: stop
 	echo "$(EMOJI_litter) Removing the project"
-	docker-compose down -v --remove-orphans
+	docker compose down -v --remove-orphans
 	git clean -dfx
 	make .link-compose-file
 
-## Starts docker-compose up -d
+## Starts docker compose up -d
 start:
 	echo "$(EMOJI_up) Starting the docker project"
-	docker-compose up -d --build
+	docker compose up -d --build
 	make .fix-mount-perms
 	make urls
 
@@ -46,7 +46,7 @@ start:
 mysql-dump:
 	echo "$(EMOJI_floppy_disk) Dumping the database"
 	mkdir -p $(SQLDUMPSDIR)
-	docker-compose exec -u 1000:1000 mysql bash -c "mysqldump -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) --no-tablespaces --add-drop-database --create-options --extended-insert --no-autocommit --quick --default-character-set=utf8mb4 $(MYSQL_DATABASE) | gzip > /$(SQLDUMPSDIR)/$(SQLDUMPFILE)"
+	docker compose exec -u 1000:1000 mysql bash -c "mysqldump -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) --no-tablespaces --add-drop-database --create-options --extended-insert --no-autocommit --quick --default-character-set=utf8mb4 $(MYSQL_DATABASE) | gzip > /$(SQLDUMPSDIR)/$(SQLDUMPFILE)"
 
 ## Wait for the mysql container to be fully provisioned
 .mysql-wait:
@@ -59,12 +59,12 @@ mysql-dump:
 ## Restores the database from the backup file defined in .env
 mysql-restore: .mysql-wait
 	echo "$(EMOJI_robot) Restoring the database"
-	docker-compose exec mysql bash -c 'DUMPFILE="/$(SQLDUMPSDIR)/$(SQLDUMPFILE)"; if [[ "$${DUMPFILE##*.}" == "sql" ]]; then cat $$DUMPFILE; else zcat $$DUMPFILE; fi | mysql --default-character-set=utf8 -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE)'
+	docker compose exec mysql bash -c 'DUMPFILE="/$(SQLDUMPSDIR)/$(SQLDUMPFILE)"; if [[ "$${DUMPFILE##*.}" == "sql" ]]; then cat $$DUMPFILE; else zcat $$DUMPFILE; fi | mysql --default-character-set=utf8 -u$(MYSQL_USER) -p$(MYSQL_PASSWORD) $(MYSQL_DATABASE)'
 
 ## Starts composer-install
 composer-install:
 	echo "$(EMOJI_package) Installing composer dependencies"
-	docker-compose exec php composer install
+	docker compose exec php composer install
 
 ## Create necessary directories
 .create-dirs:
@@ -94,7 +94,7 @@ composer-install:
 	if [[ ! -f $(HOME)/.dinghy/certs/${HOST}.key ]]; then mkcert -cert-file $(HOME)/.dinghy/certs/${HOST}.crt -key-file $(HOME)/.dinghy/certs/${HOST}.key ${HOST}; fi;
 	if [[ ! -f $(HOME)/.dinghy/certs/${MAIL}.key ]]; then mkcert -cert-file $(HOME)/.dinghy/certs/${MAIL}.crt -key-file $(HOME)/.dinghy/certs/${MAIL}.key ${MAIL}; fi;
 
-## Choose the right docker-compose file for your environment
+## Choose the right docker compose file for your environment
 .link-compose-file:
 	echo "$(EMOJI_triangular_ruler) Linking the OS specific compose file"
 ifeq ($(shell uname -s), Darwin)
@@ -106,22 +106,22 @@ endif
 ## Install Frontend Build Tool Chain dependencies
 npm-install:
 	echo "$(EMOJI_explodinghead) Installing Frontend Build Toolchain (this might take a while)"
-	docker-compose exec -u node -w /home/node/app/Resources/Private/ node npm ci
+	docker compose exec -u node -w /home/node/app/Resources/Private/ node npm ci
 
 ## Start watch on node-container
 npm-watch:
-	docker-compose exec -u node -w /home/node/app/Resources/Private/ node npm run watch:all
+	docker compose exec -u node -w /home/node/app/Resources/Private/ node npm run watch:all
 
 ## Stop the node container
 npm-stop:
-	docker-compose stop node
+	docker compose stop node
 
 ## Initialize the docker setup
 .init-docker: .create-dirs .create-certificate
 	echo "$(EMOJI_rocket) Initializing docker environment"
-	docker-compose pull
-	docker-compose up -d --build
-	docker-compose exec -u root php chown -R app:app /app/$(WEBROOT)/$(TYPO3_CACHE_DIR)/;
+	docker compose pull
+	docker compose up -d --build
+	docker compose exec -u root php chown -R app:app /app/$(WEBROOT)/$(TYPO3_CACHE_DIR)/;
 
 ## Copies the TYPO3 site configuration
 .typo3-add-site:
@@ -140,17 +140,17 @@ npm-stop:
 ## Runs the TYPO3 Database Compare
 typo3-comparedb:
 	echo "$(EMOJI_leftright) Running database:updateschema"
-	docker-compose exec php ./.Build/bin/typo3 database:updateschema
+	docker compose exec php ./.Build/bin/typo3 database:updateschema
 
 ## Starts the TYPO3 setup process
 .typo3-setupinstall:
 	echo "$(EMOJI_upright) Running install:setup"
-	docker-compose exec php ./.Build/bin/typo3 install:setup
+	docker compose exec php ./.Build/bin/typo3 install:setup
 
 ## Clears TYPO3 caches via typo3-console
 typo3-clearcache:
 	echo "$(EMOJI_broom) Clearing TYPO3 caches"
-	docker-compose exec php ./.Build/bin/typo3 cache:flush
+	docker compose exec php ./.Build/bin/typo3 cache:flush
 
 ## Checkout LFS files
 lfs-fetch:
@@ -178,7 +178,7 @@ install-project: lfs-fetch .link-compose-file destroy .add-hosts-entry .init-doc
 ## Print Project URIs
 urls:
 	PROJECT=$$(echo "$${PWD##*/}" | tr -d '.'); \
-	SERVICES=$$(docker-compose ps --services | grep '$(SERVICELIST)'); \
+	SERVICES=$$(docker compose ps --services | grep '$(SERVICELIST)'); \
 	LONGEST=$$(($$(echo -e "$$SERVICES\nFrontend:" | wc -L 2> /dev/null || echo 15)+2)); \
 	echo "$(EMOJI_telescope) Project URLs:"; \
 	echo ''; \
@@ -198,18 +198,18 @@ urls:
 ## Log into the PHP container
 login-php:
 	echo "$(EMOJI_elephant) Logging into the PHP container"
-	docker-compose exec php bash
+	docker compose exec php bash
 
 ## Log into the mysql container
 login-mysql:
 	echo "$(EMOJI_dolphin) Logging into MySQL Container"
-	docker-compose exec mysql bash
+	docker compose exec mysql bash
 
 ## Set correct onwership of mounts. Docker creates mounts owned by root:root.
 .fix-mount-perms:
 ifeq ($(shell uname -s), Darwin)
 	echo "$(EMOJI_rocket) Fixing docker mount permissions"
-	docker-compose exec -u root php chown -R app:app /app/$(TYPO3_CACHE_DIR)/;
+	docker compose exec -u root php chown -R app:app /app/$(TYPO3_CACHE_DIR)/;
 endif
 
 ## Test: PHP CS Fixer
