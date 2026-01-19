@@ -9,6 +9,7 @@
 
 | Version    | Date       | State    | TYPO3         | Description                                                                                                                                                                                      |
 |------------|------------|----------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 29.0.0     | 2026-01-19 | Feature  | `12.4 + 13.4` | Internal CURL request can be used now with basic auth, small fix for analysis of non-existing pages                                                                                              |
 | 28.0.0     | 2025-12-23 | Feature  | `12.4 + 13.4` | Support closing SMTP-connections, Prevent unneeded refindex records, Performance changes, small layout improvements in backend                                                                   |
 | 27.2.3     | 2025-07-16 | Task     | `12.4 + 13.4` | Remove PHP 8.4 deprecation warnings                                                                                                                                                              |
 | 27.2.2     | 2025-07-16 | Bugfix   | `12.4 + 13.4` | Prevent exception in backend related to some internal images                                                                                                                                     |
