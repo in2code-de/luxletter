@@ -1,7 +1,5 @@
-<svg id="luxletter" data-name="luxletter" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 70.87 70.87">
-    <path d="M0 0h70.87v70.87H0z" fill="#027ACA"/>
-    <path d="M35.24 43.44l-6.92-6.07L8.5 54.35a4.07 4.07 0 0 0 2.77 1.09h48A4 4 0 0 0 62 54.35l-19.8-17z" fill="#ffffff"/>
-    <path d="M62.22 16.52a4 4 0 0 0-2.76-1.09H11.51a4 4 0 0 0-2.76 1.09l26.73 22.92z" fill="#ffffff"/>
-    <path d="M7.43 18.94v33.24l19.34-16.43L7.43 18.94z" fill="#ffffff"/>
-    <path d="M44.1 35.75l19.34 16.43V18.93L44.1 35.75z" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" data-name="luxletter" viewBox="0 0 70.87 70.87">
+    <path fill="#027aca" d="M0 0h70.87v70.87H0z"/>
+    <path fill="#fff" d="m35.258 42.69-6.272-5.501-17.965 15.39a3.7 3.7 0 0 0 2.51.989H57.04a3.63 3.63 0 0 0 2.474-.988L41.567 37.17Z" style="stroke-width:.90642"/>
+    <path fill="#fff" d="M59.713 18.29a3.63 3.63 0 0 0-2.501-.988H13.749a3.63 3.63 0 0 0-2.502.988l24.229 20.775zM10.05 20.484v30.129l17.53-14.892ZM43.29 35.72l17.53 14.893V20.475Z" style="stroke-width:.90642"/>
 </svg>
