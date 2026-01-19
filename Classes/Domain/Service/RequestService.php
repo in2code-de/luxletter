@@ -7,19 +7,10 @@ use In2code\Luxletter\Exception\RequestException;
 use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-/**
- * Class RequestService
- */
 class RequestService
 {
-    /**
-     * @var null
-     */
     protected $requestFactory = null;
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
@@ -39,17 +30,21 @@ class RequestService
         return $response->getBody()->getContents();
     }
 
-    /**
-     * @return array
-     */
     protected function getDefaultHeaders(): array
     {
-        return [
+        $options = [
             'allow_redirects' => true,
             'headers' => [
                 'Cache-Control' => 'no-cache',
                 'User-Agent' => 'TYPO3 luxletter',
             ],
         ];
+        if (getenv('LUXLETTER_AUTH_USER') && getenv('LUXLETTER_AUTH_PASS')) {
+            $options['auth'] = [
+                0 => getenv('LUXLETTER_AUTH_USER'),
+                1 => getenv('LUXLETTER_AUTH_PASS'),
+            ];
+        }
+        return $options;
     }
 }

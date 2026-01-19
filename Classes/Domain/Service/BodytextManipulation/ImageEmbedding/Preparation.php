@@ -5,13 +5,14 @@ namespace In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding;
 
 use DOMDocument;
 use DOMElement;
+use In2code\Luxletter\Domain\Service\RequestService;
 use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\FileUtility;
 use In2code\Luxletter\Utility\StringUtility;
+use Throwable;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
-use TYPO3\CMS\Core\Http\RequestFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -20,9 +21,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class Preparation extends AbstractEmbedding
 {
-    /**
-     * Constructor
-     */
     public function __construct()
     {
         $this->createTempFolderIfNotExists();
@@ -77,17 +75,11 @@ class Preparation extends AbstractEmbedding
     protected function getImageContent(string $url): string
     {
         try {
-            $requestFactory = GeneralUtility::makeInstance(RequestFactory::class);
-            $response = $requestFactory->request($url);
-            if ($response->getStatusCode() === 200) {
-                $content = $response->getBody()->getContents();
-            } else {
-                throw new ApiConnectionException('Image could not be fetched from ' . $url, 1637265921);
-            }
-        } catch (\Exception $exception) {
+            $requestService = GeneralUtility::makeInstance(RequestService::class);
+            return $requestService->getContentFromUrl($url);
+        } catch (Throwable $exception) {
             throw new ApiConnectionException($exception->getMessage(), 1637265924);
         }
-        return $content;
     }
 
     /**
