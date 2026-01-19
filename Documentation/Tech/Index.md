@@ -212,6 +212,18 @@ Tip: You could test the server requests by yourself with a curl command on the s
 `curl -I https://domain.org/2022-01/newsletter.html`
 what should result in a status code 200.
 
+#### 5. The target URL requires basic authentication
+
+If your page requires basic authentication (e.g. htpasswd protection on staging environments), you can use
+environment variables to pass credentials:
+
+```
+LUXLETTER_AUTH_USER=username
+LUXLETTER_AUTH_PASS=password
+```
+
+These credentials will be used for fetching the newsletter content and for embedding images.
+
 
 ### Images are not loaded in my Newsletter Mail
 
