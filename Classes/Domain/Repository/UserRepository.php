@@ -88,15 +88,15 @@ class UserRepository extends AbstractRepository
         if ($groupIdentifiers !== []) {
             $connection = DatabaseUtility::getConnectionForTable(User::TABLE_NAME);
             /** @noinspection SqlDialectInspection */
-            $sql = "select count(distinct email) from " . User::TABLE_NAME;
+            $sql = 'select count(distinct email) from ' . User::TABLE_NAME;
             $sub = '';
             foreach ($groupIdentifiers as $identifier) {
                 if ($sub !== '') {
-                    $sub .= " or ";
+                    $sub .= ' or ';
                 }
                 $sub = "((',' || usergroup || ',') LIKE '%," . (int)$identifier . ",%')";
             }
-            $sql .= " where deleted=0 and disable=0 and email like '%@%' and (" . $sub . ")";
+            $sql .= " where deleted=0 and disable=0 and email like '%@%' and (" . $sub . ')';
             return (int)$connection->executeQuery($sql)->fetchOne();
         }
         return 0;

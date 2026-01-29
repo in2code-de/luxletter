@@ -19,9 +19,9 @@ class UsergroupRepository extends AbstractRepository
         $result = [];
         if ($usergroupIdentifiers !== []) {
             $connection = DatabaseUtility::getConnectionForTable(Usergroup::TABLE_NAME);
-            $sql = "select * from " . Usergroup::TABLE_NAME
-                . " where uid in (" . ArrayUtility::convertArrayToIntegerList($usergroupIdentifiers) . ")"
-                . " order by FIELD(uid, " . ArrayUtility::convertArrayToIntegerList($usergroupIdentifiers) . ")";
+            $sql = 'select * from ' . Usergroup::TABLE_NAME
+                . ' where uid in (' . ArrayUtility::convertArrayToIntegerList($usergroupIdentifiers) . ')'
+                . ' order by FIELD(uid, ' . ArrayUtility::convertArrayToIntegerList($usergroupIdentifiers) . ')';
             $records = $connection->executeQuery($sql)->fetchAllAssociative();
             foreach ($records as $record) {
                 $user = $this->findByUid($record['uid']);

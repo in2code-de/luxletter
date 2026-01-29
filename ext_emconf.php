@@ -11,14 +11,14 @@ $EM_CONF[$_EXTKEY] = [
     'state' => 'stable',
     'constraints' => [
         'depends' => [
-            'typo3' => '12.4.0-13.4.99'
+            'typo3' => '12.4.0-13.4.99',
         ],
         'conflicts' => [
-            'news' => '9.0.0-10.99.99'
+            'news' => '9.0.0-10.99.99',
         ],
         'suggests' => [
             'lux' => '0.0.0-0.0.0',
-            'dashboard' => '0.0.0-0.0.0'
-        ]
-    ]
+            'dashboard' => '0.0.0-0.0.0',
+        ],
+    ],
 ];

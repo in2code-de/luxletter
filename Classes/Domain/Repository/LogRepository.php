@@ -25,14 +25,14 @@ class LogRepository extends AbstractRepository
     public function getNumberOfReceivers(Filter $filter): int
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
-        $sql = "select count(distinct user) "
-            . " from " . Log::TABLE_NAME . " l"
-            . " left join " . Newsletter::TABLE_NAME . " nl on nl.uid=l.newsletter"
-            . " left join " . Configuration::TABLE_NAME . " c on nl.configuration=c.uid"
-            . " where l.deleted=0 and l.status=" . Log::STATUS_DISPATCH
+        $sql = 'select count(distinct user) '
+            . ' from ' . Log::TABLE_NAME . ' l'
+            . ' left join ' . Newsletter::TABLE_NAME . ' nl on nl.uid=l.newsletter'
+            . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
+            . ' where l.deleted=0 and l.status=' . Log::STATUS_DISPATCH
             . " and c.site in ('" . implode("','", $filter->getSitesForFilter()) . "')"
-            . " and nl.crdate>" . $filter->getTimeDateStart()->getTimestamp()
-            . " limit 1";
+            . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp()
+            . ' limit 1';
         return (int)$connection->executeQuery($sql)->fetchOne();
     }
 
@@ -52,16 +52,16 @@ class LogRepository extends AbstractRepository
     public function getGroupedLinksByHref(Filter $filter): array
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
-        $sql = "select count(*) as count, l.properties, l.newsletter, MAX(l.uid) uid"
-            . " from " . Log::TABLE_NAME . " l"
-            . " left join " . Newsletter::TABLE_NAME . " nl on nl.uid=l.newsletter"
-            . " left join " . Configuration::TABLE_NAME . " c on nl.configuration=c.uid"
-            . " where l.deleted=0 and l.status=" . Log::STATUS_LINKOPENING
+        $sql = 'select count(*) as count, l.properties, l.newsletter, MAX(l.uid) uid'
+            . ' from ' . Log::TABLE_NAME . ' l'
+            . ' left join ' . Newsletter::TABLE_NAME . ' nl on nl.uid=l.newsletter'
+            . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
+            . ' where l.deleted=0 and l.status=' . Log::STATUS_LINKOPENING
             . " and c.site in ('" . implode("','", $filter->getSitesForFilter()) . "')"
-            . " and nl.crdate>" . $filter->getTimeDateStart()->getTimestamp()
-            . " group by l.properties, l.newsletter"
-            . " order by count desc"
-            . " limit " . $filter->getLimit();
+            . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp()
+            . ' group by l.properties, l.newsletter'
+            . ' order by count desc'
+            . ' limit ' . $filter->getLimit();
         $results = $connection->executeQuery($sql)->fetchAllAssociative();
         $nlRepository = GeneralUtility::makeInstance(NewsletterRepository::class);
         foreach ($results as &$result) {
@@ -79,14 +79,14 @@ class LogRepository extends AbstractRepository
     public function getOverallOpenings(Filter $filter): int
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
-        $sql = "select count(distinct (newsletter, user))"
-            . " from " . Log::TABLE_NAME . " l"
-            . " left join " . Newsletter::TABLE_NAME . " nl on nl.uid=l.newsletter"
-            . " left join " . Configuration::TABLE_NAME . " c on nl.configuration=c.uid"
-            . " where l.deleted = 0"
-            . " and l.status IN (" . Log::STATUS_NEWSLETTEROPENING . "," . Log::STATUS_LINKOPENING . ")"
+        $sql = 'select count(distinct (newsletter, user))'
+            . ' from ' . Log::TABLE_NAME . ' l'
+            . ' left join ' . Newsletter::TABLE_NAME . ' nl on nl.uid=l.newsletter'
+            . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
+            . ' where l.deleted = 0'
+            . ' and l.status IN (' . Log::STATUS_NEWSLETTEROPENING . ',' . Log::STATUS_LINKOPENING . ')'
             . " and c.site in ('" . implode("','", $filter->getSitesForFilter()) . "')"
-            . " and nl.crdate>" . $filter->getTimeDateStart()->getTimestamp();
+            . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp();
         return (int)$connection->executeQuery($sql)->fetchOne();
     }
 
@@ -98,13 +98,13 @@ class LogRepository extends AbstractRepository
     public function getOpeningsByClickers(Filter $filter): int
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
-        $sql = "select count(distinct (newsletter, user))"
-            . " from " . Log::TABLE_NAME . " l"
-            . " left join " . Newsletter::TABLE_NAME . " nl on nl.uid=l.newsletter"
-            . " left join " . Configuration::TABLE_NAME . " c on nl.configuration=c.uid"
-            . " where l.deleted = 0 and l.status=" . Log::STATUS_LINKOPENING
+        $sql = 'select count(distinct (newsletter, user))'
+            . ' from ' . Log::TABLE_NAME . ' l'
+            . ' left join ' . Newsletter::TABLE_NAME . ' nl on nl.uid=l.newsletter'
+            . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
+            . ' where l.deleted = 0 and l.status=' . Log::STATUS_LINKOPENING
             . " and c.site in ('" . implode("','", $filter->getSitesForFilter()) . "')"
-            . " and nl.crdate>" . $filter->getTimeDateStart()->getTimestamp();
+            . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp();
         return (int)$connection->executeQuery($sql)->fetchOne();
     }
 
@@ -147,13 +147,13 @@ class LogRepository extends AbstractRepository
     protected function getOverallAmountByLogStatus(array $status, Filter $filter): int
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
-        $sql = "select count(l.uid)"
-            . " from " . Log::TABLE_NAME . " l"
-            . " left join " . Newsletter::TABLE_NAME . " nl on nl.uid=l.newsletter"
-            . " left join " . Configuration::TABLE_NAME . " c on nl.configuration=c.uid"
-            . " where l.deleted = 0 and l.status in (" . ArrayUtility::convertArrayToIntegerList($status) . ")"
+        $sql = 'select count(l.uid)'
+            . ' from ' . Log::TABLE_NAME . ' l'
+            . ' left join ' . Newsletter::TABLE_NAME . ' nl on nl.uid=l.newsletter'
+            . ' left join ' . Configuration::TABLE_NAME . ' c on nl.configuration=c.uid'
+            . ' where l.deleted = 0 and l.status in (' . ArrayUtility::convertArrayToIntegerList($status) . ')'
             . " and c.site in ('" . implode("','", $filter->getSitesForFilter()) . "')"
-            . " and nl.crdate>" . $filter->getTimeDateStart()->getTimestamp();
+            . ' and nl.crdate>' . $filter->getTimeDateStart()->getTimestamp();
         return (int)$connection->executeQuery($sql)->fetchOne();
     }
 
@@ -275,7 +275,7 @@ class LogRepository extends AbstractRepository
         $uid = (int)$queryBuilder
             ->select('uid')
             ->from(Log::TABLE_NAME)
-            ->where("newsletter=" . (int)$newsletterIdentifier . " and user='" . (int)$userIdentifier . "' and status='" . (int)$status . "'")
+            ->where('newsletter=' . (int)$newsletterIdentifier . " and user='" . (int)$userIdentifier . "' and status='" . (int)$status . "'")
             ->setMaxResults(1)
             ->executeQuery()
             ->fetchOne();
@@ -297,8 +297,8 @@ class LogRepository extends AbstractRepository
             $sqlSelectColumns = 'distinct (newsletter, user)';
         }
         return $connection->executeQuery(
-            "select " . $sqlSelectColumns . " from " . Log::TABLE_NAME .
-            " where deleted=0 and status in (" . implode(",", $status) . ") and newsletter=" . (int)$newsletter->getUid()
+            'select ' . $sqlSelectColumns . ' from ' . Log::TABLE_NAME .
+            ' where deleted=0 and status in (' . implode(',', $status) . ') and newsletter=' . (int)$newsletter->getUid()
         )->fetchAllAssociative();
     }
 
@@ -312,13 +312,13 @@ class LogRepository extends AbstractRepository
     public function findRawByUser(User $user, array $statusWhitelist = [], array $statusBlacklist = []): array
     {
         $connection = DatabaseUtility::getConnectionForTable(Log::TABLE_NAME);
-        $sql = "select * from " . Log::TABLE_NAME . " where deleted=0 and user='" . (int)$user->getUid() . "'";
+        $sql = 'select * from ' . Log::TABLE_NAME . " where deleted=0 and user='" . (int)$user->getUid() . "'";
         if ($statusWhitelist !== []) {
-            $sql .= " and status in (" . implode(",", $statusWhitelist) . ")";
+            $sql .= ' and status in (' . implode(',', $statusWhitelist) . ')';
         } elseif ($statusBlacklist !== []) {
-            $sql .= " and status not in (" . implode(",", $statusBlacklist) . ")";
+            $sql .= ' and status not in (' . implode(',', $statusBlacklist) . ')';
         }
-        $sql .= " order by crdate desc";
+        $sql .= ' order by crdate desc';
         return (array)$connection->executeQuery($sql)->fetchAllAssociative();
     }
 
