@@ -94,7 +94,7 @@ class UserRepository extends AbstractRepository
                 if ($sub !== '') {
                     $sub .= ' or ';
                 }
-                $sub .= 'find_in_set(' . (int)$identifier . ',usergroup)';
+                $sub .= '(concat(\',\', usergroup, \',\') like \'%,' . (int)$identifier . ',%\')';
             }
             $sql .= ' where deleted=0 and disable=0 and email like "%@%" and (' . $sub . ')';
             return (int)$connection->executeQuery($sql)->fetchOne();
