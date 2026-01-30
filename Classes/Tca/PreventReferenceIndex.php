@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace In2code\Luxletter\TCA;
+namespace In2code\Luxletter\Tca;
 
 use TYPO3\CMS\Core\DataHandling\Event\IsTableExcludedFromReferenceIndexEvent;
 

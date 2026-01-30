@@ -32,7 +32,7 @@ services:
       - name: 'console.command'
         command: 'luxletter:queue'
 
-  In2code\Luxletter\TCA\PreventReferenceIndex:
+  In2code\Luxletter\Tca\PreventReferenceIndex:
     tags:
       - name: 'event.listener'
         identifier: 'luxletter/preventReferenceIndex'
