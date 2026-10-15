@@ -227,12 +227,14 @@ test-tslint:
 	echo "$(EMOJI_robot) Test: Start TypoScript Linter tests"
 	docker compose exec php composer test:ts:lint
 
-## Test: Unit
+test: test-unit test-functional
+
+## Test: Unit (pass PHPUnit options with ARGS, e.g. make test-unit ARGS="--display-deprecations")
 test-unit:
 	echo "$(EMOJI_robot) Test: Start unit tests"
-	docker compose exec php composer test:unit
+	docker compose exec php composer test:unit -- $(ARGS)
 
-## Test: Functional (creates own test databases, so the MySQL root user is used)
+## Test: Functional (creates own test databases, so the MySQL root user is used; PHPUnit options via ARGS)
 test-functional:
 	echo "$(EMOJI_robot) Test: Start functional tests"
 	docker compose exec \
@@ -240,7 +242,7 @@ test-functional:
 		-e typo3DatabaseName=$(MYSQL_DATABASE) \
 		-e typo3DatabaseUsername=root \
 		-e typo3DatabasePassword=$(MYSQL_ROOT_PASSWORD) \
-		php composer test:functional
+		php composer test:functional -- $(ARGS)
 
 include .env
 
