@@ -1,0 +1,9 @@
+"tx_luxletter_domain_model_configuration"
+,"uid","pid","title","from_email","from_name","reply_email","reply_name","site"
+,1,0,"Default","newsletter@example.org","Newsletter","reply@example.org","Reply","main"
+"tx_luxletter_domain_model_newsletter"
+,"uid","pid","title","subject","receivers","configuration","layout","origin","bodytext","disabled","language","queued","datetime","crdate"
+,1,0,"Newsletter 1","Subject 1","1,3",1,"NewsletterContainer","1","<p>Newsletter 1</p>",0,0,0,1600000000,1600000000
+,2,0,"Disabled newsletter","Subject 2","1",1,"NewsletterContainer","1","<p>Newsletter 2</p>",1,0,1,1600000000,1600000000
+,3,0,"Newsletter without configuration","Subject 3","1",0,"NewsletterContainer","1","<p>Newsletter 3</p>",0,0,1,1600000000,1600000000
+,4,0,"Newsletter without layout","Subject 4","1",1,"","1","<p>Newsletter 4</p>",0,0,1,1600000000,1600000000

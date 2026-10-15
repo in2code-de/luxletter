@@ -232,6 +232,16 @@ test-unit:
 	echo "$(EMOJI_robot) Test: Start unit tests"
 	docker compose exec php composer test:unit
 
+## Test: Functional (creates own test databases, so the MySQL root user is used)
+test-functional:
+	echo "$(EMOJI_robot) Test: Start functional tests"
+	docker compose exec \
+		-e typo3DatabaseHost=$(MYSQL_HOST) \
+		-e typo3DatabaseName=$(MYSQL_DATABASE) \
+		-e typo3DatabaseUsername=root \
+		-e typo3DatabasePassword=$(MYSQL_ROOT_PASSWORD) \
+		php composer test:functional
+
 include .env
 
 # SETTINGS

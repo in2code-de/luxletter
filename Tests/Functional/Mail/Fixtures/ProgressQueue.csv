@@ -1,0 +1,17 @@
+"pages"
+,"uid","pid","title","slug","doktype","is_siteroot"
+,1,0,"Root","/",1,1
+,2,1,"Unsubscribe","/unsubscribe",1,0
+"tx_luxletter_domain_model_configuration"
+,"uid","pid","title","from_email","from_name","reply_email","reply_name","site"
+,1,0,"Default","newsletter@example.org","Newsletter","reply@example.org","Reply","main"
+,2,0,"Broken","newsletter@example.org","Newsletter","reply@example.org","Reply","not-existing"
+"tx_luxletter_domain_model_newsletter"
+,"uid","pid","title","subject","receivers","configuration","layout","origin","bodytext","disabled","language","queued","datetime","crdate"
+,1,0,"Newsletter 1","Hello {user.lastName}","1",1,"NewsletterContainer","1","<p>Dear {user.lastName}</p><p><a href=""https://www.in2code.de/target"">Link</a></p>",0,0,1,1600000000,1600000000
+,2,0,"Newsletter 2","Broken","1",2,"NewsletterContainer","1","<p>Broken</p>",0,0,1,1600000000,1600000000
+"tx_luxletter_domain_model_queue"
+,"uid","pid","email","newsletter","user","datetime","sent","failures","tstamp"
+,1,0,"alice@example.org",1,1,1600000000,0,0,1
+,2,0,"bob@example.org",1,2,1600000000,0,0,2
+,3,0,"alice@example.org",2,1,1600000000,0,0,3

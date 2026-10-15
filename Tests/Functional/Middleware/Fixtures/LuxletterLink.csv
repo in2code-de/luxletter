@@ -1,0 +1,11 @@
+"pages"
+,"uid","pid","title","slug","doktype","is_siteroot"
+,1,0,"Root","/",1,1
+"sys_template"
+,"uid","pid","title","root","clear","config"
+,1,1,"Root","1","3","page = PAGE
+page.10 = TEXT
+page.10.value = page content"
+"tx_luxletter_domain_model_link"
+,"uid","pid","newsletter","user","hash","target"
+,1,0,3,5,"hash1","https://www.in2code.de/target"

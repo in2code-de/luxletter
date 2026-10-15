@@ -1,0 +1,15 @@
+"fe_groups"
+,"uid","pid","title","luxletter_receiver"
+,1,0,"Newsletter A",1
+,2,0,"Customers",0
+,3,0,"Newsletter B",1
+"fe_users"
+,"uid","pid","username","email","usergroup","disable","deleted","luxletter_language","last_name","crdate"
+,1,0,"alice","alice@example.org","1",0,0,0,"Alice",1600000000
+,2,0,"bob","bob@example.org","1,2",0,0,1,"Bob",1600000000
+,3,0,"carol","carol@example.org","2",0,0,0,"Carol",1600000000
+,4,0,"dave","dave@example.org","3",0,0,-1,"Dave",1600000000
+,5,0,"eve","no-email","1",0,0,0,"Eve",1600000000
+,6,0,"frank","frank@example.org","1",1,0,0,"Frank",1600000000
+,7,0,"gina","gina@example.org","1",0,1,0,"Gina",1600000000
+,8,0,"alice2","alice@example.org","3",0,0,0,"Alice",1600000000

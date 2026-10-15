@@ -1,0 +1,12 @@
+"tx_luxletter_domain_model_queue"
+,"uid","pid","email","newsletter","user","datetime","sent","failures","tstamp"
+,1,0,"alice@example.org",1,1,1600000000,0,0,2
+,2,0,"bob@example.org",1,2,2100000000,0,0,3
+,3,0,"dave@example.org",1,4,1600000000,1,0,4
+,4,0,"alice@example.org",1,8,1600000000,0,3,5
+,5,0,"alice@example.org",2,1,1600000000,0,0,6
+,6,0,"alice@example.org",3,1,1600000000,0,0,7
+,7,0,"alice@example.org",4,1,1600000000,0,0,8
+,8,0,"frank@example.org",1,6,1600000000,0,0,9
+,9,0,"gina@example.org",1,7,1600000000,0,0,10
+,10,0,"bob@example.org",1,2,1600000000,0,2,1
