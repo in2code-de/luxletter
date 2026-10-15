@@ -43,6 +43,7 @@ class UserRepository extends AbstractRepository
         }
 
         $query = $this->createQuery();
+        $query->getQuerySettings()->setIgnoreEnableFields(false);
         $constraints = [
             $query->like('email', '%@%'),
         ];
