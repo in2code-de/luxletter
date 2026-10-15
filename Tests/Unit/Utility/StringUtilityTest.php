@@ -3,6 +3,7 @@
 namespace In2code\Luxletter\Tests\Unit\Utility;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
+use In2code\Luxletter\Tests\Unit\Fixtures\EncryptionKeyTrait;
 use In2code\Luxletter\Utility\StringUtility;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -11,6 +12,8 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 #[CoversClass(StringUtility::class)]
 class StringUtilityTest extends UnitTestCase
 {
+    use EncryptionKeyTrait;
+
     /**
      * @return void
      */
@@ -151,5 +154,53 @@ class StringUtilityTest extends UnitTestCase
         ];
         $hash = StringUtility::getHashFromArguments($arguments, false);
         self::assertSame('852efa41125da97602459ac029689f486999f5d10ba84ab0432a144e7bb3abab', $hash);
+    }
+
+    /**
+     * @return void
+     * @throws MisconfigurationException
+     */
+    public function testGetHashFromArgumentsAddsEncryptionKey(): void
+    {
+        $this->addEncryptionKey('secret');
+        $arguments = [
+            'foo' => 'bar',
+            'bar' => 'foo',
+        ];
+        self::assertSame(hash('sha256', 'bar/foo/secret'), StringUtility::getHashFromArguments($arguments));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetHashFromArgumentsThrowsExceptionWithoutEncryptionKey(): void
+    {
+        $this->addEncryptionKey('');
+
+        $this->expectException(MisconfigurationException::class);
+        $this->expectExceptionCode(1562069158);
+        StringUtility::getHashFromArguments(['foo']);
+    }
+
+    public static function removeStringPostfixDataProvider(): array
+    {
+        return [
+            'controller name' => ['NewsletterController', 'Controller', 'Newsletter'],
+            'action name' => ['dashboardAction', 'Action', 'dashboard'],
+            'only at the end' => ['ActionlistAction', 'Action', 'Actionlist'],
+            'postfix not given' => ['Newsletter', 'Controller', 'Newsletter'],
+        ];
+    }
+
+    /**
+     * @param string $string
+     * @param string $postfix
+     * @param string $expected
+     * @return void
+     */
+    #[DataProvider('removeStringPostfixDataProvider')]
+    public function testRemoveStringPostfix(string $string, string $postfix, string $expected): void
+    {
+        self::assertSame($expected, StringUtility::removeStringPostfix($string, $postfix));
     }
 }
