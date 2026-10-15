@@ -87,4 +87,8 @@ if (ConfigurationUtility::isMultiLanguageModeActivated()) {
     ExtensionManagementUtility::addUserTSConfig(
         'options.pageTree.doktypesToShowInNewPageDragArea := addToList(' . $doktype . ')'
     );
+
+    if (ExtensionManagementUtility::isLoaded('yoast_seo')) {
+        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['yoast_seo']['allowedDoktypes']['luxletter'] = $doktype;
+    }
 }
