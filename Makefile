@@ -165,7 +165,7 @@ lfs-fetch:
 	tar xvfz ../../.project/data/fileadmin.tar.gz
 
 ## To start an existing project incl. rsync from fileadmin, uploads and database dump
-install-project: lfs-fetch .link-compose-file destroy .add-hosts-entry .init-docker .fix-mount-perms composer-install .typo3-add-site .typo3-add-dockerconfig .provision-fileadmin mysql-restore typo3-comparedb typo3-clearcache .typo3-setupinstall
+install-project: lfs-fetch .link-compose-file destroy .add-hosts-entry .init-docker .fix-mount-perms composer-install .typo3-add-site .typo3-add-dockerconfig .provision-fileadmin mysql-restore .typo3-setupinstall typo3-comparedb typo3-clearcache
 	echo "---------------------"
 	echo ""
 	echo "The project is online $(EMOJI_thumbsup)"
