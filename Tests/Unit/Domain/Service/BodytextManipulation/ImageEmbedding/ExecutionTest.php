@@ -7,22 +7,18 @@ use In2code\Luxletter\Exception\ApiConnectionException;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service\BodytextManipulation\ImageEmbedding\ExecutionFixture;
 use In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service\BodytextManipulation\ImageEmbedding\PreparationFixture;
-use Nimut\TestingFramework\MockObject\AccessibleMockObjectInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
+use TYPO3\TestingFramework\Core\AccessibleObjectInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
+use UnexpectedValueException;
 
-/**
- * @coversDefaultClass Execution
- */
+#[CoversClass(Execution::class)]
 class ExecutionTest extends UnitTestCase
 {
-    /**
-     * @var AccessibleMockObjectInterface|MockObject|ExecutionFixture
-     * Todo: Add typehints to variable when PHP 7.4 is dropped
-     */
-    protected $generalValidatorMock;
+    protected AccessibleObjectInterface&MockObject&ExecutionFixture $subject;
 
     protected array $bodytextExamples = [
         '<html>
@@ -98,20 +94,19 @@ class ExecutionTest extends UnitTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->generalValidatorMock = $this->getAccessibleMock(ExecutionFixture::class, null);
+        $this->subject = $this->getAccessibleMock(ExecutionFixture::class, null);
     }
 
     /**
      * @return void
-     * @covers ::setBodytext
      */
     public function testSetBodytext(): void
     {
-        self::assertSame('', $this->generalValidatorMock->_get('content'));
-        self::assertNull($this->generalValidatorMock->_get('dom'));
-        $this->generalValidatorMock->_call('setBodytext', $this->bodytextExamples[0]);
-        self::assertSame($this->bodytextExamples[0], $this->generalValidatorMock->_get('content'));
-        self::assertInstanceOf(\DOMDocument::class, $this->generalValidatorMock->_get('dom'));
+        self::assertSame('', $this->subject->_get('content'));
+        self::assertNull($this->subject->_get('dom'));
+        $this->subject->_call('setBodytext', $this->bodytextExamples[0]);
+        self::assertSame($this->bodytextExamples[0], $this->subject->_get('content'));
+        self::assertInstanceOf(\DOMDocument::class, $this->subject->_get('dom'));
     }
 
     /**
@@ -120,7 +115,6 @@ class ExecutionTest extends UnitTestCase
      * @throws MisconfigurationException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
-     * @covers ::getImages
      */
     public function testGetImages(): void
     {
@@ -129,19 +123,19 @@ class ExecutionTest extends UnitTestCase
         $preparationFixture->storeImages($this->bodytextExamples[0]);
 
         // check for one image
-        $this->generalValidatorMock->_call('setBodytext', $this->bodytextExamples[0]);
-        $result1 = $this->generalValidatorMock->_call('getImages');
-        $image1Cid = $this->generalValidatorMock->_call(
+        $this->subject->_call('setBodytext', $this->bodytextExamples[0]);
+        $result1 = $this->subject->_call('getImages');
+        $image1Cid = $this->subject->_call(
             'getEmbedNameForPathAndFilename',
-            $this->generalValidatorMock->_call('getNewImagePathAndFilename', $this->imagesExamples[0][0])
+            $this->subject->_call('getNewImagePathAndFilename', $this->imagesExamples[0][0])
         );
         self::assertArrayHasKey($image1Cid, $result1);
         self::assertFileExists(current($result1));
 
         // check for ten images
         $preparationFixture->storeImages($this->bodytextExamples[1]);
-        $this->generalValidatorMock->_call('setBodytext', $this->bodytextExamples[1]);
-        $result2 = $this->generalValidatorMock->_call('getImages');
+        $this->subject->_call('setBodytext', $this->bodytextExamples[1]);
+        $result2 = $this->subject->_call('getImages');
         $iteration = 0;
         foreach ($result2 as $name => $path) {
             $iteration++;
@@ -151,8 +145,8 @@ class ExecutionTest extends UnitTestCase
 
         // check for two images - no duplicates
         $preparationFixture->storeImages($this->bodytextExamples[2]);
-        $this->generalValidatorMock->_call('setBodytext', $this->bodytextExamples[2]);
-        $result3 = $this->generalValidatorMock->_call('getImages');
+        $this->subject->_call('setBodytext', $this->bodytextExamples[2]);
+        $result3 = $this->subject->_call('getImages');
         $iteration = 0;
         foreach ($result3 as $name => $path) {
             $iteration++;
@@ -163,19 +157,18 @@ class ExecutionTest extends UnitTestCase
 
     /**
      * @return void
-     * @covers ::getRewrittenContent
      */
     public function testGetRewrittenContent(): void
     {
-        $this->generalValidatorMock->_call('setBodytext', $this->bodytextExamples[1]);
-        $content = $this->generalValidatorMock->_call('getRewrittenContent');
-        $image1Cid = $this->generalValidatorMock->_call(
+        $this->subject->_call('setBodytext', $this->bodytextExamples[1]);
+        $content = $this->subject->_call('getRewrittenContent');
+        $image1Cid = $this->subject->_call(
             'getEmbedNameForPathAndFilename',
-            $this->generalValidatorMock->_call('getNewImagePathAndFilename', $this->imagesExamples[1][0])
+            $this->subject->_call('getNewImagePathAndFilename', $this->imagesExamples[1][0])
         );
-        $image10Cid = $this->generalValidatorMock->_call(
+        $image10Cid = $this->subject->_call(
             'getEmbedNameForPathAndFilename',
-            $this->generalValidatorMock->_call('getNewImagePathAndFilename', $this->imagesExamples[1][9])
+            $this->subject->_call('getNewImagePathAndFilename', $this->imagesExamples[1][9])
         );
         self::assertNotSame($image1Cid, $image10Cid);
         self::assertNotFalse(stripos($content, 'cid:' . $image1Cid));
@@ -184,13 +177,12 @@ class ExecutionTest extends UnitTestCase
 
     /**
      * @return void
-     * @covers ::getEmbedNameFromIterator
      */
     public function testGetEmbedNameForPathAndFilename(): void
     {
-        $image1Cid = $this->generalValidatorMock->_call('getEmbedNameForPathAndFilename', $this->pathExamples[0][0]);
-        $image2Cid = $this->generalValidatorMock->_call('getEmbedNameForPathAndFilename', $this->pathExamples[0][1]);
-        $image3Cid = $this->generalValidatorMock->_call('getEmbedNameForPathAndFilename', $this->pathExamples[0][2]);
+        $image1Cid = $this->subject->_call('getEmbedNameForPathAndFilename', $this->pathExamples[0][0]);
+        $image2Cid = $this->subject->_call('getEmbedNameForPathAndFilename', $this->pathExamples[0][1]);
+        $image3Cid = $this->subject->_call('getEmbedNameForPathAndFilename', $this->pathExamples[0][2]);
         self::assertNotSame($image1Cid, $image2Cid);
         self::assertSame($image1Cid, $image3Cid);
         self::assertSame('name_0986b8209e4f2bd20600ceaa608aa66e', $image1Cid);
@@ -200,14 +192,21 @@ class ExecutionTest extends UnitTestCase
 
     /**
      * @return void
-     * @covers ::checkInitialization
      */
-    public function testCheckInitialization(): void
+    public function testCheckInitializationThrowsExceptionWithoutBodytext(): void
     {
+        $this->expectException(UnexpectedValueException::class);
         $this->expectExceptionCode(1637319117);
-        $this->generalValidatorMock->_call('checkInitialization');
+        $this->subject->_call('checkInitialization');
+    }
 
-        $this->generalValidatorMock->_call('setBodytext', $this->bodytextExamples[0]);
-        $this->generalValidatorMock->_call('checkInitialization');
+    /**
+     * @return void
+     */
+    public function testCheckInitializationPassesWithBodytext(): void
+    {
+        $this->subject->_call('setBodytext', $this->bodytextExamples[0]);
+        $this->subject->_call('checkInitialization');
+        $this->addToAssertionCount(1);
     }
 }

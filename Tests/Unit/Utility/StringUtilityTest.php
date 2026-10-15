@@ -4,17 +4,15 @@ namespace In2code\Luxletter\Tests\Unit\Utility;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Utility\StringUtility;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @coversDefaultClass \In2code\Luxletter\Utility\StringUtility
- */
+#[CoversClass(StringUtility::class)]
 class StringUtilityTest extends UnitTestCase
 {
     /**
      * @return void
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @covers ::getFilenameFromPathAndFilename
      */
     public function testIsAbsoluteImageUrl(): void
     {
@@ -32,8 +30,6 @@ class StringUtilityTest extends UnitTestCase
 
     /**
      * @return void
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @covers ::getFilenameFromPathAndFilename
      */
     public function testIsValidUrl(): void
     {
@@ -83,10 +79,8 @@ class StringUtilityTest extends UnitTestCase
      * @param string $needle
      * @param bool $expectedResult
      * @return void
-     * @dataProvider startsWithDataProvider
-     * @test
-     * @covers ::startsWith
      */
+    #[DataProvider('startsWithDataProvider')]
     public function testStartsWith($haystack, $needle, $expectedResult): void
     {
         self::assertSame($expectedResult, StringUtility::startsWith($haystack, $needle));
@@ -138,10 +132,8 @@ class StringUtilityTest extends UnitTestCase
      * @param string $needle
      * @param bool $expectedResult
      * @return void
-     * @dataProvider endsWithDataProvider
-     * @test
-     * @covers ::endsWith
      */
+    #[DataProvider('endsWithDataProvider')]
     public function testEndsWith($haystack, $needle, $expectedResult): void
     {
         self::assertSame($expectedResult, StringUtility::endsWith($haystack, $needle));
@@ -150,7 +142,6 @@ class StringUtilityTest extends UnitTestCase
     /**
      * @return void
      * @throws MisconfigurationException
-     * @covers ::getHashFromArguments
      */
     public function testGetHashFromArguments(): void
     {

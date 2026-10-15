@@ -3,19 +3,16 @@
 namespace In2code\Luxletter\Tests\Unit\Utility;
 
 use In2code\Luxletter\Utility\BackendUserUtility;
+use PHPUnit\Framework\Attributes\CoversClass;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @coversDefaultClass \In2code\Luxletter\Utility\BackendUserUtility
- */
-class BackendUserTest extends UnitTestCase
+#[CoversClass(BackendUserUtility::class)]
+class BackendUserUtilityTest extends UnitTestCase
 {
     /**
      * @return void
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @covers ::getBackendUserAuthentication
      */
-    public function testIsAbsoluteImageUrl(): void
+    public function testGetBackendUserAuthenticationReturnsNullWithoutBackendUser(): void
     {
         self::assertNull(BackendUserUtility::getBackendUserAuthentication());
     }

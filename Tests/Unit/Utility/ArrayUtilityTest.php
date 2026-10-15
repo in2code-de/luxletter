@@ -3,11 +3,11 @@
 namespace In2code\Luxletter\Tests\Unit\Utility;
 
 use In2code\Luxletter\Utility\ArrayUtility;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @coversDefaultClass \In2code\Luxletter\Utility\ArrayUtility
- */
+#[CoversClass(ArrayUtility::class)]
 class ArrayUtilityTest extends UnitTestCase
 {
     public static function convertToIntegerArrayDataProvider(): array
@@ -36,10 +36,8 @@ class ArrayUtilityTest extends UnitTestCase
      * @param array $actual
      * @param array $expected
      * @return void
-     * @dataProvider convertToIntegerArrayDataProvider
-     * @test
-     * @covers ::convertToIntegerArray
      */
+    #[DataProvider('convertToIntegerArrayDataProvider')]
     public function testConvertToIntegerArray(array $actual, array $expected): void
     {
         self::assertSame($expected, ArrayUtility::convertToIntegerArray($actual));
@@ -75,10 +73,8 @@ class ArrayUtilityTest extends UnitTestCase
      * @param array $actual
      * @param string $expected
      * @return void
-     * @dataProvider convertArrayToIntegerListDataProvider
-     * @test
-     * @covers ::convertArrayToIntegerList
      */
+    #[DataProvider('convertArrayToIntegerListDataProvider')]
     public function testConvertArrayToIntegerList(array $actual, string $expected): void
     {
         self::assertSame($expected, ArrayUtility::convertArrayToIntegerList($actual));

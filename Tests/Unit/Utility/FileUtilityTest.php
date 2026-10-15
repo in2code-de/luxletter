@@ -3,16 +3,14 @@
 namespace In2code\Luxletter\Tests\Unit\Utility;
 
 use In2code\Luxletter\Utility\FileUtility;
+use PHPUnit\Framework\Attributes\CoversClass;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
-/**
- * @coversDefaultClass \In2code\Luxletter\Utility\FileUtility
- */
+#[CoversClass(FileUtility::class)]
 class FileUtilityTest extends UnitTestCase
 {
     /**
      * @return void
-     * @covers ::getExtensionFromPathAndFilename
      */
     public function testGetExtensionFromPathAndFilename(): void
     {
