@@ -49,10 +49,6 @@
   content: "";
   top: 0;
   left: 0;
-
-  .luxletter--typo3-12 & {
-    border-left-color: var(--panel-bg);
-  }
 }
 
 .wizard:not(.left-arrow) a:after {

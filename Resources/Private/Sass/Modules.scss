@@ -234,14 +234,6 @@ label {
     border: 1px solid var(--typo3-component-border-color);
 }
 
-.luxletter--typo3-12 {
-
-    & .table-title,
-    & .table {
-        --typo3-component-border-color: #dddddd;
-    }
-}
-
 .table-hover > tbody > tr:hover,
 .table-hover > tbody > tr.lux-action-detail {
     background-color: $colorMain;

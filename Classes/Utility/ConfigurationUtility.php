@@ -9,7 +9,6 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotCon
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
-use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
@@ -192,11 +191,6 @@ class ConfigurationUtility
             throw new MisconfigurationException('No encryption key found in this TYPO3 installation', 1562069158);
         }
         return $encryptionKey;
-    }
-
-    public static function isTypo3Version12(): bool
-    {
-        return (new Typo3Version())->getMajorVersion() === 12;
     }
 
     public static function isCli(): bool

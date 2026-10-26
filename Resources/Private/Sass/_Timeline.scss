@@ -145,10 +145,6 @@ $linewidth: 3px;
         content: '';
         display: block;
         position: absolute;
-
-        .luxletter--typo3-12 & {
-            background-color: var(--panel-bg);
-        }
       }
     }
   }

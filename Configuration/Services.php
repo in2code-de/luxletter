@@ -64,7 +64,7 @@ return function (ContainerConfigurator $configurator, ContainerBuilder $containe
             ->arg('$dataProvider', new Reference(UnsubscribeRateDataProvider::class))
             ->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
 
-        $configuration = $services->set('dashboard.widgets.ReceiverWidget')
+        $services->set('dashboard.widgets.ReceiverWidget')
             ->class(NumberWithIconWidget::class)
             ->tag('dashboard.widget', [
                 'identifier' => 'luxletterReceiver',
@@ -80,10 +80,6 @@ return function (ContainerConfigurator $configurator, ContainerBuilder $containe
             ])
             ->arg('$dataProvider', new Reference(ReceiverDataProvider::class))
             ->arg('$backendViewFactory', new Reference(BackendViewFactory::class));
-        // Todo: Can be removed when TYPO3 12 support is dropped
-        if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() === 12) {
-            $configuration->arg('$view', new Reference('dashboard.views.widget'));
-        }
 
         $services->set('dashboard.widgets.NewsletterWidget')
             ->class(NumberWithIconWidget::class)
