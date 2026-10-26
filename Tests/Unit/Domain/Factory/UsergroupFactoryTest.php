@@ -7,7 +7,7 @@ use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Repository\UsergroupRepository;
 use In2code\Luxletter\Tests\Unit\Fixtures\DomainObjectTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 #[CoversClass(UsergroupFactory::class)]
@@ -15,13 +15,13 @@ class UsergroupFactoryTest extends UnitTestCase
 {
     use DomainObjectTrait;
 
-    protected UsergroupRepository&MockObject $usergroupRepository;
+    protected UsergroupRepository&Stub $usergroupRepository;
     protected UsergroupFactory $subject;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->usergroupRepository = $this->createMock(UsergroupRepository::class);
+        $this->usergroupRepository = self::createStub(UsergroupRepository::class);
         $this->subject = new UsergroupFactory($this->usergroupRepository);
     }
 
@@ -36,13 +36,14 @@ class UsergroupFactoryTest extends UnitTestCase
         $user->addUsergroup($this->getUsergroup(1));
         $user->addUsergroup($this->getUsergroup(7));
         $newGroups = [$this->getUsergroup(2), $this->getUsergroup(7)];
-        $this->usergroupRepository
+        $usergroupRepository = $this->createMock(UsergroupRepository::class);
+        $usergroupRepository
             ->expects(self::once())
             ->method('findByIdentifiersAndKeepOrderings')
             ->with([2, 7])
             ->willReturn($newGroups);
 
-        $this->subject->updateUsergroupsInUser($user, [2], [1, 2, 3]);
+        (new UsergroupFactory($usergroupRepository))->updateUsergroupsInUser($user, [2], [1, 2, 3]);
 
         self::assertSame($newGroups, $user->getUsergroup()->toArray());
     }
@@ -56,13 +57,14 @@ class UsergroupFactoryTest extends UnitTestCase
         $user->addUsergroup($this->getUsergroup(1));
         $user->addUsergroup($this->getUsergroup(2));
         $user->addUsergroup($this->getUsergroup(7));
-        $this->usergroupRepository
+        $usergroupRepository = $this->createMock(UsergroupRepository::class);
+        $usergroupRepository
             ->expects(self::once())
             ->method('findByIdentifiersAndKeepOrderings')
             ->with([7])
             ->willReturn([$this->getUsergroup(7)]);
 
-        $this->subject->updateUsergroupsInUser($user, [], [1, 2, 3]);
+        (new UsergroupFactory($usergroupRepository))->updateUsergroupsInUser($user, [], [1, 2, 3]);
 
         self::assertCount(1, $user->getUsergroup());
     }

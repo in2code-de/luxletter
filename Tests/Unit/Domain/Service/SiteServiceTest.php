@@ -7,7 +7,7 @@ use In2code\Luxletter\Exception\MisconfigurationException;
 use LogicException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Http\Uri;
 use TYPO3\CMS\Core\Routing\RouterInterface;
@@ -18,13 +18,13 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 #[CoversClass(SiteService::class)]
 class SiteServiceTest extends UnitTestCase
 {
-    protected SiteFinder&MockObject $siteFinder;
+    protected SiteFinder&Stub $siteFinder;
     protected SiteService $subject;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->siteFinder = $this->createMock(SiteFinder::class);
+        $this->siteFinder = self::createStub(SiteFinder::class);
         $this->subject = new SiteService($this->siteFinder);
     }
 
@@ -101,7 +101,9 @@ class SiteServiceTest extends UnitTestCase
         $site = self::createStub(Site::class);
         $site->method('getRootPageId')->willReturn(1);
         $site->method('getRouter')->willReturn($router);
-        $this->siteFinder->expects(self::once())->method('getSiteByPageId')->with(12)->willReturn($site);
+        $siteFinder = $this->createMock(SiteFinder::class);
+        $siteFinder->expects(self::once())->method('getSiteByPageId')->with(12)->willReturn($site);
+        $this->subject = new SiteService($siteFinder);
 
         self::assertSame(
             'https://www.in2code.de/unsubscribe?user=5',
@@ -115,7 +117,9 @@ class SiteServiceTest extends UnitTestCase
     public function testGetSiteReturnsSiteOfGivenPage(): void
     {
         $site = $this->getSite('https://www.in2code.de/');
-        $this->siteFinder->expects(self::once())->method('getSiteByPageId')->with(12)->willReturn($site);
+        $siteFinder = $this->createMock(SiteFinder::class);
+        $siteFinder->expects(self::once())->method('getSiteByPageId')->with(12)->willReturn($site);
+        $this->subject = new SiteService($siteFinder);
 
         self::assertSame($site, $this->subject->getSite(12));
     }

@@ -14,6 +14,7 @@ use In2code\Luxletter\Events\HashLinksEvent;
 use In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service\BodytextManipulation\LinkHashingFixture;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
 use TYPO3\CMS\Core\Site\Entity\Site;
@@ -25,7 +26,7 @@ class LinkHashingTest extends UnitTestCase
 {
     protected bool $resetSingletonInstances = true;
 
-    protected LinkRepository&MockObject $linkRepository;
+    protected LinkRepository&Stub $linkRepository;
     protected EventDispatcherInterface $eventDispatcher;
     protected Newsletter $newsletter;
     protected User $user;
@@ -38,7 +39,7 @@ class LinkHashingTest extends UnitTestCase
         $this->newsletter = new Newsletter();
         $this->newsletter->setConfiguration($configuration);
         $this->user = new User();
-        $this->linkRepository = $this->createMock(LinkRepository::class);
+        $this->linkRepository = self::createStub(LinkRepository::class);
         $this->eventDispatcher = new NoopEventDispatcher();
     }
 
@@ -47,7 +48,8 @@ class LinkHashingTest extends UnitTestCase
      */
     public function testConvertToAbsoluteHrefKeepsAbsoluteUrl(): void
     {
-        $subject = $this->getAccessibleMock(LinkHashingFixture::class, null, [$this->newsletter, $this->user]);
+        $accessibleClassName = $this->buildAccessibleProxy(LinkHashingFixture::class);
+        $subject = new $accessibleClassName($this->newsletter, $this->user);
         $testUri = 'https://test.org';
         self::assertSame($testUri, $subject->_call('convertToAbsoluteHref', $testUri));
     }
@@ -58,7 +60,7 @@ class LinkHashingTest extends UnitTestCase
     public function testHashLinksReplacesAbsoluteLinkWithTrackingLink(): void
     {
         $link = $this->addLink('https://www.in2code.de/target', 'https://www.in2code.de/?luxletterlink=hash1');
-        $this->linkRepository->expects(self::once())->method('add')->with($link);
+        $this->mockLinkRepository()->expects(self::once())->method('add')->with($link);
 
         $content = $this->getSubject()->hashLinks('<p><a href="https://www.in2code.de/target">Link</a></p>');
 
@@ -73,7 +75,7 @@ class LinkHashingTest extends UnitTestCase
     {
         $this->addSiteService();
         $this->addLink('https://www.in2code.de/folder/page', 'https://www.in2code.de/?luxletterlink=hash1');
-        $this->linkRepository->expects(self::once())->method('add');
+        $this->mockLinkRepository()->expects(self::once())->method('add');
 
         $content = $this->getSubject()->hashLinks('<p><a href="/folder/page">Link</a></p>');
 
@@ -87,7 +89,7 @@ class LinkHashingTest extends UnitTestCase
     {
         $this->addLink('https://www.in2code.de/one', 'https://www.in2code.de/?luxletterlink=hash1');
         $this->addLink('https://www.in2code.de/two', 'https://www.in2code.de/?luxletterlink=hash2');
-        $this->linkRepository->expects(self::exactly(2))->method('add');
+        $this->mockLinkRepository()->expects(self::exactly(2))->method('add');
 
         $content = $this->getSubject()->hashLinks(
             '<p><a href="https://www.in2code.de/one">One</a><a href="https://www.in2code.de/two">Two</a></p>'
@@ -102,7 +104,7 @@ class LinkHashingTest extends UnitTestCase
      */
     public function testHashLinksKeepsLinkWithParselinkFalseAndRemovesTheAttribute(): void
     {
-        $this->linkRepository->expects(self::never())->method('add');
+        $this->mockLinkRepository()->expects(self::never())->method('add');
 
         $content = $this->getSubject()->hashLinks(
             '<p><a href="https://www.in2code.de/target" data-luxletter-parselink="false">Link</a></p>'
@@ -117,7 +119,7 @@ class LinkHashingTest extends UnitTestCase
      */
     public function testHashLinksKeepsLinksWithoutValidUrl(): void
     {
-        $this->linkRepository->expects(self::never())->method('add');
+        $this->mockLinkRepository()->expects(self::never())->method('add');
 
         $content = $this->getSubject()->hashLinks('<p><a href="#top">Anchor</a><a>No href</a></p>');
 
@@ -145,6 +147,18 @@ class LinkHashingTest extends UnitTestCase
         self::assertSame([HashLinkEvent::class, HashLinksEvent::class], $dispatchedEvents);
     }
 
+    /**
+     * Replace the link repository stub with a mock to define expectations on it
+     *
+     * @return LinkRepository&MockObject
+     */
+    protected function mockLinkRepository(): LinkRepository&MockObject
+    {
+        $linkRepository = $this->createMock(LinkRepository::class);
+        $this->linkRepository = $linkRepository;
+        return $linkRepository;
+    }
+
     protected function getSubject(): LinkHashing
     {
         GeneralUtility::setSingletonInstance(LinkRepository::class, $this->linkRepository);
@@ -162,8 +176,8 @@ class LinkHashingTest extends UnitTestCase
     protected function addLink(string $expectedTarget, string $trackingUri): Link
     {
         $link = $this->createMock(Link::class);
-        $link->method('setNewsletter')->with($this->newsletter)->willReturnSelf();
-        $link->method('setUser')->with($this->user)->willReturnSelf();
+        $link->expects(self::once())->method('setNewsletter')->with($this->newsletter)->willReturnSelf();
+        $link->expects(self::once())->method('setUser')->with($this->user)->willReturnSelf();
         $link->expects(self::once())->method('setTarget')->with($expectedTarget)->willReturnSelf();
         $link->method('getUriFromHash')->willReturn($trackingUri);
         GeneralUtility::addInstance(Link::class, $link);

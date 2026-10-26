@@ -11,7 +11,7 @@ use In2code\Luxletter\Events\UnsubscribeUrlEvent;
 use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Tests\Unit\Fixtures\DomainObjectTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\EventDispatcher\NoopEventDispatcher;
 use TYPO3\CMS\Core\Site\Entity\Site;
@@ -23,13 +23,13 @@ class UnsubscribeUrlServiceTest extends UnitTestCase
 {
     use DomainObjectTrait;
 
-    protected SiteService&MockObject $siteService;
+    protected SiteService&Stub $siteService;
     protected EventDispatcherInterface $eventDispatcher;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->siteService = $this->createMock(SiteService::class);
+        $this->siteService = self::createStub(SiteService::class);
         $this->eventDispatcher = new NoopEventDispatcher();
     }
 
@@ -40,6 +40,7 @@ class UnsubscribeUrlServiceTest extends UnitTestCase
      */
     public function testGetReturnsPlaceholderWithoutNewsletterAndUser(): void
     {
+        $this->siteService = $this->createMock(SiteService::class);
         $this->siteService->expects(self::never())->method('getPageUrlFromParameter');
         $subject = $this->getSubject(null, null, $this->getSite(12), 0);
 
@@ -51,6 +52,7 @@ class UnsubscribeUrlServiceTest extends UnitTestCase
      */
     public function testGetBuildsUrlToUnsubscribePageWithUserNewsletterAndHash(): void
     {
+        $this->siteService = $this->createMock(SiteService::class);
         $this->siteService
             ->expects(self::once())
             ->method('getPageUrlFromParameter')

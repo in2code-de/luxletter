@@ -68,6 +68,7 @@ class BackendUserUtilityTest extends UnitTestCase
     {
         $backendUser = $this->createMock(BackendUserAuthentication::class);
         $backendUser
+            ->expects(self::exactly(2))
             ->method('getSessionData')
             ->with('filterlistNewsletter_luxletter')
             ->willReturnOnConsecutiveCalls(['foo' => 'bar'], null);

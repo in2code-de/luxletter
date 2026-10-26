@@ -12,7 +12,6 @@ use In2code\Luxletter\Exception\DisallowedArgumentException;
 use In2code\Luxletter\Exception\MissingRelationException;
 use In2code\Luxletter\Tests\Unit\Fixtures\DomainObjectTrait;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 use TYPO3\TestingFramework\Core\AccessibleObjectInterface;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
@@ -22,12 +21,13 @@ class FrontendControllerTest extends UnitTestCase
 {
     use DomainObjectTrait;
 
-    protected AccessibleObjectInterface&MockObject&FrontendController $subject;
+    protected AccessibleObjectInterface&FrontendController $subject;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->subject = $this->getAccessibleMock(FrontendController::class, null, [], '', false);
+        $accessibleClassName = $this->buildAccessibleProxy(FrontendController::class);
+        $this->subject = (new \ReflectionClass($accessibleClassName))->newInstanceWithoutConstructor();
     }
 
     /**

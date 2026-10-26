@@ -7,7 +7,7 @@ use In2code\Luxletter\Domain\Service\LogService;
 use In2code\Luxletter\Events\LuxletterLinkProcessEvent;
 use In2code\Luxletter\Middleware\LuxletterLink;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -20,19 +20,19 @@ use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 class LuxletterLinkTest extends UnitTestCase
 {
     protected EventDispatcherInterface $eventDispatcher;
-    protected LinkRepository&MockObject $linkRepository;
-    protected LogService&MockObject $logService;
-    protected RequestHandlerInterface&MockObject $handler;
+    protected LinkRepository&Stub $linkRepository;
+    protected LogService&Stub $logService;
+    protected RequestHandlerInterface&Stub $handler;
     protected ResponseInterface $handlerResponse;
 
     public function setUp(): void
     {
         parent::setUp();
         $this->eventDispatcher = new NoopEventDispatcher();
-        $this->linkRepository = $this->createMock(LinkRepository::class);
-        $this->logService = $this->createMock(LogService::class);
+        $this->linkRepository = self::createStub(LinkRepository::class);
+        $this->logService = self::createStub(LogService::class);
         $this->handlerResponse = new Response();
-        $this->handler = $this->createMock(RequestHandlerInterface::class);
+        $this->handler = self::createStub(RequestHandlerInterface::class);
         $this->handler->method('handle')->willReturn($this->handlerResponse);
     }
 
@@ -41,6 +41,7 @@ class LuxletterLinkTest extends UnitTestCase
      */
     public function testProcessPassesRequestToNextHandlerWithoutLuxletterlinkParameter(): void
     {
+        $this->linkRepository = $this->createMock(LinkRepository::class);
         $this->linkRepository->expects(self::never())->method('findOneByHashRaw');
 
         $response = $this->getSubject()->process(new ServerRequest('https://www.in2code.de/'), $this->handler);
@@ -54,7 +55,9 @@ class LuxletterLinkTest extends UnitTestCase
     public function testProcessPassesRequestToNextHandlerWithUnknownHash(): void
     {
         $_REQUEST['luxletterlink'] = 'unknown';
+        $this->linkRepository = $this->createMock(LinkRepository::class);
         $this->linkRepository->expects(self::once())->method('findOneByHashRaw')->with('unknown')->willReturn([]);
+        $this->logService = $this->createMock(LogService::class);
         $this->logService->expects(self::never())->method('logLinkOpening');
 
         $response = $this->getSubject()->process(new ServerRequest('https://www.in2code.de/'), $this->handler);
@@ -69,8 +72,11 @@ class LuxletterLinkTest extends UnitTestCase
     {
         $_REQUEST['luxletterlink'] = 'hash1';
         $link = ['uid' => 1, 'user' => 5, 'newsletter' => 3, 'target' => 'https://www.in2code.de/target'];
-        $this->linkRepository->method('findOneByHashRaw')->with('hash1')->willReturn($link);
+        $this->linkRepository = $this->createMock(LinkRepository::class);
+        $this->linkRepository->expects(self::once())->method('findOneByHashRaw')->with('hash1')->willReturn($link);
+        $this->logService = $this->createMock(LogService::class);
         $this->logService->expects(self::once())->method('logLinkOpening')->with($link);
+        $this->handler = $this->createMock(RequestHandlerInterface::class);
         $this->handler->expects(self::never())->method('handle');
 
         $response = $this->getSubject()->process(new ServerRequest('https://www.in2code.de/'), $this->handler);

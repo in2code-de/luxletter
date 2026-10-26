@@ -8,7 +8,6 @@ use In2code\Luxletter\Exception\MisconfigurationException;
 use In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service\BodytextManipulation\ImageEmbedding\ExecutionFixture;
 use In2code\Luxletter\Tests\Unit\Fixtures\Domain\Service\BodytextManipulation\ImageEmbedding\PreparationFixture;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\MockObject\MockObject;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\TestingFramework\Core\AccessibleObjectInterface;
@@ -18,7 +17,7 @@ use UnexpectedValueException;
 #[CoversClass(Execution::class)]
 class ExecutionTest extends UnitTestCase
 {
-    protected AccessibleObjectInterface&MockObject&ExecutionFixture $subject;
+    protected AccessibleObjectInterface&ExecutionFixture $subject;
 
     protected array $bodytextExamples = [
         '<html>
@@ -94,7 +93,8 @@ class ExecutionTest extends UnitTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->subject = $this->getAccessibleMock(ExecutionFixture::class, null);
+        $accessibleClassName = $this->buildAccessibleProxy(ExecutionFixture::class);
+        $this->subject = new $accessibleClassName();
     }
 
     /**
