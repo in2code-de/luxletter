@@ -29,25 +29,38 @@ call_user_func(
         );
 
         /**
-         * Disable not needed fields in tt_content
+         * Show fields and flexform for plugins
          */
-        $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['luxletter_fe']
-            = 'select_key,pages,recursive';
-        $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['luxletter_unsubscribe2']
-            = 'select_key,pages,recursive';
-
-        /**
-         * Include Flexform for plugins
-         */
-        $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['luxletter_fe'] = 'pi_flexform';
+        $pluginShowitem = '
+            --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:general,
+                --palette--;;general,
+                --palette--;;headers,
+            --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:plugin,
+                pi_flexform,
+            --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:appearance,
+                --palette--;;frames,
+                --palette--;;appearanceLinks,
+            --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:language,
+                --palette--;;language,
+            --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:access,
+                --palette--;;hidden,
+                --palette--;;access,
+            --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:categories,
+                categories,
+            --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:notes,
+                rowDescription,
+            --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended,';
+        $GLOBALS['TCA']['tt_content']['types']['luxletter_fe']['showitem'] = $pluginShowitem;
         ExtensionManagementUtility::addPiFlexFormValue(
-            'luxletter_fe',
-            'FILE:EXT:luxletter/Configuration/FlexForm/FlexFormFe.xml'
+            '*',
+            'FILE:EXT:luxletter/Configuration/FlexForm/FlexFormFe.xml',
+            'luxletter_fe'
         );
-        $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['luxletter_unsubscribe2'] = 'pi_flexform';
+        $GLOBALS['TCA']['tt_content']['types']['luxletter_unsubscribe2']['showitem'] = $pluginShowitem;
         ExtensionManagementUtility::addPiFlexFormValue(
-            'luxletter_unsubscribe2',
-            'FILE:EXT:luxletter/Configuration/FlexForm/FlexFormUnsubscribe2.xml'
+            '*',
+            'FILE:EXT:luxletter/Configuration/FlexForm/FlexFormUnsubscribe2.xml',
+            'luxletter_unsubscribe2'
         );
 
         /**

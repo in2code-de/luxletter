@@ -12,36 +12,34 @@ defined('TYPO3') || die();
     'Fe',
     [\In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe'],
     [\In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe'],
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
 );
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
     'Luxletter',
     'Unsubscribe2',
     [\In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe2,unsubscribe2Update'],
     [\In2code\Luxletter\Controller\FrontendController::class => 'unsubscribe2,unsubscribe2Update'],
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
 );
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
     'Luxletter',
     'Preview',
     [\In2code\Luxletter\Controller\FrontendController::class => 'preview'],
     [\In2code\Luxletter\Controller\FrontendController::class => 'preview'],
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
 );
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
     'Luxletter',
     'TrackingPixel',
     [\In2code\Luxletter\Controller\FrontendController::class => 'trackingPixel'],
     [\In2code\Luxletter\Controller\FrontendController::class => 'trackingPixel'],
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT,
 );
 
 /**
  * Fluid Namespace
  */
 $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['luxletter'][] = 'In2code\Luxletter\ViewHelpers';
-
-/**
- * Update Wizards
- */
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['luxletterReceiversUpdateWizard']
-    = \In2code\Luxletter\Update\LuxletterReceiversUpdateWizard::class;
 
 /**
  * Add TypoScript automatically (to use it in backend modules)

@@ -10,6 +10,7 @@ use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Exception\DatabaseStructureException;
 use In2code\Luxletter\Utility\DatabaseUtility;
 use Throwable;
+use TYPO3\CMS\Install\Attribute\UpgradeWizard;
 use TYPO3\CMS\Install\Updates\DatabaseUpdatedPrerequisite;
 use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
 
@@ -18,6 +19,7 @@ use TYPO3\CMS\Install\Updates\UpgradeWizardInterface;
  * to copy values of
  * - tx_luxletter_domain_model_newsletter.receiver to .receivers
  */
+#[UpgradeWizard('luxletterReceiversUpdateWizard')]
 class LuxletterReceiversUpdateWizard implements UpgradeWizardInterface
 {
     /**
