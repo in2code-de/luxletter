@@ -43,6 +43,9 @@ services:
   In2code\Luxletter\Domain\Factory\UserFactory:
     public: true
 
+  In2code\Luxletter\Domain\Factory\ViewFactory:
+    public: true
+
   In2code\Luxletter\Domain\Service\Parsing\Newsletter:
     public: true
 
