@@ -26,5 +26,5 @@ make destroy
 
 ```
 Username: admin
-Password: Password!23
+Password: password
 ```
