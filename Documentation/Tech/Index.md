@@ -57,8 +57,9 @@ plugin {
 module.tx_luxletter < plugin.tx_luxletter
 ```
 
-**Note:** If you change the path via TypoScript extension template, please take care that you are using the very first
-template on root (otherwise the paths could not be recognized by the backend module or CLI calls)
+**Note:** The backend module and the CLI commands work without a page context. Since TYPO3 14, they only use global
+TypoScript (like `ext_typoscript_setup.typoscript` below) - TypoScript in root templates of the page tree is ignored
+there. In TYPO3 13, the very first root template is used as fallback.
 
 Next copy the template file NewsletterContainer.html to your sitepackage in
 `EXT:sitepackage/Resources/Private/Templates/Mail/` and modify it a bit with your wanted HTML.
@@ -70,7 +71,7 @@ Now you can include the file with a **ext_typoscript_setup.typoscript** file
 
 **Note:** The ordering of the TypoScript is the key solution to change the template files - check this in the TypoScript Object Browser
 
-**Note:** If your TypoScript is still overruled by the default TS, ensure that luxletter is loaded before your sitepackage (via ext_emconf.php depends settings in your sitepackage)
+**Note:** If your TypoScript is still overruled by the default TS, ensure that luxletter is loaded before your sitepackage (via `require` in composer.json of your sitepackage)
 
 ## Extending luxletter
 

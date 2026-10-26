@@ -169,8 +169,10 @@ plugin {
 module.tx_luxletter.view < plugin.tx_luxletter.view
 ```
 
-**Note:** If you change the path via TypoScript extension template, please take care that you are using the very first
-template on root (otherwise the paths could not be recognized by the backend module or CLI calls)
+**Note:** The backend module and the CLI commands only see this TypoScript if it is added globally - e.g. via
+`ext_typoscript_setup.typoscript` of your sitepackage (see [Change templates](../Tech/Index.md)). Since TYPO3 14, the
+TypoScript of root templates in the page tree is ignored in the backend module and on CLI. In TYPO3 13, the very first
+root template is used as fallback.
 
 The existing template is using the **Zurb Foundation email template**
 (see https://get.foundation/emails/docs/ for details)

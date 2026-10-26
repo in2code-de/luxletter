@@ -156,7 +156,7 @@ the default mail configuration from TYPO3 will be used when sending newsletters.
 
 Nevertheless it's highly recommended to set a different mailserver for your newsletter configuration to prevent
 that your complete server will be marked as spam on some cases.
-Such settings can simply be done in your typo3conf/AdditionalConfiguration.php file like:
+Such settings can simply be done in your config/system/additional.php file like:
 
 ```
 $GLOBALS['TYPO3_CONF_VARS']['MAIL_LUXLETTER']['transport'] = 'smtp';
@@ -198,9 +198,9 @@ As an alternative, you could also process the queue directly from the console:
 ./vendor/bin/typo3 luxletter:queue
 
 # Send a specific number of newsletters from queue
-./vendor/bin/typo3cms luxletter:queue 10
+./vendor/bin/typo3 luxletter:queue 10
 
 # Send some queued newsletters from newsletter with uid 123
-./vendor/bin/typo3cms luxletter:queue 10 123
+./vendor/bin/typo3 luxletter:queue 10 123
 ```
 

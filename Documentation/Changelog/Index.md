@@ -9,6 +9,7 @@
 
 | Version    | Date       | State   | TYPO3         | Description                                                                                                                                                                                      |
 |------------|------------|---------|---------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| !!! 30.0.0 | 2026-10-26 | Task    | `13.4 + 14.3` | Support TYPO3 14 (and 13) and drop support for TYPO3 12, plugins are registered as content elements now (please run the upgrade wizard), register upgrade wizards again                           |
 | 29.0.1     | 2026-01-30 | Task    | `12.4 + 13.4` | Small code cleanup                                                                                                                                                                               |
 | 29.0.0     | 2026-01-19 | Feature | `12.4 + 13.4` | Internal CURL request can be used now with basic auth, small fix for analysis of non-existing pages                                                                                              |
 | 28.0.0     | 2025-12-23 | Feature | `12.4 + 13.4` | Support closing SMTP-connections, Prevent unneeded refindex records, Performance changes, small layout improvements in backend                                                                   |
@@ -122,6 +123,35 @@
 
 ## Breaking changes !!!
 
+### Upgrade to 30.x
+
+* TYPO3 12 is dropped, TYPO3 13.4 or 14.3 and PHP 8.2 or newer are required now
+* The plugins `Quick unsubscribe` and `Unsubscribe with category selection` are now own content elements (`CType`)
+  instead of subtypes of the "General plugin" (`list_type`), because plugin subtypes were removed with TYPO3 14
+  * Existing plugins and the permissions of backend user groups (`be_groups.explicit_allowdeny`) are migrated by an
+    upgrade wizard
+  * **Todo:** Run the upgrade wizard (e.g. `./vendor/bin/typo3 upgrade:run luxletterPluginToContentElementUpdateWizard`)
+  * **Todo:** Adjust your own configuration if it refers to the plugins as `list_type`, e.g. TypoScript
+    `tt_content.list.20.luxletter_fe` (now `tt_content.luxletter_fe`), Page TSconfig for the content element wizard or
+    restrictions in backend layouts or in extensions like content_defender
+* Upgrade wizards are registered in a way that TYPO3 13 and 14 understand. Before, the wizard from version 17 was not
+  offered in TYPO3 13 any more.
+* TYPO3 14 only: The backend module and the CLI commands (e.g. `luxletter:queue` or
+  `luxletter:createnewsletterfromorigin`) only use **global TypoScript** now. Before, TYPO3 took the TypoScript of the
+  first root template in the page tree. With TYPO3 14, settings in a root template (e.g. own container templates in
+  `containerHtml`, inline CSS files or template paths) are ignored in the backend module and on CLI (see
+  [Breaking #105728](https://docs.typo3.org/permalink/changelog:breaking-105728-1732882067)).
+  * **Todo:** Move your luxletter TypoScript (`plugin.tx_luxletter` and `module.tx_luxletter < plugin.tx_luxletter`)
+    into `ext_typoscript_setup.typoscript` of your sitepackage (see [Change templates](../Tech/Index.md))
+* Changes for developers
+  * `NewsletterUrlContainerAndContentPostParsingEvent::getStandaloneView()` returns a
+    `\TYPO3\CMS\Core\View\ViewInterface` now (instead of `StandaloneView`, which was removed with TYPO3 14).
+    `assign()` and `assignMultiple()` work as before.
+  * `\In2code\Luxletter\Mail\MailMessage::send()` was removed (like `send()` in the TYPO3 core class).
+    Use `\In2code\Luxletter\Mail\Mailer::sendMailMessage($mailMessage)` instead.
+  * `ConfigurationUtility::isTypo3Version12()` and the viewhelper `luxletter:condition.isTypo3Twelve` were removed
+  * **Todo:** Adjust your code if you use one of these
+
 ### Upgrade to 26.x
 
 * Multiclient availability needs reading access for editors to rootpages of relevant sites
@@ -163,7 +193,7 @@ module.tx_luxletter < plugin.tx_luxletter
 * Multiple user groups can now be used for selecting receivers for newsletters
   * So the fieldname changed from `tx_luxletter_domain_model_newsletter.receiver` to `.receivers`
   * To allow sending of old newsletters that are not yet completely sent (or to edit afterwards), the value must be copied from one field to the other
-  * **Todo:** Simply run the upgrade wizard (e.g. `./vendor/bin/typo3cms upgrade:run luxletterReceiversUpdateWizard`)
+  * **Todo:** Simply run the upgrade wizard (e.g. `./vendor/bin/typo3 upgrade:run luxletterReceiversUpdateWizard`)
 * If newsletters are added via CLI command, you can now set a category uid
   * Example call (see third last parameter for category uid) `./vendor/bin/typo3 luxletter:createnewsletterfromorigin "Automatic NL" 1 1 16 0 "NewsletterContainer" "Newsletter {f:format.date(date:'now',format:'Y-m')}" 123 "Optional description here" "2022-12-24T14:00:00+00:00"`
   * **Todo:** Adjust your CLI commands or your scheduler tasks if you want to add a category
