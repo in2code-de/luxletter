@@ -126,7 +126,7 @@ class SiteServiceTest extends UnitTestCase
      */
     public function testGetSiteThrowsExceptionWithoutPageIdentifierOutsideOfFrontend(): void
     {
-        $GLOBALS['TSFE'] = null;
+        $GLOBALS['TYPO3_REQUEST'] = null;
 
         $this->expectException(LogicException::class);
         $this->expectExceptionCode(1622813408);

@@ -1,5 +1,6 @@
 <?php
 
+use TYPO3\CMS\Core\Information\Typo3Version;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
 
@@ -7,6 +8,19 @@ call_user_func(
     function () {
         $languageFilePrefix = 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:';
         $frontendLanguageFilePrefix = 'LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:';
+
+        /**
+         * TYPO3 14 expects one FlexForm per record type, TYPO3 13 only reads the global "ds" array
+         * Todo: Can be replaced by columnsOverrides only when TYPO3 13 support is dropped
+         */
+        $addFlexForm = function (string $contentType, string $flexForm): void {
+            if ((new Typo3Version())->getMajorVersion() < 14) {
+                ExtensionManagementUtility::addPiFlexFormValue('*', $flexForm, $contentType);
+            } else {
+                $GLOBALS['TCA']['tt_content']['types'][$contentType]['columnsOverrides']['pi_flexform']['config']['ds']
+                    = $flexForm;
+            }
+        };
 
         /**
          * Register plugins
@@ -51,17 +65,9 @@ call_user_func(
                 rowDescription,
             --div--;LLL:EXT:core/Resources/Private/Language/Form/locallang_tabs.xlf:extended,';
         $GLOBALS['TCA']['tt_content']['types']['luxletter_fe']['showitem'] = $pluginShowitem;
-        ExtensionManagementUtility::addPiFlexFormValue(
-            '*',
-            'FILE:EXT:luxletter/Configuration/FlexForm/FlexFormFe.xml',
-            'luxletter_fe'
-        );
+        $addFlexForm('luxletter_fe', 'FILE:EXT:luxletter/Configuration/FlexForm/FlexFormFe.xml');
         $GLOBALS['TCA']['tt_content']['types']['luxletter_unsubscribe2']['showitem'] = $pluginShowitem;
-        ExtensionManagementUtility::addPiFlexFormValue(
-            '*',
-            'FILE:EXT:luxletter/Configuration/FlexForm/FlexFormUnsubscribe2.xml',
-            'luxletter_unsubscribe2'
-        );
+        $addFlexForm('luxletter_unsubscribe2', 'FILE:EXT:luxletter/Configuration/FlexForm/FlexFormUnsubscribe2.xml');
 
         /**
          * Register new CType Teaser
@@ -70,9 +76,9 @@ call_user_func(
             'tt_content',
             'CType',
             [
-                $languageFilePrefix . 'ctype.teaser',
-                'teaser',
-                'teaser',
+                'label' => $languageFilePrefix . 'ctype.teaser',
+                'value' => 'teaser',
+                'icon' => 'teaser',
             ]
         );
 
@@ -109,10 +115,6 @@ call_user_func(
         /**
          * Include Flexform for teaser content element
          */
-        ExtensionManagementUtility::addPiFlexFormValue(
-            '*',
-            'FILE:EXT:luxletter/Configuration/FlexForm/FlexFormCeTeaser.xml',
-            'teaser'
-        );
+        $addFlexForm('teaser', 'FILE:EXT:luxletter/Configuration/FlexForm/FlexFormCeTeaser.xml');
     }
 );

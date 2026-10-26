@@ -75,7 +75,7 @@ class DatabaseUtility
                 ->count($fieldName)
                 ->from($tableName)
                 ->where($fieldName . ' != "" and ' . $fieldName . ' != 0')
-                ->execute()
+                ->executeQuery()
                 ->fetchOne() > 0;
         }
         return false;

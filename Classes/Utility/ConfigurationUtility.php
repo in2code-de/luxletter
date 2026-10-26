@@ -5,10 +5,12 @@ namespace In2code\Luxletter\Utility;
 
 use In2code\Luxletter\Exception\MisconfigurationException;
 use LogicException;
+use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Http\NormalizedParams;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\ConfigurationManagerInterface;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
@@ -36,10 +38,29 @@ class ConfigurationUtility
      */
     public static function getCurrentDomain(): string
     {
-        if ((string)GeneralUtility::getIndpEnv('HTTP_HOST') === '') {
+        $normalizedParams = self::getNormalizedParams();
+        if ($normalizedParams === null || $normalizedParams->getHttpHost() === '') {
             throw new LogicException(__FUNCTION__ . ' must not be called from CLI context', 1622812071);
         }
-        return GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST') . '/';
+        return $normalizedParams->getRequestHost() . '/';
+    }
+
+    /**
+     * Get normalized server params (host, scheme, etc.) of the current request
+     *
+     * @return NormalizedParams|null
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public static function getNormalizedParams(): ?NormalizedParams
+    {
+        $request = $GLOBALS['TYPO3_REQUEST'] ?? null;
+        if ($request instanceof ServerRequestInterface) {
+            $normalizedParams = $request->getAttribute('normalizedParams');
+            if ($normalizedParams instanceof NormalizedParams) {
+                return $normalizedParams;
+            }
+        }
+        return null;
     }
 
     /**

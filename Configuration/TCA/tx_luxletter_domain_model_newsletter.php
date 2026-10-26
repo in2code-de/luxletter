@@ -11,7 +11,6 @@ return [
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
@@ -68,7 +67,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => Category::TABLE_NAME,
                 'foreign_table_where' => 'AND 1',
@@ -93,16 +92,13 @@ return [
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Newsletter::TABLE_NAME . '.datetime',
             'config' => [
-                'type' => 'input',
+                'type' => 'datetime',
                 'size' => 13,
-                'eval' => 'datetime',
-                'checkbox' => 0,
                 'default' => 0,
                 'range' => [
                     'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y')),
                 ],
                 'readOnly' => true,
-                'renderType' => 'inputDateTime',
             ],
         ],
         'subject' => [
@@ -136,7 +132,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => Configuration::TABLE_NAME,
                 'foreign_table_where' => 'AND 1',
@@ -181,17 +177,7 @@ return [
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Newsletter::TABLE_NAME . '.language',
             'config' => [
-                'type' => 'select',
-                'special' => 'languages',
-                'items' => [
-                    [
-                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
-                        -1,
-                        'flags-multiple',
-                    ],
-                ],
-                'renderType' => 'selectSingle',
-                'default' => 0,
+                'type' => 'language',
             ],
         ],
         'crdate' => [
@@ -199,10 +185,8 @@ return [
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Newsletter::TABLE_NAME . '.crdate',
             'config' => [
-                'type' => 'input',
-                'renderType' => 'inputDateTime',
+                'type' => 'datetime',
                 'size' => 30,
-                'eval' => 'datetime',
                 'readOnly' => true,
             ],
         ],

@@ -10,14 +10,14 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
 class IsUsergroupRelatedToUserViewHelper extends AbstractConditionViewHelper
 {
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('user', User::class, 'User with usergroups', true);
         $this->registerArgument('usergroup', Usergroup::class, 'Usergroup to check for', true);
     }
 
-    public static function verdict(array $arguments, RenderingContextInterface $renderingContext)
+    public static function verdict(array $arguments, RenderingContextInterface $renderingContext): bool
     {
         /** @var User $user */
         $user = $arguments['user'];

@@ -5,12 +5,12 @@ namespace In2code\Luxletter\Events;
 
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Service\Parsing\NewsletterUrl;
-use TYPO3\CMS\Fluid\View\StandaloneView;
+use TYPO3\CMS\Core\View\ViewInterface;
 
 final class NewsletterUrlContainerAndContentPostParsingEvent
 {
     /**
-     * @var StandaloneView
+     * @var ViewInterface
      */
     protected $standaloneView;
 
@@ -35,14 +35,14 @@ final class NewsletterUrlContainerAndContentPostParsingEvent
     protected $newsletterUrl;
 
     /**
-     * @param StandaloneView $standaloneView
+     * @param ViewInterface $standaloneView
      * @param string $content
      * @param array $configuration
      * @param User $user
      * @param NewsletterUrl $newsletterUrl
      */
     public function __construct(
-        StandaloneView $standaloneView,
+        ViewInterface $standaloneView,
         string $content,
         array $configuration,
         User $user,
@@ -56,9 +56,9 @@ final class NewsletterUrlContainerAndContentPostParsingEvent
     }
 
     /**
-     * @return StandaloneView
+     * @return ViewInterface
      */
-    public function getStandaloneView(): StandaloneView
+    public function getStandaloneView(): ViewInterface
     {
         return $this->standaloneView;
     }

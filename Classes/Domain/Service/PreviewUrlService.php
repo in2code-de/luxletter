@@ -88,7 +88,7 @@ class PreviewUrlService
         //     return $this->getUrlFromPageIdentifier((int)$origin, $layout, $language);
         // }
 
-        $url = '//' . GeneralUtility::getIndpEnv('HTTP_HOST') . '?type=1560777975';
+        $url = '//' . ConfigurationUtility::getNormalizedParams()?->getHttpHost() . '?type=1560777975';
         $url .= '&tx_luxletter_preview[origin]=' . htmlspecialchars($origin);
         $url .= '&tx_luxletter_preview[layout]=' . htmlspecialchars($layout);
         $url .= '&tx_luxletter_preview[language]=' . $language;

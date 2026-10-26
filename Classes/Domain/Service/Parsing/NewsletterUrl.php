@@ -8,6 +8,7 @@ use DOMXpath;
 use Exception;
 use GuzzleHttp\Exception\RequestException;
 use In2code\Luxletter\Domain\Factory\UserFactory;
+use In2code\Luxletter\Domain\Factory\ViewFactory;
 use In2code\Luxletter\Domain\Model\User;
 use In2code\Luxletter\Domain\Service\BodytextManipulation\CssInline;
 use In2code\Luxletter\Domain\Service\BodytextManipulation\ImageEmbedding\Preparation;
@@ -38,7 +39,6 @@ use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Class NewsletterUrl to fill a container html with a content from a http(s) page.
@@ -177,12 +177,15 @@ class NewsletterUrl
         $html = '';
 
         if ($this->mode === self::MODE_PREVIEW || $this->mode === self::MODE_TESTMAIL) {
-            $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-            $standaloneView->setLayoutRootPaths($this->configuration['view']['layoutRootPaths']);
-            $standaloneView->setPartialRootPaths($this->configuration['view']['partialRootPaths']);
-            $standaloneView->setTemplatePathAndFilename($this->getContainerTemplate());
-            $standaloneView->assignMultiple($this->getContentObjectVariables());
-            $standaloneView->assignMultiple(
+            $view = GeneralUtility::makeInstance(ViewFactory::class)->createFromTemplatePathAndFilename(
+                $this->getContainerTemplate(),
+                [
+                    'layoutRootPaths' => $this->configuration['view']['layoutRootPaths'],
+                    'partialRootPaths' => $this->configuration['view']['partialRootPaths'],
+                ]
+            );
+            $view->assignMultiple($this->getContentObjectVariables());
+            $view->assignMultiple(
                 [
                     'content' => $content,
                     'user' => $user,
@@ -193,13 +196,13 @@ class NewsletterUrl
             );
             $this->eventDispatcher->dispatch(GeneralUtility::makeInstance(
                 NewsletterUrlContainerAndContentPostParsingEvent::class,
-                $standaloneView,
+                $view,
                 $content,
                 $this->configuration,
                 $user,
                 $this
             ));
-            $html = $standaloneView->render();
+            $html = $view->render();
         } elseif ($this->mode === self::MODE_NEWSLETTER) {
             $container = file_get_contents($this->getContainerTemplate(true));
             $html = str_replace('{content}', $content, $container);

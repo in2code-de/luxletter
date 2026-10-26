@@ -9,7 +9,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
 class IsLuxenterpriseExtensionActivatedViewHelper extends AbstractConditionViewHelper
 {
-    public static function verdict(array $arguments, RenderingContextInterface $renderingContext)
+    public static function verdict(array $arguments, RenderingContextInterface $renderingContext): bool
     {
         return ExtensionManagementUtility::isLoaded('luxenterprise');
     }

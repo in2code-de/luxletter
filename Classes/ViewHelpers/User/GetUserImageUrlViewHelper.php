@@ -31,7 +31,7 @@ class GetUserImageUrlViewHelper extends AbstractViewHelper
     /**
      * @return void
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         $this->registerArgument('user', User::class, 'user', true);
         $this->registerArgument('size', 'int', 'size for width and height', false, $this->size);
@@ -99,7 +99,7 @@ class GetUserImageUrlViewHelper extends AbstractViewHelper
     protected function getDefaultUrl(string $url): string
     {
         if (empty($url)) {
-            $url = PathUtility::getPublicResourceWebPath($this->defaultFile);
+            $url = PathUtility::getAbsoluteWebPath(GeneralUtility::getFileAbsFileName($this->defaultFile));
         }
         return $url;
     }

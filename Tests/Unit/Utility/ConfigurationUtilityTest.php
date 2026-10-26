@@ -9,6 +9,8 @@ use LogicException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use TYPO3\CMS\Core\Core\Environment;
+use TYPO3\CMS\Core\Http\NormalizedParams;
+use TYPO3\CMS\Core\Http\ServerRequest;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;
 
 #[CoversClass(ConfigurationUtility::class)]
@@ -168,7 +170,7 @@ class ConfigurationUtilityTest extends UnitTestCase
      */
     public function testGetCurrentDomainThrowsExceptionWithoutHttpHost(): void
     {
-        unset($_SERVER['HTTP_HOST']);
+        unset($GLOBALS['TYPO3_REQUEST']);
 
         $this->expectException(LogicException::class);
         $this->expectExceptionCode(1622812071);
@@ -181,11 +183,16 @@ class ConfigurationUtilityTest extends UnitTestCase
      */
     public function testGetCurrentDomainReturnsSchemeAndHostWithTrailingSlash(): void
     {
-        $_SERVER['HTTP_HOST'] = 'www.in2code.de';
-        $_SERVER['HTTPS'] = 'on';
-        $_SERVER['REQUEST_URI'] = '/folder/page?foo=bar';
+        $serverParams = [
+            'HTTP_HOST' => 'www.in2code.de',
+            'HTTPS' => 'on',
+            'REQUEST_URI' => '/folder/page?foo=bar',
+        ];
+        $GLOBALS['TYPO3_REQUEST'] = (new ServerRequest('https://www.in2code.de/folder/page?foo=bar'))
+            ->withAttribute('normalizedParams', NormalizedParams::createFromServerParams($serverParams));
 
         self::assertSame('https://www.in2code.de/', ConfigurationUtility::getCurrentDomain());
+        unset($GLOBALS['TYPO3_REQUEST']);
     }
 
     /**

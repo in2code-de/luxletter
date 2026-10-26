@@ -10,7 +10,6 @@ return [
         'label' => 'target',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
@@ -35,7 +34,6 @@ return [
                 . Link::TABLE_NAME . '.newsletter',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => Newsletter::TABLE_NAME,
                 'size' => 1,
                 'maxitems' => 1,
@@ -50,7 +48,6 @@ return [
                 . Link::TABLE_NAME . '.user',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => User::TABLE_NAME,
                 'size' => 1,
                 'maxitems' => 1,

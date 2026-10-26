@@ -37,9 +37,12 @@ defined('TYPO3') || die();
 );
 
 /**
- * Fluid Namespace
+ * Fluid Namespace (TYPO3 14 uses Configuration/Fluid/Namespaces.php)
+ * Todo: Can be removed when TYPO3 13 support is dropped
  */
-$GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['luxletter'][] = 'In2code\Luxletter\ViewHelpers';
+if ((new \TYPO3\CMS\Core\Information\Typo3Version())->getMajorVersion() < 14) {
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['fluid']['namespaces']['luxletter'][] = 'In2code\Luxletter\ViewHelpers';
+}
 
 /**
  * Add TypoScript automatically (to use it in backend modules)

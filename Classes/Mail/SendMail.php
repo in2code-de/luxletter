@@ -81,7 +81,7 @@ class SendMail
                 $this
             ));
             if ($event->isSend() === true) {
-                return $mailMessage->send();
+                return GeneralUtility::makeInstance(Mailer::class)->sendMailMessage($mailMessage);
             }
         }
         return false;

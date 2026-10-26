@@ -17,7 +17,7 @@ class GetNumberOfReceiversFromQueueViewHelper extends AbstractViewHelper
     /**
      * @return void
      */
-    public function initializeArguments()
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('newsletter', Newsletter::class, 'Newsletter object', true);

@@ -3,6 +3,7 @@
 declare(strict_types=1);
 namespace In2code\Luxletter\Domain\Service\Parsing;
 
+use In2code\Luxletter\Domain\Factory\ViewFactory;
 use In2code\Luxletter\Events\NewsletterParseBodytextEvent;
 use In2code\Luxletter\Events\NewsletterParseMailtextEvent;
 use In2code\Luxletter\Events\NewsletterParseSubjectEvent;
@@ -10,7 +11,6 @@ use In2code\Luxletter\Utility\ConfigurationUtility;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Configuration\Exception\InvalidConfigurationTypeException;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Class Newsletter
@@ -24,11 +24,18 @@ class Newsletter
     private $eventDispatcher;
 
     /**
-     * @param EventDispatcherInterface $eventDispatcher
+     * @var ViewFactory
      */
-    public function __construct(EventDispatcherInterface $eventDispatcher)
+    private $viewFactory;
+
+    /**
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param ViewFactory $viewFactory
+     */
+    public function __construct(EventDispatcherInterface $eventDispatcher, ViewFactory $viewFactory)
     {
         $this->eventDispatcher = $eventDispatcher;
+        $this->viewFactory = $viewFactory;
     }
 
     /**
@@ -73,13 +80,9 @@ class Newsletter
     {
         if (!empty($text)) {
             $configuration = ConfigurationUtility::getExtensionSettings();
-            $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-            $standaloneView->setTemplateRootPaths($configuration['view']['templateRootPaths'] ?? []);
-            $standaloneView->setLayoutRootPaths($configuration['view']['layoutRootPaths'] ?? []);
-            $standaloneView->setPartialRootPaths($configuration['view']['partialRootPaths'] ?? []);
-            $standaloneView->setTemplateSource($text);
-            $standaloneView->assignMultiple($properties);
-            $text = $standaloneView->render();
+            $view = $this->viewFactory->createFromTemplateSource($text, $configuration['view'] ?? []);
+            $view->assignMultiple($properties);
+            $text = $view->render();
             /** @var NewsletterParseMailtextEvent $event */
             $event = $this->eventDispatcher->dispatch(
                 GeneralUtility::makeInstance(NewsletterParseMailtextEvent::class, $text, $properties)

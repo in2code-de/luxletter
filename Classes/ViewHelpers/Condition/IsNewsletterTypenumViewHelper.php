@@ -9,7 +9,7 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
 class IsNewsletterTypenumViewHelper extends AbstractConditionViewHelper
 {
-    public static function verdict(array $arguments, RenderingContextInterface $renderingContext)
+    public static function verdict(array $arguments, RenderingContextInterface $renderingContext): bool
     {
         return ConfigurationUtility::getTypeNumToNumberLocation() === (int)($_REQUEST['type'] ?? 0);
     }

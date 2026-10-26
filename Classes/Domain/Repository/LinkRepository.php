@@ -34,8 +34,7 @@ class LinkRepository extends AbstractRepository
      */
     public function isHashAlreadyExisting(string $hash): bool
     {
-        /** @noinspection PhpUndefinedMethodInspection */
-        $link = $this->findOneByHash($hash);
+        $link = $this->findOneBy(['hash' => $hash]);
         return $link !== null;
     }
 

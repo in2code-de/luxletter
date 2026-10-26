@@ -44,7 +44,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => Newsletter::TABLE_NAME,
                 'foreign_table_where' => 'AND sys_language_uid in (0,-1)',
@@ -60,7 +60,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => User::TABLE_NAME,
                 'foreign_table_where' => 'AND 1',
@@ -73,16 +73,13 @@ return [
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Queue::TABLE_NAME . '.datetime',
             'config' => [
-                'type' => 'input',
+                'type' => 'datetime',
                 'size' => 13,
-                'eval' => 'datetime',
-                'checkbox' => 0,
                 'default' => 0,
                 'range' => [
                     'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y')),
                 ],
                 'readOnly' => true,
-                'renderType' => 'inputDateTime',
             ],
         ],
         'sent' => [

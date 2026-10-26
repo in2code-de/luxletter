@@ -11,11 +11,10 @@
                     <limit>
                         <label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.flexform.limit</label>
                         <config>
-                            <type>input</type>
+                            <type>number</type>
                             <size>40</size>
-                            <max>9</max>
                             <default>240</default>
-                            <eval>int,required</eval>
+                            <required>1</required>
                         </config>
                     </limit>
                     <append>
@@ -34,14 +33,13 @@
                             <size>40</size>
                             <max>200</max>
                             <default>read more</default>
-                            <eval>required</eval>
+                            <required>1</required>
                         </config>
                     </buttontext>
                     <records>
                         <label>LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:ctype.teaser.flexform.records</label>
                         <config>
                             <type>group</type>
-                            <internal_type>db</internal_type>
                             <allowed>tt_content</allowed>
                             <size>10</size>
                             <maxitems>10</maxitems>

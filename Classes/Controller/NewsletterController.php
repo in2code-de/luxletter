@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace In2code\Luxletter\Controller;
 
 use In2code\Lux\Domain\Repository\VisitorRepository;
+use In2code\Luxletter\Domain\Factory\ViewFactory;
 use In2code\Luxletter\Domain\Model\Dto\Filter;
 use In2code\Luxletter\Domain\Model\Newsletter;
 use In2code\Luxletter\Domain\Repository\LogRepository;
@@ -21,7 +22,6 @@ use In2code\Luxletter\Utility\ObjectUtility;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class NewsletterController extends AbstractNewsletterController
 {
@@ -237,15 +237,16 @@ class NewsletterController extends AbstractNewsletterController
     {
         $usergroups = GeneralUtility::intExplode(',', $request->getQueryParams()['usergroups'], true);
         $userRepository = GeneralUtility::makeInstance(UserRepository::class);
-        $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-        $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->wizardUserPreviewFile));
-        $standaloneView->assignMultiple([
+        $view = GeneralUtility::makeInstance(ViewFactory::class)->createFromTemplatePathAndFilename(
+            GeneralUtility::getFileAbsFileName($this->wizardUserPreviewFile)
+        );
+        $view->assignMultiple([
             'userPreview' => $userRepository->getUsersFromGroups($usergroups, -1, 3),
             'userAmount' => $userRepository->getUserAmountFromGroups($usergroups),
         ]);
         $response = ObjectUtility::getJsonResponse();
         $response->getBody()->write(json_encode(
-            ['html' => $standaloneView->render()]
+            ['html' => $view->render()]
         ));
         return $response;
     }
@@ -302,8 +303,9 @@ class NewsletterController extends AbstractNewsletterController
         $userRepository = GeneralUtility::makeInstance(UserRepository::class);
         $visitorRepository = GeneralUtility::makeInstance(VisitorRepository::class);
         $logRepository = GeneralUtility::makeInstance(LogRepository::class);
-        $standaloneView = GeneralUtility::makeInstance(StandaloneView::class);
-        $standaloneView->setTemplatePathAndFilename(GeneralUtility::getFileAbsFileName($this->receiverDetailFile));
+        $view = GeneralUtility::makeInstance(ViewFactory::class)->createFromTemplatePathAndFilename(
+            GeneralUtility::getFileAbsFileName($this->receiverDetailFile)
+        );
         $user = $userRepository->findByUid((int)$request->getQueryParams()['user']);
         $visitor = $visitorRepository->findOneByFrontenduser($user);
         $variables = [
@@ -315,11 +317,11 @@ class NewsletterController extends AbstractNewsletterController
                 'logs' => $logRepository->findByUser($user),
             ];
         }
-        $standaloneView->assignMultiple($variables);
+        $view->assignMultiple($variables);
 
         $response = ObjectUtility::getJsonResponse();
         $response->getBody()->write(json_encode(
-            ['html' => $standaloneView->render()]
+            ['html' => $view->render()]
         ));
         return $response;
     }

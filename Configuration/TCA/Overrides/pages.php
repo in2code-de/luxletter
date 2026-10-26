@@ -17,9 +17,9 @@ call_user_func(
                 'pages',
                 'doktype',
                 [
-                    'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:pages.doktype_luxletter',
-                    $doktype,
-                    'EXT:luxletter/Resources/Public/Icons/luxletter_doktype.svg',
+                    'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:pages.doktype_luxletter',
+                    'value' => $doktype,
+                    'icon' => 'EXT:luxletter/Resources/Public/Icons/luxletter_doktype.svg',
                 ],
                 '6',
                 'after'
@@ -41,6 +41,8 @@ call_user_func(
                     'types' => [
                         $doktype => [
                             'showitem' => $GLOBALS['TCA']['pages']['types'][$doktypeDefault]['showitem'],
+                            // Allow all records on this page type (evaluated since TYPO3 14.2)
+                            'allowedRecordTypes' => ['*'],
                         ],
                     ],
                 ]
@@ -56,7 +58,8 @@ call_user_func(
                         'placeholder' => 'Your new newsletter for product A (2022/01)',
                         'description' => $llPath . 'module.newsletter.new.field.subject.description',
                         'default' => '',
-                        'eval' => 'trim,required',
+                        'eval' => 'trim',
+                        'required' => true,
                     ],
                 ],
             ];

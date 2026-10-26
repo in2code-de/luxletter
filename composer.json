@@ -30,7 +30,7 @@
 		"ext-dom": "*",
 		"ext-libxml": "*",
 		"ext-pdo": "*",
-		"typo3/cms-core": "^13.4",
+		"typo3/cms-core": "^13.4 || ^14.3",
 		"tijsverkoyen/css-to-inline-styles": "^2.2",
 		"doctrine/dbal": ">=2.11.0"
 	},
@@ -118,7 +118,11 @@
 			"cms-package-dir": "{$vendor-dir}/typo3/cms",
 			"web-dir": ".Build/public",
 			"extension-key": "luxletter",
-			"ignore-as-root": false
+			"version": "29.0.1",
+			"ignore-as-root": false,
+			"Package": {
+				"providesPackages": {}
+			}
 		}
 	}
 }

@@ -9,7 +9,6 @@ return [
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
@@ -44,17 +43,17 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'placeholder' => 'Marketing yourdomain.org',
-                'eval' => 'required',
+                'required' => true,
             ],
         ],
         'from_email' => [
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Configuration::TABLE_NAME . '.from_email',
             'config' => [
-                'type' => 'input',
+                'type' => 'email',
                 'size' => 30,
                 'placeholder' => 'marketing@yourdomain.org',
-                'eval' => 'required,email',
+                'required' => true,
             ],
         ],
         'from_name' => [
@@ -64,17 +63,17 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'placeholder' => 'Marketing',
-                'eval' => 'required',
+                'required' => true,
             ],
         ],
         'reply_email' => [
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:'
                 . Configuration::TABLE_NAME . '.reply_email',
             'config' => [
-                'type' => 'input',
+                'type' => 'email',
                 'size' => 30,
                 'placeholder' => 'sales@yourdomain.org',
-                'eval' => 'required,email',
+                'required' => true,
             ],
         ],
         'reply_name' => [
@@ -84,7 +83,7 @@ return [
                 'type' => 'input',
                 'size' => 30,
                 'placeholder' => 'Sales',
-                'eval' => 'required',
+                'required' => true,
             ],
         ],
         'site' => [

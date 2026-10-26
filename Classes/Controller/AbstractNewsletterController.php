@@ -163,14 +163,26 @@ abstract class AbstractNewsletterController extends ActionController
         $buttonBar->addButton($navigationGroupButton, ButtonBar::BUTTON_POSITION_LEFT, 2);
     }
 
+    /**
+     * Todo: Can be reduced to setShortcutContext() when TYPO3 13 support is dropped
+     */
     protected function addShortcutButton(): void
     {
-        $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
-        $shortCutButton = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar()->makeShortcutButton();
-        $shortCutButton
-            ->setRouteIdentifier('lux_Luxletter')
-            ->setDisplayName('Shortcut')
-            ->setArguments(['action' => $this->getActionName(), 'controller' => $this->getControllerName()]);
-        $buttonBar->addButton($shortCutButton, ButtonBar::BUTTON_POSITION_RIGHT, 1);
+        $docHeaderComponent = $this->moduleTemplate->getDocHeaderComponent();
+        $arguments = ['action' => $this->getActionName(), 'controller' => $this->getControllerName()];
+        if (method_exists($docHeaderComponent, 'setShortcutContext')) {
+            $docHeaderComponent->setShortcutContext(
+                routeIdentifier: 'lux_Luxletter',
+                displayName: 'Shortcut',
+                arguments: $arguments
+            );
+        } else {
+            $buttonBar = $docHeaderComponent->getButtonBar();
+            $shortCutButton = $buttonBar->makeShortcutButton()
+                ->setRouteIdentifier('lux_Luxletter')
+                ->setDisplayName('Shortcut')
+                ->setArguments($arguments);
+            $buttonBar->addButton($shortCutButton, ButtonBar::BUTTON_POSITION_RIGHT, 1);
+        }
     }
 }

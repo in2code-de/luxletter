@@ -10,7 +10,6 @@ return [
         'label' => 'status',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
-        'cruser_id' => 'cruser_id',
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
@@ -33,11 +32,9 @@ return [
             'exclude' => true,
             'label' => 'LLL:EXT:luxletter/Resources/Private/Language/locallang_db.xlf:' . Log::TABLE_NAME . '.crdate',
             'config' => [
-                'type' => 'input',
+                'type' => 'datetime',
                 'size' => 30,
-                'eval' => 'datetime',
                 'readOnly' => true,
-                'renderType' => 'inputDateTime',
             ],
         ],
         'newsletter' => [
@@ -46,7 +43,6 @@ return [
                 . Log::TABLE_NAME . '.newsletter',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => Newsletter::TABLE_NAME,
                 'size' => 1,
                 'maxitems' => 1,
@@ -61,7 +57,6 @@ return [
                 . Log::TABLE_NAME . '.user',
             'config' => [
                 'type' => 'group',
-                'internal_type' => 'db',
                 'allowed' => User::TABLE_NAME,
                 'size' => 1,
                 'maxitems' => 1,
