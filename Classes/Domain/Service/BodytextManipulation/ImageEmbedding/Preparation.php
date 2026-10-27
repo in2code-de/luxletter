@@ -27,11 +27,11 @@ class Preparation extends AbstractEmbedding
     }
 
     /**
-     * Store images locally
+     * Store images locally. Images that can not be loaded are skipped and keep their original src, so that a single
+     * missing image does not break the parsing of the whole newsletter.
      *
      * @param string $bodytext newsletter bodytext
      * @return void
-     * @throws ApiConnectionException
      * @throws MisconfigurationException
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
@@ -46,7 +46,11 @@ class Preparation extends AbstractEmbedding
             foreach ($imageTags as $imageTag) {
                 $src = $imageTag->getAttribute('src');
                 if (StringUtility::isAbsoluteImageUrl($src)) {
-                    $this->storeImage($src);
+                    try {
+                        $this->storeImage($src);
+                    } catch (ApiConnectionException $exception) {
+                        continue;
+                    }
                 }
             }
         }
