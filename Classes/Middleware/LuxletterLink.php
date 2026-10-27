@@ -23,6 +23,8 @@ use TYPO3\CMS\Core\Package\Exception as ExceptionPackage;
  */
 class LuxletterLink implements MiddlewareInterface
 {
+    private const PARAMETER_NAME = 'luxletterlink';
+
     public function __construct(
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly LinkRepository $linkRepository,
@@ -39,8 +41,9 @@ class LuxletterLink implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if ($this->isLuxletterLink()) {
-            $link = $this->linkRepository->findOneByHashRaw($this->getHash());
+        $hashEvent = $this->getHashEvent($request);
+        if ($hashEvent->isHashGiven()) {
+            $link = $this->linkRepository->findOneByHashRaw($hashEvent->getHash());
             if ($link !== []) {
                 /** @var LuxletterLinkProcessEvent $event */
                 $event = $this->eventDispatcher->dispatch(new LuxletterLinkProcessEvent($link, $request, $handler));
@@ -53,17 +56,17 @@ class LuxletterLink implements MiddlewareInterface
         return $handler->handle($request);
     }
 
-    protected function isLuxletterLink(): bool
+    /**
+     * Only the query string is respected - the hash is never expected in POST data or cookies
+     *
+     * @param ServerRequestInterface $request
+     * @return LuxletterLinkGetHashEvent
+     */
+    protected function getHashEvent(ServerRequestInterface $request): LuxletterLinkGetHashEvent
     {
+        $hash = $request->getQueryParams()[self::PARAMETER_NAME] ?? null;
         /** @var LuxletterLinkGetHashEvent $event */
-        $event = $this->eventDispatcher->dispatch(new LuxletterLinkGetHashEvent($_REQUEST['luxletterlink'] ?? null));
-        return $event->isHashGiven();
-    }
-
-    protected function getHash(): ?string
-    {
-        /** @var LuxletterLinkGetHashEvent $event */
-        $event = $this->eventDispatcher->dispatch(new LuxletterLinkGetHashEvent($_REQUEST['luxletterlink'] ?? null));
-        return $event->getHash();
+        $event = $this->eventDispatcher->dispatch(new LuxletterLinkGetHashEvent(is_string($hash) ? $hash : null));
+        return $event;
     }
 }

@@ -7,6 +7,7 @@ use In2code\Luxletter\Middleware\LuxletterLink;
 use In2code\Luxletter\Tests\Functional\AbstractFunctionalTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\TestingFramework\Core\Functional\Framework\Frontend\InternalRequest;
 
 /**
@@ -50,6 +51,31 @@ class LuxletterLinkTest extends AbstractFunctionalTestCase
     }
 
     /**
+     * Tracking links point to the root page of the site, which is often a shortcut to its first subpage. The click
+     * must be processed before TYPO3 redirects to the shortcut target.
+     *
+     * @return void
+     */
+    public function testTrackingLinkToShortcutPageRedirectsToTargetAndLogsClick(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/LuxletterLinkShortcut.csv');
+        $this->getConnectionPool()->getConnectionForTable('pages')->update(
+            'pages',
+            [
+                'doktype' => PageRepository::DOKTYPE_SHORTCUT,
+                'shortcut_mode' => PageRepository::SHORTCUT_MODE_FIRST_SUBPAGE,
+            ],
+            ['uid' => 1]
+        );
+
+        $response = $this->executeFrontendRequestWithLuxletterlink('hash1');
+
+        self::assertSame(302, $response->getStatusCode());
+        self::assertSame('https://www.in2code.de/target', $response->getHeaderLine('location'));
+        self::assertCount(2, $this->getRows(Log::TABLE_NAME, ['newsletter', 'user', 'status']));
+    }
+
+    /**
      * @return void
      */
     public function testUnknownHashRendersRequestedPage(): void
@@ -62,16 +88,11 @@ class LuxletterLinkTest extends AbstractFunctionalTestCase
     }
 
     /**
-     * LuxletterLink reads the hash from $_REQUEST instead of the PSR-7 request, so it has to be set additionally for
-     * a sub request (superglobals are restored after each test because of backupGlobals)
-     *
      * @param string $hash
      * @return ResponseInterface
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function executeFrontendRequestWithLuxletterlink(string $hash): ResponseInterface
     {
-        $_REQUEST['luxletterlink'] = $hash;
         return $this->executeFrontendSubRequest(
             (new InternalRequest('https://www.example.org/'))->withQueryParameter('luxletterlink', $hash)
         );

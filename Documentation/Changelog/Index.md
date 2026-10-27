@@ -150,6 +150,11 @@
   * `\In2code\Luxletter\Mail\MailMessage::send()` was removed (like `send()` in the TYPO3 core class).
     Use `\In2code\Luxletter\Mail\Mailer::sendMailMessage($mailMessage)` instead.
   * `ConfigurationUtility::isTypo3Version12()` and the viewhelper `luxletter:condition.isTypo3Twelve` were removed
+  * The middleware `\In2code\Luxletter\Middleware\LuxletterLink` reads the parameter `luxletterlink` from the PSR-7
+    request now (instead of `$_REQUEST`), so tracking links also work in sub requests and in requests changed by a
+    previous middleware. Only the query string is respected, a hash in POST data or cookies is ignored now.
+    `LuxletterLinkGetHashEvent` is dispatched once per request (before twice), the protected methods
+    `isLuxletterLink()` and `getHash()` were replaced by `getHashEvent(ServerRequestInterface $request)`.
   * **Todo:** Adjust your code if you use one of these
 
 ### Upgrade to 26.x
