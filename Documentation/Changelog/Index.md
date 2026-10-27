@@ -155,6 +155,11 @@
     previous middleware. Only the query string is respected, a hash in POST data or cookies is ignored now.
     `LuxletterLinkGetHashEvent` is dispatched once per request (before twice), the protected methods
     `isLuxletterLink()` and `getHash()` were replaced by `getHashEvent(ServerRequestInterface $request)`.
+  * The middleware `luxletter-luxletterlink` is ordered after `typo3/cms-frontend/prepare-tsfe-rendering` and before
+    `typo3/cms-frontend/shortcut-and-mountpoint-redirect` now (before: only after `typo3/cms-frontend/tsfe`, so the
+    middleware ran after the shortcut redirect, and the ID does not exist in TYPO3 14 any more). So a tracking link to
+    a shortcut page is processed directly without an additional redirect, and a link to a page of type "Link" is
+    tracked at all. Check your own middlewares if they refer to it.
   * **Todo:** Adjust your code if you use one of these
 
 ### Upgrade to 26.x
