@@ -94,7 +94,7 @@ class QueueRepository extends AbstractRepository
         return (int)$queryBuilder
             ->select('uid')
             ->from(Queue::TABLE_NAME)
-            ->where('newsletter=' . $newsletter->getUid() . ' and user=' . $user->getUid())
+            ->where('newsletter=' . $newsletter->getUid() . ' and user=\'' . $user->getUid() . '\'')
             ->setMaxResults(1)
             ->executeQuery()
             ->fetchOne() > 0;
